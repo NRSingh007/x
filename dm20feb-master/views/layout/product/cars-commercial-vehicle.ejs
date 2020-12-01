@@ -1,0 +1,82 @@
+<div class="form-group">
+    <label for="product_type">Type*</label>
+    <select class="form-control custom-select" name="product_type" id="product_type">
+
+        <%if(edit){%>
+        <option value="none">Select Type</option>
+        <option value="Auto-rickchaw & E-rickshaws" <%if(product.product_type.trim() == 'Auto-rickchaw & E-rickshaws'){%>selected<%}%> >Auto-rickchaw & E-rickshaws</option>
+            <option value="Buses" <%if(product.product_type.trim() == 'Buses'){%>selected<%}%> >Buses</option>
+            <option value="Trucks" <%if(product.product_type.trim() == 'Trucks'){%>selected<%}%> >Trucks</option>
+            <option value="Heavy Machinery" <%if(product.product_type.trim() == 'Heavy Machinery'){%>selected<%}%> >Heavy Machinery</option>
+            <option value="Modified Jeep" <%if(product.product_type.trim() == 'Modified Jeep'){%>selected<%}%> >Modified Jeep</option>
+            <option value="Pick-up Vans / Pick-up Trucks" <%if(product.product_type.trim() == 'Pick-up Vans / Pick-up Trucks'){%>selected<%}%> >Pick-up Vans / Pick-up Trucks</option>
+            <option value="Scrap Cars" <%if(product.product_type.trim() == 'Scrap Cars'){%>selected<%}%> >Scrap Cars</option>
+            <option value="Taxi Cabs" <%if(product.product_type.trim() == 'Taxi Cabs'){%>selected<%}%> >Taxi Cabs</option>
+            <option value="Tractors" <%if(product.product_type.trim() == 'Tractors'){%>selected<%}%> >Tractors</option>
+            <option value="Other" <%if(product.product_type.trim() == 'Other'){%>selected<%}%> >Other</option>
+            <%} else{%> <option value="none">Select Type</option>
+        <option value="Auto-rickchaw & E-rickshaws">Auto-rickchaw & E-rickshaws</option>
+        <option value="Buses">Buses</option>
+        <option value="Trucks">Trucks</option>
+        <option value="Heavy Machinery">Heavy Machinery</option>
+        <option value="Modified Jeep">Modified Jeep</option>
+        <option value="Pick-up Vans / Pick-up Trucks">Pick-up Vans / Pick-up Trucks</option>
+        <option value="Scrap Cars">Scrap Cars</option>
+        <option value="Taxi Cabs">Taxi Cabs</option>
+        <option value="Tractors">Tractors</option>
+        <option value="Other">Other</option>
+        <%}%>        
+    </select>
+</div>
+
+
+<div class="form-group">
+    <label for="product_year">Year*</label>
+    <input type="number" class="form-control" name="product_year" id="product_year"
+        <%if(edit){%>value="<%=product.product_year%>" <%}%> >
+</div>
+
+
+<div class="form-group">
+    <label for="product_fuel_type">Fuel Type*</label>
+    <select class="form-control custom-select" id="product_fuel_type" name="product_fuel_type">
+        <%if(edit){%> <option value="none">Select Fuel Type</option>
+        <option value="CNG & Hybrids" <%if(product.product_fuel_type.trim() == 'CNG & Hybrids'){%>selected<%}%> >CNG & Hybrids</option>
+            <option value="Diesel" <%if(product.product_fuel_type.trim() == 'Diesel'){%>selected<%}%> >Diesel</option>
+            <option value="Petrol" <%if(product.product_fuel_type.trim() == 'Petrol'){%>selected<%}%> >Petrol</option>
+            <option value="Electric" <%if(product.product_fuel_type.trim() == 'Electric'){%>selected<%}%> >Electric</option>
+            <option value="LPG" <%if(product.product_fuel_type.trim() == 'LPG'){%>selected<%}%> >LPG</option>
+                <%} else{%> <option value="none">Select Fuel Type</option>
+        <option value="CNG & Hybrids">CNG & Hybrids</option>
+        <option value="Diesel">Diesel</option>
+        <option value="Petrol">Petrol</option>
+        <option value="Electric">Electric</option>
+        <option value="LPG">LPG</option>
+        <%}%>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="product_transmission_type">Transmission Type*</label>
+    <select class="form-control custom-select" id="product_transmission_type" name="product_transmission_type">
+        <%if(edit){%>
+        <option value="none">Select Transmission Type</option>
+        <option value="Automatic" <%if(product.product_transmission_type.trim() == 'Automatic'){%>selected<%}%> >Automatic</option>
+        <option value="Manual" <%if(product.product_transmission_type.trim() == 'Manual'){%>selected<%}%> >Manual</option>
+        <%} else{%> <option value="none">Select Transmission Type</option>
+        <option value="Automatic">Automatic</option>
+        <option value="Manual">Manual</option>
+        <%}%>
+        
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="product_km_driven">KM driven*</label>
+    <input type="number" 
+    class="form-control" 
+    name="product_km_driven" 
+    id="product_km_driven"
+    <%if(edit){%>value = "<%=product.product_km_driven%>"<%}%>
+    >
+</div>

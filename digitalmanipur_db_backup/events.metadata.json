@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"digitalmanipur.events"}],"uuid":"f69398e7277e4cfdb3e11039b1a8b525"}

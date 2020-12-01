@@ -1,0 +1,175 @@
+<div class="p-3" id="manageSC">
+    <h4>Manage Collections</h4>
+    <div class="p-3 row justify-content-center">
+        <div class="col-sm-12 col-md-8 ">
+            <div class="form-group px-3 border border-lightgrey bg-white py-3 rounded" id="TrendingFormGroup">
+                <h5 class="name" data-id="Trending">Trending</h5>
+                <hr>
+                <label for="trending">Name</label>
+                <input type="text"  name="name"  class="form-control " placeholder="Enter name" value="Trending this week">
+                <label for="trending">Description</label>
+                <input type="text"  name="description"  class="form-control description" 
+                placeholder="Enter description"
+                value="Most popular places in town this week">
+                <input type="file" onchange="filePreviewSC(this, event)" name="coverImage"  hidden  accept=".jpg,.jpeg,.png">
+                <div class="cover-image bg-img"></div>
+                <input type="text" name="oldImageURL" hidden>
+                <button class="mt-2 btn btn-sm  btn-outline-secondary chooseImage">Choose cover image</button>
+                <button class="mt-2 btn btn-sm float-right btn-success save-collection px-3" >SAVE</button>
+
+            </div>
+            <div class="form-group px-3 border border-lightgrey bg-white py-3 rounded" id="Newly_OpenedFormGroup">
+                <h5 class="name" data-id="Newly_Opened">Newly Opened</h5>
+                <hr>
+                <label for="trending">Name</label>
+                <input type="text"  name="name" class="form-control " placeholder="Enter name" value="Newly Opened">
+                <label for="newlyOpened">Description</label>
+                <input type="text" name="description" class="form-control description" placeholder="Enter description" 
+                 value="The best places in town">
+                <input type="text" name="oldImageURL"  hidden>
+                <input type="file" onchange="filePreviewSC(this, event)" 
+                name="coverImage"  hidden  accept=".jpg,.jpeg,.png">
+                <div class="cover-image bg-img"></div>
+                <button class="mt-2 btn btn-sm  btn-outline-secondary chooseImage">Choose cover image</button>
+                <button class="mt-2 btn btn-sm float-right btn-success save-collection px-3" >SAVE</button>
+            </div>
+
+            <div class="form-group px-3 border border-lightgrey bg-white py-3 rounded" id="FinestFormGroup">
+                <h5 class="name" data-id="Finest">Finest </h5>
+                <hr>
+                <label for="trending">Name</label>
+                <input type="text"  name="name"  class="form-control " placeholder="Enter name" value="Finest">
+                <label for="finest" >Description</label>
+                <input type="text" name="description"  class="form-control description" placeholder="Enter description"
+                value="The hunt for the best places in your city ends here">
+                <input type="text" name="oldImageURL" hidden>
+                <input type="file" onchange="filePreviewSC(this, event)" name="coverImage"  hidden  accept=".jpg,.jpeg,.png">
+                <div class="cover-image bg-img"></div>
+
+                <button class="mt-2 btn btn-sm  btn-outline-secondary chooseImage">Choose cover image</button>
+                <button class="mt-2 btn btn-sm float-right btn-success save-collection px-3" >SAVE</button>
+
+            </div>
+
+            <div class="form-group px-3 border border-lightgrey bg-white py-3 rounded" id="EventsFormGroup">
+                <h5 class="name" data-id="Events">Events</h5>
+                <hr>
+                <label for="trending">Name</label>
+                <input type="text"  name="name"  class="form-control " placeholder="Enter name" value="Upcoming Events">
+                <label for="events">Description</label>
+                <input type="text" name="description"  class="form-control description" placeholder="Enter description"
+                value="Checkout for exotic events in your town">
+                <input type="file" onchange="filePreviewSC(this, event)" name="coverImage"  hidden accept=".jpg,.jpeg,.png">
+                <input type="text" name="oldImageURL" hidden>
+                <div class="cover-image bg-img"></div>
+
+                <button class="mt-2 btn btn-sm  btn-outline-secondary chooseImage">Choose cover image</button>
+                <button class="mt-2 btn btn-sm float-right btn-success save-collection px-3" >SAVE</button>
+
+            </div>
+
+        </div>
+        
+    </div>
+</div>
+
+<script>
+    // show collection cover image
+    function filePreviewSC(input, e) {
+            // const file = $(event.target).files[0]);
+            console.log({input});
+            console.log(e.target);
+            const file = input.files[0];
+            console.log("input file - ", file);
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (ev) {
+                    // $('.file-preview').children().remove();
+                    $(e.target).siblings('.cover-image').show();
+                    $(e.target).siblings('.cover-image').css('background-image', `url(${ev.target.result})`);
+                    $(e.target).siblings('.cover-image').show();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // choose image
+        $("#manageSC .chooseImage").click((e)=>{
+            e.preventDefault();
+            // alert($(e.target).html());
+            $(e.target).siblings("input[name='coverImage']").trigger('click');
+        });
+
+        //save 
+        $("#manageSC .save-collection").click((e)=>{
+            e.preventDefault();
+
+            const id = $(e.target).siblings('.name').data('id');
+            const name = $(e.target).siblings('input[name="name"]').val();
+            const description = $(e.target).siblings(".description").val();
+            const coverImage = $(e.target).siblings('input[name="coverImage"]')[0].files[0];
+            const oldImageURL = $(e.target).siblings('input[name="oldImageURL"]').val().trim();
+
+            console.log({
+                id,
+                name,
+                description,
+                coverImage,
+                oldImageURL
+            })
+
+            if ( id && name && description && ( oldImageURL || (coverImage && coverImage)) ) {
+                
+                const formData = new FormData();
+                formData.append('id',id);
+                formData.append('name',name);
+                formData.append('description',description);
+                formData.append('cover-image',coverImage);
+                formData.append('oldImageURL',oldImageURL);
+
+                $(e.target).html(`<div class="spinner-border text-white spinner-border-sm"></div> Saving`);
+
+                
+                $.ajax({
+                    url: `${rootDomain}/admin/site/collections/static-collections/createORupdate`,
+                    type: 'POST',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false, // neccessary for file upload
+                    success: function (data) {
+                        console.log('Form submitted');
+                        console.log({data});
+                        console.log("Collection: ", data ? data : null);
+
+                        // show erro
+                        if (!data) {
+                            // error occurred
+                            alert('Unexpected error occurred. Please try again.');
+                        } else if ( data ) {
+                            $(e.target).html(`SAVED!`);
+                            if (data.filename) {
+                                $(e.target).siblings('input[name="oldImageURL"]').val(data.filename)
+                            }
+
+                            setTimeout(() => {
+                                $(e.target).html(`SAVE`);
+                                getStaticCollections();
+                            }, 1000);
+
+                        }
+                    },
+                    error: function (data) {
+                        console.log('Error');
+                        $(e.target).html(`SAVE`);
+                        alert('Error occurred. Please try again.');
+                       
+                    }
+                });
+            } else {
+                alert('Please provide required fields *');
+            }
+            // alert(  name+description);
+
+        });
+</script>

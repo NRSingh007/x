@@ -1,0 +1,313 @@
+.profile-setting .profile-header {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.profile-setting .profile-header .profile-preview {
+  width: 150px;
+  height: 150px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  max-height: 250px;
+  font-size: 80px;
+}
+
+.profile-setting .profile-header .profile-preview-default {
+  width: 150px;
+  height: 150px;
+  max-height: 300px;
+  font-size: 80px;
+  color: #e7e7e7;
+}
+
+.profile-setting .profile-header .profile-desc {
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-left: 20px;
+  -webkit-box-align: left;
+      -ms-flex-align: left;
+          align-items: left;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.profile-setting .profile-header .profile-desc .name {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.profile-setting .profile-header .profile-desc .address {
+  font-size: 14px;
+}
+
+.profile-setting .back-profile {
+  color: #cb202d;
+}
+
+.profile-setting .back-profile:hover {
+  color: #242424;
+}
+
+.profile-setting .profile-change-box {
+  height: 250px;
+  max-height: 250px;
+  overflow: hidden;
+}
+
+.profile-setting .profile-change-box .profile-change {
+  height: 250px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.profile-setting .profile-change-box .profile-change-default {
+  height: 250px;
+  max-width: 300px;
+  font-size: 100px;
+  color: #e7e7e7;
+}
+
+.profile-setting .profile-change-box .profile-change:hover,
+.profile-setting .profile-change-box .profile-change-default:hover {
+  opacity: .5;
+}
+
+.profile-setting .profile-change-box .select-profile {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 250px;
+  -webkit-transition: ease-in-out 200ms all;
+  transition: ease-in-out 200ms all;
+}
+
+.profile-setting .profile-change-box .select-profile button {
+  display: none;
+}
+
+.profile-setting .profile-change-box .select-profile:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  opacity: 1;
+}
+
+.profile-setting .profile-change-box .select-profile:hover button {
+  display: block;
+  z-index: 1;
+}
+
+.profile-setting .list-group .list-group-item {
+  padding: 10px 15px;
+}
+
+.profile-setting .list-group .list-group-item.active {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #495057;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.profile-setting .modal.fade .modal-dialog.modal-dialog-zoom {
+  -webkit-transform: translate(0, 0) scale(0.5);
+  transform: translate(0, 0) scale(0.5);
+}
+
+.profile-setting .modal.show .modal-dialog.modal-dialog-zoom {
+  -webkit-transform: translate(0, 0) scale(1);
+  transform: translate(0, 0) scale(1);
+}
+
+.profile-setting .tab-content .form-group label {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.profile-setting form button {
+  min-width: 90px;
+}
+
+.profile-setting .social-connected {
+  font-size: 14px;
+}
+
+.profile-setting .social-connected label {
+  font-weight: bold;
+}
+
+.profile-setting .social-connected button {
+  color: #fff;
+  font-size: 14px;
+}
+
+.center-items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.form-group label {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.profile-notifications .nav-links * {
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.profile-notifications .nav-links * a {
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .user-home .profile-setting {
+    padding: 5%;
+  }
+  .user-home .profile-setting .user-tabs-holder {
+    padding-right: 0 !important;
+  }
+  .user-home .profile-setting .review-item {
+    border: 1px solid #e7e7e7 !important;
+  }
+  .user-home .profile-setting .review-item .review-leftCol {
+    display: none !important;
+  }
+  .user-home .profile-setting .review-item .msg-body {
+    padding: 10px !important;
+  }
+  .user-home .profile-setting .review-item .msg-body .rev-header {
+    font-size: 13px !important;
+  }
+  .user-home .profile-setting .review-item .msg-body .rev-header .name {
+    font-size: 15px;
+  }
+  .user-home .profile-setting .review-item .msg-body .rev-header .date {
+    font-size: 13px;
+  }
+}
+
+.user-home .tab-content .tab-pane .main-body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+  margin-top: 10px;
+}
+
+.user-home .tab-content .tab-pane .main-body .pitem:nth-child(3n) {
+  margin: 0 0 2% 0;
+}
+
+.user-home .tab-content .tab-pane .main-body .pitem {
+  margin: 0 3% 3% 0;
+  width: calc(31.3%);
+  border-radius: .5rem !important;
+  overflow: hidden;
+}
+
+.user-home .tab-content .tab-pane .main-body .pitem .bg-img {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  max-height: 150px;
+  height: 150px;
+}
+
+.user-home .tab-content .tab-pane .main-body .pitem .bg-img .overlay {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  opacity: 0;
+  -webkit-transition: ease-in-out 200ms all;
+  transition: ease-in-out 200ms all;
+}
+
+.user-home .tab-content .tab-pane .main-body .pitem .bg-img .overlay a, .user-home .tab-content .tab-pane .main-body .pitem .bg-img .overlay button {
+  min-width: 96px;
+}
+
+.user-home .tab-content .tab-pane .main-body .pitem .bg-img .overlay:hover {
+  opacity: 1;
+  background-color: rgba(250, 250, 250, 0.486);
+}
+
+.user-home .tab-content .tab-pane .main-body .pitem .desc .name {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.user-home .tab-content .tab-pane .main-body .pitem .desc .about {
+  color: #807d7d;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-size: 12px;
+}
+
+@media screen and (max-width: 576px) {
+  .user-home .tab-content .tab-pane .main-body .pitem {
+    margin: 0 0% 4% 0 !important;
+    width: calc(98%);
+    border-radius: .5rem !important;
+    overflow: hidden;
+  }
+}
+
+.msg-body .message:hover {
+  color: black;
+}
+
+.msg-body:hover .message {
+  color: black;
+}
+
+.msg-body:hover span {
+  color: grey;
+}
+/*# sourceMappingURL=profile-setting.css.map */

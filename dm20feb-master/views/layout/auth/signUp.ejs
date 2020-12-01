@@ -1,0 +1,107 @@
+<%- include('../../includes/header.ejs',{pageTitle:pageTitle}); %>
+    <link rel="stylesheet" href="../css/main.css">
+
+    </head>
+
+    <body>
+
+            <%- include("../../includes/navBar.ejs"); %>
+            <%- include("../../includes/shortcutBar.ejs") %>
+
+            <div class="container">
+                <div class="row p-3 my-3 d-flex flex-column justify-content-center align-items-center ">
+                        
+                        <% if (errorMessage ) { %>
+                            <div class="alert alert-danger alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <%= errorMessage %>
+                            </div>
+                            <% } %>
+                            <% if (noticeMessage ) { %>
+                                <div class="alert alert-info alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    <%= noticeMessage %>
+                                </div>
+                                <% } %>
+                        
+                        <div class="col-5 panel py-5">
+                                
+                            <div class="col " id="auth-sign-up">
+                                    
+                        <form name="sign-up-form" action="/auth/signup" method="POST" novalidate>
+                            <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" name="name" class="form-control" id="name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="text" name="email" class="form-control" id="email">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password:</label>
+                                
+                                <input type="password" name="password" class="form-control" id="password">
+                            </div>
+                            <div class="form-check mb-3">
+                                <label class="form-check-label font-weight-normal small">
+                                    <input type="checkbox" required class="form-check-input" value="" id="agreeCBox">I agree to Digital Manipur's Terms of Service, Privacy Policy and Content Policies
+                                </label>
+                            </div>
+
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>" >
+
+                            <button type="submit" class="btn btn-danger btn-block p-3">Sign up</button>
+                        </form>
+
+                        
+                        <p class="small pt-3 lightgrey">
+                            By creating an account, you agree to Digital Manipur's
+                            <a>Terms of Service</a>,
+                            <a href="">Cookie Policy</a> ,
+                            <a href="">Privacy Policy</a> and
+                            <a href="">Content Policies</a> .
+                        </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <%- include('../../includes/footer.ejs') %>
+            <script src="./../library/jqueryvalidatemin.js" ></script>
+            <script>
+              $(document).ready(function() {
+                $("#sign-up-form").validate({
+                  rules: {
+                    name : {
+                      required: true,
+                      minlength: 3
+                    },
+                    password : {
+                      required: true,
+                      minlength: 8
+                    },
+                    email: {
+                      required: true,
+                      email: true
+                    },
+                    
+                  },
+                  messages : {
+                    name: {
+                      minlength: "Name should be at least 3 characters"
+                    },
+                   
+                    email: {
+                      email: "The email should be in the format: abc@domain.xyz"
+                    },
+                    password: {
+                      number: "Password should be at least 8 characters"
+                    }
+                  }
+                });
+              });
+            </script>
+
+    </body>
+
+    </html>

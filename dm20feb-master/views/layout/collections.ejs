@@ -1,0 +1,648 @@
+<%- include('../includes/header.ejs') %>
+<link rel="stylesheet" href="/assets/css/collectionPublic.css">
+
+</head>
+
+<body id="collectionPublic">
+    <input type="text" name="userId" id="userId" value="<%= user && user._id ? user._id : '' %>" hidden>
+
+    <%- include('../includes/navBar.ejs' ) %>
+    <div class="container main p-2 p-md-0">
+
+        <section id="quick_navigation">
+            <div class="links">
+                <a href="/">Home</a>
+                <span class="seperator">/</span>
+                <a
+                    href="/collections/<%= typeof state != 'undefined' ? state: typeof defaultState != 'undefined'  ? defaultState : 'manipur' %>">Collections</a>
+                <span class="seperator">/</span>
+                <a href="<%= href %>" onclick="return false;"
+                    class="active"><%= pageTitle ? pageTitle: 'Collection' %></a>
+
+
+            </div>
+        </section>
+
+        <div>
+            <h2 class="my-0">Collections in <span
+                    class="text-capitalize"><%= state ? state: defaultState? defaultState : 'manipur' %></span></h2>
+            <p class="text-secondary " style="font-size: 16px; margin: 0;"> Create and browse lists of the best places
+            </p>
+        </div>
+
+        <section class="nav-controls mt-2">
+            <ul class="nav nav-tabs">
+                <!-- <li class="nav-item">
+                  <a class="nav-link " data-toggle="tab" href="#home">Home</a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#Handpicked">Handpicked
+                    </a>
+                </li>
+                <% if ( user ) { %>
+
+                <li class="nav-item" onclick="fetchSavedCollections()">
+                    <a class="nav-link" data-toggle="tab" href="#savedCollections">Saved Collections</a>
+                </li>
+                <li class="nav-item">
+                    <a onclick="fetchMyCollections(event)" class="nav-link" data-toggle="tab" href="#MyCollections">My
+                        Collections</a>
+                </li>
+                <li class="nav-item ml-3 ml-auto">
+                    <button class="btn btn-outline-secondary  float-right my-2 " id="createCollectionBtn">Create
+                        Collection</button>
+                        </li>
+                        <% } %>
+            </ul>
+        </section>
+
+        <section class="main-body ">
+            <div class="tab-content">
+                <div class="tab-pane px-0 container active" id="Handpicked">
+
+                    <section id="more_collections" class="Allcollections" style="margin-top: 25px !important;">
+                        <% if (( staticCollections &&  staticCollections.length > 0  ) || ( moreCollections &&  moreCollections.length > 0  ) ) { %>
+
+                        <div class="places">
+
+                            <% if ( staticCollections &&  staticCollections.length > 0  ) { %>
+
+                            <% staticCollections.forEach( place => {   if (place.places && place.places.length >= 0 ) { %>
+                            <div class="place px-2  col-md-4 col-lg-3" data-id="<%= place._id %>">
+                                <a data-id="<%= place._id %>"
+                                    href="<%= rootDomain %>/collections/<%= state ? state: defaultState? defaultState : 'manipur' %>/<%= place.id %>">
+                                    <% if (place.coverImage) { %>
+                                    <div class="cover-image lozad"
+                                        data-background-image="/uploads/images/mobile/<%=  place.coverImage %>"
+                                        data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  place.coverImage %>') 1x , url('/uploads/images/web_thumbnail/<%=  place.coverImage %>') 2x">
+
+                                        <% } else { %>
+                                        <div class="cover-image lozad"
+                                            data-background-image="/assets/img/bg-abstract-lg.jpg">
+                                            <% } %>
+
+                                            <div class="overlay p-3">
+                                                <div class="controls">
+
+                                                </div>
+                                                <div class="details">
+                                                    <div class="name"><%= place.name %></div>
+                                            <div class="place_count"><%= staticCollectionCounts[place.id] + ' Place(s)' %>
+                                                <i class="fas fa-caret-right ml-1"></i>
+                                            </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                </a>
+
+
+                            </div>
+                            <% } }) %>
+                            <% } %>
+
+                            <% if ( moreCollections &&  moreCollections.length > 0  ) { %>
+
+                            <% moreCollections.forEach( place => {   if (place.places && place.places.length > 0 ) { %>
+                            <div class="place px-2  col-sm-6 col-md-4 col-lg-3" data-id="<%= place._id %>">
+                                <a data-id="<%= place._id %>"
+                                    href="<%= rootDomain %>/collections/<%= state ? state: defaultState? defaultState : 'manipur' %>/<%= String(place.name).replace(/\s/g,'-') %>/<%= place._id %>">
+                                    <% if (place.coverImage) { %>
+                                    <div class="cover-image lozad"
+                                        data-background-image="/uploads/images/mobile/<%=  place.coverImage %>"
+                                        data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  place.coverImage %>') 1x , url('/uploads/images/web_thumbnail/<%=  place.coverImage %>') 2x">
+
+                                        <% } else { %>
+                                        <div class="cover-image lozad"
+                                            data-background-image="/assets/img/bg-abstract-lg.jpg">
+                                            <% } %>
+
+                                            <div class="overlay p-3">
+                                                <div class="controls">
+                                                    <!-- <button class="btn saved">
+                                                <i class="far fa-plus"></i>
+                                                Save Collection
+
+                                            </button>
+                                            <button class="btn rounded-circle copy">
+                                                <i class="far fa-link "></i>
+                                            </button> -->
+                                                </div>
+                                                <div class="details">
+                                                    <div class="name"><%= place.name %></div>
+                                                    <div class="place_count"><%= place.places.length + ' Place(s)' %> 
+                                                        <i class="fas fa-caret-right ml-1"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                </a>
+
+
+                            </div>
+                            <% } }) %>
+                            <% } %>
+
+
+
+                        </div>
+                        <% } %>
+                    </section>
+                </div>
+                <div class="tab-pane px-0  container " id="savedCollections">
+                    <div class="p-3 my-3 d-flex flex-column justify-content-center default">
+                        <div class="my-5 d-flex justify-content-center">
+                            <!-- <img src="" width="150px" height="150px" alt=""> -->
+                            <i class="fal fa-bookmark " style="font-size: 130px; color: #e7e7e7;"></i>
+                        </div>
+                        <div class="display-4 text-center text-muted" style="font-size: 26px; font-weight: 400;">
+                            Save collections you love! <br>
+                            They'll appear here.
+                        </div>
+
+                    </div>
+                    <section id="more_collections"  class="Allcollections" style="margin-top: 25px !important;">
+                        <div class="places">
+
+                        </div>
+                    </section>
+                </div>
+                <div class="tab-pane px-0  container " id="MyCollections">
+                    
+                    <div class="p-3 my-3 d-flex flex-column justify-content-center default">
+                        <div class="my-5 d-flex justify-content-center">
+                            <!-- <img src="" width="150px" height="150px" alt=""> -->
+                            <i class="fal fa-bookmark " style="font-size: 130px; color: #e7e7e7;"></i>
+                        </div>
+                        <div class="display-4 text-center text-muted" style="font-size: 26px; font-weight: 400;">
+                            Create your own collections and share it.<br>
+                        </div>
+                    </div>
+                    <section id="more_collections"  class="Allcollections" style="margin-top: 25px !important;">
+                        <div class="places">
+
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="d-flex flex-row justify-content-center alert-container"
+        style=" position: fixed; top: 30px; width: 100%; height: auto;">
+        <div class="col-6 " style="z-index: 1; font-size: 22px;">
+            <div class="alert alert-success alert-dismissible" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong class="mr-3">Success!</strong> <span class="message"></span>
+            </div>
+
+            <div class="alert alert-info alert-dismissible" style="display: none;;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong class="mr-3">Info!</strong> <span class="message"></span>
+            </div>
+
+            <div class="alert alert-danger alert-dismissible" style="display: none;;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong class="mr-3">Error!</strong> <span class="message"></span>
+            </div>
+        </div>
+
+    </div>
+
+    <%- include('./../includes/modals/createCollectionUser.ejs') %>
+    <%- include('./../includes/modals/editCollectionUser.ejs') %>
+
+    <script type="text/javascript" src="/assets/js/lozad.min.js">
+
+    </script>
+    <script>
+        // image lazy load
+        const observer = lozad('.lozad', {
+            // load: function (el) {
+            //     console.log('loading element');
+
+            //     // Custom implementation to load an element
+            //     // e.g. el.src = el.getAttribute('data-src');
+            // },
+            loaded: function (el) {
+                // Custom implementation on a loaded element
+                console.log('loaded element');
+                console.log($(el.target));
+
+                el.classList.add('zoom-bg');
+            }
+        }); // lazy loads elements with default selector as '.lozad'
+        observer.observe();
+
+        // online/offline
+        window.addEventListener('load', function () {
+
+            function updateOnlineStatus(event) {
+                document.body.setAttribute("data-online", navigator.onLine);
+            }
+            updateOnlineStatus();
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+        });
+
+
+        // bookmark icon
+        $(".bookmark > i").click(function (e) {
+            // Do something
+            console.log("Common");
+
+            console.log($(e.target));
+            $(e.target).parent().trigger('click');
+            e.stopImmediatePropagation();
+            return false;
+
+        });
+
+        $(document).on('click', ".bookmark i.save", (e) => {
+            // Do something
+            console.log("SAVE");
+            console.log($(e.target));
+            $(e.target).parent().trigger('click');
+            e.stopImmediatePropagation();
+            return false;
+
+            alert(e.isPropagationStopped());
+
+        });
+
+        $(document).on('click', ".bookmark i.remove", (e) => {
+            // Do something
+            console.log("REMOVE");
+            console.log($(e.target));
+            $(e.target).parent().trigger('click');
+            e.stopImmediatePropagation();
+            return false;
+            alert(e.isPropagationStopped());
+
+        });
+
+        // bookmark spinner
+        $(".bookmark > div").click(function (e) {
+            // Do something
+            e.stopPropagation();
+            alert(e.isPropagationStopped());
+        });
+
+        // bookmark div 
+        $(".bookmark").click(e => {
+
+            // check isonline
+            // if (!navigator.onLine) {
+            //     showDangerAlert('Oops! Something went wrong. Please contact support.');
+            //     e.stopPropagation();
+            //     return false;
+            // }
+
+            let id = $(e.target).data('id'); // clicked on button
+            if (!id)
+                return;
+
+            console.log({
+                id
+            });
+            console.log($(e.target));
+
+            // mode
+            const save = $(e.target).children('i').hasClass('fal');
+            const remove = $(e.target).children('i').hasClass('fas');
+            const mode = save ? 'save' : remove ? 'remove' : null;
+
+            // request
+            const rootDomain =
+                `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+            // loading
+            console.log("IsDIV ", $(e.target).hasClass('bookmark'));
+
+            $(e.target).empty();
+            $(e.target).html(`<div class="spinner-border spinner-border-sm"></div>`);
+
+            $.post(`${rootDomain}/users/bookmark/${mode}/${id}`, null, (data, status) => {
+                console.log({
+                    data,
+                    status
+                });
+                if (status == 'success' && data) {
+
+                    // change icon
+                    if (save) {
+                        $(e.target).html(`<i class="fas fa-bookmark remove"></i>`);
+                    }
+
+                    if (remove) {
+                        $(e.target).html(`<i class="fal fa-bookmark save"></i>`);
+                    }
+
+                } else {
+                    showDangerAlert('Oops! Something went wrong. Please contact support.');
+                }
+            }).fail(e => {
+                showDangerAlert('Oops! Something went wrong. Please contact support.');
+                if (save) {
+                    $(e.target).html(`<i class="fal fa-bookmark save"></i>`);
+                }
+
+                if (remove) {
+                    $(e.target).html(`<i class="fas fa-bookmark remove"></i>`);
+                }
+
+            });
+
+            e.stopPropagation();
+            return false;
+
+        });
+
+
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").show();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+
+        // collection click
+        // $("#more_collections .places .place a , #moreCollections .places .place").click( e => {
+
+        //     e.preventDefault();
+
+        //     const id = $(e.target).data('id');
+        //     if ( !id ) return;
+        //     const form = `<form action="/collections/${id}" method="post" ></form>`;
+        //     console.log($(form).prop());
+
+        // });
+
+        function copyLink() {
+
+            /* Alert the copied text */
+
+            var input = document.createElement('textarea');
+            input.innerHTML = window.location.href;
+            document.body.appendChild(input);
+            input.select();
+            var result = document.execCommand('copy');
+            document.body.removeChild(input);
+            showSuccessAlert("Link Copied to Clipboard");
+
+            return result;
+
+        }
+
+        function fetchSavedCollections() {
+
+            $.post(`${rootDomain}/users/savedCollections`, null, (data, status) => {
+                console.log({
+                    data
+                });
+                if (status == 'success' && data.length > 0) {
+                    $("#savedCollections .default").removeClass('d-flex').addClass('d-none');
+                    $("#savedCollections .places").empty();
+                    data.forEach(collection => {
+                        let coverImage;
+                        if (collection && collection.id && collection.id.coverImage) {
+                            coverImage = `
+                                        <div class="cover-image lozad"
+                                            style="
+                                            background-image: url('/uploads/images/mobile/${collection.id.coverImage }')"
+                                            data-background-image="/uploads/images/mobile/${collection.id.coverImage }"
+                                            data-background-image-set="url('/uploads/images/mobile_thumbnail/${collection.id.coverImage}') 1x ,
+                                            url('/uploads/images/web_thumbnail/${collection.id.coverImage}') 2x"
+                                            >
+                                        `;
+                        } else {
+                            coverImage = `
+                                        <div class="cover-image lozad"
+
+                                            data-background-image="/assets/img/bg-abstract.jpg"
+                                            >
+                                        `;
+                        }
+
+                        if ( collection.id && collection.id._id ) {
+                        $("#savedCollections .places").append(
+                            `
+                                        <div class="place px-2  col-md-4 col-lg-3" data-id="${collection._id}">
+                                            <a data-id="${collection.id._id}" 
+                                                href="${collection.url}">
+                                                    ${coverImage}
+                                                        <div class="overlay p-3">
+                                                            <div class="controls">
+
+                                                            </div>
+                                                            <div class="details">
+                                                                <div class="name">${collection.id.name}</div>
+                                                                <div class="place_count"> ${collection.placesCount} Places <i class="fas fa-caret-right ml-2"></i></div> 
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                            </a>
+                                        </div>
+                                        `
+                        );
+                                    }
+
+                    });
+
+                } else {
+                    $("#savedCollections .default").removeClass('d-none').addClass('d-flex');
+                    $("#savedCollections .places").empty();
+                }
+            }).fail(e => {
+
+            });
+        }
+
+
+
+        function fetchMyCollections() {
+
+            $.post(`${rootDomain}/users/myCollections`,  (data, status) => {
+                console.log({
+                    data
+                });
+                if (status == 'success' && data.length > 0) {
+                    $("#MyCollections .default").removeClass('d-flex').addClass('d-none');
+                    $("#MyCollections .places").empty();
+                    data.forEach(collection => {
+                        let coverImage;
+                        if (collection && collection.coverImage) {
+                            coverImage = `
+                            <div class="cover-image lozad"
+                                style="
+                                background-image: url('/uploads/images/mobile/${collection.coverImage }')"
+                                data-background-image="/uploads/images/mobile/${collection.coverImage }"
+                                data-background-image-set="url('/uploads/images/mobile_thumbnail/${collection.coverImage}') 1x ,
+                                url('/uploads/images/web_thumbnail/${collection.coverImage}') 2x"
+                                >
+                            `;
+                        } else {
+                            coverImage = `
+                            <div class="cover-image lozad"
+
+                                data-background-image="/assets/img/bg-abstract.jpg"
+                                >
+                            `;
+                        }
+
+                        // href="/collections/${collection.places[0].state}/${collection.name}/${collection._id}"
+
+                        $("#MyCollections .places").append(
+                            `
+                            <div class="place px-2  col-md-4 col-lg-3" data-id="${collection._id}" onclick="editCollection(event)">
+                                <a data-id="${collection._id}" 
+                                    >
+                                        ${coverImage}
+                                            <div class="overlay ">
+                                                <div class="controls p-3 ">
+
+                                                </div>
+                                                <div class="details p-3">
+                                                    <div class="name">${collection.name}</div>
+                                                    <div class="place_count"> ${collection.places ? collection.places.length : 0} Places <i class="fas fa-caret-right ml-2"></i></div> 
+                                                </div>
+                                                <div class="editOverlay p-0 m-0" data-id="${collection._id}" onclick="editCollection(event)" >
+                                                    <i class="far fa-edit"></i>
+                                                    </div>
+                                            </div>
+
+                                        </div>
+                                </a>
+                            </div>
+                            `
+                        );
+
+                    });
+
+                } else {
+                    $("#MyCollections .default").removeClass('d-none').addClass('d-flex');
+                    $("#MyCollections .places").empty();
+                }
+            }).fail(e => {
+
+            });
+        }
+
+        function editCollection(e){
+            console.log("Editing collection : ", $(e.target).data('id'));
+            let id = $(e.target).data('id');
+            if (id) {
+                fetchCollection(id);
+            }
+        }
+
+        // fetch single collection
+        function fetchCollection(id) {
+            $("#createCollectionModalEC").modal('show');
+            $("#createCollectionModalEC .modal-body .spinner-border").show();
+
+            $("#createCollectionModalEC .modal-body .main-content").hide();
+
+            // fetch admin collections
+            $.post(`${rootDomain}/users/collection/${id}`, null, (data, status) => {
+                
+                if (status == 'success' && data) {
+
+                    CollectionToEdit = data;
+                    console.log({CollectionToEdit});
+                    $("#createCollectionModalEC .modal-body .main-content").show();
+                    $("#createCollectionModalEC .modal-body .spinner-border").hide();
+
+                    // assign values
+                    $("#createCollectionFormEC #collectionIdEC").val(id);
+                    $("#createCollectionFormEC #collectionStatusEC").prop('checked',data.status);
+                    $("#createCollectionFormEC #collectionStatusEC").trigger('change');
+                    
+                    $("#createCollectionFormEC input[name='name']").val(data.name);
+                    $("#createCollectionFormEC input[name='coverImageURL']").val(data.coverImage);
+                    $("#createCollectionFormEC input[name='description']").val(data.description);
+                    $('#createCollectionFormEC .first .cover-image').show();
+                    $('#createCollectionFormEC .first .cover-image').css('background-image',
+                        `url('/uploads/images/web_thumbnail/${data.coverImage}')`);
+
+                    
+
+                    $('#createCollectionFormEC .first .cover-image').show();
+
+                    if (CollectionToEdit.places.length > 0) {
+                        $("#createCollectionFormEC #placesCountIdEC").html(CollectionToEdit.places.length);
+                        $("#createCollectionFormEC #InCollectionEC .list-group").html('');
+                        CollectionToEdit.places.forEach(place => {
+                            console.log({place});
+                            $("#createCollectionFormEC #InCollectionEC .list-group").append(
+                                `
+                                <li class="list-group-item d-flex  flex-row py-1">
+                                    <div class="col-9  d-flex  flex-column">
+                                        <label class="mb-0">${place.name}</label>
+                                        <span class="text-muted font-weight-normal">
+                                            ${place.district}
+                                            ${ place.locality ? ', '+  place.locality :'' }
+
+                                            </span>
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="button" data-id="${String(place.id)}" onclick="removePlaceEC(event)" class="btn btn-link text-danger  btn-sm float-right">Remove</button>
+                                    </div>
+                                </li>
+                                `
+                            );
+                        });
+
+                        $("#InCollectionEC .collection-default").hide();
+                        // $("#InCollectionEC .list-group").show();
+
+
+                    } else {
+
+                        $("#InCollectionEC .collection-default").show();
+                        // $("#InCollectionEC .list-group").hide();
+
+
+                    }
+
+                }
+            }).fail(e => {
+                console.log({
+                    e
+                });
+            });
+        }
+
+        // listen for click on edit icon for - edit collection 
+        $(document).on('click', ".editOverlay", (e)=>{
+            // console.log(e.target);
+            // console.log($(e.target).parent());
+            // console.log($(e.target).parent().parent());
+            // console.log($(e.target).parent().parent().parent());
+            // console.log($(e.target).parent().parent().parent().parent());
+            // console.log($(e.target).parent().parent().parent().parent().parent());
+            $(e.target).parent().parent().parent().parent().parent().trigger('click');
+        });
+
+
+    </script>
+
+    <%- include('../includes/footer.ejs') %>

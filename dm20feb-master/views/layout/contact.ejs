@@ -1,0 +1,246 @@
+<%- include('../includes/header.ejs',{ 
+    keywords: ['business claim','onwer claim','listing'] , 
+    author: 'Digtal Manipur',
+    description: `Claim your listing in Digital Manipur`
+ }) %>
+<link rel="stylesheet" href="/assets/css/claim.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+<link rel="stylesheet" href="/assets/css/contact.css">
+
+
+</head>
+
+<body>
+    <%- include('./../includes/navBar') %>
+    <%- include('./../includes/alert'); %>
+
+    <section class="mt-4">
+        <div class="container px-0">
+            <!-- <div class="my-3 path"><a href="/">Home</a><span class="mx-2">&gt;</span><a href="#">Contact</a></div> -->
+            <div class="col  cus-panel px-0 rounded bg-white">
+                <div class="bg-img claim-img-lanscape"
+                    style="background-image: url('/assets/img/social-media-busineess.jpg'); min-height: 300px;">
+                    <div class="d-block d-flex justify-content-center flex-column align-items-center bg-overlay">
+
+
+                        <h1 class=" text-center text-white  px-3" style="letter-spacing: 0px;">
+                            We would love to hear from you!</h1>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+            <div class="mt-5 row  ">
+
+
+                <div class="col-xs-12 col-md-8 ">
+
+                    <div class=" bg-white d-block p-4 border rounded ">
+                        <form id="sendMessageForm" action="/site/career/message" method="POST"
+                            enctype="multipart/form-data">
+
+                            <div class="form-group ">
+                                <input type="text" name="fullName" class="form-control" placeholder="Full name*">
+                            </div>
+                            <div class="form-group ">
+                                <input type="text" name="email" class="form-control" placeholder="Email*">
+                            </div>
+                            <div class="form-group ">
+                                <input type="text" name="mobile" class="form-control"
+                                    placeholder="Mobile number (optional)">
+                            </div>
+                            <div class="form-group">
+                                <select name="subject" class="form-control">
+                                    <option disabled selected hidden for="">How can we help you? *</option>
+                                    <option value="I would like to give feedback/suggestions.">I would like to give
+                                        feedback/suggestions.</option>
+                                    <option value="I found incorrect/outdated information on a page.">I found
+                                        incorrect/outdated information on a page.</option>
+                                    <option value="The website/app are not working the way they should.">The website/app
+                                        are not working the way they should.</option>
+                                    <option
+                                        value="There is a photo/review that is bothering me and I would like to report it.">
+                                        There is a photo/review that is bothering me and I would like to report it.
+                                    </option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group ">
+                                <textarea type="text" name="message" class="form-control" rows="5"
+                                    placeholder="Message*"></textarea>
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <button id="submitMessage" class="btn btn-danger px-3 " style="">Send message</button>
+                            </div>
+                        </form>
+
+                    </div>
+
+
+                </div>
+
+                <div class="col-xs-12 col-md-4 mt-4 mt-md-0">
+                    <div class="border rounded bg-white p-4 mb-3">
+                        <h5>Work with us</h5>
+                        <p>We're hiring! Check out all open positions here.</p>
+                        <a href="/site/career" class="btn-danger btn">See our open positions</a>
+                    </div>
+                    <div class="border rounded bg-white p-4 mb-3">
+                        <h5>Our office</h5>
+                        <div class="d-flex flex-row mb-3">
+                            <div>
+                                <i class="far fa-map-marker-alt mr-3"></i>
+                            </div>
+                            <div>
+                                Khurai Thoudingjam Leikai, Lamlong, Imphal East, Manipur.
+                            </div>
+                        </div>
+                        <a target="blank"
+                            href="https://www.google.com/maps/search/?api=1&query=Leibak Information Technology, Khurai Thoudingjam Leikai, Lamlong, Imphal East, Manipur"
+                            class="btn-danger btn">Get directions
+                            <i class="far fa-directions ml-3 " style="font-size: 1.5rem;"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </section>
+
+
+    <script>
+        $(document).ready(e => {
+            fixedSeeMores();
+        });
+
+        function getRows(selector) {
+            var height = selector.scrollHeight;
+            var line_height = $(selector).css('line-height');
+            line_height = parseFloat(line_height);
+            return Math.round(height / line_height);
+        }
+
+        function fixedSeeMores() {
+            const messsages = $(".message-body");
+
+            for (let i = 0; i < messsages.length; i++) {
+                console.log("Rows : ", getRows(messsages[i]));
+                if (getRows(messsages[i]) <= 5) {
+                    $(messsages[i]).siblings('button').hide();
+                }
+            }
+
+
+        }
+
+
+        $(document).on('click', '.see-more-message', e => {
+            $(e.target).siblings('.message-body').toggleClass('see-less');
+            const text = $(e.target).html();
+            $(e.target).html(text == 'see more' ? 'see less' : 'see more');
+
+        });
+
+
+        $(".more-info").click(e => {
+            const id = $(e.target).data('id');
+            if (id) {
+                $("#desc-" + id).toggle();
+            }
+        });
+
+
+        //  apply job
+        $("#submitMessage").click(e => {
+            e.preventDefault();
+
+            const formData = new FormData($("#sendMessageForm")[0]);
+
+            const fullName = formData.get('fullName');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+
+            let data = {};
+            for (let entry of formData.entries()) {
+                console.log(entry[0], '-', entry[1]);
+                data[entry[0]] = entry[1];
+            }
+            if (!message || !fullName || !subject || !email) {
+                showInfoAlert('Please enter required fields (*).');
+                return;
+            }
+
+
+
+            $(e.target).html(`Sending...`).prop('disabled', false);
+            $.post(`${rootDomain}/site/contact/message`, data,
+                (data, status) => {
+                    console.log('Message sent.');
+                    console.log("Res: ", data);
+
+                    if (data && data.msg && data.msg == 'Done') {
+                        showSuccessAlert('Your message has been sent.');
+                        $("#sendMessageForm").trigger('reset');
+                    }
+                    $(e.target).html(`Send message`).prop('disabled', false);
+
+                }).fail(data => {
+                    console.log('Error', data);
+                    showDangerAlert('Please try again after some time.');
+                    $(e.target).html(`Send message`).prop('disabled', false);
+                });
+
+            return false;
+
+        });
+
+
+
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-container").show();
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+
+        function showInfoAlert(message) {
+            $(".alert-container").show();
+            $(".alert-info .message").html(message);
+            $(".alert-info").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-info").hide();
+            }, 1500);
+        }
+    </script>
+
+
+    <%- include('../includes/footer.ejs') %>
+
+
+</body>
+
+</html>

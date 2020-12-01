@@ -1,0 +1,591 @@
+
+
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    
+
+
+</head>
+
+<body class="admin-page">
+
+    <%- include('./../../includes/alert'); %>
+
+
+    <section class="main-body container-fluid row mx-0 px-0">
+
+        <!-- Left column navigation  -->
+        <%- include('./../../includes/adminNavigation.ejs') %>
+
+        <!-- Right column main body -->
+        <div class="col-10  main-col px-0" ">
+
+            <!-- Top navigation -->
+            <section class=" container nav-container mx-0">
+                    <div class="d-flex nav-header  bg-white  py-2 px-3  " style="width: 100%;">
+
+                        <div class="dropdown dropdown-menu-right ml-auto" style="color: black;">
+                            <button class="shadow-none btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
+                                type="button">
+                                <% if( typeof user.images.profile.common.url != "undefined" && user.images.profile.common.url) { %>
+                                <img class="rounded-circle" src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                    style="width: 25px;height: 25px;margin-right: 5px;">
+                                <% } else { %>
+                                <i class="fad fa-user-shield font-weight-bold"></i>
+                                <% } %>
+
+                                <span class="px-1">
+                                    <%= `${user.name.firstName}` %>
+                                </span>
+                            </button>
+                            <div class="dropdown-menu text-secondary" role="menu"
+                                style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                                <i class="fal fa-angle-up"  style="
+                                color: #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 10px;
+                                font-size: 22px;
+                                z-index: 999;
+                                "></i>
+                                <a class="dropdown-item" role="presentation" href="#" style="color: black;">Profile</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Notifications</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Settings</a>
+                                <hr style="margin: 0;">
+                                <form action="/auth/logout?via=admin" method="POST">
+                                    <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                        role="presentation">Logout</button>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+            </section>
+
+            <!-- main content -->
+            <section>
+
+                <div class="container p-5 " id="sublocalityContainer">
+
+                    <div class="row" style="position: absolute;
+                    right: 50px;
+                    top: 0;
+                    z-index: 1">
+                
+                        <div class="toast" data-delay="5000">
+                            <div class="toast-header">
+                                <strong class="mr-auto text-primary"></strong>
+                                <!-- <small class="text-muted">5 mins ago</small> -->
+                                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                            </div>
+                            <div class="toast-body">
+                
+                            </div>
+                        </div>
+                    </div>
+                
+                    <section class="row px-3 edit-section">
+                        <div class="col bg-white p-3 rounded border">
+                            <h5 class="title">Add sub-locality </h5>
+                            <div class="form">
+                                <form action="" name="sublocality-form">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <input autocomplete="off" type="text" class="form-control" id="sublocality"
+                                                    placeholder="Enter new sub-locality ...">
+                                            </div>
+                                            <!-- <div class="form-group">
+                                                <label for="countrySelect">Country</label>
+                                                <select name="countrySelect"  class="form-control" id="sublocalityCountrySelect">
+                                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="stateSelect">State</label>
+                                                <select name="stateSelect"  class="form-control" id="sublocalityStateSelect">
+                                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                                                </select>
+                                            </div> -->
+                                            <div class="form-group">
+                                                <label for="localitySelect">Locality</label>
+                                                <select name="localitySelect"  class="form-control" id="sublocalityLocalitySelect">
+                                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                                                </select>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="t" id="multilist_holder">
+                
+                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <input type="hidden" id="updateIdsublocality" name="updateId" value="null">
+                                    <hr class="my-3">
+                                    <div class="row px-3 page-control">
+                                        <button type="button" id="addBtnsublocality" onclick="addsublocality(event)"
+                                            class="btn btn-success mr-3">Submit</button>
+                                        <button type="button" hidden id="updateBtnsublocality" onclick="updatesublocality()"
+                                            class="btn btn-success mr-3">Update</button>
+                                        <button type="reset" id="cancelBtnsublocality" class="btn btn-info mr-3 "
+                                            onclick="cancelEditDistrict()">Cancel</button>
+                                        <button hidden type="button" id="deleteBtnsublocality" class="btn btn-danger mr-3 ">Delete</button>
+                                        <script>
+                                            $(document).ready(function () {
+                
+                                                var div = $('<div></div>');
+                                                div.append(`<div class="px-3 py-2" style="display: flex;"> 
+                                                                    <button onclick="deletesublocality()" class="btn btn-success small mr-3">Yes</button>
+                                                                    <button class="btn btn-secondary small">No</button>
+                                                                </div>`);
+                                                var options = {
+                                                    placement: 'right',
+                                                    html: true,
+                                                    title: "Are you sure?",
+                                                    trigger: 'click',
+                                                    template: `
+                                                    <div class="popover" role="tooltip" style="width: min-width:200px">
+                                                        <div class="arrow"></div>
+                                                            <h3 class="popover-header"> Are you sure? </h3>
+                                                            <div class="popover-body" style="">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        `,
+                                                    content: div,
+                                                    animation: true
+                
+                                                };
+                
+                                                $('#deleteBtnsublocality').popover(options);
+                
+                
+                
+                
+                                            });
+                
+                                            $('html').on('click', function (e) {
+                                                if (typeof $(e.target).data('original-title') == 'undefined' &&
+                                                    !$(e.target).parents().is('.popover.in')) {
+                                                    $('#deleteBtnsublocality').popover('hide');
+                                                }
+                                            });
+                
+                                        </script>
+                                    </div>
+                                </form>
+                
+                            </div>
+                        </div>
+                
+                    </section>
+                
+                    <section class="row px-3">
+                        <div class="col bg-white p-3 rounded border">
+                            <div class="row px-0 my-2 py-1">
+                                <div class="col">
+                                    <span>
+                                        <h5>Recent sub-locality </h5>
+                                    </span>
+                                </div>
+                                <div class="col d-flex flex-row "
+                                    style="display: flex; align-items: center; justify-content: space-around;">
+                                    <input autocomplete="off" type="text" class="" style="width:90%;  padding: 4px 10px;display: none;"
+                                        name="searchsublocality" id="searchsublocality" class="form-control" onkeyup="searchsublocality()"
+                                        placeholder=" Enter sub-locality to search..." id="">
+                                    <a class="ml-auto" onclick="(() => { $('#searchsublocality').show().focus(); searchsublocality();  })()"
+                                        style="color: initial; cursor: pointer;">
+                                        <i class="fa fa-search text-secondary"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="posts-list">
+                                <ul class="list-group " id="Recent_sublocality_list">
+                
+                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                
+                
+                
+                </div>
+                
+
+                
+            <!-- Main content ends here -->
+            </section>
+
+        <!-- Right column main body ends here -->
+         </div>
+
+
+    </section>
+
+
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/fontawesome-pro-5.11.1-web/js/fontawesome.min.js"></script>
+    <script src="/assets/js/admin.js"></script>
+
+   
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+
+
+<script >
+
+
+    $(document).ready(e=> {
+        getsublocality();
+    });
+
+
+    // AJAX sublocality PAGE
+    let recentsublocality,  recentLocalitySublocality ;
+    const getsublocality = () => {
+
+        
+
+        console.log('calling getsublocality');
+        $('#sublocalityContainer #Recent_sublocality_list').html('');
+        $('#sublocalityContainer #Recent_sublocality_list').append(`<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+        $.get(rootDomain + '/admin/sublocality/recent', (data, status) => {
+
+            if (status == 'success') {
+                console.log("Response getsublocality : ", data, status);
+                // $('#totalUsers').html(data.usersCount);
+                // $('#monthlyUsers').html(data.usersCountCurrentMonth);
+                // $('#totalPosts').html(data.postsCount);
+                // $('#monthlyPosts').html(data.postsCountCurrentMonth);
+                recentsublocality = data.sublocalities;
+                recentLocalitySublocality = data.localities;
+                
+                refreshsublocalityList(recentsublocality);
+
+
+                // append locality list
+                $('#sublocalityContainer #sublocalityLocalitySelect').html('');
+                var counta = 0;
+                data.localities.forEach( locality => {
+
+                    $('#sublocalityContainer #sublocalityLocalitySelect').append(`
+                        <option value="${locality._id}" name="${locality.name}">${++counta}. ${locality.name}</option>
+                    `);
+                });
+                
+
+            }
+
+        });
+
+    }
+
+
+    function refreshsublocalityList(data) {
+
+        console.log("refreshsublocalityList data ", data);
+        $('#sublocalityContainer #Recent_sublocality_list').html('');
+        // append list header
+        $('#sublocalityContainer #Recent_sublocality_list').append(`<li class="cus-list-header list-group-item d-flex justify-content-between align-items-center">
+            <div class="col-3 d-inline-block text-truncate">
+                <b> Sub-locality </b>
+            </div>
+            <div class="col-2 d-inline-block text-truncate">
+                <b> Locality </b>
+            </div>
+           
+            <div class="col-3 d-inline-block text-truncate">
+                <b> Created Date </b>
+            </div>
+            <div class="col-3 d-inline-block text-truncate"><b>Modified Date</b></div>
+            <div class="col-1" >   
+                <b>Manage</b>                    
+            </div>
+        </li>`);
+
+        data.forEach(sublocality => {
+
+            // append list data
+            $('#sublocalityContainer #Recent_sublocality_list').append(`
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="col-3 d-inline-block text-truncate">${sublocality.name}</div>
+                <div class="col-2 d-inline-block text-truncate">
+                    ${sublocality.locality && sublocality.locality.name ? sublocality.locality.name :''}
+            </div>
+                <input type="hidden" name="keyId" value="${sublocality._id}" />
+                <div class="col-3 d-inline-block text-truncate">${ getCustomDate(new Date(sublocality.createdOn)) }</div>
+                <div class="col-3 d-inline-block text-truncate">${ getCustomDate(new Date(sublocality.modifiedOn)) }</div>
+                <div class="col-1" >                            
+                    <button  class="btn btn-outline-primary btn-sm" onclick="editsublocality(event)">Edit</button>                            
+                </div>
+        </li>
+        `);
+        });
+    }
+
+    function editsublocality(e) {
+
+        $('.main-col').stop(true, false).animate({ scrollTop: 0 }, 'fast');
+        $('#updateBtnsublocality').prop('hidden', false);
+        $('#addBtnsublocality').prop('hidden', true);
+        $('#deleteBtnsublocality').prop('hidden', false);
+
+        // find sublocality from previously fetch sublocality array
+        let sublocality = recentsublocality.find((sublocality) => {
+            return $(e.target).parent('div').siblings("input").val() == sublocality._id;
+        })
+        if (sublocality) {
+            $('#sublocalityContainer #sublocality').val(sublocality.name);
+            $('#sublocalityContainer .edit-section .title').text('Edit sublocality');
+            $('#updateIdsublocality').val(sublocality._id);
+            $('#sublocalityContainer  #multilist_holder').html('');
+
+            
+            if ( sublocality.locality ) {
+                $('#sublocalityContainer #sublocalityDistrictSelect option:selected').prop('selected', false);
+
+                    var localityIdObject = $('#sublocalityDistrictSelect option').map((index, option) => option.value);
+                    var localityIdArray = Object.values(localityIdObject);
+
+                        console.log('locality ID : ', sublocality.locality._id);
+                        if (localityIdArray.indexOf(sublocality.locality._id) != -1) {
+                            console.log(localityIdArray.indexOf(sublocality.locality._id));
+                            $('#sublocalityContainer #sublocalityDistrictSelect option:nth-child(' + (localityIdArray.indexOf(sublocality.locality._id) + 1) + ')').prop('selected', true);
+                        } else {
+                            console.log('not found : ', sublocality.locality.name);
+
+                        }
+
+            }
+
+        }
+
+
+    }
+
+
+    function cancelEditDistrict() {
+    
+        $('#sublocalityContainer #multilist_holder').html('');            // clear selected options
+        $('#sublocalityContainer .edit-section .title').text('Add new sublocality');
+        $('#sublocalityContainer #sublocalityCountrySelect option:selected').prop("selected", false);
+        $('#sublocalityContainer #sublocalityStateSelect option:selected').prop("selected", false);
+        $('#sublocalityContainer #sublocalityDistrictSelect option:selected').prop("selected", false);
+        $('#updateBtnsublocality').prop('hidden', true);
+        $('#addBtnsublocality').prop('hidden', false);
+        $('#deleteBtnsublocality').prop('hidden', true);
+        $("#sublocalityContainer form[name='sublocality-form']").trigger("reset");
+        $('#sublocalityContainer #sublocality').removeAttr('value');
+
+        // $('#cancelBtnsublocality').prop('hidden', true);
+
+    }
+
+    function updatesublocality() {
+        const updateId = $('#sublocalityContainer #updateIdsublocality').val();
+        console.log('updateId : ', updateId);
+
+
+        const key = $('#sublocalityContainer #sublocality').val();
+        const token = $("#sublocalityContainer form[name='sublocality-form'] input[name='_csrf']").val();
+        // const country = $('#sublocalityCountrySelect').val();
+        // const state = $('#sublocalityStateSelect').val();
+        const locality = $('#sublocalityDistrictSelect').val();
+
+        if ( updateId != null && updateId.length == 24 && locality ) {
+
+            // ajax post update
+            $.post(rootDomain + '/admin/sublocality/update',
+                {
+                    "name": key,
+                    "_csrf": token,
+                    "id": updateId,
+                    
+                    "locality": locality
+                }, (data, status) => {
+
+                    if (status == 'success') {
+                        getsublocality();
+                        cancelEditDistrict();
+                        console.log(data, status);
+                        showToastLocality('Updated successfully');
+                    }
+                });
+
+        }
+    }
+
+    function deletesublocality() {
+
+        const id = $('#sublocalityContainer #updateIdsublocality').val();
+        const token = $("#sublocalityContainer form[name='sublocality-form'] input[name='_csrf']").val();
+        console.log('Deleting sublocality - ', id);
+        if ( id != null && id.length == 24 ) {
+            $.post(`${rootDomain}/admin/sublocality/delete`, {
+                "_csrf": token,
+                "id": id
+            }, (data, status) => {
+                if (status == 'success') {
+                    console.log('Response : ', data);
+                    console.log('sublocality Deleted ');
+                    getsublocality();
+                    showToastLocality('sublocality deleted successfully');
+                    cancelEditDistrict();
+
+                }
+            }
+
+            )
+                .fail(function (error) {
+                    // alert(JSON.parse(error)) ;
+                    const response = JSON.parse(error.responseText);
+                    console.log(response);
+                    showToastLocality(response.error)
+                });
+        }
+
+    }
+
+
+    function addsublocality(event) {
+        event.preventDefault();
+        console.log('adding sublocality..');
+
+        const key = $('#sublocalityContainer #sublocality').val();
+        const token = $(event.target).parent('div').siblings("input[name='_csrf']").val();
+        const locality = $('#sublocalityLocalitySelect').val();
+    
+
+
+        if ( key.length > 0 && district ) {
+            $.post(`${rootDomain}/admin/sublocality/add`, {
+                "name": key,
+                "_csrf": token,
+                "locality": locality
+            }, (data, status) => {
+                if (status == 'success') {
+                    console.log('Response : ', data);
+                    cancelEditDistrict();
+                    showToastLocality('Added!')
+                    getsublocality();
+                }
+            }
+
+            )
+                .fail(function (error) {
+                    // alert(JSON.parse(error)) ;
+                    const response = JSON.parse(error.responseText);
+                    console.log(response);
+                    showToastLocality(response.error)
+                });
+
+        } else {
+            console.log("fields cannot be empty");
+            showToastLocality('Please provide a sublocality name');
+        }
+
+    }
+
+
+
+
+
+    function showToastLocality(title, error = false, message = null) {
+        $('#sublocalityContainer .toast-header strong').text(title);
+        // $('#sublocality .toast-header small').text(title);
+        // $('#sublocality .toast-body ').text(body);
+
+        if (error) {
+            $('#sublocalityContainer .toast-body ').text(message ? message : '');
+            $('#sublocalityContainer .toast-body ').show();
+        } else {
+            $('#sublocalityContainer .toast-body ').hide();
+        }
+        $('#sublocalityContainer .toast').toast('show');
+        // setTimeout(function(){ $('#sublocality .toast').toast('hide') }, 200000);
+    };
+
+    var timer;
+    function searchsublocality() {
+
+        const value = $(" #sublocalityContainer #searchsublocality").val();
+        console.log(value)
+        if (value.length > 0) {
+
+            $('#sublocalityContainer #Recent_sublocality_list').html('');
+            $('#sublocalityContainer #Recent_sublocality_list').append(`<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+
+            if (timer) { clearTimeout(timer); }
+            timer = setTimeout(function () {
+                $.get(`${rootDomain}/admin/sublocality/search?searchText=${value}`, (data, status) => {
+                    // console.log(data,status)
+
+                    if (status == 'success' && data != 'undefined' && data.length > 0) {
+                        console.log(data, status)
+
+                        refreshsublocalityList(data);
+                    } else {
+                        refreshsublocalityList(recentsublocality);
+                    }
+                })
+                    .fail((error) => {
+                        console.log("error")
+
+                        refreshsublocalityList(recentsublocality);
+                    });
+            }, 1000)
+
+        } else {
+            clearTimeout(timer);
+            refreshsublocalityList(recentsublocality);
+        }
+    }
+
+
+   
+
+// show selected sub-categories on right side
+$('#sublocalityContainer #sublocalityMultiSelect').on('click', 'option', function (e) {
+
+$("#sublocalityContainer #sublocalityMultiSelect")
+    .change(function () {
+
+        $('#sublocalityContainer  #multilist_holder').html('');
+        $("#sublocalityContainer  #sublocalityMultiSelect option:selected").each(function () {
+            $(' #sublocalityContainer  #multilist_holder').append(`
+        <span class="badge badge-pill badge-success"> ${ $(this).text()}</span>
+        `);
+        });
+
+    })
+    .trigger("change");
+
+// console.log($('#sublocalityMultiSelect').val());
+});
+
+</script>
+
+</body>
+
+</html>

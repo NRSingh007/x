@@ -1,0 +1,40 @@
+<div class="modal fade" id="filterByLocality">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h6 class="modal-title">Filter search by Locality</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body pt-0 ">
+                
+                <div class="p-3">
+                    <%  for ( let {_id ,group} of filterLocations.localities  ) { %>
+                        <!-- <div class="pincode-header text-muted small"><%= _id %></div> -->
+                        <div class="localitygroup my-2 p-3 d-flex flex-row flex-wrap">
+                        <%  for ( let locality of group ) {   %>
+                            <div class="district px-1 filter-item">
+                        <a href="/search?stext=<%= typeof stext != 'undefined' ? stext : '' %>&slocation=<%=  slocation ? slocation : '' %>&sdistrict=<%= typeof sdistrict != 'undefined' ? sdistrict : '' %>&slocality=<%= typeof locality.name != 'undefined' ? locality.name : '' %>&sstate=<%= typeof sstate != 'undefined'? sstate : '' %>&scat=<%= scat ? scat : '' %>&skeyword=<%= skeyword ? skeyword : '' %>&p=1&li=15&sk=0" class="a-cus">
+        
+                        <span class="badge badge-light p-2 badge-pill">  
+                            <%= locality.name  %> 
+                        </span> 
+                    </a>
+                </div>
+                    <% } %>
+                </div>
+                    <% } %>
+                    
+                </div>
+                
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,66 @@
+.message-body {
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+    word-break: break-word;
+}
+
+.see-less {
+    -webkit-line-clamp: 4;
+}
+
+.jobs{
+    // border-top: 1px solid #3f3f3f31;
+    .jobs-header{
+        div{
+            margin: 0;
+            padding: 0;
+        }
+    }
+    margin-top: 20px;
+    .job {
+        margin: 10px 0;
+        border-bottom: 1px solid #5a5a5a1f;
+        div{
+            margin: 0;
+            padding: 0 10px 0 0;
+            text-transform: capitalize;
+
+            div.row{
+                margin: 0;
+                padding: 0;  
+                div{
+                    text-transform: capitalize;
+
+                    margin: 0;
+                    padding: 0;  
+                    .badge{
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+        .div:first-child{
+            font-weight: 300 !important;
+        }
+
+    }
+}
+
+#applyJob{
+    .form-group{
+        > div:first-child{
+            justify-content: flex-start !important;
+                label{
+                    text-align: right;
+                }
+        }
+        input, select{
+            background-color: rgba(236, 236, 236, 0.582);
+        }
+        
+    }
+}

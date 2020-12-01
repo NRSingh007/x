@@ -1,0 +1,439 @@
+body {
+  color: #000;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.cus-card:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.089);
+}
+
+.cus-card {
+  border-top-left-radius: 1.7em;
+  border-bottom-left-radius: 1.7em;
+}
+
+.cus-card button {
+  color: #fff;
+  width: 100%;
+  text-align: left;
+  border-top-left-radius: 1.7em;
+  border-bottom-left-radius: 1.7em;
+  margin-bottom: 1px;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.cus-card button:hover {
+  color: #fff;
+  background-color: rgba(255, 255, 255, 0.089);
+}
+
+.cus-card button:focus {
+  outline: none;
+  border-color: none;
+  -webkit-box-shadow: none;
+          box-shadow: none;
+}
+
+.cus-card button.btn-active,
+.cus-card button.btn-active i {
+  color: #91ff00;
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.089);
+}
+
+.admin-page input {
+  overflow: hidden;
+}
+
+.admin-page .left-col {
+  min-width: 225px;
+  height: 100vh;
+  color: #fff;
+  background: #226ec3;
+  background: -webkit-gradient(linear, left top, left bottom, from(#226ec3), to(#2dc0fd));
+  background: linear-gradient(180deg, #226ec3 0%, #2dc0fd 100%);
+}
+
+.admin-page .left-col .accordion .cus-card {
+  margin-bottom: 1px;
+  color: #fff !important;
+}
+
+.admin-page .left-col .accordion .cus-card ul.list-group {
+  color: #fff;
+}
+
+.admin-page .left-col .accordion .cus-card ul.list-group li.list-group-item:hover {
+  cursor: pointer;
+}
+
+.admin-page .left-col .accordion .cus-card ul.list-group li.list-group-item {
+  background-color: inherit;
+  margin: 0;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  padding: 0px;
+  border: none;
+  -webkit-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+}
+
+.admin-page .left-col .accordion .cus-card ul.list-group li.list-group-item a:hover {
+  background-color: rgba(255, 255, 255, 0.253);
+}
+
+.admin-page .left-col .accordion .cus-card ul.list-group li.list-group-item a {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  padding: 10px 15px;
+  padding-left: 30px;
+  background-color: #186ecf;
+  color: #fff;
+  list-style: none;
+  text-decoration: none;
+}
+
+.admin-page .left-col .accordion .cus-card ul.list-group li.list-group-item a.btn-active,
+.admin-page .left-col .accordion .cus-card ul.list-group li.list-group-item a.btn-active i {
+  color: #91ff00;
+  font-weight: bold;
+}
+
+.admin-page .left-col .accordion .cus-card ul.list-group li.list-group-item a * {
+  pointer-events: none;
+}
+
+.admin-page .left-col .accordion .cus-card ul.list-group li.list-group-item:first-child a {
+  border-top-left-radius: 1.7em;
+}
+
+.admin-page .left-col .accordion .cus-card ul.list-group li.list-group-item:last-child a {
+  border-bottom-left-radius: 1.7em;
+}
+
+.card-icon-holder {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.card-icon-holder i {
+  font-size: 2.5rem;
+  color: lightgray;
+}
+
+.admin-page .main-col {
+  overflow-y: scroll;
+  color: #000;
+  background-color: rgba(227, 252, 255, 0.705);
+}
+
+.admin-page .main-col .tab-content .active {
+  -webkit-animation: slide-out 200ms ease-out forwards;
+          animation: slide-out 200ms ease-out forwards;
+}
+
+.admin-page .main-col .tab-content .tab-pane {
+  -webkit-animation: slide-in 200ms ease-out forwards;
+          animation: slide-in 200ms ease-out forwards;
+}
+
+.card {
+  background-color: #ffffff;
+}
+
+.admin-page .main-col {
+  position: fixed;
+  overflow-y: scroll;
+  height: 100%;
+  right: 0;
+}
+
+.admin-page .main-col section {
+  margin-bottom: 30px;
+}
+
+.admin-page .main-col .nav-container {
+  height: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  z-index: 1;
+  background-color: white;
+  opacity: 1;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  border-bottom: 1px solid #b8edf3;
+}
+
+.admin-page .main-col .nav-container .nav-header {
+  background: #fff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.admin-page .main-col .tab-content {
+  margin-top: 50px;
+}
+
+@-webkit-keyframes slide-in {
+  from {
+    -webkit-transform: translateX(60px);
+            transform: translateX(60px);
+    opacity: 0;
+  }
+  to {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in {
+  from {
+    -webkit-transform: translateX(60px);
+            transform: translateX(60px);
+    opacity: 0;
+  }
+  to {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes slide-out {
+  from {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: translateX(60px);
+            transform: translateX(60px);
+    opacity: 0;
+  }
+}
+
+@keyframes slide-out {
+  from {
+    -webkit-transform: translateX(0);
+            transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    -webkit-transform: translateX(60px);
+            transform: translateX(60px);
+    opacity: 0;
+  }
+}
+
+.admin-page #keywords #multilist_holder {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: start;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.admin-page #keywords #multilist_holder .badge {
+  padding: 5px 7px;
+  margin: 5px 7px;
+}
+
+.cus-list-header * {
+  color: #6a6b6d !important;
+  font-weight: 500;
+}
+
+#keywords .list-group li,
+#overview .list-group li {
+  color: #323233 !important;
+}
+
+#Recent_post_list li.cus-list-header div {
+  font-size: 14px;
+}
+
+#Recent_post_list li div {
+  font-size: 14px;
+}
+
+#Recent_post_list li div dl dt {
+  font-weight: normal;
+}
+
+.cat-posts-overview,
+.cat-pending-posts-overview {
+  position: absolute;
+  left: 0;
+  background-color: white;
+  z-index: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.cat-posts-overview .cat-item,
+.cat-pending-posts-overview .cat-item {
+  width: auto;
+  background-color: ghostwhite;
+  color: midnightblue;
+  cursor: pointer;
+}
+
+.cat-posts-overview .cat-item *,
+.cat-pending-posts-overview .cat-item * {
+  pointer-events: none;
+}
+
+.cat-posts-overview .cat-item:hover,
+.cat-pending-posts-overview .cat-item:hover {
+  border: 1px solid greenyellow !important;
+}
+
+.postEdits-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+.required {
+  position: absolute;
+  right: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  color: #ff000d;
+}
+
+#edit_post_form .postEdits-list .form-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#edit_post_form h4 {
+  color: #2da4cc !important;
+}
+
+#add_post_form .postAdds-list, #update_edit_post_form .postAdds-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-pack: distribute;
+      justify-content: space-around;
+}
+
+#add_post_form .postAdds-list .form-group, #update_edit_post_form .postAdds-list .form-group {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#add_post_form h4, #update_edit_post_form h4 {
+  color: #2da4cc !important;
+}
+
+#time-slot-display ul li {
+  padding: 3px;
+}
+
+#time-slot-display ul li i {
+  cursor: pointer;
+}
+
+#time-slot-display ul li .close-time {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.custom-file-label {
+  overflow: hidden;
+}
+
+#addUserContainerId input.error {
+  border-color: red;
+}
+
+#addUserContainerId textarea.error {
+  border: 1px solid red;
+}
+
+.admin-navigation a {
+  color: white;
+}
+
+.admin-navigation a:hover {
+  color: white;
+}
+
+.admin-navigation a.btn-active,
+.admin-navigation a.btn-active i {
+  color: #91ff00;
+  font-weight: bold;
+}
+
+.admin-navigation a.btn-active,
+.admin-navigation a.btn-active i {
+  color: #91ff00;
+  font-weight: bold;
+}
+
+.admin-navigation button i {
+  float: right;
+}
+/*# sourceMappingURL=admin.css.map */

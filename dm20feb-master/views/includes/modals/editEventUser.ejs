@@ -1,0 +1,610 @@
+<!-- The Modal -->
+<div class="modal fade" id="editCollectionModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Event</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body pt-0">
+                <div class="spinner-border text-primary spinner-border mt-3"></div>
+
+                <div class="px-3 main-content">
+
+                    <form name="editEventForm" id="editEventForm" action="" method="post">
+                        <input type="hidden" name="documentId" id="documentId">
+                        <section class="first pt-2">
+
+                            <div class="form-group">
+                                <label for="">NAME OF EVENT* </label>
+                                <input type="text" name="name" placeholder="Enter event name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="">DESCRIPTION* </label>
+                                <input type="text" name="description"
+                                    placeholder="Enter a short description about your event" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="">WEBSITE* </label>
+                                <input type="text" name="website" placeholder="e.g. http://www.event.com"
+                                    class="form-control">
+                            </div>
+                            <div class="form-group d-flex flex-column">
+                                <label for="">ADDRESS* </label>
+                                <div class="row">
+                                    <div class=" form-group col-lg-4 col-xs-12 from_datetime">
+
+                                        <select class="form-control" name="state" onchange="fetchDistricts()">
+                                            <option value="" hidden>State</option>
+                                        </select>
+                                    </div>
+                                    <div class=" form-group col-lg-4 col-xs-12 from_datetime">
+                                        <select class="form-control" name="district" onchange="fetchLocalities()" >
+                                            <option value="" hidden>District</option>
+                                        </select>
+                                    </div>
+                                    <div class=" form-group col-lg-4 col-xs-12 from_datetime">
+                                        <select class="form-control" placeholder="Locality" name="locality">
+                                            <option value="" hidden>Locality</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Street Address"
+                                    name="street_address">
+
+                            </div>
+                            <div class="form-group d-flex flex-column">
+                                <label for="">CONTACT INFO* </label>
+                                <div class="row">
+                                    <div class=" form-group col-lg-6 col-xs-12 ">
+                                        <input type="tel" class="form-control" placeholder="Mobile" name="mobile">
+                                    </div>
+                                    <div class=" form-group col-lg-6 col-xs-12 ">
+                                        <input type="email" class="form-control" placeholder="Email" name="email">
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <input type="hidden"  name="coverImageURL">
+
+                            <div class="custom-file form-group ">
+                                <input type="file" name="cover-image" onchange="filePreview(this)"
+                                    accept=".jpg,.jpeg,.png" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Choose cover image*</label>
+                            </div>
+                            <div class="cover-image img-thumbnail">
+
+                            </div>
+
+                            <div class="d-flex flex-row row my-2">
+                                <div class=" form-group col-lg-7 col-xs-12 from_datetime">
+                                    <label for="date">Date*</label>
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <input type="date" name="from_date" class="form-control ">
+                                        <span class="mx-2">-</span>
+                                        <input type="date" name="to_date" class="form-control mr-2">
+                                        
+                                    </div>
+                                </div>
+                                
+                         
+                                
+                                <div class=" form-group col-lg-5 col-xs-12 from_datetime">
+                                    <label for="date">Time*</label>
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <select name="from_time" class="form-control" >
+                                            <option value="" hidden>hr:min AM/PM</option>
+                                        </select>
+                                        <span class="mx-2">-</span>
+                                        <select name="to_time" class="form-control" >
+                                            <option value="" hidden>hr:min AM/PM</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="custom-control custom-switch d-flex flex-row px-0 my-3 mx-0">
+                                <div class="col-sm-3 pl-0 ">
+                                    <label for="collectionStatus" class="font-weight-bold">Status*</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="checkbox" name="status" class="custom-control-input"
+                                        onchange="checkStatus(event)" checked id="status">
+                                    <label class="custom-control-label pl-3" for="status">Active</label>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="form-group">
+                                
+                                <button onclick="deleteEvent(event)"
+                                class="btn btn-danger px-3 float-left btn-sm px-2" type="button"
+                                >DELETE</button>
+                                <button onclick="updateEvent(event)"
+                                    class="btn btn-success px-3 float-right btn-sm px-2" type="button"
+                                    >SAVE</button>
+                            </div>
+                        </section>
+
+
+                        
+                    </form>
+
+
+
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var CollectionToEdit;
+
+
+    $(document).ready((e) => {
+
+        // Show modal
+        // $("#createCollectionBtn").click((e) => {
+        //     e.preventDefault();
+
+        //     // init CollectionToEdit
+        //     CollectionToEdit = {
+        //         name: '',
+        //         places: [],
+        //         createdOn: Date.now(),
+        //         modifiedOn: Date.now(),
+        //         userId: '',
+        //         coverImage: ''
+        //     };
+
+        //     $("#editCollectionModal").modal('show');
+        //     // show create collection first tab only  and hide second tab
+        //     $("#editCollectionModal section.first").removeClass('d-none');
+        //     $("#editCollectionModal section.second").addClass('d-none');
+        // });
+
+        // Reset tabs.. on modal hidden
+        $('#editCollectionModal').on('hidden.bs.modal', function (e) {
+            console.log('hidden')
+            $("#editCollectionModal section").addClass('d-none');
+            $("#editCollectionModal section.first").removeClass('d-none');
+            $("#editEventForm").trigger('reset');
+            // remove img
+            $('#editCollectionModal .cover-image').hide();
+            $("#InCollectionEC .collection-default").show();
+            $("#InCollectionEC .list-group").html('');
+            $("#placeNameResultListEC").html('');
+        });
+
+        // Reset data on modal shown
+        $('#editCollectionModal').on('show.bs.modal', function (e) {
+            console.log('showing');
+            $("#placeNameResultListEC .collection-default").show();
+            $("#placeNameResultListEC").siblings(".load-more").remove();
+
+            prevSkips = 0;
+            skips = 0;
+            totals = null;
+            CollectionToEdit = {
+                name: '',
+                places: [],
+                createdOn: Date.now(),
+                modifiedOn: Date.now(),
+                userId: '',
+                coverImage: ''
+            };
+            $("#placesCountIdEC").html(0);
+
+
+        });
+
+        // goback
+        $("#editCollectionModal #backBtnEC").click((e) => {
+
+            e.preventDefault();
+
+            // change modal title 
+            $("#editCollectionModal .modal-title").html('EDIT COLLECTION');
+
+            // show add places tab
+            $("#editCollectionModal section.first").removeClass('d-none');
+            $("#editCollectionModal section.second").addClass('d-none');
+
+        });
+
+        // search location
+        // <li class="list-group-item">First item</li>
+        let timers;
+        $("#locationInputIdEC").on('keyup', (e) => {
+            let value = $(e.target).val();
+            if (value.length > 1) {
+
+                if (timers) {
+                    clearTimeout(timers);
+                }
+
+                timers = setTimeout(function () {
+
+                    console.log('Searching locations');
+                    $(e.target).siblings(".input-group-append").children("button").html(
+                        `<div class="spinner-border text-muted spinner-border-sm"></div>`
+                    );
+
+                    const rootDomain =
+                        `${location.protocol}//${window.location.hostname}${location.port ? ':'+location.port: ''}`;
+
+                    $.get(`${rootDomain}/search/ajax/location?slocation=${value}`, (data,
+                            status) => {
+                            if (status == 'success' && data.length > 0) {
+                                console.log({
+                                    data
+                                });
+                                $("#locationResultListEC").html('');
+                                $("#locationResultListEC").show();
+
+                                data.forEach(location => {
+                                    $("#locationResultListEC").append(
+                                        `<a href="#" class="list-group-item list-group-item-action">${location}</a>`
+                                    );
+                                });
+
+                                $(e.target).siblings(".input-group-append").children(
+                                    "button").html(
+                                    `<i class="fal fa-map-marker-alt  "></i>`
+                                );
+
+                            }
+                        })
+                        .fail((e) => {
+                            console.log({
+                                e
+                            });
+                            $(e.target).siblings(".input-group-append").children("button")
+                                .html(
+                                    `<i class="fal fa-map-marker-alt  "></i>`
+                                );
+                        });
+
+                }, 1000);
+
+
+            }
+        });
+
+        // show previous search result 
+        $("#locationInputIdEC").on('click', (e) => {
+            $("#locationResultListEC").html().trim() != '' ? $("#locationResultListEC").show() : '';
+            $("#placeNameResultListEC").hide();
+
+        });
+
+        // listen for onclick events on search result
+        $(document).on('click', "#locationResultListEC > .list-group-item", (e) => {
+            console.log('clicked');
+            $("#locationInputIdEC").val($(e.target).html());
+            $("#locationResultListEC").hide();
+        });
+
+
+
+        // show previous search result 
+        $("#placeNameInputIdEC").on('click', (e) => {
+            $("#placeNameResultListEC").html().trim() != '' ? $("#placeNameResultListEC").show() : '';
+            $("#locationResultListEC").hide();
+
+        });
+
+        // listen for onclick events on search result
+        // $(document).on('click', "#placeNameResultListEC > .list-group-item", (e) => {
+        //     console.log('clicked');
+        //     $("#placeNameInputIdEC").val($(e.target).html());
+        //     $("#placeNameResultListEC").hide();
+        // });
+
+        // listen for onclick events on search result list items
+        $(document).on('click', "#placeNameResultListEC > .list-group-item > button", (e) => {
+            console.log('clicked');
+            e.preventDefault();
+            e.stopPropagation();
+
+            let text = $(e.target).html();
+            let name = $(e.target).siblings('.place-name').data('name');
+            let locality = $(e.target).siblings('.place-name').data('locality'); // not working
+            let district = $(e.target).siblings('.place-name').data('district');
+            let state = $(e.target).siblings('.place-name').data('state');
+            let id = $(e.target).siblings('.place-name').data('id');
+
+            console.log({
+                text,
+                name,
+                locality,
+                district,
+                state,
+                id
+            })
+
+            if (text.trim() == 'ADD') {
+                if (CollectionToEdit.places.every((item) => String(item.id) !== String(id))) {
+
+                    CollectionToEdit.places.push({
+                        id,
+                        name,
+                        district,
+                        locality,
+                        state
+                    });
+                }
+
+                $(e.target).html('REMOVE');
+                $(e.target).removeClass('btn-outline-success').addClass(
+                    'btn-outline-danger');
+            } else {
+                CollectionToEdit.places = CollectionToEdit.places.filter((item) => String(item
+                        .id) !=
+                    String(id));
+                $(e.target).html('ADD');
+                $(e.target).removeClass('btn-outline-danger').addClass('btn-outline-success');
+
+            }
+
+            if (CollectionToEdit.places.length > 0) {
+
+                $("#InCollectionEC .list-group").html('');
+                CollectionToEdit.places.forEach(place => {
+                    $("#InCollectionEC .list-group").append(
+                        `
+                                        <li class="list-group-item d-flex  flex-row py-1">
+                                            <div class="col-9  d-flex  flex-column">
+                                                <label class="mb-0">${place.name}</label>
+                                                <span class="text-muted font-weight-normal">
+                                                    ${ place.district }
+                                                    ${ place.locality ? ', '+  place.locality :'' }
+                                                    </span>
+                                            </div>
+                                            <div class="col-3">
+                                                <button type="button" data-id="${ String(place.id) }" onclick="removePlaceEC(event)" class="btn btn-link text-danger  btn-sm float-right">Remove</button>
+                                            </div>
+                                        </li>
+                                        `
+                    );
+                });
+
+                $("#InCollectionEC .collection-default").hide();
+                $("#InCollectionEC .list-group").show();
+
+
+            } else {
+
+                $("#InCollectionEC .collection-default").show();
+                $("#InCollectionEC .list-group").hide();
+
+
+            }
+
+
+            console.log({
+                CollectionToEdit
+            });
+
+            // update collection state
+            $("#placesCountIdEC").html(CollectionToEdit.places.length);
+
+
+
+        });
+
+
+
+
+
+
+    });
+
+
+
+
+    // functions -----------------------------------------------------------------------
+
+
+
+    // // show collection cover image
+    function filePreviewEC(input) {
+        // const file = $(event.target).files[0]);
+        console.log({
+            input
+        });
+        const file = input.files[0];
+        console.log("input file - ", file);
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                // $('.file-preview').children().remove();
+                $('#editEventForm .first .cover-image').show();
+                $('#editEventForm .first .cover-image').css('background-image',
+                    `url(${e.target.result})`);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // // submit 1st form - cover-image,name,description
+    function updateEvent(e) {
+
+        console.log('adding places', e);
+
+       // trim inputs
+       const form = $("#editEventForm")[0];
+        for (let i = 0; i < form.length; i++) {
+            console.log($(form[0]).prop('name'), '-', $(form[0]).val());
+            if ( $(form[i]).prop('type') != 'file') {
+                $(form[i]).val($(form[i]).val().trim());
+            }
+        }
+
+
+        const formData = new FormData(form);
+        let keys = [];
+        for (let entries of formData.entries()) {
+            keys.push(entries[0]);
+        }
+        console.log({
+            keys
+        });
+        console.log(keys.length);
+
+        // validate form
+        for (let entries of formData.entries()) {
+            console.log(entries[0], '-', entries[1]);
+            if ((!entries[1] || entries[1] == '' || entries[1] == null || typeof entries[1] == 'undefined')
+                && entries[0] != 'cover-image'
+            ) {
+                alert('All fields are required.');
+                return false;
+                break;
+
+            } else {
+
+            }
+            console.log("Looping...");
+
+        }
+        
+        let status = $('#editEventForm input[name="status"]').prop('checked');
+        formData.set('status', status);
+
+        let file = formData.get('cover-image');
+        if ( file && Number(file.size) / (1024 * 1024) > 5 && (file.type != 'image/png' || file.type != 'image/jpg') ) {
+            alert('Image size should be less than 5mb and of type jpeg or png. ');
+        } else {
+
+            // upload
+            const rootDomain =
+                `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+            $(e.target).html(`<div class="spinner-border text-white spinner-border-sm"></div> Saving`);
+            $.ajax({
+                url: `${rootDomain}/admin/events/update`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (data) {
+                    console.log('Form submitted');
+                    console.log({
+                        data
+                    });
+                    console.log("Collection: ", data ? data : null);
+
+                    // show erro
+                    if (!data) {
+                        // error occurred
+                        alert('Unexpected error occurred. Please try again.');
+                    } else if (data) {
+                        // success exit modal
+                        $(e.target).html(`SAVED!`);
+                        // fetchEvents();
+
+                        setTimeout(() => {
+                            $(e.target).html(`SAVE`);
+                            $("#editCollectionModal").modal('hide');
+                        }, 1500);
+
+                    }
+                },
+                error: function (data) {
+                    console.log('Error');
+                    $(e.target).html(`SAVE`);
+                    alert('Error occurred. Please try again.');
+
+                }
+            });
+        }
+    }
+
+    // remove place from collection
+    function removePlaceEC(e) {
+        const l = CollectionToEdit.places.length;
+        const id = $(e.target).data('id');
+        console.log({
+            id,
+            l
+        })
+        if (id) {
+            const a = CollectionToEdit.places.filter((item) => {
+                console.log(String(item.id) != String(id) ? true : false);
+                return String(item.id) != String(id);
+            });
+
+            CollectionToEdit['places'] = a;
+            $("#editEventForm #placesCountIdEC").html(CollectionToEdit.places.length);
+            console.log({
+                a,
+                'l': CollectionToEdit.places.length
+            });
+            console.log({
+                'Places': CollectionToEdit.places
+            });
+            $(e.target).parent().parent().remove();
+
+            // change remove to add on placeNameResultList
+            $(`#${id}_btn_EC`).html('ADD').removeClass('btn-outline-danger').addClass('btn-outline-success');
+
+        }
+    }
+
+    // show add places tab
+    function showAddPlacesT(e) {
+
+        // change modal title 
+        $("#editCollectionModal .modal-title").html('EDIT PLACES');
+
+        // show add places tab
+        $("#editCollectionModal section.first").addClass('d-none');
+        $("#editCollectionModal section.second").removeClass('d-none');
+
+    }
+
+    function checkStatus( e){
+        const checked = $(e.target).prop('checked');
+
+        $(e.target).siblings("label").html(checked? 'Active': 'Inactive');
+    }
+
+    function deleteEvent(e){
+        e.preventDefault();
+
+        const id = $("#editEventForm #documentId").val();
+        if (id && confirm('Please confirm to delete collection')) {
+            // alert(id);
+            const rootDomain = `${location.protocol}//${window.location.hostname}${location.port ? ':'+location.port: ''}`;
+
+            $.post(`${rootDomain}/admin/events/delete/${id}`,
+            (data, status) => {
+                console.log(data);
+                if ( status == 'success' && data ) {
+                    $("#editCollectionModal").modal('hide');
+                    fetchEvents();
+                }
+            })
+            .fail(e=>{
+                alert('Error occurred');
+            });
+        }
+        
+    }
+</script>

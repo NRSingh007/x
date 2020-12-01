@@ -1,0 +1,409 @@
+<%- include('../includes/header.ejs',{ 
+    keywords: ['business claim','onwer claim','listing'] , 
+    author: 'Digtal Manipur',
+    description: `Claim your listing in Digital Manipur`
+ }) %>
+<link rel="stylesheet" href="/assets/css/career.css">
+<link rel="stylesheet" href="/assets/css/site.css">
+</head>
+
+<body>
+
+    <section class="outer-container">
+
+        <header class="container " id="nav-header">
+            <div></div>
+            <div class="brand text-center ">
+                <i class="far fa-times float-left text-dark close-header" onclick='$("#nav-header").hide()'></i>
+                Digital Manipur
+            </div>
+            <ul class="nav navigations">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/site/about">About</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/site/career">
+                        Careers
+
+                    </a>
+                    <div class="underline"></div>
+                </li>
+            </ul>
+
+        </header>
+
+        <div class="container " id="mobile-header">
+
+            <i class="far fa-bars mb-0 text-light open-mobile-header"
+                onclick='$("#nav-header").css("display","flex")'></i>
+
+
+            <div class="brand text-center mx-auto">
+
+                Digital Manipur
+            </div>
+        </div>
+
+        
+
+        <div class="landing-bg">
+            <div class="overlay-bg"></div>
+
+            <div class="work-withus">
+                <div class="container">
+                    Work with us
+                </div>
+            </div>
+            <div class="work-withus-fixed">
+                <div class="container">
+                    Work with us
+                </div>
+            </div>
+            <!-- <div class="container motto">
+                <div class="h1">
+                    Welcome to the most significant work of your life
+                </div>
+                <div class="h4">
+                    We hustle every day to shape a sustainable future
+                </div>
+                <a href="/site/career/all" class="btn btn-danger rounded p-2 mt-3">View all Jobs
+                    <i class="fas fa-caret-right ml-2"></i>
+                </a>
+
+            </div> -->
+        </div>
+
+    </section>
+
+    <section class="outer-container row-two">
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-md-4 pr-3 pr-md-1">
+                    <div class="rounded border p-3">
+                        <h5 class="mb-3">
+                            Location
+                            <button class=" btn btn-light py-0 float-right clearFilter">
+                                Clear Filters
+                            </btn>
+                        </h5>
+                        <div class="form-group mb-5">
+                            <input type="text" placeholder="All Locations" id="select-locations" class="shadow-none form-control py-4">
+                            <div class="select-locations ">
+                                <div class="list-group list-group-flush shadow">
+                                    <% for ( let location of locations ) { %> 
+                                        <% if (  typeof location != 'undefined' && location != null  ) { %> 
+                                            <div class="list-group-item list-group-item-action"  >
+                                                <div class="d-flex flex-row justify-content-start align-items-center location-filter"
+                                                data-location="<%= location %>"
+                                                >
+                                                    <i class="far fa-map-marker-alt mr-3"></i>
+                                                    <div class="name text-capitalize " >
+                                                        <%= location %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% } %>
+                                    <% } %>
+                                  </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <h5 class=" mb-3">
+                                Departments
+                            </h5>
+                            <% for ( let department of departments ) { %> 
+                                <% if (  typeof department != 'undefined' && department != null  ) { %> 
+                                    <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="<%= department %>CheckBoxId" name="<%= department %>" value="<%= department %>">
+                                            <label class="custom-control-label text-capitalize" for="<%= department %>CheckBoxId"><%= department %></label>
+                                        </div> 
+                                    
+                                <% } %>
+                            <% } %>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-xs-12 col-md-8 mt-5 mt-md-0">
+                    <% if ( careers.length >    0 ) { %>
+                    <%  careers.forEach( job => { if ( job && job._id ) { %>
+                        <a href="/site/career/<%= typeof job.department != 'undefined' ? job.department : '' %>/<%= typeof job.role != 'undefined' ? job.role : ''  %>/<%= job._id %>">
+                            <div class="d-flex rounded border p-2 p-md-3  job"
+                            data-location="<%= typeof job.location != 'undefined' ? job.location : '' %>"
+                            data-department="<%= typeof job.department != 'undefined' ? job.department : ''  %>"
+                            >
+                                <div class="col-10">
+                                    <div class="title my-1"><%= typeof job.role != 'undefined' ? job.role : ''  %></div>
+                                    <div class="location my-1"><%= typeof job.location != 'undefined' ? job.location : '' %></div>
+                                </div>
+                                <div class="col-2 d-flex align-items-center justify-content-end">
+                                    <i class="far fa-angle-right"></i>
+                                </div>
+                            </div>
+                        </a>
+                    <% }}) %>
+                    <% } else { %>
+                        <h5 class="text-center">There are no recruitment right now.</h5>
+                        <h5 class="text-center">Please come back later.</h6>
+                            <% } %>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <script>
+        // fetch stats
+        $(document).ready(e => {
+
+
+            // add down arrow in card header
+            let cardHeaders = $('.card-header');
+            for( let i =0 ; i < cardHeaders.length ; i++ ) {
+                console.log(cardHeaders[i]);
+                $(cardHeaders[i]).append(
+                    `<i class="far small fa-angle-down float-right"></i>`
+                );
+            };
+
+            // event listener to change arrow angle in card headers
+            $(".card-link").click(e=>{
+                e.preventDefault();
+                console.log("card link sibling : ",$(e.target).siblings('i')[0]);
+                let item = $(e.target).siblings('i')[0];
+                if ($(item).hasClass('fa-angle-down') ) {
+                    // $(e.target).siblings('i').remove();
+                    // $(e.target).parent('.card-header').append(
+                    //     `<i class="far small fa-angle-right float-right"></i>`
+                    //  );
+                    $(item).removeClass('fa-angle-down');
+                    $(item).addClass('fa-angle-right');
+                }
+                if ($(e.target).siblings('i').hasClass('fa-angle-right') ) {
+                    $(e.target).siblings('i').remove();
+                    $(e.target).parent('div').append(
+                        `<i class="far small fa-angle-down float-right"></i>`
+                     );
+                }
+            });
+
+
+           
+        });
+    </script>
+
+
+<script>
+    $(document).ready( (e) => {
+
+        const targetHeight = $(".work-withus").outerHeight();
+        const targetTopOffsetHeight = $(".work-withus").offset().top;
+        const trueActionHeight = targetTopOffsetHeight + targetHeight/3; 
+        
+        $(window).scroll(function() {
+
+            
+            // console.log("targetTopOffsetHeight", targetTopOffsetHeight);
+            // console.log("targetHeight", targetHeight);
+            console.log("trueActionHeight", trueActionHeight);
+            console.log("scrollTop height", $(document).scrollTop());
+
+            if ($(document).scrollTop() > trueActionHeight ) {
+                console.log('Greater');
+                // change div to fixed position
+                    $('.work-withus-fixed').slideDown('fast');
+            } else {
+                console.log('Less');
+                $('.work-withus-fixed').slideUp('fast');
+                
+            }
+
+        });
+    });
+
+    $("#select-locations").click( e => {
+        $(".select-locations").show();
+    });
+
+
+    // hide job select location dropdown
+    $(document).mouseup( e => {
+        const locations_container = $(".select-locations");
+        if (!locations_container.is(e.target) && locations_container.has(e.target).length === 0) {
+            locations_container.hide();
+         }
+    });
+
+    const careers = <%- JSON.stringify(careers) %>;
+    let selectedDeparments = [], selectedLocation;
+
+
+
+    // department filter
+    $(".custom-control-input").click( e => {
+        const departmentName = $(e.target).val();
+        const checked = $(e.target).prop('checked');
+        console.log({departmentName} );
+
+        if ( departmentName && careers )  {
+            const jobs = $('.job');
+            //  console.log({jobs});
+
+
+             if ( checked ) {
+                if ( selectedDeparments.indexOf(departmentName) == -1){
+                    selectedDeparments.push(departmentName);
+                } 
+            } else {
+                selectedDeparments = selectedDeparments.filter( e => e != departmentName);
+            }
+
+            updateClearFilter();
+
+            console.log({selectedDeparments});
+
+            for ( let i = 0 ; i < jobs.length ; i++ ) {
+                let dept = $(jobs[i]).data('department').toLowerCase();
+                let curLocation = $(jobs[i]).data('location').toLowerCase();
+                console.log( jobs[i] ?  dept === departmentName : 'Error', );
+
+                if ( selectedDeparments.length > 0 && selectedDeparments.indexOf(dept) != -1 ) {
+                    console.log("Matched department: ");
+                    if ( typeof selectedLocation != 'undefined' ){
+                        if ( selectedLocation == curLocation ) {
+                            $(jobs[i]).removeClass('hide');
+                        } else {
+                            $(jobs[i]).addClass('hide');
+                        }
+                    } else {
+                        $(jobs[i]).removeClass('hide');
+                    }
+
+                } else if ( selectedDeparments.length > 0 && selectedDeparments.indexOf(dept) == -1 ) {
+                        // not selected
+                        console.log("not selected departments");
+                        $(jobs[i]).addClass('hide');
+                } else {
+                    if ( typeof selectedLocation != 'undefined' ){
+                        if ( selectedLocation == curLocation ) {
+                            $(jobs[i]).removeClass('hide');
+                        } else {
+                            $(jobs[i]).addClass('hide');
+                        }
+                    } else {
+                        $(jobs[i]).removeClass('hide');
+                    }
+                }
+            }
+        }
+
+       
+    });
+
+    // location filter
+    $(".location-filter i,  .location-filter .name ").click( e => {
+        $(e.target).parent().trigger('click');
+        e.preventDefault();
+        e.stopImmediatePropagation();
+    });
+
+    $(".location-filter").click( e => {
+
+        e.preventDefault();
+        const location = $(e.target).data('location');
+        selectedLocation = location;
+
+        updateClearFilter();
+
+        // const departments = $(".custom-control-input:checked");
+        // let selectedDepts = [];
+        // for ( let i = 0 ; i < departments.length ; i++ ) {
+        //     selectedDepts.push($(departments[i]).val());
+        // }
+        console.log({selectedDeparments});
+
+        if ( location ) {
+            const jobs = $('.job');
+            //  console.log({jobs});
+
+            for ( let i = 0 ; i < jobs.length ; i++ ) {
+
+                const curLocation = $(jobs[i]).data('location').toLowerCase();
+                const curDepartment = $(jobs[i]).data('department').toLowerCase();
+
+                if ( selectedDeparments.length > 0 ) {  
+                    if (selectedDeparments.indexOf(curDepartment) != -1 && curLocation == location ) {
+                        console.log("Matched department & selected dept: ");
+                        $(jobs[i]).removeClass('hide');
+                    } else {
+                        $(jobs[i]).addClass('hide');
+                    }
+
+                } else {
+                    // console.log(" ");
+
+                    if ( curLocation == location  ) {
+                        console.log("Dept not selected: location  matched: ");
+                        $(jobs[i]).removeClass('hide');
+                    } else {
+                        console.log("Dept not selected: location not matched: ");
+                        $(jobs[i]).addClass('hide');
+                    }
+                }
+
+
+                // console.log( jobs[i] ? $(jobs[i]).data('location').toLowerCase() : '', location );
+                // if ( jobs[i] && $(jobs[i]).data('location').toLowerCase() != location   ) {
+                //     // location not matched
+                //     $(jobs[i]).addClass('hide') ;
+                // } else {
+                //     // location not matched
+
+                //     if (  ( selectedDepts.length > 0 && selectedDepts.indexOf($(jobs[i]).data('department').toLowerCase() == -1) ) ){
+                //         $(jobs[i]).removeClass('hide');
+                //     } 
+                //     if ( selectedDepts.length == 0) {
+                //         $(jobs[i]).addClass('hide') ;
+                //     }
+                // }
+            }
+        }
+        $(".select-locations").hide();
+        return false;
+    });
+    
+    function updateClearFilter( ) {
+        if ( selectedLocation || selectedDeparments.length > 0 ) {
+            $(".clearFilter").addClass('text-danger').removeClass('disabled');
+        } else {
+            $(".clearFilter").removeClass('text-danger').addClass('disabled');
+        }
+    }
+
+    $(".clearFilter").click( e=> {
+        selectedDeparments=[];
+        selectedLocation = undefined;
+
+        $(".custom-control-input").prop('checked', false);
+        
+        const jobs = $('.job');
+        for ( let i = 0 ; i < jobs.length ; i++ ) {
+            $(jobs[i]).removeClass('hide');
+        }
+        $(".clearFilter").removeClass('text-danger').addClass('disabled');
+        
+    });
+
+</script>
+    <%- include('../includes/footer.ejs') %>
+
+
+</body>
+
+</html>

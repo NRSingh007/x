@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"digitalmanipur.categories"},{"v":2,"key":{"keywords.name":1},"name":"keywords.name_1","ns":"digitalmanipur.categories","background":true}],"uuid":"cefd8b45a04648b996acb78466cb6b49"}

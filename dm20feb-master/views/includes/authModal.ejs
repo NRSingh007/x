@@ -1,0 +1,133 @@
+<% 
+<!-- default page -->
+<!-- controls.changePage('login'); -->
+
+%>
+
+<!-- login modal ********* -->
+<div class="modal fade" id="authModal">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                    <!-- <button type="button" class="close">
+                            <i class="far fa-angle-left px-3 py-1 mr-3 lightgrey" style="font-size: 1.5rem;"></i>
+                    </button> -->
+                <h5 class="modal-title">
+                        <%= controls.getCurrentPage() === 'login' ? "Sign up or log in to Digital Manipur":"" %> 
+                        <%= controls.getCurrentPage() === 'signup' ? "Sign up new":"" %> 
+                        <%= controls.getCurrentPage() === 'reset' ? "reset":"" %> 
+                </h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body d-flex justify-content-center ">
+
+                <% if( controls.getCurrentPage() == 'login') { %>
+                <!-- Login Modal body -->
+                <div class="col text-center" id="auth-default">
+                    <button type="button" class="btn btn-outline-success btn-block p-3 mb-3">
+                        <i class="float-left fab fa-google"></i>
+                        Continue with Google</button>
+                    <button type="button" class="btn btn-outline-primary btn-block p-3">
+                        <i class="float-left fab fa-facebook"></i>
+                        Continue with facebook</button>
+                    <h6 class="py-2">Or use your email address</h6>
+                    <div class="row px-0 mx-0">
+                        <div class="col  pl-0 pr-2 ">
+                            <button type="button" class="btn btn-danger btn-block p-3" id="loginButton">Login</button>
+                        </div>
+                        <div class="col   pl-2   pr-0">
+                            <button type="button" onclick="<%= controls.changePage('signup') %>" class="btn btn-outline-secondary btn-block p-3" id="signUpButton">Sign up</button>
+                        </div>
+
+                    </div>
+                    <p class="small pt-3 lightgrey">
+                        By logging in, you agree to Digital Manipur's
+                        <a>Terms of Service</a>,
+                        <a href="">Cookie Policy</a> ,
+                        <a href="">Privacy Policy</a> and
+                        <a href="">Content Policies</a> .
+                    </p>
+                </div>
+
+                <% } %>
+
+                <% if( controls.getCurrentPage() == 'signup') { %>
+                <!-- sign up modal body -->
+                <div class="col text-left hide" id="auth-sign-up">
+
+                    <form action="/auth/login" method="POST">
+                        <div class="form-group">
+                                <label for="name">Name:</label>
+                                <input type="text" name="name" class="form-control" id="name">
+                            </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="text" name="email" class="form-control" id="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" name="password" class="form-control" id="password">
+                        </div>
+                        <div class="form-check mb-3">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" value="">I agree to Digital Manipur's Terms of Service, Privacy Policy and Content Policies
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-danger btn-block p-3">Login</button>
+                    </form>
+
+                    <a href="#" id="reset-pwd">Forget password</a>
+                    <p class="small pt-3 lightgrey">
+                        By creating an account, you agree to Digital Manipur's
+                        <a>Terms of Service</a>,
+                        <a href="">Cookie Policy</a> ,
+                        <a href="">Privacy Policy</a> and
+                        <a href="">Content Policies</a> .
+                    </p>
+                </div>
+                <% } %>
+                
+                <% if( controls.getCurrentPage() == 'reset') { %>
+                <!-- Reset account up modal body -->
+                <div class="col text-left hide" id="auth-reset-pwd">
+
+                    <form action="/auth/login" method="POST">
+                        <div class="form-group">
+                            <label for="usr">Email:</label>
+                            <input type="text" name="email" class="form-control" id="usr">
+                        </div>
+                        
+                        <!-- <div class="form-check mb-3">
+                            <label class="form-check-label">
+                                <input type="checkbox" class="form-check-input" value="">I agree to Digital Manipur's Terms of Service, Privacy Policy and Content Policies
+                            </label>
+                        </div> -->
+
+                        <button type="submit" class="btn btn-danger btn-block p-3">Reset</button>
+                    </form>
+
+
+                    <p class="small pt-3 lightgrey">
+                        By creating an account, you agree to Digital Manipur's
+                        <a>Terms of Service</a>,
+                        <a href="">Cookie Policy</a> ,
+                        <a href="">Privacy Policy</a> and
+                        <a href="">Content Policies</a> .
+                    </p>
+                </div>
+                <% } %>
+                
+            </div>
+
+            <!-- Modal footer -->
+            <!-- <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div> -->
+
+        </div>
+    </div>
+</div>

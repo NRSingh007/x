@@ -1,0 +1,263 @@
+section {
+}
+
+.form-holder .form-group input:hover, .form-holder .input-group input:hover {
+  cursor: pointer;
+}
+
+.form-holder .form-container {
+  font-size: 14px;
+}
+
+.form-holder .form-container .row .col:first-child {
+  padding-left: 0 !important;
+  padding-right: 10px !important;
+}
+
+.form-holder .form-container .row .col {
+  padding-right: 10px !important;
+  padding-left: 10px !important;
+}
+
+.form-holder .form-container .row .col:last-child {
+  padding-right: 0 !important;
+  padding-left: 10px !important;
+}
+
+.form-holder .form-group label {
+  text-transform: uppercase;
+  font-weight: 450;
+  color: #89959B !important;
+  font-size: 16px;
+}
+
+.form-holder .asRed {
+  color: #cb202d;
+}
+
+.form-holder .form-group label input[type=radio] {
+  margin-right: 5px !important;
+  font-size: 1rem !important;
+}
+
+.form-holder .form-holder .choice div label {
+  color: rgb(83, 82, 82) !important;
+  font-weight: normal;
+  text-transform: initial;
+  padding-right: 25px;
+}
+
+.form-holder .choice div label {
+  padding: 0 10px;
+  font-size: 1rem;
+}
+
+.form-holder .choice div label input {
+  margin-right: 5px;
+}
+
+.form-holder ul {
+  padding-left: 15px !important;
+  font-size: .85rem !important;
+}
+
+.form-holder ul li {
+  \: 5px 0;
+}
+
+.form-holder .geo-selector {
+  width: 100%;
+  height: 200px;
+  border: 1px solid grey;
+}
+
+.form-holder .form-group select option {
+  padding: 5px;
+}
+
+.form-holder .timings .form-radio label {
+  font-size: 1rem;
+  font-weight: normal !important;
+}
+
+.form-holder .form-holder .timings .hours-select {
+  width: auto;
+}
+
+.time-slots a {
+  color: rgb(189, 45, 45) !important;
+}
+
+.time-slots i {
+  font-size: 18px;
+}
+
+.form-inline .input-group input {
+  width: 70px;
+  border: 1px solid grey;
+  padding: 5px 15px;
+}
+
+.hidden {
+  display: none;
+}
+
+ul.dd_list {
+  z-index: 2;
+  position: absolute;
+  background: #fff;
+  width: 100%;
+  list-style: none;
+  text-align: center;
+  overflow-y: scroll;
+  height: 200px;
+  margin: 0 !important;
+  padding: 0 !important;
+  top: 34px;
+  border-radius: 0 0rem .8rem .8rem;
+}
+
+ul.dd_list li {
+  padding: 5px 15px;
+  margin: 0;
+}
+
+ul.dd_list li:last-child {
+  border-radius: 0 0rem .8rem .8rem;
+}
+
+ul.dd_list li:hover {
+  background: rgba(235, 235, 235, 0.637);
+  cursor: pointer;
+}
+
+#from_timings:active, #to_timings:active, ul.dd_list:hover, .bor_t_ligthblue {
+  border-color: #96C8DA;
+  border: 1px solid #96C8DA !important;
+  box-shadow: 0 2px 3px 0 #e7e7e7;
+}
+
+.ddl_bold {
+  font-weight: bold;
+}
+
+/*  custom dropdwon-list  */
+
+.selected-items {
+  border: 1px solid #d1cfcf;
+  padding: 10px;
+  width: 100%;
+  border-radius: .25rem;
+  cursor: pointer;
+}
+
+.custom-dropdown-list {
+  height: 45px;
+  background: #fff;
+}
+
+.selected-items {
+  background: #fff;
+  z-index: 1;
+}
+
+.selected-items:hover {
+  border: 1px solid #949292;
+}
+
+.selected-items i {
+  float: right;
+}
+
+.selected-items-active {
+  border: 1px solid #96C8DA !important;
+  border-bottom: none !important;
+}
+
+#selected-items-container {
+}
+
+#selected-items-container a {
+  display: inline-block;
+  padding: 3px 5px 3px 10px;
+  background: rgb(221, 220, 223);
+  margin: 0 5px 7px 0;
+  border-radius: .3rem;
+}
+
+#selected-items-container a:hover {
+  background: #ecebeb;
+}
+
+#selected-items-container a i {
+  padding: 4px;
+  margin: 0  5px 0 7px;
+  font-size: 1.1rem;
+  color: rgb(185, 184, 187);
+}
+
+#selected-items-container a i:hover {
+  color: rgb(154, 154, 156);
+}
+
+div.menus-container {
+  position: relative;
+  width: 100%;
+  border: 1px solid #96C8DA;
+  box-shadow: 0 2px 3px 0 #e7e7e7;
+  border-top: none;
+  border-radius: 0 0 .4rem .4rem;
+  padding-right: 1px;
+  padding-bottom: 5px;
+  margin-top: -2px;
+  cursor: pointer;
+  z-index: 2;
+  background: #fff;
+}
+
+ul.menu {
+  z-index: 2;
+  width: 100%;
+  list-style: none;
+  text-align: left;
+  overflow-y: scroll;
+  max-height: 256px;
+  margin: 0 !important;
+  padding: 0 !important;
+  top: 34px;
+  border-radius: 0 0rem .8rem .5rem;
+}
+
+ul.menu li, #selected-items-container {
+  text-transform: capitalize;
+}
+
+ul.menu li:first-child {
+  border-top: 1px solid #e7e7e7;
+}
+
+ul.menu li {
+  padding-left: 15px;
+  padding: 10px 15px;
+}
+
+ul.menu li:hover {
+  background: #e7e7e7;
+}
+
+ul.menu li:last-child {
+  border-radius: 0 0 .5rem .5rem;
+}
+
+/*  characteristic  */
+
+.autoHeight {
+  height: auto !important;
+}
+
+.form-group .error {
+  text-transform: initial;
+  font-style: italic;
+  color: red !important;
+}
+

@@ -1,0 +1,928 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="/assets/css/admin.css"> -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/manageWebsite.css">
+    <style>
+        .thumbnail-cover {
+            width: 150px;
+            height: 80px;
+        }
+
+        .thumbnail-logo {
+            width: 80px;
+            height: 80px;
+        }
+    </style>
+    <script>
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-container").show();
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+
+        function showInfoAlert(message) {
+            $(".alert-container").show();
+            $(".alert-info .message").html(message);
+            $(".alert-info").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-info").hide();
+            }, 1500);
+        }
+    </script>
+</head>
+
+<body class="">
+    <section>
+
+    </section>
+    <%- include('./../../includes/alert'); %>
+
+
+
+    <section class="manage-website">
+
+
+
+        <div class="container-fluid ">
+            <div class="row">
+
+
+                <div class="col-2 left-content p-2">
+                    <div class="list-group">
+                        <%- include('./../../includes/manage-website-pages', {page}) %>
+                    </div>
+                </div>
+
+                <div class="col-10 right-content p-2">
+
+                    <section class="nav-controls ">
+                        <ul class="nav nav-tabs">
+                            <!-- <li class="nav-item">
+                              <a class="nav-link " data-toggle="tab" href="#home">Home</a>
+                            </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#AdminCollections">Categories</a>
+                            </li>
+                            <button type="button" class="btn btn-link" data-toggle="modal" data-target="#trendingSearchesModal">
+                                Trending Searches
+                              </button>
+                            <!-- <li class="nav-item" >
+                                <a onclick="getUsersCollections()" class="nav-link" data-toggle="tab" href="#UsersCollections">Users Collections</a>
+                            </li>
+                            <li class="nav-item">
+                                <a onclick="getStaticCollections(event)" class="nav-link" data-toggle="tab" href="#StaticCollections">Static Collections</a>
+                            </li> -->
+                        </ul>
+                    </section>
+
+                    <section class="main-body ">
+                        <div class="tab-content">
+
+                            <% if( typeof errors != 'undefined' && errors.length>0) { %>
+                            <div class="alert alert-danger my-3 px-3 alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Error occurred!</strong>
+
+                                <ul>
+                                    <% errors.forEach( error => {   %>
+                                    <li><%= error.msg %></li>
+                                    <% }) %>
+                                </ul>
+                            </div>
+                            <% } %>
+
+                            <% if( typeof events != 'undefined' && events.length>0) { %>
+                            <div class="alert alert-success my-3 px-3 alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <strong>Success!</strong>
+
+                                <ul>
+                                    <% events.forEach( event => {   %>
+                                    <li><%= event.msg %></li>
+                                    <% }) %>
+                                </ul>
+                            </div>
+                            <% } %>
+
+                            <!-- tab 1 -->
+                            <div class="tab-pane container active" id="AdminCollections">
+                                <div class="tab-body d-flex flex-column">
+
+                                    
+
+                                    <div class="mb-3">
+                                        <strong class="text-muted" style="font-size: 24px;">Available
+                                            categories</strong>
+                                        <!-- <button type="button" class="float-right btn btn-outline-success "
+                                            id="createJob" data-toggle="modal" data-target="#addJobModal">
+                                            Add new job</button> -->
+
+
+
+
+                                    </div>
+                                    <div>
+                                        <ul class="list-group" id="careers-list">
+                                            <% if ( categories && categories.length > 0 ) { %>
+                                            <li class=" d-flex list-group-item">
+                                                <div class="col-1 px-0">
+                                                    <b>Sl.</b>
+                                                </div>
+                                                <div class="col-3 px-0">
+                                                    <b>Name</b>
+                                                </div>
+                                                <div class="col-1">
+                                                    <b>Logo <span class="text-danger">*</span></b>
+                                                </div>
+                                                <div class="col-1">
+                                                    <b>Cover Image <span class="text-danger">*</span></b>
+                                                </div>
+                                                <div class="col-1">
+                                                    <b>Descr-<br>iption <span class="text-danger">*</span></b>
+                                                </div>
+                                                <div class="col-2">
+                                                    <b>Search Suggestion</b>
+                                                </div>
+                                                <div class="col-2">
+                                                    <b>Quick search</b>
+                                                </div>
+                                                <div class="col-2">
+                                                    <b>Action</b>
+                                                   
+                                                </div>
+                                                <!-- <div class="col-2">
+                                                    <b>Ad Plans</b>
+                                                   
+                                                </div> -->
+                                            </li>
+                                            <%  let i = 0; categories.forEach( job => {   %>
+                                            <li class=" d-flex  list-group-item">
+                                                <div class="col-1 px-0">
+                                                    <%= ++i %>
+                                                </div>
+                                                <div class="col-3 text-break text-wrap px-0">
+                                                    <%= job.name %>
+                                                </div>
+                                                <div class="col-1">
+                                                    <% if (job.images && job.images.logo && job.images.logo.url) { %>
+                                                    <!-- <img class="thumbnail-logo"
+                                                        src="/uploads/images/mobile_thumbnail/<%= job.images.logo.url %>"
+                                                        alt=""> -->
+                                                    <i class="fas fa-check-circle text-success" style=""></i>
+                                                    <% }  else { %>
+                                                    <i class="fas fa-check text-muted " style="opacity: .12;"></i>
+
+                                                    <% } %>
+                                                </div>
+                                                <div class="col-1">
+                                                    <% if (job.images && job.images.coverImage && job.images.coverImage.url) { %>
+                                                    <!-- <img class="thumbnail-cover"
+                                                        src="/uploads/images/mobile_thumbnail/<%= job.images.coverImage.url %>"
+                                                        alt=""> -->
+                                                    <i class="fas fa-check-circle text-success" style=""></i>
+
+                                                    <% }  else { %>
+                                                    <i class="fas fa-check text-muted " style="opacity: .12;"></i>
+
+                                                    <% } %>
+                                                </div>
+                                                <div class="col-1">
+                                                    <% if (job.description) { %>
+                                                    <i class="fas fa-check-circle text-success" style=""></i>
+                                                    <% } else { %>
+                                                    <i class="fas fa-check text-muted " style="opacity: .12;"></i>
+
+                                                    <% } %>
+                                                </div>
+                                                <div class="col-2   ">
+                                                    <div class="custom-control custom-switch">
+                                                        <input data-id="<%= job._id %>" type="checkbox" <%=  job.searchSuggestion ? "checked" : "" %>   class="custom-control-input" onchange="updateSearchSuggestion(event)" id="<%=  job._id %>">
+                                                        <label class="custom-control-label" for="<%=  job._id %>">
+                                                            <%=  job.searchSuggestion ? "On" : "Off" %> 
+                                                        </label>
+                                                    </div>
+                                                    <!-- <%= String(job.createdOn).slice(0,15) %> -->
+                                                </div>
+                                                <div class="col-2   ">
+                                                    <div class="custom-control custom-switch">
+                                                        <input data-id="<%= job._id %>" type="checkbox" <%=  job.quickSearch ? "checked" : "" %>   class="custom-control-input" onchange="updateQuickSearch(event)" id="<%=  job._id+"QuickSearch" %>">
+                                                        <label class="custom-control-label" for="<%=  job._id+"QuickSearch" %>">
+                                                            <%=  job.quickSearch ? "On" : "Off" %> 
+                                                        </label>
+                                                    </div>
+                                                    <!-- <%= String(job.createdOn).slice(0,15) %> -->
+                                                </div>
+                                                <div class="col-2    d-flex justify-content-between align-items-start">
+                                                    <!-- <button data-id="<%= job._id %>" class="delete-job btn btn-danger btn-sm">Delete</button> -->
+                                                    <button
+                                                        data-logo="<%=  job.images && job.images.logo && job.images.logo.url ? job.images.logo.url : '' %>"
+                                                        data-cover="<%=  job.images && job.images.coverImage && job.images.coverImage.url ? job.images.coverImage.url : '' %>"
+                                                        data-description="<%= job.description %>"
+                                                        data-id="<%= job._id %>"
+                                                        class="edit-category btn btn-info btn-sm">Edit</button>
+
+                                                   
+
+                                                </div>
+
+
+                                                <!-- <div class="col-2">
+                                                    <button data-toggle="modal" data-target="#editAdsModal"
+                                                        data-index="<%= i - 1 %>"
+                                                        data-id="<%= job._id %>" 
+                                                        class="setadsplan btn btn-sm
+                                                        <%= job.postAdType && job.postAdType.name && job.productAdType && job.productAdType.name ? 'btn-success' : 'btn-secondary' %>
+                                                        ">
+                                                        Set Ads plan
+                                                        <% if (job.postAdType && job.postAdType.name && job.productAdType && job.productAdType.name ) { %>
+                                                        <i class="ml-2 fas fa-check text-white" style=""></i>
+                                                        <% } else { %>
+                                                        <i class="fas fa-exclamation ml-2  text-white"
+                                                            style="opacity: 1;"></i>
+
+                                                        <% } %>
+                                                    </button>
+                                                        <div class="small text-muted">
+                                                            <label style="width: 60px; margin-bottom: 0;">Post: </label>
+                                                            <span class="font-weight-bold text-success text-uppercase ">
+                                                            <%=  job.postAdType && job.postAdType.name ? job.postAdType.name : '' %>
+                                                            </span>
+                                                        </div>
+                                                        <div class="small text-muted">
+                                                            <label style="width: 60px; margin-bottom: 0;">Product: </label>
+
+                                                            <span class="font-weight-bold text-success text-uppercase">
+                                                                <%=  job.productAdType && job.productAdType.name ? job.productAdType.name : '' %>
+                                                            </span>
+                                                        </div>
+                                               
+                                                </div> -->
+
+                                            </li>
+
+                                            <% }) %>
+                                            <% }  %>
+
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- tab 2 -->
+                            <!-- <div class="tab-pane container fade" id="home">..menu1.</div> -->
+                            <div class="tab-pane container fade" id="UsersCollections">
+                                <h4 class="my-3">Manage Collections</h4>
+                                <ul class="list-group p-4" id="users-collections-list">
+
+                                </ul>
+                            </div>
+
+                            <!-- tab content content 3 -->
+                            <div class="tab-pane container fade" id="StaticCollections">
+                                <%- include('./../../includes/staticCollections.ejs') %>
+
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+            <!-- container ends here -->
+        </div>
+
+    </section>
+
+
+
+    <!-- modals -->
+
+    
+
+    <div class="modal" id="trendingSearchesModal">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+      
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h6 class="modal-title">Trending searches</h6>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+      
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row  p-2">
+                                        
+                    <div class="col">
+                       
+                        <div class="row px-3">
+                            <table class="table table-striped">
+                               
+                                <tbody>
+                                    <thead>
+                                        <tr>
+                                          <th>Search keyword</th>
+                                          <th>Count</th>
+                                          <th>Show/hide</th>
+                                        </tr>
+                                      </thead>
+                                  <% for ( let text of trendingSearches ) { %>
+                                    <tr class="px-1 py-0">
+                                        <td class="py-1"><%= text.name %></td>
+                                        <td class="py-1"><%= text.count %></td>
+                                        <td class="py-1" >
+                                            <div class="custom-control custom-switch">
+                                                <input 
+                                                data-id="<%= text._id %>" 
+                                                type="checkbox" <%=  text.status ? "checked" : "" %>   
+                                                class="custom-control-input" 
+                                                onchange="updateTrendingSearch(event)" id="<%=  text._id %>">
+                                                <label class="custom-control-label" for="<%=  text._id %>">
+                                                    <%=  text.status ? "On" : "Off" %> 
+                                                </label>
+                                            </div>     
+                                        </td>
+                                    </tr> 
+                                     <% } %>
+                                 
+                                </tbody>
+                              </table>
+                           
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+      
+           
+      
+          </div>
+        </div>
+      </div>
+
+
+
+    <!-- add job modal -->
+
+    <!-- Button to Open the Modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addJobModal">
+            Open modal
+        </button> -->
+
+    <!-- The Modal -->
+    <div class="modal" id="addJobModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add new job opening</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="newJobForm" action="/admin/career/job/new" method="post">
+                        <div class="form-group">
+                            <label for="">Role</label>
+                            <input type="text" name="role" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Location</label>
+                            <input type="text" name="location" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Department</label>
+                            <input type="text" name="department" required class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="">Description</label>
+                            <textarea name="description" rows="5" required class="p-1 m-0 form-control"></textarea>
+                        </div>
+                        <button class="btn btn-success" type="submit">Submit</button>
+
+                    </form>
+
+                </div>
+
+                <!-- Modal footer -->
+                <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div> -->
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Button to Edit the Modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addJobModal">
+            Open modal
+        </button> -->
+
+    <!-- The Modal -->
+    <div class="modal" id="editCategoryModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit category <span class="text-primary" id="editCatName"></span></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+
+
+                    <form id="editCategoryForm" enctype="multipart/form-data" action="/admin/site/category/update"
+                        method="post">
+                        <div class="row">
+                            <div class="col">
+
+                                <div class="border rounded p-3 my-2">
+                                    <div class="form-group">
+                                        <label for="" class="font-weight-bold">Logo</label>
+                                        <div class="custom-file">
+                                            <input onchange="filePreview(this)" type="file" name="logo"
+                                                accept=".jpeg,.jpg,.png" class="custom-file-input" id="customFile">
+                                            <label class="custom-file-label" for="customFile"
+                                                style="overflow-x: hidden;"
+                                                class="text-truncate custom-file-label">Choose file</label>
+                                        </div>
+                                        <script>
+                                            // Add the following code if you want the name of the file appear on select
+                                            $(".custom-file-input").on("change", function () {
+                                                var fileName = $(this).val().split("\\").pop();
+                                                $(this).siblings(".custom-file-label").addClass("selected")
+                                                    .html(
+                                                        fileName);
+                                            });
+                                        </script>
+                                        <div class="file-preview my-2 d-flex justify-content-around align-items-end">
+
+                                            <img src='' width="50%" height="50%" class="img-thumbnail"
+                                                style="width: 150px; height: 100px;" id="logoImg">
+
+
+                                        </div>
+                                    </div>
+                                    <input type="text" name="categoryId" hidden class="editCategoryId">
+                                </div>
+
+                            </div>
+                            <div class="col">
+
+                                <div class="border rounded p-3 my-2">
+                                    <div class="form-group">
+                                        <label for="" class="font-weight-bold">Cover Image</label>
+                                        <div class="custom-file">
+                                            <input type="file" onchange="filePreview(this)" name="coverImage"
+                                                accept=".jpeg,.jpg,.png" class="custom-file-input" id="customFile1">
+                                            <label class="custom-file-label" for="customFile1"
+                                                style="overflow-x: hidden;"
+                                                class="text-truncate custom-file-label">Choose file</label>
+                                        </div>
+                                        <script>
+                                            // Add the following code if you want the name of the file appear on select
+                                            $(".custom-file-input").on("change", function () {
+                                                var fileName = $(this).val().split("\\").pop();
+                                                $(this).siblings(".custom-file-label").addClass("selected")
+                                                    .html(
+                                                        fileName);
+                                            });
+                                        </script>
+                                        <div class="file-preview  my-2 d-flex justify-content-center align-items-end">
+                                            <img src='' width="60%" height="50%" class="img-thumbnail"
+                                                style="width: 250px; height: 100px;" id="coverImageImg">
+
+                                        </div>
+                                    </div>
+                                    <input type="text" name="categoryId" hidden class="editCategoryId">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="" class="small text-black font-weight-bold  ">Description</label>
+                                    <input type="text" name="description"
+                                        placeholder="Short description - not more than 100 characters"
+                                        class="form-control"
+                                        onkeypress="(function(){  $(`#editCategoryForm input[name='description']`).val($(`#editCategoryForm input[name='description']`).val().toString().slice(0,100))  })()">
+                                </div>
+                                <button class="btn btn-success btn-sm float-right "
+                                    id="submitCategoryDetail">Save</button>
+                            </div>
+
+                        </div>
+                    </form>
+
+
+                </div>
+
+                <!-- Modal footer -->
+                <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div> -->
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <!-- The Modal -->
+    <div class="modal" id="editAdsModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Set Ads plan </h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <form id="editAdsForm" action="/admin/site/category/ads/update" method="post">
+                        <div class="form-group">
+                            <label for="post">Post</label>
+                            <select onchange="updatePost(event)" class="form-control" name="postAdType" id="postSelect">
+                                <% if ( postAds && postAds.length > 0) { %>
+                                <option hidden selected disabled>Select</option>
+                                <% postAds.forEach( ad => { %>
+                                <option value="<%= ad._id %>" data-name="<%= ad.name %>"><%= ad.name %></option>
+                                <% }); %>
+                                <% } %>
+                            </select>
+                            <input type="text" name="postAdName" hidden id="postAdName">
+                        </div>
+                        <div class="form-group">
+                            <label for="Product">Product</label>
+                            <select onchange="updateProduct(event)" class="form-control" name="productAdType"
+                                id="productSelect">
+                                <% if ( productAds && productAds.length > 0) { %>
+                                <option hidden selected disabled>Select</option>
+                                <% productAds.forEach( ad => { %>
+                                <option value="<%= ad._id %>" data-name="<%= ad.name %>"><%= ad.name %></option>
+                                <% }); %>
+                                <% } %>
+                            </select>
+                            <input type="text" name="productAdName" hidden id="productAdName">
+                        </div>
+                        <div>
+                            <button class="btn btn-success  btn-sm" type="submit">Save</button>
+
+                           
+                        </div>
+                        <input type="text" name="catId" class="catId" hidden>
+                    </form>
+
+                    <form  id="resetForm" action="/admin/site/category/ads/reset" method="POST">
+                        <input type="text" name="catId" class="catId" hidden>
+
+                        <button class="btn btn-danger btn-sm" type="submit">Reset</button>
+                    </form>
+
+                </div>
+
+                <!-- Modal footer -->
+                <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div> -->
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script>
+        const rootDomain =
+            `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+        const categories = <%- JSON.stringify(categories) %> ;
+        const postAds = <%- JSON.stringify(postAds) %> ;
+        const productAds = <%- JSON.stringify(productAds) %> ;
+
+
+        $(".delete-job").click(e => {
+            e.preventDefault();
+            // alert('dad');
+            const id = $(e.target).data('id');
+            if (id && confirm("Are you sure?")) {
+                let form = $('form').prop('action', '/admin/career/job/delete/' + id).prop('method', 'POST');
+                form.submit();
+            }
+        });
+
+        $(".edit-category").click(e => {
+            e.preventDefault();
+            // alert('dad');
+            const id = $(e.target).data('id');
+
+            $.get(`${rootDomain}/admin/site/category/get/${id}`,
+                (res, status) => {
+                    console.log({
+                        res
+                    });
+                    if (res && res.data && status == 'success') {
+                        $("#editCatName").text(" - "+res.data.name);
+                        $("#editCategoryModal").modal('show');
+                        const action = $("#editCategoryForm").prop('action');
+                        $(".editCategoryId").val(id);
+                        $("#logoImg").prop('src', $(e.target).data('logo') ? '/uploads/images/mobile/' + $(e
+                            .target).data('logo') : '');
+                        $("#coverImageImg").prop('src', $(e.target).data('cover') ?
+                            '/uploads/images/mobile/' + $(e.target).data('cover') : '');
+                        $("#submitCategoryDetail").data('id', id);
+                        $("#editCategoryForm input[name='description']").val(res.data.description);
+                    }
+                }).fail(e => {
+                console.log({
+                    e
+                });
+            });
+
+
+        });
+
+
+        $("#submitCategoryDetail").click(e => {
+            e.preventDefault();
+            console.log("Submitting form");
+            const formData = new FormData($("#editCategoryForm")[0]);
+
+            // 5 mb limit
+            if ((formData.get('coverImage').size / (1024 * 1024)) > 5 || (formData.get('logo').size / (1024 *
+                    1024)) > 5) {
+                showInfoAlert('File size exceeded. Please select a smaller file.');
+                return;
+            }
+
+            $(e.target).html(`Saving...`).prop('disabled', false);
+            $.ajax({
+                url: `${rootDomain}/admin/site/category/update/${$(e.target).data('id')}`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (data) {
+                    console.log("Res: ", data);
+
+                    if (data && data.msg && data.msg == 'Done') {
+                        console.log('Category updated.');
+
+                        showSuccessAlert('Category updated successfully.');
+                        $("#editCategoryForm").trigger('reset');
+                        $(".custom-file-label").text('Choose file');
+                        location.reload();
+                    }
+                    $(e.target).html(`Save`).prop('disabled', false);
+
+                },
+                error: function (data) {
+                    console.log('Error', data);
+                    showDangerAlert('Please try again after some time.');
+                    $(e.target).html(`Save`).prop('disabled', false);
+
+                }
+            });
+
+            return false;
+
+        });
+
+
+
+
+        function filePreview(input) {
+            console.log("input files", input.files[0]);
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // $('.file-preview').children().remove();
+                    // $('.file-preview').removeClass('d-none');
+                    // $('.file-preview').addClass('d-flex');
+                    $(input).parent().siblings('.file-preview').children('.img-thumbnail').prop('src', e.target
+                        .result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+
+        $(".setadsplan").click( e => {
+
+            const id = $(e.target).data('id');
+            const index = $(e.target).data('index');
+            console.log({id, index});
+
+            $(".catId").val(id);
+
+            if ( categories[index] && categories[index].postAdType  && categories[index].postAdType.name ) {
+                $("#postAdName").val( categories[index].postAdType.name);
+            }
+
+            if (categories[index] && categories[index].postAdType) {
+
+                $("#postSelect").html('<option  hidden disabled>Select</option>');
+
+                for (let i = 0; i < postAds.length; i++) {
+                    console.log(String(postAds[i]._id)," == ",String(categories[index].postAdType.id))
+                    if (String(postAds[i]._id) == String(categories[index].postAdType.id)) {
+                        console.log('Matched post');
+                        $("#postSelect").append(`
+                            <option selected data-name="${postAds[i].name}" value="${postAds[i]._id}">${postAds[i].name}</option>
+                        `);
+                    } else {
+                        console.log('not Matched post');
+                        $("#postSelect").append(`
+                            <option data-name="${postAds[i].name}" value="${postAds[i]._id}">${postAds[i].name}</option>
+                        `);
+                    }
+                }
+
+
+            }
+
+
+            if ( categories[index] && categories[index].productAdType  && categories[index].productAdType.name ) {
+                $("#productAdName").val( categories[index].productAdType.name);
+            }
+
+            if (categories[index] && categories[index].productAdType) {
+
+                $("#productSelect").html('<option hidden  disabled>Select</option>');
+
+                for (let i = 0; i < productAds.length; i++) {
+                    console.log(String(productAds[i]._id)," == ",String(categories[index].productAdType.id));
+                    if (String(productAds[i]._id) == String(categories[index].productAdType.id)) {
+                        console.log('Matched product');
+                        $("#productSelect").append(`
+                            <option selected data-name="${productAds[i].name}" value="${productAds[i]._id}">${productAds[i].name}</option>
+                        `);
+                                    } else {
+                        console.log('not Matched product');
+
+                                        $("#productSelect").append(`
+                            <option data-name="${productAds[i].name}" value="${productAds[i]._id}">${productAds[i].name}</option>
+                        `);
+                    }
+                }
+
+            }
+
+
+        });
+
+
+        function updateProduct(e) {
+            const id = $(e.target).val();
+            const name = $(e.target).children("option:selected").data('name');
+            console.log({
+                name
+            });
+            $("#productAdName").val(name);
+        }
+
+        function updatePost(e) {
+            const id = $(e.target).val();
+            const name = $(e.target).children("option:selected").data('name');
+            console.log({
+                name
+            });
+            $("#postAdName").val(name);
+        }
+            
+        $("#editAdsModal").on("hide.bs.modal", e => {
+                $("#postSelect").html('<option selected hidden disabled>Select</option>');
+                for (let i = 0; i < postAds.length; i++) {
+                        $("#postSelect").append(`
+                            <option data-name="${postAds[i].name}" value="${postAds[i]._id}">${postAds[i].name}</option>
+                        `);
+                }
+
+                $("#productSelect").html('<option selected hidden disabled>Select</option>');
+                for (let i = 0; i < productAds.length; i++) {
+                                        $("#productSelect").append(`
+                            <option data-name="${productAds[i].name}" value="${productAds[i]._id}">${productAds[i].name}</option>
+                        `);
+                }
+        });
+
+        $("#resetForm").on('submit', e => {
+            if ( !confirm("Are you sure?")) {
+                return false;
+            }
+        });
+
+
+        function updateSearchSuggestion( event ) {
+            const id = $(event.target).data('id');
+            if ( id ) {
+                $.post(`${rootDomain}/admin/site/category/searchSuggestion/${id}`, 
+                ( res , status ) => {
+                    console.log(res.searchSuggestion ? res.searchSuggestion : '');
+                    if ( res &&  res.data ) {
+                        showSuccessAlert('Updated');
+                        const state = res.data.searchSuggestion;
+                        $(event.target).prop('checked', state);
+                        $(event.target).siblings('label').html( state ? "On" : "Off");
+
+                    } else { 
+                        showDangerAlert("Failed");
+                    }
+                }).fail( error => {
+                    showDangerAlert("Failed");
+                    console.log({error});
+                })
+            }
+        }
+
+        function updateTrendingSearch( event ) {
+            const id = $(event.target).data('id');
+            if ( id ) {
+                $.post(`${rootDomain}/admin/site/category/searchTrending/${id}`, 
+                ( res , status ) => {
+                    console.log(res.data ? res.data : '');
+                    if ( res &&  res.data ) {
+                        showSuccessAlert('Updated');
+                        const state = res.data.status;
+                        $(event.target).prop('checked', state);
+                        $(event.target).siblings('label').html( state ? "On" : "Off");
+
+                    } else { 
+                        showDangerAlert("Failed");
+                    }
+                }).fail( error => {
+                    showDangerAlert("Failed");
+                    console.log({error});
+                })
+            }
+        }
+
+        function updateQuickSearch( event ) {
+            const id = $(event.target).data('id');
+            if ( id ) {
+                $.post(`${rootDomain}/admin/site/category/quickSearch/${id}`, 
+                ( res , status ) => {
+                    console.log(res.data ? res.data : '');
+                    if ( res &&  res.data ) {
+                        showSuccessAlert('Updated');
+                        const state = res.data.quickSearch;
+                        $(event.target).prop('checked', state);
+                        $(event.target).siblings('label').html( state ? "On" : "Off");
+
+                    } else { 
+                        showDangerAlert("Failed");
+                    }
+                }).fail( error => {
+                    showDangerAlert("Failed");
+                    console.log({error});
+                })
+            }
+        }
+        
+    </script>
+
+</body>
+
+</html>

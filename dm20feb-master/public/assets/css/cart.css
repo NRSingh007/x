@@ -1,0 +1,148 @@
+#cart-page #shortcut-navbar {
+  display: none;
+}
+
+.cart-hide {
+  display: none !important;
+}
+
+.cart-show {
+  display: block !important;
+}
+
+.sm-show.cart-show {
+  display: initial !important;
+}
+
+.main-content-cart .container > * {
+  margin: 0 -15px;
+}
+
+.cus-col-holder {
+  border-top: 1px solid rgb(232,232,232);
+}
+
+.col.d-flex.flex-column.justify-content-center * {
+  width: 100%;
+}
+
+.cus-col-holder > div {
+  border-left: 1px solid rgb(239,237,237);
+  padding: 6px 0;
+}
+
+@media (min-width: 300px) {
+  #left-col-cart {
+    /*margin: 5px;*/
+  }
+}
+
+.left-col-cart > .row {
+  margin-bottom: 20px;
+}
+
+.menu-group-col-holder > div {
+  padding: 12px 0;
+}
+
+.active-bar {
+  position: absolute;
+  width: 100%;
+  margin-top: 7px;
+  height: 5px;
+}
+
+.d-flex.flex-row.menu-group-col-holder > div {
+  /*min-width: 170px;*/
+  /*margin-left: 7px;*/
+}
+
+.d-flex.flex-row.menu-group-col-holder > div > h6 {
+  /*min-width: 170px;*/
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.d-flex.flex-row.menu-group-col-holder > div:hover {
+  cursor: pointer;
+}
+
+.menu-group-name {
+  /*border-top: 1px solid #e7e7e7;*/
+  border-bottom: 1px solid #efefef;
+  background-color: #f7f8fc;
+  font-weight: 600;
+}
+
+.row.cart-item-list {
+  min-height: 90vh;
+}
+
+@media (min-width: 300px) {
+  .menu-item-img {
+    padding: 5px;
+  }
+}
+
+@media (min-width: 768px) {
+  .menu-item-img {
+    padding: 10px;
+  }
+}
+
+.menu-item-img img {
+  width: 100%;
+  margin: 0;
+  /*padding: 0;*/
+}
+
+.menu-item-desc p {
+  margin-bottom: 0;
+}
+
+.menu-item-per {
+  border-bottom: 1px solid rgb(213,211,211);
+}
+
+.menu-group-header {
+  border-bottom: 1px solid rgb(213,211,211);
+}
+
+.row.cart-item-per {
+  /*border-bottom: 1px solid rgb(232,231,231);*/
+}
+
+.subtotal {
+  position: fixed;
+  /*width: 300px;*/
+  bottom: 0;
+  background-color: #fafafa;
+  z-index: 2;
+  color: #89959B;
+  border-top: 1px solid #e7e7e7;
+  border-top-left-radius: 0;
+  box-shadow: rgba(0,0,0,.15) 0 -2px 15px -5px;
+  border-top-right-radius: 0;
+}
+
+.fixed-top-cart {
+  position: fixed;
+  top: 0;
+}
+
+@media (min-width: 300px) {
+  #right-side-cart, #cart-upper, #subtotal {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  #right-side-cart, #cart-upper, #subtotal {
+    display: block;
+  }
+}
+
+#cart-upper {
+  z-index: 1;
+}
+

@@ -1,0 +1,694 @@
+<!-- The Modal -->
+<div class="d-flex flex-row justify-content-center alert-container"
+    style=" position: fixed; top: 30px; width: 100%; height: auto;">
+    <div class="col-6 " style="z-index: 1; font-size: 22px;">
+        <div class="alert alert-success alert-dismissible" style="display: none;">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="mr-3">Success!</strong> <span class="message"></span>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible" style="display: none;;">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="mr-3">Error!</strong> <span class="message"></span>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="createCollectionModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Create New Collection</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body pt-0">
+
+
+
+                <div class="px-3">
+
+                    <form name="createCollectionForm" id="createCollectionForm" action="" method="post">
+                        <input type="hidden" name="collectionId" id="collectionId">
+                        <section class="first pt-2">
+
+                            <div class="form-group">
+                                <label for="">NAME OF COLLECTION* </label>
+                                <input type="text" name="name" placeholder="e.g. Best Hotels" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="">DESCRIPTION* </label>
+                                <input type="text" name="description"
+                                    placeholder="e.g. My favorite places to stay on holidays" class="form-control">
+                            </div>
+                            <div class="custom-file form-group ">
+                                <input type="file" name="cover-image" onchange="filePreview(this)"
+                                    accept=".jpg,.jpeg,.png" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Choose cover image*</label>
+                            </div>
+                            <div class="cover-image img-thumbnail">
+
+                            </div>
+                            <div class="custom-control custom-switch d-flex flex-row px-0 pt-3 mx-0">
+                                <div class="col-sm-3 pl-0 ">
+                                    <label for="collectionStatus" class="font-weight-bold">Status*</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="checkbox" name="collectionStatus" class="custom-control-input"
+                                        onchange="checkStatus(event)" checked id="collectionStatus">
+                                    <label class="custom-control-label pl-3" for="collectionStatus">Active</label>
+                                </div>
+
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="">TAGS </label>
+                                <input type="text" name="Collection-name" placeholder="e.g. #top10 #biryani #BestHotels"
+                                    class="form-control">
+                            </div> -->
+
+
+                            <input type="text" hidden name="userId" value="<%= user._id %>" />
+                            <button onclick="showAddPlacesTab(event)" id="addPlacesBtn"
+                                class="my-3 float-right btn-sm shadow-none btn btn-success" type="button">ADD PLACES
+                            </button>
+                        </section>
+
+
+                        <section class="second d-none">
+                            <ul class="nav nav-tabs nav-justified">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#AddPlaces">Add Places</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#InCollection">In Collection (<span
+                                            class="text-muted" id="placesCountId">0</span>) </a>
+                                </li>
+
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane container   active p-3" id="AddPlaces">
+                                    <div class="input-group mb-3">
+                                        <input autocomplete="off" type="text" name="location" id="locationInputId"
+                                            value="Imphal" placeholder="Search location" class="form-control">
+                                        <div class="input-group-append ">
+                                            <button class="btn btn-default" type="button">
+                                                <i class="fal fa-map-marker-alt  "></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <ul class="list-group my-3" id="locationResultList" style="display: none;">
+
+                                    </ul>
+                                    <div class="input-group mb-3">
+                                        <input autocomplete="off" type="text" name="place-name"
+                                            onkeyup="searchPosts(event)" id="placeNameInputId" value=""
+                                            placeholder="Search for places by name" class="form-control">
+                                        <div class="input-group-append ">
+                                            <button class="btn btn-default" type="button">
+                                                <i class="fal fa-search  "></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <ul class="list-group my-3" id="placeNameResultList" style="display: none;">
+
+                                    </ul>
+                                </div>
+                                <div class="tab-pane container fade p-3" id="InCollection">
+                                    <p class="collection-default">No places added yet!</p>
+                                    <ul class="list-group">
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <button class="btn btn-danger float-left btn-sm px-2" type="button"
+                                    id="backBtn">BACK</button>
+                                <button onclick="submitFirstForm(event)" class="btn btn-success float-right btn-sm px-2"
+                                    type="button" id="saveBtn">SAVE</button>
+                            </div>
+                        </section>
+                    </form>
+
+
+
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    let Collection;
+
+    $(document).ready(function () {
+
+
+        // Show modal
+        $("#createCollectionBtn").click((e) => {
+            e.preventDefault();
+
+            // init Collection
+            Collection = {
+                name: '',
+                places: [],
+                createdOn: Date.now(),
+                modifiedOn: Date.now(),
+                userId: '',
+                coverImage: ''
+            };
+
+            $("#createCollectionModal").modal('show');
+            // show create collection first tab only  and hide second tab
+            $("#createCollectionModal section.first").removeClass('d-none');
+            $("#createCollectionModal section.second").addClass('d-none');
+        });
+
+        // Reset tabs.. on modal hidden
+        $('#createCollectionModal').on('hidden.bs.modal', function (e) {
+            console.log('hidden')
+            $("#createCollectionModal section").addClass('d-none');
+            $("#createCollectionModal section.first").removeClass('d-none');
+            $("#createCollectionForm").trigger('reset');
+            // remove img
+            $('.cover-image').hide();
+            // $("#InCollection ").html('');
+            $("#InCollection .collection-default").show();
+            $("#InCollection .list-group").html('');
+            $("#placeNameResultList").html('');
+        });
+
+        // Reset data on modal shown
+        $('#createCollectionModal').on('show.bs.modal', function (e) {
+            console.log('showing');
+            $("#placeNameResultList .collection-default").show();
+            $("#placeNameResultList").siblings(".load-more").remove();
+
+            prevSkip = 0;
+            skip = 0;
+            total = null;
+            Collection = {
+                name: '',
+                places: [],
+                createdOn: Date.now(),
+                modifiedOn: Date.now(),
+                userId: '',
+                coverImage: ''
+            };
+            $("#placesCountId").html(0);
+
+
+        });
+
+        // goback
+        $("#createCollectionModal #backBtn").click((e) => {
+
+            e.preventDefault();
+
+            // change modal title 
+            $("#createCollectionModal .modal-title").html('CREATE NEW COLLECTION');
+
+            // show add places tab
+            $("#createCollectionModal section.first").removeClass('d-none');
+            $("#createCollectionModal section.second").addClass('d-none');
+
+        });
+
+        // search location
+        // <li class="list-group-item">First item</li>
+        let timer;
+        $("#locationInputId").on('keyup', (e) => {
+            let value = $(e.target).val();
+            if (value.length > 1) {
+
+                if (timer) {
+                    clearTimeout(timer);
+                }
+
+                timer = setTimeout(function () {
+
+                    console.log('Searching locations');
+                    $(e.target).siblings(".input-group-append").children("button").html(
+                        `<div class="spinner-border text-muted spinner-border-sm"></div>`
+                    );
+
+                    const rootDomain =
+                        `${location.protocol}//${window.location.hostname}${location.port ? ':'+location.port: ''}`;
+
+                    $.get(`${rootDomain}/search/ajax/location?slocation=${value}`, (data,
+                            status) => {
+                            if (status == 'success' && data.length > 0) {
+                                console.log({
+                                    data
+                                });
+                                $("#locationResultList").html('');
+                                $("#locationResultList").show();
+
+                                data.forEach(location => {
+                                    $("#locationResultList").append(
+                                        `<a href="#" class="list-group-item list-group-item-action">${location}</a>`
+                                    );
+                                });
+
+                                $(e.target).siblings(".input-group-append").children(
+                                    "button").html(
+                                    `<i class="fal fa-map-marker-alt  "></i>`
+                                );
+
+                            }
+                        })
+                        .fail((e) => {
+                            console.log({
+                                e
+                            });
+                            $(e.target).siblings(".input-group-append").children("button")
+                                .html(
+                                    `<i class="fal fa-map-marker-alt  "></i>`
+                                );
+                        });
+
+                }, 1000);
+
+
+            }
+        });
+
+        // show previous search result 
+        $("#locationInputId").on('click', (e) => {
+            $("#locationResultList").html().trim() != '' ? $("#locationResultList").show() : '';
+            $("#placeNameResultList").hide();
+
+        });
+
+        // listen for onclick events on search result
+        $(document).on('click', "#locationResultList > .list-group-item", (e) => {
+            console.log('clicked');
+            $("#locationInputId").val($(e.target).html());
+            $("#locationResultList").hide();
+        });
+
+
+
+        // show previous search result 
+        $("#placeNameInputId").on('click', (e) => {
+            $("#placeNameResultList").html().trim() != '' ? $("#placeNameResultList").show() : '';
+            $("#locationResultList").hide();
+
+        });
+
+        // listen for onclick events on search result
+        // $(document).on('click', "#placeNameResultList > .list-group-item", (e) => {
+        //     console.log('clicked');
+        //     $("#placeNameInputId").val($(e.target).html());
+        //     $("#placeNameResultList").hide();
+        // });
+
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").show();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+
+        // add places -------------listen for onclick events on search result list items
+        $(document).on('click', "#placeNameResultList > .list-group-item > button", (e) => {
+            console.log('clicked');
+            e.preventDefault();
+            e.stopPropagation();
+
+            let text = $(e.target).html();
+            let name = $(e.target).siblings('.place-name').data('name');
+            let locality = $(e.target).siblings('.place-name').data('locality'); // not working
+            let district = $(e.target).siblings('.place-name').data('district');
+            let state = $(e.target).siblings('.place-name').data('state');
+            let id = $(e.target).siblings('.place-name').data('id');
+
+            console.log({
+                text,
+                name,
+                locality,
+                district,
+                state,
+                id
+            });
+
+            if (Collection.places.length > 0 && Collection.places.every((item) => String(item.state) != String(state))) {
+                alert('All places should be from same state');
+            }
+
+            if (text.trim() == 'ADD') {
+                if (Collection.places.every((item) => String(item.id) != String(id))) {
+                    Collection.places.push({
+                        id,
+                        name,
+                        district,
+                        locality,
+                        state
+                    });
+                }
+                $(e.target).html('REMOVE');
+                $(e.target).removeClass('btn-outline-success');
+                $(e.target).addClass('btn-outline-danger');
+            } else {
+                Collection.places = Collection.places.filter((item) => String(item.id) != String(id));
+                $(e.target).html('ADD');
+                $(e.target).removeClass('btn-outline-danger')
+                $(e.target).addClass('btn-outline-success');
+
+            }
+
+            if (Collection.places.length > 0) {
+
+                $("#InCollection .list-group").html('');
+                Collection.places.forEach(place => {
+                    $("#InCollection .list-group").append(
+                        `
+                        <li class="list-group-item d-flex  flex-row py-1">
+                            <div class="col-9  d-flex  flex-column">
+                                <label class="mb-0">${place.name}</label>
+                                <span class="text-muted font-weight-normal">${place.district} ${place.locality ? ', '+place.locality : ''}</span>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" data-id="${String(place.id)}" onclick="removePlace(event)" class="btn btn-link text-danger  btn-sm float-right">Remove</button>
+
+                            </div>
+                        </li>
+                        `
+                    );
+                });
+
+                $("#InCollection .collection-default").hide();
+                $("#InCollection .list-group").show();
+
+
+            } else {
+
+                $("#InCollection .collection-default").show();
+                $("#InCollection .list-group").hide();
+
+
+            }
+
+
+            console.log({
+                Collection
+            });
+
+            // update collection state
+            $("#placesCountId").html(Collection.places.length);
+
+
+
+        });
+
+
+
+    });
+
+
+    // remove place from collection
+    // remove place from collection
+    function removePlace(e) {
+        const l = Collection.places.length;
+        const id = $(e.target).data('id');
+        console.log({
+            id,
+            l
+        })
+        if (id) {
+            const a = Collection.places.filter((item) => {
+                console.log(String(item.id) != String(id) ? true : false);
+                return String(item.id) != String(id);
+            });
+
+            Collection['places'] = a;
+            $("#createCollectionForm #placesCountId").html(Collection.places.length);
+
+            console.log({
+                a,
+                'l': Collection.places.length
+            });
+            console.log({
+                'Places': Collection.places
+            });
+            $(e.target).parent().parent().remove();
+
+            // change remove to add on placeNameResultList
+            $(`#${id}_btn`).html('ADD').removeClass('btn-outline-danger').addClass('btn-outline-success');
+
+        }
+    }
+
+    // search places
+
+
+    function searchPosts(e, prevSkip = 0, skip = 0, total = null) {
+        e.preventDefault();
+
+        console.log("Searching...");
+        let stext = $("#placeNameInputId").val();
+        let slocation = $("#locationInputId").val();
+        if (stext.length > 1 && slocation.length > 1) {
+
+            console.log('Validate: true');
+            $("#placeNameInputId").siblings(".input-group-append").children("button").html(
+                `<div class="spinner-border text-muted spinner-border-sm"></div>`
+            );
+            const rootDomain =
+                `${location.protocol}//${window.location.hostname}${location.port ? ':'+location.port: ''}`;
+
+            $.get(rootDomain + '/search/ajax?stext=' + stext + '&slocation=' + slocation + '&total=' + total +
+                    '&skip=' + skip, (data,
+                        status) => {
+                        console.log({
+                            data
+                        });
+                        if (status == 'success' && data.posts && data.posts.length > 0) {
+
+                            if (prevSkip == 0) {
+                                $("#placeNameResultList").html('');
+                            }
+                            $("#placeNameResultList").show();
+                            console.log({
+                                data
+                            });
+                            data.posts.forEach(element => {
+                                const notAdded = Collection.places.every((item) => String(item.id) != String(
+                                    element._id));
+                                $("#placeNameResultList").append(
+                                    `<li href="#" class=" list-group-item list-group-item-action">
+                                <span 
+                                style="width: 90%" 
+                                class="place-name" 
+                                data-id="${element._id}" 
+                                data-name="${element.name}"
+                                data-state="${element.address.state.name}"
+                                data-district="${element.address.district.name}"
+                                data-locality="${element.address.locality.name}"
+                                >
+                                ${element.name}<br/>
+                                </span>
+                                <span class="text-muted font-weight-normal"> 
+                                    ${element.address.district.name} ${element.address.locality.name ? ', '+element.address.locality.name :''}
+                                </span>
+                                <button id="${element._id}_btn" class="btn btn-sm ${ notAdded ? 'btn-outline-success': 'btn-outline-danger' } shadow-none float-right" >
+                                            ${ notAdded ?  'ADD':'REMOVE' }
+                                </button>
+                                </li>`
+                                );
+                            });
+
+                            if (prevSkip < data.total && data.total > 7 && (data.total - (prevSkip + 7)) > 0) {
+
+                                skip = skip + 7;
+                                prevSkip = skip;
+                                $("#placeNameResultList").siblings(".load-more").remove();
+                                $("#placeNameResultList ").after(`
+                            <div class="load-more p-0 ">
+                                <button onclick="searchPosts(event , ${prevSkip} , ${skip}, ${data.total})" 
+                                    class="btn-sm form-control btn btn-block text-center btn-light" style="background-color: #dddfe0;">
+                                    Load more ${data.total - prevSkip}
+                                </button>
+                            </div>
+                        `);
+
+                            } else {
+                                $("#placeNameResultList").siblings(".load-more").remove();
+                            }
+
+                            $("#placeNameInputId").siblings(".input-group-append").children("button").html(
+                                `<i class="fal fa-search  "></i>`
+                            );
+
+                        } else {
+                            $("#placeNameInputId").siblings(".input-group-append").children("button").html(
+                                `<i class="fal fa-search  "></i>`
+                            );
+                        }
+                    })
+                .fail((e) => {
+                    console.log({
+                        e
+                    });
+                    $("#placeNameInputId").siblings(".input-group-append").children("button").html(
+                        `<i class="fal fa-search  "></i>`
+                    );
+                });
+
+        }
+    }
+
+    // functions --------------------
+
+    // show collection cover image
+    function filePreview(input) {
+        // const file = $(event.target).files[0]);
+        console.log({
+            input
+        });
+        const file = input.files[0];
+        console.log("input file - ", file);
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                // $('.file-preview').children().remove();
+                $('#createCollectionForm .first .cover-image').show();
+                $('#createCollectionForm .first .cover-image').css({
+                    'background-image': `url(${e.target.result})`,
+                    'height': '150px'
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // submit 1st form - cover-image,name,description
+    function submitFirstForm(e) {
+        console.log('adding places', e);
+
+        // trim inputs
+        const form = $("#createCollectionForm")[0];
+        for (let i = 0; i < form.length; i++) {
+            console.log($(form[0]).prop('name'), '-', $(form[0]).val());
+            $(form[0]).val($(form[0]).val().trim());
+        }
+
+
+        const formData = new FormData(form);
+        for (let entries of formData.entries()) {
+            console.log(entries[0], '-', entries[1]);
+        }
+        console.log({
+            formData
+        });
+
+        // validate form
+        let file = formData.get('cover-image');
+        let name = formData.get('name');
+        let description = formData.get('description');
+        let userId = formData.get('userId');
+        // formData.append()
+
+        let status = $('#createCollectionForm input[name="collectionStatus"]').prop('checked');
+        formData.set('status', Boolean(status));
+
+        if ((!name || name.trim() == '') || (!description || description.trim() == '')) {
+            alert('Please enter required fields ( * )');
+        } else if (!file || !file.name) {
+            alert('Please select a cover image');
+        } else if (Number(file.size) / (1024 * 1024) > 5 && (file.type != 'image/png' || file.type !=
+                'image/jpg')) {
+            alert('Image size should be less than 5mb and of type jpeg or png. ');
+        } else {
+
+            // upload
+            const rootDomain =
+                `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+            formData.append('places', JSON.stringify(Collection.places));
+            $(e.target).html(`<div class="spinner-border text-white spinner-border-sm"></div> Saving`);
+            $.ajax({
+                url: `${rootDomain}/admin/site/collections/create`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (data) {
+                    console.log('Form submitted');
+                    console.log({
+                        data
+                    });
+                    console.log("Collection: ", data ? data : null);
+
+                    // show erro
+                    if (!data) {
+                        // error occurred
+                        alert('Unexpected error occurred. Please try again.');
+                    } else if (data) {
+                        // success exit modal
+                        fetchCollections();
+                        $(e.target).html(`SAVED!`);
+                        setTimeout(() => {
+                            $(e.target).html(`SAVE`);
+                            $("#createCollectionModal").modal('hide');
+                        }, 1000);
+
+                    }
+                },
+                error: function (data) {
+                    console.log('Error');
+                    $(e.target).html(`SAVE`);
+                    alert('Error occurred. Please try again.');
+
+                }
+            });
+        }
+    }
+
+    // show add places tab
+    function showAddPlacesTab(e) {
+        e.preventDefault();
+
+        // overwrite collection id
+        // $("#createCollectionForm #collectionId").val(collectionId);
+
+        // change modal title 
+        $("#createCollectionModal .modal-title").html('ADD PLACES');
+
+        // show add places tab
+        $("#createCollectionModal section.first").addClass('d-none');
+        $("#createCollectionModal section.second").removeClass('d-none');
+
+    };
+
+    function checkStatus(e) {
+        const checked = $(e.target).prop('checked');
+
+        $(e.target).siblings("label").html(checked ? 'Active' : 'Inactive');
+    }
+</script>

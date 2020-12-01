@@ -1,0 +1,339 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="/assets/css/admin.css"> -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/manageWebsite.css">
+
+</head>
+
+<body class="">
+    <section>
+
+    </section>
+
+    
+    
+    <section class="manage-website">
+
+        
+
+        <div class="container-fluid ">
+            <div class="row">
+
+
+                <div class="col-2 left-content p-2">
+                    <div class="list-group">
+                        <%- include('./../../includes/manage-website-pages', {page}) %>
+                    </div>
+                </div>
+
+                <div class="col-10 right-content p-2">
+
+                    <section class="nav-controls ">
+                        <ul class="nav nav-tabs">
+                            <!-- <li class="nav-item">
+                              <a class="nav-link " data-toggle="tab" href="#home">Home</a>
+                            </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#AdminCollections">Career</a>
+                            </li>
+                            <!-- <li class="nav-item" >
+                                <a onclick="getUsersCollections()" class="nav-link" data-toggle="tab" href="#UsersCollections">Users Collections</a>
+                            </li>
+                            <li class="nav-item">
+                                <a onclick="getStaticCollections(event)" class="nav-link" data-toggle="tab" href="#StaticCollections">Static Collections</a>
+                            </li> -->
+                        </ul>
+                    </section>
+
+                    <section class="main-body ">
+                        <div class="tab-content">
+
+                            <% if( typeof errors != 'undefined' && errors.length>0) { %>
+                                <div class="alert alert-danger my-3 px-3 alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    <strong>Error occurred!</strong> 
+
+                                    <ul>
+                                        <% errors.forEach( error => {   %>
+                                            <li><%= error.msg %></li>
+                                        <% }) %>
+                                    </ul>
+                                </div>
+                            <% } %>
+
+                            <% if( typeof events != 'undefined' && events.length>0) { %>
+                                <div class="alert alert-success my-3 px-3 alert-dismissible">
+                                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                    <strong>Success!</strong> 
+
+                                    <ul>
+                                        <% events.forEach( event => {   %>
+                                            <li><%= event.msg %></li>
+                                        <% }) %>
+                                    </ul>
+                                </div>
+                            <% } %>
+
+                            <!-- tab 1 -->
+                            <div class="tab-pane container active" id="AdminCollections">
+                                <div class="tab-body d-flex flex-column">
+
+                                    <div class="mb-3">
+                                        <strong class="text-muted" style="font-size: 24px;">Current job openings
+                                            </strong>
+                                        <button type="button" class="float-right btn btn-outline-success "
+                                            id="createJob" data-toggle="modal" data-target="#addJobModal">
+                                            Add new job</button>
+
+
+
+
+                                    </div>
+                                    <div>
+                                        <ul class="list-group" id="careers-list">
+                                            <% if ( careers && careers.length > 0 ) { %>
+                                                <li class=" d-flex list-group-item">
+                                                    <div class="col-1">
+                                                        <b>Sl.</b>
+                                                    </div>
+                                                    <div class="col-3">
+                                                        <b>Name</b>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <b>Department</b>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <b>location</b>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <b>Added on</b>
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <b>Action</b>
+                                                    </div>
+                                                </li>
+                                                <%  let i =0; careers.forEach( job => {   %>
+                                                    <li class=" d-flex  list-group-item">
+                                                        <div class="col-1">
+                                                            <%= ++i %>
+                                                        </div>
+                                                        <div class="col-3 text-break text-wrap">
+                                                            <%= job.role %>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <%= job.department %>
+                                                        </div>
+                                                        <div class="col-2">
+                                                            <%= job.location %>
+                                                        </div>
+                                                        <div class="col-2   ">
+                                                            <%= String(job.createdOn).slice(0,15) %>
+                                                        </div>
+                                                        <div class="col-2 d-flex justify-content-between align-items-center">
+                                                            <button data-id="<%= job._id %>" class="delete-job btn btn-danger btn-sm">Delete</button>
+                                                            <button data-id="<%= job._id %>" class="edit-job btn btn-info btn-sm">Edit</button>
+                                                        </div>
+                                                    </li>
+
+                                                <% }) %>
+                                            <% } else { %>
+                                                - No jobs currently opening
+                                                <% } %>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- tab 2 -->
+                            <!-- <div class="tab-pane container fade" id="home">..menu1.</div> -->
+                            <div class="tab-pane container fade"  id="UsersCollections">
+                                <h4 class="my-3">Manage Collections</h4>
+                                <ul class="list-group p-4" id="users-collections-list">
+
+                                </ul>
+                            </div>
+
+                            <!-- tab content content 3 -->
+                            <div class="tab-pane container fade" id="StaticCollections">
+                                <%- include('./../../includes/staticCollections.ejs') %>
+                                
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+            <!-- container ends here -->
+        </div>
+
+    </section>
+
+
+    <!-- modals -->
+
+    <!-- add job modal -->
+
+    <!-- Button to Open the Modal -->
+        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addJobModal">
+            Open modal
+        </button> -->
+  
+    <!-- The Modal -->
+    <div class="modal" id="addJobModal">
+        <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+    
+            <!-- Modal Header -->
+            <div class="modal-header">
+            <h4 class="modal-title">Add new job opening</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+    
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form  id="newJobForm" action="/admin/site/career/job/new" method="post" >
+                    <div class="form-group">
+                        <label  class="font-weight-bold" for="">Role</label>
+                        <input type="text" name="role" required  class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="">Location/City</label>
+                        <input type="text" name="location" required  class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="font-weight-bold" for="">Department</label>
+                        <input type="text" name="department" required  class="form-control">
+                    </div>
+                    <div class="form-group" >
+                        <label class="font-weight-bold" for="">Description</label>
+                        <textarea name="description" rows="5" required  class="p-1 m-0 form-control"></textarea>
+                    </div>
+                    <div class="form-group  my-1" >
+                        <label class="font-weight-bold" for="">Requirements</label>
+                        <textarea name="requirements" rows="5" required  class="p-1 m-0 form-control"></textarea>
+                    </div>
+                    <button class="btn btn-success" type="submit">Submit</button>
+
+                </form>
+            
+            </div>
+    
+            <!-- Modal footer -->
+            <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div> -->
+    
+        </div>
+        </div>
+    </div>
+
+
+    <!-- Button to Edit the Modal -->
+        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addJobModal">
+            Open modal
+        </button> -->
+  
+    <!-- The Modal -->
+    <div class="modal" id="editJobModal">
+        <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+    
+            <!-- Modal Header -->
+            <div class="modal-header">
+            <h4 class="modal-title">Edit job opening</h4>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+    
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form  id="editJobForm" action="/admin/site/career/job/update" method="post" enctype="application/x-www-form-urlencoded">
+                    <div class="form-group my-1">
+                        <label class="font-weight-bold" for="">Role</label>
+                        <input type="text" name="role" required  class="form-control">
+                    </div>
+                    <div class="form-group  my-1">
+                        <label class="font-weight-bold" for="">Location/City</label>
+                        <input type="text" name="location" required  class="form-control">
+                    </div>
+                    <div class="form-group  my-1">
+                        <label class="font-weight-bold" for="">Department</label>
+                        <input type="text" name="department" required  class="form-control">
+                    </div>
+                    <div class="form-group  my-1" >
+                        <label class="font-weight-bold" for="">Description</label>
+                        <textarea name="description" rows="5" required  class="p-1 m-0 form-control"></textarea>
+                    </div>
+                    <div class="form-group  my-1" >
+                        <label class="font-weight-bold" for="">Requirements</label>
+                        <textarea name="requirements" rows="5" required  class="p-1 m-0 form-control"></textarea>
+                    </div>
+                    <button class="btn btn-success" type="submit">Submit</button>
+
+                </form>
+            
+            </div>
+    
+            <!-- Modal footer -->
+            <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div> -->
+    
+        </div>
+        </div>
+    </div>
+    
+   <script>
+        const rootDomain = `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+       $(".delete-job").click(e=>{
+            e.preventDefault();
+            // alert('dad');
+            const id = $(e.target).data('id');
+            if (id  && confirm("Are you sure?")) {
+                let form = $('form').prop('action','/admin/site/career/job/delete/'+id).prop('method', 'POST');
+                form.submit();
+            }
+       });
+
+       $(".edit-job").click(e=>{
+            e.preventDefault();
+            // alert('dad');
+            const id = $(e.target).data('id');
+
+            $.get(`${rootDomain}/admin/site/career/job/get/${id}`, 
+            (res, status) => {
+                console.log({res});
+                if ( res && res.data && status == 'success' ) {
+                    $("#editJobModal").modal('show');
+                    const action = $("#editJobForm").prop('action');
+                    $("#editJobForm").prop('action', action+'/'+id);
+                    $("#editJobForm input[name='role']").val(res.data.role);
+                    $("#editJobForm input[name='location']").val(res.data.location);
+                    $("#editJobForm input[name='department']").val(res.data.department);
+                    $("#editJobForm textarea[name='description']").val(unescape(res.data.description));
+                    $("#editJobForm textarea[name='requirements']").val(unescape(res.data.requirements));
+                }""
+            }).fail(e=>{
+                console.log({e});
+            });
+
+           
+       });
+   </script>
+   
+</body>
+
+</html>

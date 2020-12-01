@@ -1,0 +1,868 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="/assets/css/admin.css"> -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/manageWebsite.css">
+    <style>
+        .thumbnail-cover {
+            width: 150px;
+            height: 80px;
+        }
+
+        .thumbnail-logo {
+            width: 80px;
+            height: 80px;
+        }
+    </style>
+    <script>
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-container").show();
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+
+        function showInfoAlert(message) {
+            $(".alert-container").show();
+            $(".alert-info .message").html(message);
+            $(".alert-info").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-info").hide();
+            }, 1500);
+        }
+    </script>
+</head>
+
+<body class="">
+    <section>
+        
+        <% if ( typeof messages.error != "undefined" ) { %>
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Error!</strong> <%= messages.error %>
+            </div>
+        <% } %>
+          
+
+    </section>
+    <%- include('./../../includes/alert'); %>
+
+
+
+    <section class="manage-website">
+
+
+
+        <div class="container-fluid ">
+            <div class="row">
+
+
+                <div class="col-2 left-content p-2">
+                    <div class="list-group">
+                        <%- include('./../../includes/manage-website-pages', {page}) %>
+                    </div>
+                </div>
+
+                <div class="col-10 right-content p-2 bg-white">
+
+                    <section class="nav-controls ">
+                        <ul class="nav nav-tabs">
+                            <!-- <li class="nav-item">
+                                  <a class="nav-link " data-toggle="tab" href="#home">Home</a>
+                                </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link " href="/admin/site/business/post"
+                                >POSTS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link "  href="/admin/site/business/product">PRODUCTS </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active " >LED and Banner </a>
+                            </li>
+                            <!-- <li class="nav-item" >
+                                    <a onclick="getUsersCollections()" class="nav-link" data-toggle="tab" href="#UsersCollections">Users Collections</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a onclick="getStaticCollections(event)" class="nav-link" data-toggle="tab" href="#StaticCollections">Static Collections</a>
+                                </li> -->
+                        </ul>
+                    </section>
+
+                    <section class="main-body ">
+                        <div class="tab-content">
+
+
+
+                            <!-- tab 1 -->
+                            <div class="tab-pane container p-4 active" id="AdminCollections">
+
+
+
+                                <section>
+                                    <div class="row border px-2 py-3 mb-5 bg-light">
+                                        <div class="px-3 col-4 ">
+                                            <h6>Add new ad Type</h6>
+                                            <form action="/admin/site/business/ledandbanner/type/add" method="post">
+                                                <div class="form-group">
+                                                    <input type="text" name="name" required placeholder="Enter new type" class="form-control">
+                                                </div>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheckImage" name="image">
+                                                    <label class="custom-control-label" for="customCheckImage">Image</label>
+                                                  </div>
+                                                  <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="customCheckVideo" name="video">
+                                                    <label class="custom-control-label" for="customCheckVideo">Video</label>
+                                                  </div>
+                                                <input type="submit" value="Submit" class="btn-sm btn btn-success">
+                                            </form>
+                                        </div>
+                                        <div class="col-6 ml-auto ">
+                                            <h6 class="m-1 p-1">
+                                                List of available Ad Types
+                                            </h6>
+                                           
+                                            <% if ( typeof types != "undefined" && types.length > 0 ) { %>
+
+                                                    <% for( let i = 0; i< types.length; i++ ) { %>
+                                                            <li class="py-1  d-flex flex-row list-group-item">
+                                                                <div class="col-8">
+                                                                    <%= i+1 +'. '+types[i].name %> 
+                                                                    <% if (types[i].features && types[i].features.image) { %>
+                                                                        <span class="badge badge-info float-right mx-2"> Image</span>
+                                                                        <% } %>
+                                                                    <% if ( types[i].features && types[i].features.video ) { %>
+                                                                        <span class="badge badge-info float-right mx-2"> Video</span>
+                                                                    <% } %>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <form action="/admin/site/business/ledandbanner/type/delete" method="post">
+                                                                    <input 
+                                                                    onclick="if(!confirm('Are U Sure?')){ return false;}"
+                                                                    type="submit" class="float-right mr-1 btn btn-sm btn-danger" value="Delete">
+                                                                        
+                                                                    <input type="text" hidden name="id" value="<%= types[i]._id %>">
+                                                                </form>
+                                                                </div>
+                                                            </li>
+                                                    <% } %>
+
+                                            <% } else { %> 
+                                                <- Please add new type
+                                            <% } %>
+                                        
+                                        </div>
+                                    </div>
+                                </section>
+                                
+                                <section>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h6>Available Ads</h6>
+                                        </div>
+                                        <div class="col">
+                                            <button data-toggle="modal" data-target="#addFormModal" class="btn float-right btn-outline-secondary btn-sm">Add New</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-3 px-4">
+                                        <% if ( typeof ads != 'undefined' && ads.length>0 ) { %>
+                                            <% ads.forEach( ad => { %>
+                                                <div class="col p-3 mx-3 bg-white my-4 p-2 border border-warning rounded">
+                                                    <div class="row px-3">
+                                                        <div class="col-4">
+                                                        
+                                                            <!-- <div>
+
+                                                                <label style="min-width: 70px;" class="font-weight-bold   text-info"> Name: </label>
+                                                                <label class="text-uppercase font-weight-bold text-muted" for=""><%= ad.name %></label> 
+                                                            </div> -->
+                                                            <div>
+                                                                <label style="min-width: 70px; " class="font-weight-bold   text-info"> Type: </label>
+                                                                <span class="badge badge-success p-2 px-3 rounded"><%= typeof types != "undefined" && types.length > 0 && types.find( cur => String(cur._id) == String(ad.type)) ? types.find( cur => String(cur._id) == String(ad.type)).name : '' %></span>
+                                                             </div>
+                                                        </div>
+                                                        <div class="col-8">
+                                                            <div>
+                                                               <div style="min-width: 70px; " class="font-weight-bold   text-info"> Pricing: </div>
+                                                               <ul class="list-group my-2 mx-0 px-3">
+                                                                <% if ( ad.pricings && ad.features.length > 0 ) { %> 
+                                                                    <li class="  border-bottom   row">
+                                                                        <div style="font-weight: 500;" class=" col-4 border  text-black">Name</div>
+                                                                        <div style="font-weight: 500;" class=" col-4 border  text-black">Price</div>
+                                                                        <div style="font-weight: 500;" class="col border text-black">Validity (days)</div>
+                                                                    </li>
+                                                                <% ad.pricings.forEach( item => { %> 
+                                                                    <li class=" border   row">
+                                                                        <div class=" col border  text-uppercase font-weight-normal text-info"><%= item.name %></div>
+                                                                        <div class="col border text-uppercase font-weight-bold text-muted"><%= item.price %></div>
+                                                                        <div class="col border text-uppercase font-weight-bold text-muted"><%= item.validityInDays %></div>
+                                                                    </li>
+                                                                   <% }); %>
+                                                                   <% } %>
+
+                                                               </ul>
+                                                               
+                                                            </div>
+    
+                                                            <div>
+                                                               <div style="min-width: 70px; " class="font-weight-bold   text-info"> Features: </div>
+
+                                                               <ul class="list-group my-2 mx-0 px-3">
+    
+                                                                <% if ( ad.features && ad.features.length > 0 ) { %> 
+                                                                    <li class="  border-bottom   row">
+                                                                        <div style="font-weight: 500;" class=" col-4 border  text-black">Name</div>
+                                                                        <div style="font-weight: 500;" class="col border text-black">Description</div>
+                                                                    </li>
+                                                                    <% ad.features.forEach( feature => { %> 
+                                                                    <li class="  border-bottom  row">
+                                                                        <div class=" col-4 border  font-weight-normal text-muted"><%= feature.name %></div>
+                                                                        <div class="col border font-weight-normal text-muted"><%= feature.description %></div>
+                                                                    </li>
+                                                                    <% }); %>
+                                                                <% } %>
+                                                               </ul>
+    
+                                                             </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <hr class="py-1 mt-2 m-0">
+                                                    <div class="row px-3 d-flex align-items-center  justify-content-end">
+                                                       <div class="mr-3">
+                                                            <button  
+                                                                data-id="<%= ad._id %>"
+                                                                class="edit-ad-btn btn-primary px-3 btn btn-sm">
+                                                                    Edit
+                                                                </button>
+                                                       </div> 
+                                                       <div>
+                                                        <form class="m-0 p-0" action="/admin/site/business/ledandbanner/delete/<%= ad._id %>" method="post">
+                                                            <button 
+                                                            data-id="<%= ad._id %>"
+                                                            onclick="if(!confirm('Are you sure')){ return false;} "
+                                                            class="delete-ad-btn btn-danger btn btn-sm">
+                                                                Delete
+                                                            </button>
+                                                            <input type="text" value="<%= ads._id %>" name="id" hidden>
+                                                        </form>
+                                                       </div>
+                                                       
+    
+                                                        
+                                                    </div>
+                                                </div>
+                                               
+                                            <% }); %>
+                                        <% } %>
+
+                                    </div>
+                                </section>
+
+
+                            </div>
+
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+            <!-- container ends here -->
+        </div>
+
+    </section>
+
+
+    <!-- modals -->
+
+    <!-- add job modal -->
+
+    <!-- Button to Open the Modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAdPlanModal">
+                Open modal
+            </button> -->
+
+    <!-- The Modal -->
+    <div class="modal" id="addFormModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">New Ad Plan</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="addForm"  method="post">
+                        <div class="row">
+                        <!-- <div class="form-group col-8">
+                            <label for="" class="font-weight-bold">Name</label>
+                            <input type="text" name="name" required class="form-control">
+                        </div> -->
+                            <div class="form-group col-4">
+                                <label for=""  class="font-weight-bold">Ad Type</label>
+                                <select required name="type" class="form-control">
+                                    <option selected disabled hidden>Select</option>
+                                    <% for( let i = 0; i< types.length; i++ ) { %>
+                                    <option value="<%= types[i]._id %>"><%= types[i].name %></option>
+                                    <% } %>>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                           
+                            <div class="col">
+                                <label for=""  class="font-weight-bold">Pricing</label> 
+                                <button class="addMorePricing  float-right btn btn-sm btn-outline-secondary">Add more</button>
+                                <div class="d-flex flex-column pricingHolder">
+                                    <div class="row mt-2 pricingTemplate"> 
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <input placeholder="Name eg. 1 Month" type="text" name="pricingName" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                
+                                                <input placeholder="Price" type="number" max="999999999999" min="1" name="pricingPrice" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                               
+                                                <input placeholder="Validity (days)" type="number" max="99999999999" min="1" name="pricingValidityInDays" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                            </div>
+                            
+                        </div>
+                        <style>
+                            .features-label{
+                                min-width: 250px;
+                            }
+                        </style>
+                        <div class="form-group features">
+                            <label class="font-weight-bold" for="">Features </label> <button  class="addMoreFeature float-right btn btn-sm btn-outline-secondary">Add more</button>
+                            <div class="col mt-2 featuresHolder">
+                                <div class="row featureTemplate">
+                                    <div class="col">
+                                        <div class="form-group">
+                                           
+                                            <input placeholder="Name" type="text" name="featureName" 
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            
+                                            <input placeholder="Description" type="text" name="featureDescription" 
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+    
+                            </div>
+    
+                        </div>
+                        <button class="btn btn-success btn-sm" type="submit" id="submitAddFormBtn">Submit</button>
+
+                    </form>
+
+                </div>
+
+                <!-- Modal footer -->
+                <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- The Modal -->
+    <div class="modal" id="editFormModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Ad Plan</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="editForm" action="#" method="post">
+                        <div class="row">
+                        <!-- <div class="form-group col-8">
+                            <label for="" class="font-weight-bold">Name</label>
+                            <input type="text" name="name" required class="form-control">
+                        </div> -->
+                            <div class="form-group col-4">
+                                <label for=""  class="font-weight-bold">Ad Type</label>
+                                <select required name="type" class="form-control">
+                                    <option selected disabled hidden>Select</option>
+                                    <% for( let i = 0; i< types.length; i++ ) { %>
+                                        <option value="<%= types[i]._id %>"><%= types[i].name %></option>
+                                        <% } %>>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                           
+                            <div class="col">
+                                <label for=""  class="font-weight-bold">Pricing</label> 
+                                <button class="addMorePricing  float-right btn btn-sm btn-outline-secondary">Add more</button>
+                                <div class="d-flex flex-column pricingHolder">
+                                    <!-- <div class="row mt-2 pricingTemplate"> 
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <input placeholder="Name" type="text" name="pricingName" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                
+                                                <input placeholder="Price" type="number" 
+                                                max="999999999999" min="1" name="pricingPrice" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                               
+                                                <input placeholder="Validity (days)" type="number" 
+                                                max="99999999999" min="1" name="pricingValidityInDays" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                
+                                
+                                
+                            </div>
+                            
+                        </div>
+                        <style>
+                            .features-label{
+                                min-width: 250px;
+                            }
+                        </style>
+                        <div class="form-group features">
+                            <label class="font-weight-bold" for="">Features </label> <button  class="addMoreFeature float-right btn btn-sm btn-outline-secondary">Add more</button>
+                            <div class="col mt-2 featuresHolder">
+                                <!-- <div class="row featureTemplate">
+                                    <div class="col">
+                                        <div class="form-group">
+                                           
+                                            <input placeholder="Name" type="text" name="featureName" 
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            
+                                            <input placeholder="Description" type="text" name="featureDescription" 
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                </div> -->
+                                
+    
+                            </div>
+    
+                        </div>
+                        <input type="text" name="adId" hidden>
+                        <button class="btn btn-success btn-sm" id="submitEditFormBtn">Submit</button>
+
+                    </form>
+
+                </div>
+
+                <!-- Modal footer -->
+                <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+
+<script>
+
+     $(".addMorePricing").click( e => {
+        e.preventDefault();
+
+        const template = `
+        <div class="row mt-2 pricingTemplate"> 
+            <div class="col">
+                <div class="form-group">
+                    <input placeholder="Name eg. 1 Month" type="text" name="pricingName" 
+                        class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    
+                    <input placeholder="Price" type="number" max="999999999999" min="1" name="pricingPrice" 
+                        class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    
+                    <input placeholder="Validity (days)" type="number" max="99999999999" min="1" name="pricingValidityInDays" 
+                        class="form-control">
+                </div>
+            </div>
+        </div>
+        `;
+        console.log({template});
+        $(e.target).siblings('.pricingHolder').append(template);
+    });
+
+    $(".addMoreFeature").click( e => {
+        e.preventDefault();
+
+        const template = `
+        <div class="row featureTemplate">
+            <div class="col">
+                <div class="form-group">
+                    
+                    <input placeholder="Name" type="text" name="featureName" 
+                        class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    
+                    <input placeholder="Description" type="text" name="featureDescription" 
+                        class="form-control">
+                </div>
+            </div>
+        </div>
+        `;
+        console.log({template});
+        $(e.target).siblings('.featuresHolder').append(template);
+    });
+</script>
+
+    <script>
+        const rootDomain =
+            `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+       
+
+        $("#submitAddFormBtn").click( e  =>{
+            e.preventDefault();
+
+            // const name = $("#addForm input[name='name']").val();
+            const type = $("#addForm select[name='type']").val();
+
+            const pricingsObj = $("#addForm .pricingTemplate");
+            let pricings = [];
+            for ( let i = 0; i < pricingsObj.length; i++) {
+                const pricingName = $(pricingsObj[i]).find('input[name="pricingName"]').val();
+                const pricingPrice = $(pricingsObj[i]).find('input[name="pricingPrice"]').val();
+                const pricingValidityInDays = $(pricingsObj[i]).find('input[name="pricingValidityInDays"]').val();
+                console.log({pricingName, pricingPrice, pricingValidityInDays});
+                if ( pricingName && pricingPrice && pricingValidityInDays ){
+                    pricings.push({
+                        name: pricingName,
+                        price: pricingPrice,
+                        validityInDays: pricingValidityInDays
+                    });
+                }
+            }
+
+            const featuresObj = $("#addForm .featureTemplate");
+            let features = [];
+            for ( let i =0; i< featuresObj.length; i++) {
+                const featureName = $(featuresObj[i]).find('input[name="featureName"]').val();
+                const featureDescription = $(featuresObj[i]).find('input[name="featureDescription"]').val();
+                console.log({featureName, featureDescription});
+                if (featureName && featureDescription ){
+                    features.push({
+                        name: featureName,
+                        description: featureDescription
+                    });
+                }
+            }
+
+            console.log({ type, pricings, features });
+
+            if (  type &&  pricings.length>0 && features.length > 0 ) {
+
+            }else {
+                showInfoAlert('Please enter all required fields');
+                return;
+            }
+            $.post(`${rootDomain}/admin/site/business/ledandbanner/add/new`, 
+            {
+                name, type, pricings, features 
+            }, (res, status) => {
+                console.log({res});
+                if ( status == 'success' && res.data ) {
+                    showSuccessAlert( res.message ? res.message : 'Ad submitted.');
+
+                    location.reload();
+                }
+            }).fail( e=> {
+                console.log({e});
+                showDangerAlert( e.message ? e.message : 'Error occurred');
+            });
+            return false;
+
+          });
+
+        $("#editAdPlanModal").on("hide.bs.modal", e=> {
+            $("#editAdPlanForm").prop('action', action);
+            $("#editAdPlanForm").trigger('reset');
+        });
+
+
+        $(".deletePlan").click( e => {
+            const id = $(e.target).data('id');
+            const index = $(e.target).data('index');
+
+            if ( confirm('Are you sure? \nPlan to delete - '+adTypes[index].name+'\nYou cannot revert this process!')) {
+                location.replace('/admin/site/business/product/delete/'+id);
+            }
+        });
+    </script>
+
+    <script>
+        $(".edit-ad-btn").click(async e => {
+            console.log(e);
+            e.preventDefault();
+
+            const id = $(e.target).data('id');
+            if (id){
+                try {
+                    const ad = await getAd(id);
+                    updateEditmodal(ad); 
+                } catch (error) {
+                    console.log({error});
+                    showDangerAlert(error.message);
+
+                }
+               
+            } else {
+                showInfoAlert('Empty ad ID');
+            }
+        });
+
+        function getAd (id) {
+            return new Promise( ( resolve, reject ) => {
+                $.get(`${rootDomain}/admin/site/business/ledandbanner/get/${id}`, 
+                (res, status) => {
+                    console.log({res});
+                    if ( res.data ) {
+                        resolve(res.data);
+                    } else {
+                        reject(res.message);
+                    }
+                })
+                .fail( e=> {
+                    reject(e);
+                });
+            });
+        }
+
+        function updateEditmodal(ad){
+            // $("#editForm input[name='name']").val(ad.name);
+            $("#editForm input[name='adId']").val(ad._id);
+            $("#editForm select[name='type'] option[value='"+ad.type+"']").prop('selected',true);
+
+            $("#editForm .pricingHolder").html('');
+            for ( let i =0; i< ad.pricings.length; i++) {
+
+                const template = 
+                `
+                <div class="row mt-2 pricingTemplate"> 
+                    <div class="col">
+                        <div class="form-group">
+                            <input placeholder="Name" type="text" name="pricingName"  value="${ad.pricings[i].name}"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            
+                            <input placeholder="Price" type="number" 
+                            max="999999999999" min="1" name="pricingPrice" 
+                            value="${ad.pricings[i].price}"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            
+                            <input placeholder="Validity (days)" type="number" 
+                            max="99999999999" min="1" name="pricingValidityInDays" 
+                            value="${ad.pricings[i].validityInDays}"
+
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+                `;
+                $("#editForm .pricingHolder").append(template);
+
+            }
+
+            let features = [];
+            $("#editForm .featuresHolder").html('');
+            for ( let i =0; i< ad.features.length; i++) {
+         
+               const template =
+               `
+               <div class="row featureTemplate">
+                    <div class="col">
+                        <div class="form-group">
+                            
+                            <input placeholder="Name" type="text" name="featureName" 
+                            value="${ad.features[i].name}"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            
+                            <input placeholder="Description" type="text" name="featureDescription" 
+                            value="${ad.features[i].description}"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+                `;
+
+                $("#editForm .featuresHolder").append(template);
+            }
+
+            $("#editFormModal").modal('show');
+
+
+        }
+
+        $("#editFormModal").on("hide.bs.modal", e => {
+            $("#editForm").trigger('reset');
+        });
+    </script>
+
+
+<script>
+    $("#submitEditFormBtn").click( e  =>{
+            e.preventDefault();
+
+            // const name = $("#editForm input[name='name']").val();
+            const type = $("#editForm select[name='type']").val();
+
+            const pricingsObj = $("#editForm .pricingTemplate");
+            let pricings = [];
+            for ( let i =0; i< pricingsObj.length; i++) {
+                const pricingName = $(pricingsObj[i]).find('input[name="pricingName"]').val();
+                const pricingPrice = $(pricingsObj[i]).find('input[name="pricingPrice"]').val();
+                const pricingValidityInDays = $(pricingsObj[i]).find('input[name="pricingValidityInDays"]').val();
+                console.log({pricingName, pricingPrice, pricingValidityInDays});
+                if (pricingName && pricingPrice && pricingValidityInDays ){
+                    pricings.push({
+                        name: pricingName,
+                        price: pricingPrice,
+                        validityInDays: pricingValidityInDays
+                    });
+                }
+            }
+
+            const featuresObj = $("#editForm .featureTemplate");
+            let features = [];
+            for ( let i =0; i< featuresObj.length; i++) {
+                const featureName = $(featuresObj[i]).find('input[name="featureName"]').val();
+                const featureDescription = $(featuresObj[i]).find('input[name="featureDescription"]').val();
+                console.log({featureName, featureDescription});
+                if (featureName && featureDescription ){
+                    features.push({
+                        name: featureName,
+                        description: featureDescription
+                    });
+                }
+            }
+
+            console.log({  type, pricings, features });
+            const adId = $("#editForm input[name='adId']").val();
+
+
+            if ( adId &&  type &&  pricings.length>0 && features.length > 0 ) {
+
+            }else {
+                showInfoAlert('Please enter all required fields');
+                return;
+            }
+            $.post(`${rootDomain}/admin/site/business/ledandbanner/update/${adId}`, 
+            {
+                 type, pricings, features 
+            }, (res, status) => {
+                console.log({res});
+                if ( status == 'success' && res.data ) {
+                    showSuccessAlert( res.message ? res.message : 'Ad updated.');
+
+                    location.reload();
+                }
+            }).fail( e=> {
+                console.log({e});
+                showDangerAlert( e.message ? e.message : 'Error occurred');
+            });
+            return false;
+
+          });
+
+    
+</script>
+
+</body>
+
+</html>

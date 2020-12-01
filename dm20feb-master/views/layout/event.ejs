@@ -1,0 +1,447 @@
+<%- include('../includes/header.ejs') %>
+<link rel="stylesheet" href="/assets/css/collectionPublic.css">
+
+</head>
+
+<body id="collectionPublic">
+    <%- include('../includes/navBar.ejs' ) %>
+    <input type="text" name="userId" id="userId" value="<%= user && user._id ? user._id : '' %>" hidden>
+
+    <div class="container main p-2 p-md-0">
+        <section id="quick_navigation">
+            <div class="links">
+                <a href="/">Home</a>
+                <span class="seperator">/</span>
+                <a                 
+                href="/collections/<%= typeof state != 'undefined' ? state: typeof defaultState != 'undefined'  ? defaultState : 'manipur' %>"
+                    >Collections</a>
+                <span class="seperator">/</span>
+                <a href="/Collections/<%= typeof state != 'undefined' ? state: typeof defaultState != 'undefined'  ? defaultState : 'manipur' %>/<%= page %>">Events</a>
+                <span class="seperator">/</span>
+                <a href="<%= href %>" onclick="return false;" class="active"><%= event.name %></a>
+
+
+            </div>
+        </section>
+        
+
+        <section id="cover_image">
+            <div class="bg-img lozad" style="background-image: url('/uploads/images/web/<%= event.coverImage  %>');">
+                <div class="overlay p-4">
+                    <div class="controls">
+                        <!-- <button class="btn saved">
+                            <i class="far fa-plus"></i>
+                            Save Event
+
+                        </button> -->
+                        <button class="btn rounded-circle copy" onclick="copyLink()">
+                            <i class="far fa-link " onclick="copyLink()"></i>
+                        </button>
+                    </div>
+                    <div class="details">
+                        <div class="name"><%= event.name %></div>
+                        <div class="description"><%= event.fullAddress %></div>
+                    </div>
+                </div>
+            </div>
+            <!-- <img src="/uploads/images/compressed/<%= trending.coverImage %>" width="100%" height="300px" alt=""> -->
+        </section>
+
+        <section id="eventDetails" class="my-5">
+            <div class=" d-flex flex-column align-items-center">
+                <div class="col-md-7 col-sm-12 box rounded lightGrey-border p-5">
+                    <div class="group">
+                        <div class="title" for="">
+                            <i class="fal fa-clock mr-3 float-right"></i> Timing
+                        </div>
+                        <hr>
+                        <p class="main my-0">
+                            <dl>
+                                <dt>Date</dt>
+                                <dd>-
+                                    <% if ( new Date(event.timings.date.from).toString().slice(0,16) == new Date(event.timings.date.to).toString().slice(0,16) ) { %>
+                                    <%= new Date(event.timings.date.from).toString().slice(0,16)   %>
+                                    <% } else{ %>
+                                    <%= new Date(event.timings.date.from).toString().slice(0,16) +' to '+ new Date(event.timings.date.to).toString().slice(0,16)  %>
+                                    <% } %>
+                                </dd>
+                                <dt>Timing</dt>
+                                <dd>-
+                                    <%= event.timings.time.to +' to '+ event.timings.time.to  %>
+                                </dd>
+                            </dl>
+                        </p>
+                    </div>
+                    <div class="group">
+                        <div class="title" for="">
+                            <i class="fal fa-info mr-3 float-right"></i> Event information
+                        </div>
+                        <hr>
+                        <p class="main">
+                            <%= event.description %>
+                        </p>
+                    </div>
+                    <div class="group">
+                        <div class="title" for="">
+                            <i class="fal fa-map-marker-alt  mr-3 float-right"></i>Address
+                        </div>
+                        <hr>
+                        <p class="main">
+                            <%= event.address.street_address+', '+event.fullAddress %>
+                        </p>
+                    </div>
+                    <div class="group">
+                        <div class="title" for="">
+                            <i class="fal fa-paper-plane mr-3 float-right"></i> Contact information
+                        </div>
+                        <hr>
+                        <p class="main my-0">
+                            <dl>
+                                <dt>Mobile</dt>
+                                <dd>- <%= event.mobile %></dd>
+                                <dt>Email</dt>
+                                <dd>- <%= event.email %></dd>
+                                <dt>Website</dt>
+                                <dd>- <%= event.website %></dd>
+                            </dl>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="more_collections">
+            <% if (( staticCollections &&  staticCollections.length > 0  ) || ( moreCollections &&  moreCollections.length > 0  ) ) { %>
+
+            <div class="title">More Collections</div>
+            <div class="places">
+
+                <% if ( staticCollections &&  staticCollections.length > 0  ) { %>
+
+                <% staticCollections.forEach( place => {   if ( place.places && place.id != page ) { %>
+                <div class="place px-2  col-sm-6 col-md-4 col-lg-3" data-id="<%= place._id %>">
+                    <a data-id="<%= place._id %>" 
+                        href="<%= rootDomain %>/collections/<%= state ? state: defaultState? defaultState : 'manipur' %>/<%= place.id %>">
+                         <% if (place.coverImage) { %>
+                        <div class="cover-image lozad"
+                            data-background-image="/uploads/images/mobile/<%=  place.coverImage %>"
+                            data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  place.coverImage %>') 1x , url('/uploads/images/web_thumbnail/<%=  place.coverImage %>') 2x">
+
+                            <% } else { %>
+                            <div class="cover-image lozad" data-background-image="/assets/img/bg-abstract-lg.jpg">
+                                <% } %>
+
+                                <div class="overlay p-3">
+                                    <div class="controls">
+                                        <!-- <button class="btn saved">
+                                                    <i class="far fa-plus"></i>
+                                                    Save Collection
+    
+                                                </button>
+                                                <button class="btn rounded-circle copy">
+                                                    <i class="far fa-link "></i>
+                                                </button> -->
+                                    </div>
+                                    <div class="details">
+                                        <div class="name"><%= place.name %></div>
+                                        <div class="place_count"><%= staticCollectionCounts[place.id] + ' Place(s)' %></div>
+
+                                        <!-- <div class="description"><%= trending.description %></div> -->
+                                        <!-- <div class="place_count"><%= place.places.length + ' Place(s)' %></div> -->
+                                    </div>
+                                </div>
+
+                            </div>
+                    </a>
+
+
+                </div>
+                <% } }) %>
+                <% } %>
+
+                <% if ( moreCollections &&  moreCollections.length > 0  ) { %>
+
+                <% moreCollections.forEach( place => {   if (place.places && place.places.length > 0 ) { %>
+                <div class="place px-2  col-sm-6 col-md-4 col-lg-3" data-id="<%= place._id %>">
+                    <a data-id="<%= place._id %>" href="<%= rootDomain %>/collections/<%= state ? state: defaultState? defaultState : 'manipur' %>/<%= String(place.name).replace(/\s/g,'-') %>/<%= place._id %>">
+                        <% if (place.coverImage) { %>
+                        <div class="cover-image lozad"
+                            data-background-image="/uploads/images/mobile/<%=  place.coverImage %>"
+                            data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  place.coverImage %>') 1x , url('/uploads/images/web_thumbnail/<%=  place.coverImage %>') 2x">
+
+                            <% } else { %>
+                            <div class="cover-image lozad" data-background-image="/assets/img/bg-abstract-lg.jpg">
+                                <% } %>
+
+                                <div class="overlay p-3">
+                                    <div class="controls">
+                                        <!-- <button class="btn saved">
+                                                <i class="far fa-plus"></i>
+                                                Save Collection
+
+                                            </button>
+                                            <button class="btn rounded-circle copy">
+                                                <i class="far fa-link "></i>
+                                            </button> -->
+                                    </div>
+                                    <div class="details">
+                                        <div class="name"><%= place.name %></div>
+                                        <!-- <div class="description"><%= trending.description %></div> -->
+                                        <div class="place_count"><%= place.places.length + ' Place(s)' %></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                    </a>
+
+
+                </div>
+                <% } }) %>
+                <% } %>
+
+
+
+            </div>
+            <% } %>
+        </section>
+    </div>
+
+    <div class="d-flex flex-row justify-content-center alert-container"
+    style=" position: fixed; top: 30px; width: 100%; height: auto;">
+    <div class="col-sm-10 col-lg-8 " style="z-index: 1; font-size: 22px;">
+        <div class="alert alert-success alert-dismissible" style="display: none;">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="mr-3">Success!</strong> <span class="message"></span>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible" style="display: none;;">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="mr-3">Error!</strong> <span class="message"></span>
+        </div>
+
+        <div class="alert alert-info alert-dismissible" style="display: none;;">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="mr-3">Info!</strong> <span class="message"></span>
+        </div>
+
+    </div>
+
+</div>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js">
+
+    </script>
+    <script>
+        const userId = $("#userId").val();
+
+        // image lazy load
+        const observer = lozad('.lozad', {
+            // load: function (el) {
+            //     console.log('loading element');
+
+            //     // Custom implementation to load an element
+            //     // e.g. el.src = el.getAttribute('data-src');
+            // },
+            loaded: function (el) {
+                // Custom implementation on a loaded element
+                console.log('loaded element');
+                console.log($(el.target));
+
+                el.classList.add('zoom-bg');
+            }
+        }); // lazy loads elements with default selector as '.lozad'
+        observer.observe();
+
+
+
+        // online/offline
+        window.addEventListener('load', function () {
+
+            function updateOnlineStatus(event) {
+                document.body.setAttribute("data-online", navigator.onLine);
+            }
+            updateOnlineStatus();
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+        });
+
+
+        // bookmark icon
+        $(".bookmark > i").click(function (e) {
+            // Do something
+            console.log("Common");
+
+            console.log($(e.target));
+            $(e.target).parent().trigger('click');
+            e.stopImmediatePropagation();
+            return false;
+
+        });
+
+        $(document).on('click', ".bookmark i.save", (e) => {
+            // Do something
+            console.log("SAVE");
+            console.log($(e.target));
+            $(e.target).parent().trigger('click');
+            e.stopImmediatePropagation();
+            return false;
+
+            alert(e.isPropagationStopped());
+
+        });
+
+        $(document).on('click', ".bookmark i.remove", (e) => {
+            // Do something
+            console.log("REMOVE");
+            console.log($(e.target));
+            $(e.target).parent().trigger('click');
+            e.stopImmediatePropagation();
+            return false;
+            alert(e.isPropagationStopped());
+
+        });
+
+        // bookmark spinner
+        $(".bookmark > div").click(function (e) {
+            // Do something
+            e.stopPropagation();
+            alert(e.isPropagationStopped());
+        });
+
+        // bookmark div 
+        $(".bookmark").click(e => {
+
+            // check isonline
+            // if (!navigator.onLine) {
+            //     showDangerAlert('Oops! Something went wrong. Please contact support.');
+            //     e.stopPropagation();
+            //     return false;
+            // }
+            if (!userId) {
+                showInfoAlert('Please login to continue.');
+                return false;
+            }
+            let id = $(e.target).data('id'); // clicked on button
+            if (!id)
+                return;
+
+            console.log({
+                id
+            });
+            console.log($(e.target));
+
+            // mode
+            const save = $(e.target).children('i').hasClass('fal');
+            const remove = $(e.target).children('i').hasClass('fas');
+            const mode = save ? 'save' : remove ? 'remove' : null;
+
+            // request
+            const rootDomain =
+                `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+            // loading
+            console.log("IsDIV ", $(e.target).hasClass('bookmark'));
+
+            $(e.target).empty();
+            $(e.target).html(`<div class="spinner-border spinner-border-sm"></div>`);
+
+            $.post(`${rootDomain}/users/bookmark/${mode}/${id}`, null, (data, status) => {
+                console.log({
+                    data,
+                    status
+                });
+                if (status == 'success' && data) {
+
+                    // change icon
+                    if (save) {
+                        $(e.target).html(`<i class="fas fa-bookmark remove"></i>`);
+                    }
+
+                    if (remove) {
+                        $(e.target).html(`<i class="fal fa-bookmark save"></i>`);
+                    }
+
+                } else {
+                    showDangerAlert('Oops! Something went wrong. Please contact support.');
+                }
+            }).fail(e => {
+                showDangerAlert('Oops! Something went wrong. Please contact support.');
+                if (save) {
+                    $(e.target).html(`<i class="fal fa-bookmark save"></i>`);
+                }
+
+                if (remove) {
+                    $(e.target).html(`<i class="fas fa-bookmark remove"></i>`);
+                }
+
+            });
+
+            e.stopPropagation();
+            return false;
+
+        });
+
+
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").show();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+        function showInfoAlert(message) {
+            $(".alert-info .message").html(message);
+            $(".alert-info").show();
+            setTimeout(() => {
+                $(".alert-container").show();
+                $(".alert-info").hide();
+            }, 1500);
+        }
+        // collection click
+        // $("#more_collections .places .place a , #moreCollections .places .place").click( e => {
+
+        //     e.preventDefault();
+
+        //     const id = $(e.target).data('id');
+        //     if ( !id ) return;
+        //     const form = `<form action="/collections/${id}" method="post" ></form>`;
+        //     console.log($(form).prop());
+
+        // });
+
+        $('.lozad').on('load', function (e) {
+            $(e.target).addClass('zoom-in');
+        });
+
+        function copyLink() {
+
+            /* Alert the copied text */
+
+            var input = document.createElement('textarea');
+            input.innerHTML = window.location.href;
+            document.body.appendChild(input);
+            input.select();
+            var result = document.execCommand('copy');
+            document.body.removeChild(input);
+            showSuccessAlert("Link Copied to Clipboard");
+
+            return result;
+
+        }
+    </script>
+
+    <%- include('../includes/footer.ejs') %>

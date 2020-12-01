@@ -1,0 +1,326 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="/assets/css/admin.css"> -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/manageWebsite.css">
+
+</head>
+
+<body class="">
+    <section>
+
+    </section>
+
+    
+    <%- include('./../../includes/modals/createCollection.ejs') %>
+
+    <%- include('./../../includes/modals/editCollection.ejs') %>
+
+    <section class="manage-website">
+
+        
+
+        <div class="container-fluid">
+            <div class="row">
+
+
+                <div class="col-2 left-content p-2">
+                    <div class="list-group">
+                        <%- include('./../../includes/manage-website-pages', {page}) %>
+                         </div>
+                </div>
+                <div class="col-10 right-content p-2">
+
+                    <section class="nav-controls ">
+                        <ul class="nav nav-tabs">
+                            <!-- <li class="nav-item">
+                              <a class="nav-link " data-toggle="tab" href="#home">Home</a>
+                            </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#AdminCollections">Admin
+                                    Collections</a>
+                            </li>
+                            <li class="nav-item" >
+                                <a onclick="getUsersCollections()" class="nav-link" data-toggle="tab" href="#UsersCollections">Users Collections</a>
+                            </li>
+                            <li class="nav-item">
+                                <a onclick="getStaticCollections(event)" class="nav-link" data-toggle="tab" href="#StaticCollections">Static Collections</a>
+                            </li>
+                        </ul>
+                    </section>
+                    <section class="main-body ">
+                        <div class="tab-content">
+                            <div class="tab-pane container active" id="AdminCollections">
+                                <div class="tab-body d-flex flex-column">
+
+                                    <div class="mb-3">
+                                        <strong class="text-muted" style="font-size: 24px;">Available
+                                            Collections</strong>
+                                        <button type="button" class="float-right btn btn-outline-success "
+                                            id="createCollectionBtn">Create collection</button>
+
+
+
+
+                                    </div>
+                                    <div>
+                                        <ul class="list-group" id="collections-list">
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- <div class="tab-pane container fade" id="home">..menu1.</div> -->
+                            <div class="tab-pane container fade"  id="UsersCollections">
+                                <h4 class="my-3">Manage Collections</h4>
+                                <ul class="list-group p-4" id="users-collections-list">
+
+                                </ul>
+                            </div>
+                            <div class="tab-pane container fade" id="StaticCollections">
+                                <%- include('./../../includes/staticCollections.ejs') %>
+                                
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+            <!-- container ends here -->
+        </div>
+
+    </section>
+
+
+    
+    <script>
+        const rootDomain =
+            `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+        $(document).ready(() => {
+
+
+
+            fetchCollections();
+        });
+
+        function fetchCollections() {
+            // fetch admin collections
+            $("#collections-list").html(`<div class="spinner-border text-primary"></div>`);
+
+            $.get(`${rootDomain}/admin/site/collections/all`, (data, status) => {
+                console.log('Collections', {
+                    data
+                })
+                if (status == 'success' && data.length > 0) {
+                    $("#collections-list").empty();
+                    data.forEach(item => {
+                        if (item && item.name) {
+                            $("#collections-list").append(`
+                            <li class="list-group-item d-flex flex-row" > 
+                                <div class="col-5">
+                                    <div>${item.name}</div>
+                                    <div class="text-muted font-weight-normal">${item.description}</div>
+
+                                    <div/>
+                                </div>
+                                
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div>${item.places && item.places[0] && item.places[0].state ? item.places[0].state : ''}</div>
+                                    
+                                </div>
+                                
+                                <div class="col-2 d-flex justify-content-center align-items-center">
+                                    ${item.status ? `<span class="text-success">Active</span>`: `<span class="text-danger">Inactive</span>`}
+                                </div>
+                                <div class="col-2 d-flex  justify-content-center align-items-center">
+                                <button onclick="editCollection(event)" data-id="${item._id}" class="btn btn-light">Edit</button>
+                                </div>
+                            </li>
+                        `);
+                        }
+                    });
+                } else {
+            $("#collections-list .spinner-border").remove();
+            $("#collections-list ").html('No collections added yet!');
+
+                }
+            }).fail(e => {
+            $("#collections-list .spinner-border").remove();
+
+                console.log({
+                    e
+                });
+            });
+        }
+
+        // edit collections
+        function editCollection(e) {
+            console.log({
+                e
+            })
+            console.log("Editing collection : ", $(e.target).data('id'));
+            let id = $(e.target).data('id');
+            if (id) {
+                fetchCollection(id);
+            }
+        }
+
+        // fetch single collection
+        function fetchCollection(id) {
+            $("#createCollectionModalEC").modal('show');
+            $("#createCollectionModalEC .modal-body .spinner-border").show();
+
+            $("#createCollectionModalEC .modal-body .main-content").hide();
+
+            // fetch admin collections
+            $.get(`${rootDomain}/admin/site/collections/collection/${id}`, (data, status) => {
+                
+                if (status == 'success' && data) {
+
+                    CollectionToEdit = data;
+                    console.log({CollectionToEdit});
+                    $("#createCollectionModalEC .modal-body .main-content").show();
+                    $("#createCollectionModalEC .modal-body .spinner-border").hide();
+
+                    // assign values
+                    $("#createCollectionFormEC #collectionIdEC").val(id);
+                    $("#createCollectionFormEC #collectionStatusEC").prop('checked',data.status);
+                    $("#createCollectionFormEC #collectionStatusEC").trigger('change');
+                    
+                    $("#createCollectionFormEC input[name='name']").val(data.name);
+                    $("#createCollectionFormEC input[name='coverImageURL']").val(data.coverImage);
+                    $("#createCollectionFormEC input[name='description']").val(data.description);
+                    $('#createCollectionFormEC .first .cover-image').show();
+                    $('#createCollectionFormEC .first .cover-image').css('background-image',
+                        `url('/uploads/images/web_thumbnail/${data.coverImage}')`);
+
+                    
+
+                    $('#createCollectionFormEC .first .cover-image').show();
+
+                    if (CollectionToEdit.places.length > 0) {
+                        $("#createCollectionFormEC #placesCountIdEC").html(CollectionToEdit.places.length);
+                        $("#createCollectionFormEC #InCollectionEC .list-group").html('');
+                        CollectionToEdit.places.forEach(place => {
+                            console.log({place});
+                            $("#createCollectionFormEC #InCollectionEC .list-group").append(
+                                `
+                                <li class="list-group-item d-flex  flex-row py-1">
+                                    <div class="col-9  d-flex  flex-column">
+                                        <label class="mb-0">${place.name}</label>
+                                        <span class="text-muted font-weight-normal">
+                                            ${place.district}
+                                            ${ place.locality ? ', '+  place.locality :'' }
+
+                                            </span>
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="button" data-id="${String(place.id)}" onclick="removePlaceEC(event)" class="btn btn-link text-danger  btn-sm float-right">Remove</button>
+                                    </div>
+                                </li>
+                                `
+                            );
+                        });
+
+                        $("#InCollectionEC .collection-default").hide();
+                        // $("#InCollectionEC .list-group").show();
+
+
+                    } else {
+
+                        $("#InCollectionEC .collection-default").show();
+                        // $("#InCollectionEC .list-group").hide();
+
+
+                    }
+
+                }
+            }).fail(e => {
+                console.log({
+                    e
+                });
+            });
+        }
+
+
+        function getStaticCollections(e){
+            e.preventDefault();
+
+            $.get(`${rootDomain}/admin/site/collections/staticCollections`, (data, status)=>{
+                console.log({data});
+                if ( status == 'success' && data.length>0) {
+
+                    data.forEach( doc => {
+                            $(`#${doc.id}FormGroup input[name='name']`).val(doc.name);
+                            $(`#${doc.id}FormGroup input[name='description']`).val(doc.description);
+                            $(`#${doc.id}FormGroup input[name='oldImageURL']`).val(doc.coverImage);
+                            $(`#${doc.id}FormGroup .cover-image`).show();
+                            $(`#${doc.id}FormGroup .cover-image`).css('background-image', `url(/uploads/images/web_thumbnail/${doc.coverImage})`);
+                    });
+                    
+                } else {
+                    console.log('Not yet created');
+                }
+            }).fail(e=>{
+                console.log('Error occurred');
+                alert('Error occurred');
+            });
+        }
+
+        function getUsersCollections(){
+
+            $.get(`${rootDomain}/admin/site/collections/users`, (data, status)=>{
+                console.log({'users collection': data});
+                if ( status == 'success' && data.length>0) {
+$("#users-collections-list").empty();
+                    data.forEach( item => {
+                        if (item && item.name) {
+                            $("#users-collections-list").append(`
+                            <li class="list-group-item d-flex flex-row" > 
+                                <div class="col-5">
+                                    <div>${item.name}</div>
+                                    <div class="text-muted font-weight-normal">${item.description}</div>
+
+                                    <div/>
+                                </div>
+                                <div class="col-3 d-flex justify-content-center align-items-center">
+                                    <div>${item.places && item.places[0] && item.places[0].state ? item.places[0].state : ''}</div>
+                                    
+                                </div>
+                                <div class="col-2 d-flex justify-content-center align-items-center">
+                                    ${item.status ? `<span class="text-success">Active</span>`: `<span class="text-danger">Inactive</span>`}
+                                </div>
+                                <div class="col-2 d-flex  justify-content-center align-items-center">
+                                <button onclick="editCollection(event)" data-id="${item._id}" class="btn btn-light">Edit</button>
+                                </div>
+                            </li>
+                        `);
+                        }        
+                    });
+                    
+                } else {
+                    console.log('Not yet created');
+                }
+            }).fail(e=>{
+                console.log('Error occurred');
+                alert('Error occurred');
+            });
+
+        }
+
+    </script>
+</body>
+
+</html>

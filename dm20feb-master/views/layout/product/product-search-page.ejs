@@ -1,0 +1,443 @@
+<%- include('./../../includes/product/searchHeader.ejs') %>
+
+</head>
+
+<body>
+    <%- include('./../../includes/product/searchNavBar.ejs') %>
+
+    <section class="search_content">
+        <div class="container">
+            <div class="nav_tab">
+
+
+            </div>
+            <div class="search_result_count">
+                <%if(searchResult.length == 0 || searchResult.length == 1){%>
+                <span>Showing <%=searchResult.length%> search result</span>
+                <%}%>
+                    <%if(searchResult.length > 1){%>
+                <span>Showing <%=searchResult.length%> search results</span>
+                <%}%>
+                
+            </div>
+
+            <!-- Search content content section -->
+            <section>
+                <div class="d-flex bd-highlight flex-wrap">
+                    <div class="flex_md_20 filter_section" style="margin-bottom: 15px;">
+                       
+                        <div class="search_filter_content_holder">
+                            <div class="d-flex bd-highlight">
+                                <div class="filter_main_title">
+                                    <span>Filters</span>
+                                </div>
+                                <div class="ml-auto">
+                                    <a class="text-muted" href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=<%=search_product_query%>"><small>Clear
+                    All</small></a>
+
+            </div>
+        </div>
+        <!-- Selected filter badge section starts here -->
+        <div style="margin-bottom: 20px;">
+            <%if(filters.length > 0){%>
+            <div class="d-flex bd-highlight flex-wrap">
+                <%filters.forEach(function(filter, ind){%>
+                <div class="filter_badge"><%=filter%></div>
+                <%})%>
+            </div>
+            <%}%>
+                            </div>
+                            <!-- Selected filter badge section ends here -->
+
+
+
+                            <!-- Filter form section -->
+
+                            <hr>
+                            
+                            <form action="/product/search" id="filterSearchForm">
+                                <input type="hidden" name="searchlocation" value="<%=search_location_query%>">
+            <input type="hidden" name="searchlocationproduct" value="<%=search_product_query%>">
+            <div>
+                <button type="button" onclick="search_on_filter_change()" class="btn btn-block custom_btn_red">Apply
+                    Filter</button>
+            </div>
+            <!-- price filter badge section starts here -->
+            <section style="margin-bottom: 20px;">
+
+                <div class="d-flex bd-highlight">
+                    <div class="category_filter_title">
+                        <span style="margin-right: 5px;">Price</span> <span
+                            class="category_filter_subtitle text-muted">(Rupees)</span>
+                    </div>
+                    <div class="ml-auto">
+                        <a href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=<%=search_product_query%>&districtfilterslist=<%=districtfilterslist%>"
+                            class="text-muted"><small>Clear</small></a>
+
+                    </div>
+                </div>
+                <div class="d-flex bd-highlight align-items-baseline">
+                    <div class="form-group" style="margin-right: 5px;">
+                        <input type="number" class="price_range_selector form-control" step="1" name="priceStarts"
+						value="<%= priceStarts ? priceStarts : ''  %>"
+                            placeholder="Min">
+                    </div>
+                    <div class="flex-fill price_range_selector"
+                        style="margin-right: 5px; text-align: center; padding-left: 10px; padding-right: 10px;">
+                        <span>to</span>
+                    </div>
+                    <div class="">
+                        <input type="number" class="price_range_selector form-control" step="1" name="priceEnds"
+                            value="<%= priceEnds ? priceEnds : ''  %>"
+                            placeholder="Max">
+                    </div>
+                </div>
+
+            </section>
+            <!-- Selected filter badge section ends here -->
+
+
+            <!-- district filter section starts here-->
+            <section class="district_filter section">
+                <div class="d-flex bd-highlight">
+                    <div class="category_filter_title">
+                        <span>Districts</span>
+                    </div>
+                    <div class="ml-auto">
+                        <a href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=<%=search_product_query%>&priceStarts=<%=priceStarts%>&priceEnds=<%=priceEnds%>"
+                            class="text-muted"><small>Clear</small></a>
+
+                    </div>
+                </div>
+                <div>
+                    <%if(districtlist.length > 0){%>
+                    <%districtlist.forEach(function(district, i){%>
+
+                    <%if(i < 5){%>
+
+                    <div class="custom-control custom-checkbox category_filters partial_districts">
+                        <input type="checkbox" <%districtfilterslist.forEach(function(df, d){%> <%if(df == district.trim()){%>checked<%}%>
+                            <%})%> class="custom-control-input" name="districtfilterslist[]" id="district_<%=i%>"
+                            value="<%=district%>">
+                        <label class="custom-control-label" for="district_<%=i%>"><%=district%></label>
+                    </div>
+
+                    <%}%>
+                                    <%if( i > 4){%>
+
+                    <div class="custom-control custom-checkbox category_filters more_districts" style="display: none;">
+                        <input type="checkbox" <%districtfilterslist.forEach(function(df, d2){%> <%if(df == district){%>checked<%}%> 
+                            <%})%> class="custom-control-input" name="districtfilterslist[]" id="district_<%=i%>"
+                            value="<%=district%>">
+                        <label class="custom-control-label" for="district_<%=i%>"><%=district%></label>
+                    </div>
+
+                    <%}%>
+
+                        <%})%>
+                    <%}%>
+                <div class="d-flex bd-highlight">
+                    <div class="ml-auto" style="color: red;">
+                        <small onclick="return showDistricts()" style="cursor: pointer;" id="d_show">Show More</small>
+                        <small onclick="return hideDistricts()" style="cursor: pointer; display: none;" id="d_hide">Show Less</small>
+                    </div>
+                  </div>
+                  
+        </div>
+                               
+                            </section>
+                            <!-- district filter section ends here-->
+
+                            <!-- category filter section starts here -->
+                            <section class="category_filter_section">
+                                <div class="d-flex bd-highlight">
+                                    <div class="category_filter_title">
+                                        <span>Categories</span>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <a href=""
+                                            class="text-muted"><small>Clear</small></a>
+                
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="custom-control custom-checkbox category_filters">
+                                        <input type="checkbox" class="custom-control-input" name="categoryfilterslist[]" id="category_mobile"
+                                                                <%if(categoryfilterslist.length > 0){%>
+                    <%categoryfilterslist.forEach(function(cf, ind){%>
+                    <%if(cf.toLowerCase().trim() == 'mobiles'){%>checked<%}%>
+                                                                        <%})%>
+                    <%}%>
+                    value="Mobiles">
+                    <label class="custom-control-label" for="category_mobile">Mobiles</label>
+                </div>
+                <div class="custom-control custom-checkbox category_filters">
+                    <input type="checkbox" class="custom-control-input" name="categoryfilterslist[]" id="category_car" <%if(categoryfilterslist.length > 0){%>
+                    <%categoryfilterslist.forEach(function(cf, ind){%> <%if(cf.toLowerCase().trim() == 'cars'){%>checked<%}%>
+                                                <%})%>
+                    <%}%>
+                    value="Cars">
+                    <label class="custom-control-label" for="category_car">Cars</label>
+                </div>
+                <div class="custom-control custom-checkbox category_filters">
+                    <input type="checkbox" class="custom-control-input" name="categoryfilterslist[]" id="category_bike" <%if(categoryfilterslist.length > 0){%>
+                    <%categoryfilterslist.forEach(function(cf, ind){%> <%if(cf.toLowerCase().trim() == 'bikes'){%>checked<%}%>
+                                                <%})%> <%}%>
+                    value="Bikes">
+                    <label class="custom-control-label" for="category_bike">Bikes</label>
+                </div>
+                <div class="custom-control custom-checkbox category_filters">
+                    <input type="checkbox" class="custom-control-input" name="categoryfilterslist[]"
+                        id="category_electronics" <%if(categoryfilterslist.length > 0){%>
+                    <%categoryfilterslist.forEach(function(cf, ind){%> <%if(cf.toLowerCase().trim() == 'electronics & appliances'){%>checked<%}%>
+                                                <%})%>
+                    <%}%>
+                    value="Electronics & Appliances">
+                    <label class="custom-control-label" for="category_electronics">Electronics & Appliances</label>
+                </div>
+                <div class="custom-control custom-checkbox category_filters">
+                    <input type="checkbox" class="custom-control-input" name="categoryfilterslist[]" id="category_home" <%if(categoryfilterslist.length > 0){%>
+                    <%categoryfilterslist.forEach(function(cf, ind){%> <%if(cf.toLowerCase().trim() == 'home & lifestyle'){%>checked<%}%>
+                                                <%})%> <%}%>
+                    value="Home & Lifestyle">
+                    <label class="custom-control-label" for="category_home">Home & Lifestyle</label>
+                </div>
+                <div class="custom-control custom-checkbox category_filters">
+                    <input type="checkbox" class="custom-control-input" name="categoryfilterslist[]"
+                        id="category_bakery" <%if(categoryfilterslist.length > 0){%>
+                    <%categoryfilterslist.forEach(function(cf, ind){%> <%if(cf.toLowerCase().trim() == 'bakery'){%>checked<%}%>
+                                                <%})%> <%}%>
+                    value="Bakery">
+                    <label class="custom-control-label" for="category_bakery">Bakery</label>
+                </div>
+
+        </div>
+
+    </section>
+    <!-- category filter section ends here -->
+
+
+    <!-- brand filter section starts here -->
+    <section id="brand_filter_section">
+       
+        <%if(brandslist.length >0){%>
+                    <div class="d-flex bd-highlight">
+                        <div class="category_filter_title">
+                            <span>Brands</span>
+                        </div>
+                        <div class="ml-auto">
+                            <a href="" class="text-muted"><small>Clear</small></a>
+
+                        </div>
+                    </div>
+                    <%brandslist.forEach(function(brand, index){%>
+                    <div class="custom-control custom-checkbox category_filters">
+                        <input type="checkbox" class="custom-control-input" name="brandfilterslist[]"
+                            id="brand_<%=index%>" value="<%=brand%>">
+                        <label class="custom-control-label" for="brand_<%=index%>"><%=brand%></label>
+                    </div>
+                    <%})%>
+                    <%}%>
+
+
+            
+    </section>
+    <!-- brand filter section ends here -->
+
+
+
+    </form>
+
+    <!-- filter form section sends here -->
+    </div>
+
+    </div>
+
+
+    <div class="flex_md_80 content_section">
+
+        <div class="d-flex bd-highlight flex-wrap" style="padding-left: 12px; padding-right: 12px;">
+            <div>
+                <%if(searchResult.length >1){%>
+                    <span style="font-size: 17px; font-weight: 500;"><%=searchResult.length%> ADS</span>
+                    <%}else{%>
+                    <span style="font-size: 17px; font-weight: 500;"><%=searchResult.length%> AD</span>
+                    <%}%>
+                            </div>
+                
+               
+                                <div class="ml-auto" style="margin-right: 10px;">
+                                    <select id="productSortX" class="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
+                                        <option selected>Recommended</option>
+										<option value="lowToHigh">Low to high</option>
+                                        <option value="highToLow">High to low</option>
+                                    </select>
+                                </div>
+								<script>
+                                    // sortSelector = $("#productSortX");
+
+                                    $(document).ready(()=>{
+                                        $("#productSortX").click(e=>{
+                                            let selectedOption = $(e.target).val();
+                                            
+                                            console.log(selectedOption);
+                                            if($(e.target).val() == "lowToHigh"){
+                                                // alert("low to high");
+                                                location.replace("./search?searchlocation=Manipur&searchlocationproduct=&priceStarts=<%= priceStarts ? priceStarts : '' %>&priceEnds=<%= priceEnds ? priceEnds : '' %>&sort=lowToHigh");
+                                            }
+                                            if($(e.target).val() == "highToLow"){
+                                                // alert("low to high");
+                                                location.replace("./search?searchlocation=Manipur&searchlocationproduct=&priceStarts=<%= priceStarts ? priceStarts : '' %>&priceEnds=<%= priceEnds ? priceEnds : '' %>&sort=highToLow");
+                                            }
+                                        });
+                                    });
+                                </script>
+                                
+            </div>
+
+            <!-- Load when search result is 0 -->
+            <%if(searchResult.length == 0){%>
+                    <div class="search_result_none">
+                        <span>No results found</span>
+                        <form action="/product/search" method="GET">
+                            <input type="hidden" name="searchlocation" value="Manipur">
+                            <input type="hidden" name="searchlocationproduct" value="">
+                            <button class="btn btn-danger">See all products in Manipur</button>
+                        </form>
+                    </div>
+                    <%}%>
+
+
+            <%if(searchResult.length > 0){%>
+                    <!-- product card -->
+                    <div class="d-flex bd-highlight flex-wrap">
+                        <%searchResult.forEach(function(product, index){%>
+                        <div class="product_search_col_wrapper flex_md_25">
+                            <a class="product_link" href="/product/post/<%=product._id%>"
+                                style="text-decoration: none;">
+                                <div class="product_search_col_comp_ele">
+                                    <!-- product image container -->
+                                    <div class="search_col_card_image_container"
+                                        style="background-image: url('/product/image/<%=product.product_photos[0].photo.image_filename%>');">
+                                        <div class="ad_badge_overlay_container d-flex bd-highlight">
+                                            <div>
+                                                <span class="ad_badge">FEATURED</span>
+                                            </div>
+                                            <div class="ml-auto">
+                                                <span class="ad_badge2"><i class="fas fa-heart like_badge"
+                                                        aria-hidden="true"></i></span>
+                                            </div>
+
+                                        </div>
+                                        <br><br><br><br><br>
+                                        <div class="ad_badge_overlay_container d-flex flex-row-reverse">
+                                            <img src="https://i.imgur.com/FJDEL9O_d.webp?maxwidth=640&shape=thumb&fidelity=medium" alt="dm_icon" style="height: 20px; opacity: 0.5;">
+                                        </div>
+                                    </div>
+                                    <!-- product detail -->
+                                    <div class="col_card_detail">
+                                        <div class="col_title_holder">
+                                            <div class="col_card_ad_title flex-fill">
+                                                <span><%=product.product_ad_title%></span>
+                                            </div>
+                                            <div class="col_card_date_container">
+                                                <span
+                                                    class="col_card_date text-muted"><%=moment(product.createdAt).format('ll')%></span>
+                                            </div>
+                                        </div>
+                                        <!-- <div class="col_card_price">
+                                            ₹ <span id="<%=product._id%>"></span>
+                                            <script>
+                                                var format = new Number('<%=product.product_price%>').toLocaleString('en-IN');
+                                                document.getElementById("<%=product._id%>").innerHTML = format;
+                                                console.log(format);
+                                            </script>
+                                        </div> -->
+                                        <div
+                                        class="col_card_price">
+                                        <%if(product.product_price_updated > 0){%>
+                                           <%if(product.product_price_updated < product.product_price) {%>
+                                                ₹ <span id="t_<%=product._id%>"></span>
+                                                <script>
+                                                    var format = new Number('<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                                    document.getElementById("t_<%=product._id%>").innerHTML = format;
+                                                    console.log(format);
+                                                </script>
+                                                <span class="productAdPrice" style="font-size:70%; color: #99a3a4;"><del>₹ <%=product.product_price%></del></span>
+                                            <%}
+                                            else{%>
+                                                ₹ <span id="t_<%=product._id%>"></span>
+                                                <script>
+                                                    var format = new Number('<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                                    document.getElementById("t_<%=product._id%>").innerHTML = format;
+                                                    console.log(format);
+                                                </script>
+                                            <%}%>
+                                            %>
+                                        <%}
+                                            else{%>
+                                                ₹ <span id="t_<%=product._id%>"></span>
+                                                <script>
+                                                    var format = new Number('<%=product.product_price%>').toLocaleString('en-IN');
+                                                    document.getElementById("t_<%=product._id%>").innerHTML = format;
+                                                    console.log(format);
+                                                </script>
+                
+                                            <%}%>
+                                    </div>
+                                    <div><span><%=product.locality.name%></span></div>
+                                        <div class="col_card_desc text-muted">
+                                            <span><%=product.product_description%></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <%})%>
+                    </div>
+
+                    <%}%>
+                    </div>
+                </div>
+            </section>
+            
+        </div>
+
+    </section>
+    <script>
+        function showDistricts() {
+            var elements = document.getElementsByClassName('more_districts');
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.display = "block";
+            }
+            document.getElementById('d_show').style.display = "none";
+            document.getElementById('d_hide').style.display = "block";
+        }
+
+        function hideDistricts() {
+            var elements = document.getElementsByClassName('more_districts');
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].style.display = "none";
+            }
+            document.getElementById('d_show').style.display = "block";
+            document.getElementById('d_hide').style.display = "none";
+        }
+
+
+        // test form section
+        function test_form_list() {
+            var sports = document.forms['test_form'].elements['sports[]'];
+            alert(sports.length);
+        }
+
+        // search onfilter change
+        function search_on_filter_change() {
+            document.getElementById('filterSearchForm').submit();
+        }
+
+    </script>
+
+    <script type="text/javascript" src="/assets/js/lozad.min.js"></script>
+    <script src="/assets/js/detail-functions.js"></script>
+    <script type="text/javascript" src="/assets/js/product-search-nav-functions.js"></script>
+    <%- include('./../../includes/footer.ejs') %>

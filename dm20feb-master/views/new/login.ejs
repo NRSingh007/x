@@ -1,0 +1,106 @@
+<%- include('../includes/header.ejs',
+    {
+    pageTitle: pageTitle, 
+    keywords: [ 'Sign up', 'Log In', 'Digital Manipur', 'Digital Imphal', 'Digital India', 'Digital North East', 'Manipur Marketing', 'Imphal Marketing', 'Digital News', 'Digital Media', 'SEO', 'Facebook Marketing', 'Youtube Marketing', 'Promotion Page', 'Hoarding Ad', 'LED Ad', 'Local Poromotion','Digital Manipur','Manipur.info','Leibaklei infotech'],
+    author: 'Digital Manipur, Manipur Info',
+    description: `Digital Manipur, known as the Leading Local Search Engine, acts as a bridge between Buyers and Sellers. Digital Manipur provides information about any products or services to customers. Digital Manipur is present online services which helps your business grow to the next level!`,
+    }
+    ) %>
+</head>
+
+<body class="auth row d-flex flex-row justify-content-center">
+
+        <div class="text-center login-clean col-12 col-md-6 col-lg-5" style="/*background-color: #f9f9f9;*/">
+            <div class="illustration illustration img-box mt-4 ">
+                <a href="/">
+                    <img class="p-2 logo-img" src="/assets/img/logo.png"  >
+                </a>
+            </div>
+            <h3 style="height: 41px;font-weight: 300;font-size: 24px;">Log in to Digital Manipur</h3>
+            <form method="post" action="/auth/login">
+                <h2 class="sr-only">Login Form</h2>
+                <p class="<%= messages && messages.error ? '':'d-none' %> text-left m-0 pb-2 text-danger" style="font-size: 12px;">*
+                    <%= messages.error %> 
+                    <% if ( messages.error == 'Please verify your email.' ) { %>
+                    <a  id="resend" href="/auth/request-email-verification/?email=<%= oldInput.email ? oldInput.email:'' %>" class="btn btn-sm btn-outline btn-secondary my-2 small">Resend verification link</a>
+                    <% } %>
+                    <script>
+                        const rootDomain = `${location.protocol}//${window.location.hostname}${location.port ? ':'+location.port: ''}`;
+
+                       $(document).ready(function(){
+                        $("#resend").click(function(event){
+                            event.preventDefault();
+                            event.stopPropagation();
+
+                            const email = $("input[name='email']").val();
+                            console('Requesting new verification email');
+                            $.get(`${rootDomain}/auth/request-email-verification?email=${email}`, (data,status) => {
+                                if ( status == 'success') {
+                                    console.log('Response : ',data);
+                                }
+                            });
+                        });
+                       }); 
+                    </script>
+                </p>
+                <p class="<%= messages && messages.info ? '':'d-none' %> text-left m-0 pb-2 text-success" style="font-size: 12px;">*
+                    <%= messages.info %>
+                </p>
+                <input type="hidden" name="via" value="<%= typeof via != 'undefined' ? via : `home`  %>" >
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                
+                <div class="form-group">
+                    <div class="form-inline d-flex flex-row justify-content-between align-items-center">
+                        <label for="">Name</label>
+                    </div>
+                    <input class="form-control" type="email" name="email" value="<%= oldInput.email %>" placeholder="Email" required="">
+                </div>
+                
+                <div class="form-group">
+                    <div class="form-inline d-flex flex-row justify-content-between align-items-center">
+                        <label for="">Password</label>
+                        <a class="float-right text-primary " href="/auth/password_reset">Forgot your password?</a>
+                    </div>
+                    <input class="form-control" type="password" name="password" value="<%= oldInput.password %>" placeholder="Password"
+                        required="" minlength="8">
+                </div>
+                
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-success btn-block" role="button">Log In</button>
+                </div>
+                
+                
+                <div class=" mt-5 ">
+                    New to Digital Manipur? <a href="/auth/signup" class="text-primary">Create an account</a>
+                </div>
+                <div class="d-flex justify-content-between my-1">
+                    <div class="col">
+                        <hr>
+                    </div>
+                    <span>OR</span>
+                    <div class="col">
+                        <hr>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a class="py-2 px-5 btn col btn-sm rounded mr-3" href="/auth/google" style="background-color: #EA4335;color: #fff;">
+                        <i class="fab fa-google"></i>
+                    </a>
+                    <a class="py-2 px-5 btn  col btn-sm rounded ml-3" href="/auth/facebook" style="color: #fff;background-color: #3b5998 ;">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </form>
+        </div>
+        <script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+        <script src="/assets/js/add-listing.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
+        <script src="/assets/js/search.js"></script>
+        <script src="/assets/js/Simple-Slider.js"></script>
+        <script src="/assets/js/tools.js"></script>
+        <script src="/assets/js/untitled.js"></script>
+    </body>
+
+    </html>

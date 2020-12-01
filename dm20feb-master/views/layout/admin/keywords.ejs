@@ -1,0 +1,913 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    
+    <style>
+        .editKeyword{
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 50px;
+            margin-top: -18px;
+        }
+    </style>
+
+</head>
+
+<body class="admin-page">
+
+
+
+    <section class="main-body container-fluid row mx-0 px-0">
+
+        <!-- Left column navigation  -->
+        <%- include('./../../includes/adminNavigation.ejs') %>
+
+        <!-- Right column main body -->
+        <div class="col-10  main-col px-0" ">
+
+            <!-- Top navigation -->
+            <section class=" container nav-container mx-0">
+                    <div class="d-flex nav-header  bg-white  py-2 px-3  " style="width: 100%;">
+
+                        <div class="dropdown dropdown-menu-right ml-auto" style="color: black;">
+                            <button class="shadow-none btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
+                                type="button">
+                                <% if( typeof user.images.profile.common.url != "undefined" && user.images.profile.common.url) { %>
+                                <img class="rounded-circle" src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                    style="width: 25px;height: 25px;margin-right: 5px;">
+                                <% } else { %>
+                                <i class="fad fa-user-shield font-weight-bold"></i>
+                                <% } %>
+
+                                <span class="px-1">
+                                    <%= `${user.name.firstName}` %>
+                                </span>
+                            </button>
+                            <div class="dropdown-menu text-secondary" role="menu"
+                                style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                                <i class="fal fa-angle-up"  style="
+                                color: #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 10px;
+                                font-size: 22px;
+                                z-index: 999;
+                                "></i>
+                                <a class="dropdown-item" role="presentation" href="#" style="color: black;">Profile</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Notifications</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Settings</a>
+                                <hr style="margin: 0;">
+                                <form action="/auth/logout?via=admin" method="POST">
+                                    <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                        role="presentation">Logout</button>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+            </section>
+
+            <!-- main content -->
+            <section>
+
+                <div class="container p-5 " id="keywords">
+
+                    <div class="row" style="position: absolute;
+                    right: 50px;
+                    top: 0;
+                    z-index: 1">
+                
+                        <div class="toast" data-delay="5000">
+                            <div class="toast-header">
+                                <strong class="mr-auto text-primary"></strong>
+                                <!-- <small class="text-muted">5 mins ago</small> -->
+                                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                            </div>
+                            <div class="toast-body">
+                
+                            </div>
+                        </div>
+                    </div>
+                
+                    <section class="row px-3 edit-section">
+                        <div class="col bg-white p-3 rounded border">
+                            <div class="form">
+                                <form action="" name="keywords-form">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <!-- <div class="form-group">
+                                                <input autocomplete="off" type="text" class="form-control" id="keyword"
+                                                    placeholder="Enter new keyword ...">
+                                            </div> -->
+                                            <div class="form-group">
+                                                <h5 for="exampleFormControlSelect2" class="title" style="display: block;">Select
+                                                    category </h5>
+                                                <select name="selected_categories" onchange="showKeywords()"
+                                                    class="form-control custom-select" id="keywordsMultiSelect">
+                                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                                                </select>
+                                            </div>
+                
+                                            <div class="form-group px-2 show-keywords d-flex  flex-column"
+                                                style="max-height: 300px; overflow-x: hidden; overflow-y: scroll;">
+                
+                                            </div>
+                                        </div>
+                                        <div class="col-6 ">
+                                            <h5 class="title">Add new keyword </h5>
+                                            <div class="right-keyword-col">
+                                                <div class="form-group">
+                                                    <input name="newKeyword" autocomplete="off" type="text"
+                                                        class="form-control newKeyword" placeholder="Enter new keyword ...">
+                                                </div>
+                                            </div>
+                
+                                            <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                onclick="addMoreKeyword(event)">Add more</button>
+                                            <script>
+                                                function addMoreKeyword(e) {
+                                                    e.preventDefault();
+                                                    console.log(e);
+                                                    $(e.target).siblings('.right-keyword-col').append(`
+                                                    <div class="form-group input-group">
+                                                        <input  name="newKeyword" autocomplete="off" type="text" class="form-control newKeyword"
+                                                            placeholder="Enter new keyword ...">
+                                                        <button onclick="removeKeywordInput(event)" class="input-group-append btn btn-outline-secondary btn-sm px-3 px-1">X</button>
+                                                    </div>
+                                                    `);
+                                                }
+                
+                                                function removeKeywordInput(e) {
+                                                    e.preventDefault();
+                                                    $(e.target).parent().remove();
+                                                }
+                                            </script>
+                                            <div class="t" id="">
+                
+                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <input type="hidden" id="updateIdKeyword" name="updateId" value="null">
+                
+                                    <hr>
+                                    <div class="row px-3 page-control">
+                                        <button type="submit" id="addBtnKeyword" class="btn btn-success mr-3">Save</button>
+                                        <!-- <button type="button" hidden id="updateBtnKeyword" onclick="updateKeyword()"
+                                            class="btn btn-success mr-3">Update</button>
+                                        <button type="reset" id="cancelBtnKeyword" class="btn btn-info mr-3 "
+                                            onclick="cancelEditKeyword()">Cancel</button>
+                                        <button hidden type="button" id="deleteBtnKeyword" class="btn btn-danger mr-3 ">Delete</button> -->
+                                        <script>
+                                            $(document).ready(function () {
+                
+                                                var div = $('<div></div>');
+                                                div.append(`<div class="px-3 py-2" style="display: flex;"> 
+                                                                    <button onclick="deleteKeyword()" class="btn btn-success small mr-3">Yes</button>
+                                                                    <button class="btn btn-secondary small">No</button>
+                                                                </div>`);
+                                                var options = {
+                                                    placement: 'right',
+                                                    html: true,
+                                                    title: "Are you sure?",
+                                                    trigger: 'click',
+                                                    template: `
+                                                    <div class="popover" role="tooltip" style="width: min-width:200px">
+                                                        <div class="arrow"></div>
+                                                            <h3 class="popover-header"> Are you sure? </h3>
+                                                            <div class="popover-body" style="">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        `,
+                                                    content: div,
+                                                    animation: true
+                
+                                                };
+                
+                                                $('#deleteBtnKeyword').popover(options);
+                
+                
+                
+                
+                                            });
+                
+                                            $('html').on('click', function (e) {
+                                                if (typeof $(e.target).data('original-title') == 'undefined' &&
+                                                    !$(e.target).parents().is('.popover.in')) {
+                                                    $('#deleteBtnKeyword').popover('hide');
+                                                }
+                                            });
+                
+                                        </script>
+                                    </div>
+                                </form>
+                
+                            </div>
+                        </div>
+                
+                    </section>
+                
+                    <section class="row px-3">
+                        <div class="col bg-white p-3 rounded border">
+                            <div class="row px-0 my-2 py-1">
+                                <div class="col">
+                                    <span>
+                                        <h5>Recent keywords </h5>
+                                    </span>
+                                </div>
+                                <div class="col d-flex flex-row "
+                                    style="display: flex; align-items: center; justify-content: space-around;">
+                                    <input autocomplete="off" type="text" class="" style="width:90%;  padding: 4px 10px;display: none;"
+                                        name="searchKeyword" id="searchKeyword" class="form-control" onkeyup="searchKeyword()"
+                                        placeholder=" Enter keyword to search..." id="">
+                                    <a class="ml-auto" onclick="(() => { $('#searchKeyword').show().focus(); searchKeyword();  })()"
+                                        style="color: initial; cursor: pointer;">
+                                        <i class="fa fa-search text-secondary"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="posts-list">
+                                <ul class="list-group " id="Recent_keywords_list">
+                
+                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                
+                
+                
+                </div>
+
+            <!-- Main content ends here -->
+            </section>
+
+        <!-- Right column main body ends here -->
+         </div>
+
+
+    </section>
+
+
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/fontawesome-pro-5.11.1-web/js/fontawesome.min.js"></script>
+    <script src="/assets/js/admin.js"></script>
+
+    <script>
+        // const rootDomain = `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+        // tab pane bug fix - problem in switching tabs between list anchor link and upper accordion button
+        // $(document).ready(() => {
+
+        //     $("button[data-toggle='tab'] , a[data-toggle='tab']").click((event) => {
+        //         console.log('tab click href: ', $(event.target).attr('href'));
+        //         const tabIdToShow = $(event.target).attr('href');
+
+        //         // hide all open tabs by removing active class
+        //         $("div.tab-pane").removeClass('active');
+        //         $(`${$(event.target).attr('href')}`).addClass('active');
+
+        //     });
+
+        // });
+
+        
+
+    </script>
+
+<script>
+
+    // show keywords on selecting catergory
+    let recentSelectedCatKeywords, recentSelectedCatKeywordsConstant;
+    function showKeywords() {
+        const catId = $('#keywordsMultiSelect').val();
+        if (catId) {
+            $('.show-keywords').html(`
+            <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+            </div>`);
+
+            $.get(`${rootDomain}/admin/keywords/getKeywords/${catId}`, (data, status) => {
+                console.log({ data });
+                if (status == 'success' && data.length > 0) {
+                    const keywords = Array.from(data);
+
+                    // To create immutable array or object with nested items 
+                    // use JSON parse and stringify
+
+                    recentSelectedCatKeywords = JSON.parse(JSON.stringify(data));
+                    recentSelectedCatKeywordsConstant = JSON.parse(JSON.stringify(data));
+                    // Object.freeze(recentSelectedCatKeywordsConstant);
+
+                    refreshKeywords(recentSelectedCatKeywords);
+
+                }
+            })
+                .fail((error) => {
+                    $('.show-keywords').html(``);
+
+                    console.log('Error', error);
+                });
+
+
+        }
+    }
+
+    function refreshKeywords(data) {
+        $('.show-keywords').html(``);
+
+        var sorted = data.sort(function (a, b) {
+            var nameA = a.name ? a.name.toLowerCase() : '';
+            var nameB = b.name ? b.name.toLowerCase() : '';
+            if (nameA < nameB) //sort string ascending
+                return -1
+            if (nameA > nameB)
+                return 1
+            return 0 //default return value (no sorting)
+        });
+        console.log(sorted);
+
+        sorted.forEach(keyword => {
+            $('.show-keywords').append(`
+                            <div class="row mb-1">
+                                <div class=" col-8"> 
+                                    <input autocomplete="off" type="text"  onchange="updateKeywordValue(event)" class="form-control" name="keywordName"
+                                      value="${keyword.name}">
+                                      <input autocomplete="off" type="text" hidden class="form-control" name="keywordId"
+                                      value="${keyword._id}">
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="removeKeywordFromList(event)">Delete</button>
+                                </div>
+                        `);
+        });
+    }
+
+    // updateKeywordValue
+    function updateKeywordValue(e) {
+        console.log('keyword  changed');
+
+        const updatedValue = $(e.target).val();
+        const updatedId = $(e.target).siblings("input[name='keywordId']").val();
+        recentSelectedCatKeywords = recentSelectedCatKeywords.map(item => {
+            console.log('keyword  ', { item });
+
+            if (updatedId == item._id) {
+                item.name = updatedValue;
+                item.modifiedOn = Date.now();
+            }
+            return item;
+        });
+
+        console.log({ recentSelectedCatKeywords, recentSelectedCatKeywordsConstant });
+
+    }
+
+
+    // remove keyword from recentSeletedKeywords
+    function removeKeywordFromList(e) {
+        e.preventDefault();
+        console.log(e)
+        const keyId = $(e.target).parent().siblings('div').children('input[name="keywordId"]').val();
+        const keyName = $(e.target).parent().siblings('div').children('input[name="keywordName"]').val();
+        console.log({ keyId, keyName });
+
+        const filteredArray = recentSelectedCatKeywords.filter((cur, index, arr) => {
+            console.log({ "array item id": arr[index]._id, keyName });
+            return arr[index]._id != keyId;
+        });
+
+        // assign recentSelectedCatKeywords
+        recentSelectedCatKeywords = filteredArray;
+        refreshKeywords(filteredArray)
+        console.log({ filteredArray });
+    }
+
+
+    // AJAX KEYWORD PAGE
+    let recentKeywords, recentCategories;
+    const getKeywords = () => {
+
+        console.log('calling ');
+        $('#keywords #Recent_keywords_list').html('');
+        $('#keywords #Recent_keywords_list').append(`<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+        $.get(rootDomain + '/admin/keywords/recent', null, (data, status) => {
+
+            if (status == 'success') {
+                console.log(data, status);
+                // $('#totalUsers').html(data.usersCount);
+                // $('#monthlyUsers').html(data.usersCountCurrentMonth);
+                // $('#totalPosts').html(data.postsCount);
+                // $('#monthlyPosts').html(data.postsCountCurrentMonth);
+                recentKeywords = data.recentKeywords;
+                recentCategories = data.categories;
+                refreshKeywordsList(data);
+
+                // append categories
+                $('#keywords #keywordsMultiSelect').html('');
+                var count = 0;
+                $('#keywords #keywordsMultiSelect').append(`
+                    <option value="" selected hidden disabled >
+                        Categories</option>
+            `);
+                data.categories.forEach(category => {
+
+                    $('#keywords #keywordsMultiSelect').append(`
+                    <option value="${category._id}" name="${category.name}">
+                         ${category.name} <span class="text-success float-right mx-auto">(${category.numberOfKeywords}  keywords)<span></option>
+            `);
+                });
+
+            }
+
+        });
+    }
+
+
+    // show selected categories on right side
+    $('#keywords #keywordsMultiSelect').on('click', 'option', function (e) {
+
+        $("#keywordsMultiSelect")
+            .change(function () {
+
+                $('#multilist_holder').html('');
+                $("#keywordsMultiSelect option:selected").each(function () {
+                    $('#multilist_holder').append(`
+                <span class="badge badge-pill badge-success"> ${ $(this).text()}</span>
+                `);
+                });
+
+            })
+            .trigger("change");
+
+        // console.log($('#keywordsMultiSelect').val());
+    });
+
+    function refreshKeywordsList(data) {
+
+        console.log("refreshKeywordsList data ", data);
+        $('#keywords #Recent_keywords_list').html('');
+        // append list header
+        $('#keywords #Recent_keywords_list').append(`<li class="cus-list-header list-group-item d-flex justify-content-between align-items-center">
+                        <div class="col-4 d-inline-block text-wrap "><b>Keyword</b></div>
+                        <div class="col-2 d-inline-block text-wrap">
+                           <b> Categories </b>
+                        </div>
+                        <div class="col-3 d-inline-block text-wrap"><b>Modified Date</b></div>
+                        <div class="col-2 d-inline-block text-wrap">
+                           <b> Manage </b>
+                        </div>
+                    </li>`);
+        // <div class="col-1" >   
+        //         <b>Manage     </b>                    
+        //     </div>
+        data.recentKeywords.forEach(post => {
+
+            // var categories = post.category.map(e => e.name+' ');
+            // var catLength = categories.length;
+            // categories = categories.toString();
+            // const postString = JSON.stringify(post);
+
+
+
+
+            // append list data
+            $('#keywords #Recent_keywords_list').append(`
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="col-4 d-inline-block text-wrap key-name">
+                            <span class="name">${post.keywords.name}</span>
+                            <div class="form-inline editKeyword">
+                                <input type="text" class="form-control" name="keyword" >
+                                <button 
+                                data-categoryid="${post._id}" 
+                                data-keyname="${post.keywords.name}"  
+                                data-keyid="${post.keywords._id}"
+                                class="btn btn-sm btn-success" onclick="updateKeyword(event)" >Update</button>
+                            </div>
+                        </div>
+                        <div class="col-2 d-inline-block text-wrap">
+                            ${post.name}
+                        </div>
+                        <input type="hidden" name="keyId" value="${post.keywords._id}" />
+                        <input type="hidden" name="catId" value="${post._id}" />
+                        <div class="col-3 d-inline-block text-truncate">${getCustomDate(new Date(post.keywords.createdOn)) }</div>
+                        <div class="col-2 d-inline-block text-wrap">
+                           <button class="btn btn-sm btn-info" 
+                           data-categoryid="${post._id}" 
+                           data-keyname="${post.keywords.name}"  
+                           data-keyid="${post.keywords._id}" 
+                           onclick="showUpdateForm(event)"
+                           >Edit</button>
+                        </div>
+                        
+                </li>
+
+            `);
+            // <div class="col-1" >                            
+            //     <button  class="btn btn-outline-primary btn-sm" onclick="editKeyword(event)">Edit</button>                            
+            // </div>
+        });
+    }
+
+    // Save keywords or update keywords
+    $('#addBtnKeyword').click((event) => {
+        event.preventDefault();
+
+        const catId = $('#keywordsMultiSelect').val();
+
+
+        // Parse new keywords
+        const newKeywordsFieldObj = $("input.newKeyword");
+        const noOfNewKeywords = newKeywordsFieldObj.length;
+
+        const keywordsArray = Object.values(newKeywordsFieldObj);
+        const keywords = [];
+        console.log({ keywordsArray });
+        for (let index = 0; index < noOfNewKeywords; index++) {
+            if (index == noOfNewKeywords) break;
+            else {
+                if ($(keywordsArray[index]).val() && $(keywordsArray[index]).val().length > 0) {
+                    let name = $(keywordsArray[index]).val();
+                    if (name.length > 0) {
+                        keywords.push({
+                            name,
+                            createdOn: Date.now,
+                            modifiedOn: Date.now
+                        });
+                    }
+                    
+                }
+            }
+        }
+
+        console.log({ catId, keywords });
+
+        // Parse deleted keywords
+        // check for changes : keywords deleted
+        // 
+        let update;
+        if (recentSelectedCatKeywords && recentSelectedCatKeywordsConstant)
+        console.log("Is modified", !isObjectsEquivalent(recentSelectedCatKeywordsConstant, recentSelectedCatKeywords));
+
+        if (recentSelectedCatKeywords && recentSelectedCatKeywordsConstant && !isObjectsEquivalent(recentSelectedCatKeywordsConstant, recentSelectedCatKeywords)) {
+            update = recentSelectedCatKeywords;
+        }
+
+        console.log({ catId, update, keywords });
+
+
+        // save to db
+        if (keywords.length > 0 || update) {
+            console.log('updating');
+            $.post(
+                `${rootDomain}/admin/keywords/updateOrAdd`,
+                { catId, update, keywords },
+                (data, status) => {
+                    if (status == 'success') {
+                        showToastKeyword('Success ', false, ' Updated successfully! ');
+                    }
+
+                    getKeywords();
+
+                    // remove add more key fields and reset
+                    $(".right-keyword-col div input").val('');
+                    $(".right-keyword-col div:not(:first-child)").remove();
+                    $('.show-keywords').html(``);
+
+                    console.log({ data, status });
+                }
+            ).fail(e => { showToastKeyword('Error ', true, ' Please try again '); });
+        } else {
+            console.log('Not updating');
+        }
+
+    });
+
+    function isObjectsEquivalent(a, b) {
+        console.log('comparing ', { a, b });
+        // Create arrays of property names
+        var aProps = Object.getOwnPropertyNames(a);
+        var bProps = Object.getOwnPropertyNames(b);
+
+        // If number of properties is different,
+        // objects are not equivalent
+        if (aProps.length != bProps.length) {
+            return false;
+        }
+
+        for (var i = 0; i < aProps.length; i++) {
+            var propName = aProps[i];
+
+            // If values of same property are not equal,
+            // objects are not equivalent
+            if (a[propName] !== b[propName]) {
+                console.log('compare ', a[propName], b[propName]);
+                return false;
+            }
+        }
+
+        // If we made it this far, objects
+        // are considered equivalent
+        return true;
+    }
+
+    function editKeyword(e) {
+        $('.main-col').stop(true, false).animate({ scrollTop: 0 }, 'fast');
+
+        $('#updateBtnKeyword').prop('hidden', false);
+        $('#addBtnKeyword').prop('hidden', true);
+        $('#deleteBtnKeyword').prop('hidden', false);
+
+
+        console.log(e, $(e.target).parent('div').siblings("input[name='keyId']").val());
+        console.log(e, $(e.target).parent('div').siblings("input[name='catId']").val());
+
+        let keyword = recentKeywords.find((keyword) => {
+            return $(e.target).parent('div').siblings("input[name='keyId']").val() == keyword.keywords._id;
+        })
+        if (keyword) {
+
+            console.log("keyword data : ", keyword);
+
+            $('#keywords #keyword').val(keyword.keywords.name);
+            $('#multilist_holder').html('');            // clear selected options
+            $('#keywords .edit-section .title').text('Edit keyword');
+            $('#keywordsMultiSelect option:selected').prop("selected", false);  // unselect pre-selected
+            $('#updateKeyIdKeyword').val(keyword.keywords._id);
+            $('#updateCatIdKeyword').val(keyword._id);
+
+            if (keyword.category) {
+                var categoriesIdObject = $('#keywordsMultiSelect option').map((index, option) => option.value);
+                var categoriesIdArray = Object.values(categoriesIdObject);
+                // console.log(categoriesIdArray , typeof categoriesIdArray );
+                keyword.category.forEach((cat) => {
+                    console.log('ID : ', cat._id);
+                    if (categoriesIdArray.indexOf(cat._id) != -1) {
+                        console.log(categoriesIdArray.indexOf(cat._id));
+                        $('#keywordsMultiSelect option:nth-child(' + (categoriesIdArray.indexOf(cat._id) + 1) + ')').prop('selected', true);
+                    } else {
+                        console.log('not found : ', cat.name);
+
+                    }
+                });
+                $("#keywordsMultiSelect option:selected").each(function () {
+                    $('#multilist_holder').append(`
+                    <span class="badge badge-pill badge-success"> ${ $(this).text()}</span>
+                    `);
+                });
+
+            }
+
+        } else {
+            console.log("Editable keyword not found");
+        }
+
+
+    }
+
+
+    function cancelEditKeyword() {
+        $('#keywords #multilist_holder').html('');            // clear selected options
+        $('#keywords .edit-section .title').text('Add new keyword');
+        $('#keywordsMultiSelect option:selected').prop("selected", false);
+        $('#keywordsMultiSelect option:selected').prop("selected", false);
+        $('#updateBtnKeyword').prop('hidden', true);
+        $('#addBtnKeyword').prop('hidden', false);
+        $('#deleteBtnKeyword').prop('hidden', true);
+        $("#keywords form[name='keywords-form']").trigger("reset");
+        $('#keywords #keyword').removeAttr('value');
+        // $('#cancelBtnKeyword').prop('hidden', true);
+
+    }
+
+    function updateKeyword() {
+        const updateId = $('#keywords #updateIdKeyword').val();
+
+        const key = $('#keywords #keyword').val();
+        const categories = $(' #keywords #keywordsMultiSelect').val();
+        const token = $("#keywords form[name='keywords-form'] input[name='_csrf']").val();
+        console.log('categories : ', categories);
+
+        if (updateId != null && updateId.length == 24) {
+
+            // ajax post update
+            $.post(rootDomain + '/admin/keyword/update',
+                {
+                    "keyword": key,
+                    "categories": JSON.stringify(categories),
+                    "_csrf": token,
+                    "id": updateId
+                }, (data, status) => {
+
+                    if (status == 'success') {
+                        getKeywords();
+                        cancelEditKeyword();
+                        console.log(data, status);
+                        showToastKeyword('Updated successfully');
+                    }
+                });
+
+        }
+    }
+
+    function deleteKeyword() {
+
+        const id = $('#keywords #updateIdKeyword').val();
+        const token = $("#keywords form[name='keywords-form'] input[name='_csrf']").val();
+        console.log('Deleting keyword - ', id);
+        if (id != null && id.length == 24) {
+            $.post(`${rootDomain}/admin/keyword/delete`, {
+                "_csrf": token,
+                "id": id
+            }, (data, status) => {
+                if (status == 'success') {
+                    console.log('Response : ', data);
+                    console.log('keyword Deleted ');
+                    getKeywords();
+                    showToastKeyword('Keyword deleted successfully');
+                    cancelEditKeyword();
+
+                }
+            }
+
+            )
+                .fail(function (error) {
+                    // alert(JSON.parse(error)) ;
+                    const response = JSON.parse(error.responseText);
+                    console.log(response);
+                    showToastKeyword(response.error)
+                });
+        }
+
+    }
+
+    $(document).ready(function () {
+        getKeywords();
+        // const rootDomain = `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+        // $('form[name="keywords-form"]').submit(function (event) {
+        //     event.preventDefault();
+        //     event.stopPropagation();
+
+        //     const key = $('#keyword').val();
+        //     const categories = $('#keywordsMultiSelect').val();
+        //     const token = $(this).children("input[name='_csrf']").val();
+
+
+        //     if (key.length > 0 && categories.length > 0) {
+        //         $.post(`${rootDomain}/admin/keyword/add`, {
+        //             "keyword": key,
+        //             "categories": JSON.stringify(categories),
+        //             "_csrf": token
+        //         }, (data, status) => {
+        //             if (status == 'success') {
+        //                 console.log('Response : ', data);
+        //                 cancelEditKeyword();
+        //                 showToastKeyword('Added!')
+        //                 getKeywords();
+        //             }
+        //         }
+
+        //         )
+        //             .fail(function (error) {
+        //                 // alert(JSON.parse(error)) ;
+        //                 const response = JSON.parse(error.responseText);
+        //                 console.log(response);
+        //                 showToastKeyword(response.error)
+        //             });
+
+        //     } else {
+        //         console.log("fields cannot be empty");
+        //         showToastKeyword('Please choose a category and a name');
+        //     }
+
+        // });
+
+    });
+
+
+    function showToastKeyword(title, error = false, message = null) {
+        $('#keywords .toast-header strong').text(title);
+        // $('#keywords .toast-header small').text(title);
+        // $('#keywords .toast-body ').text(body);
+
+        if (error) {
+            $('#keywords .toast-body ').text(message ? message : '');
+            $('#keywords .toast-body ').show();
+        } else {
+            $('#keywords .toast-body ').hide();
+        }
+        $('#keywords .toast').toast('show');
+        // setTimeout(function(){ $('#keywords .toast').toast('hide') }, 200000);
+    };
+
+    var timer;
+    function searchKeyword() {
+
+        const value = $(" #keywords #searchKeyword").val();
+        console.log(value)
+        if (value.length > 0) {
+
+            $('#keywords #Recent_keywords_list').html('');
+            $('#keywords #Recent_keywords_list').append(`<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+
+            if (timer) { clearTimeout(timer); }
+            timer = setTimeout(function () {
+                $.get(`${rootDomain}/admin/keywords/search?key=${value}`, (data, status) => {
+                    console.log(data,status)
+
+                    if (status == 'success' && data.recentKeywords != 'undefined' && data.recentKeywords.length > 0) {
+                        console.log(data, status)
+
+                        refreshKeywordsList(data);
+                    } else {
+                        refreshKeywordsList({ recentKeywords: recentKeywords });
+                    }
+                })
+                    .fail((error) => {
+                        console.log("error")
+
+                        refreshKeywordsList({ recentKeywords: recentKeywords });
+                    });
+            }, 1000)
+
+        } else {
+            clearTimeout(timer);
+            refreshKeywordsList({ recentKeywords: recentKeywords });
+        }
+    }
+
+
+    function showUpdateForm( event) {
+        console.log(event.target)
+        $(event.target).parent().siblings('.key-name').children('.name').hide();
+        
+        const val = $(event.target).parent().siblings('.key-name').children('.name').html();
+        $(event.target).parent().siblings('.key-name').children('.editKeyword').children('input').val(val);
+        $(event.target).parent().siblings('.key-name').children('.editKeyword').show();
+        
+    }
+
+    function updateKeyword( event) {
+        console.log(event.target)
+        
+        const catId = $(event.target).data('categoryid');
+        const keyId = $(event.target).data('keyid');
+        const val = $(event.target).siblings('input').val();
+        
+        if ( catId && keyId && val  ) {
+            $.post(
+                `${rootDomain}/admin/keywords/single/update`,
+                {
+                    name: val,
+                    catId: catId,
+                    keyId: keyId
+                }, (data, status) => {
+                    console.log('Response', {data});
+                    if( status == 'success' && data && data.result ) {
+                        
+                        $(event.target).parent().siblings('.name').show();
+                        $(event.target).parent().siblings('.name').html(val);
+                        $(event.target).parent().hide();
+
+
+                    }
+                }
+            )
+        }
+        
+    }
+
+    // data-categoryid="${post._id}" 
+    //                             data-keyname="${post.keywords.name}"  
+    //                             data-keyid="${post.keywords._id}"
+    //                             class="btn btn-sm btn-success" onclick="updateKeyword(event)"
+
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+
+</body>
+
+</html>
+
+
+

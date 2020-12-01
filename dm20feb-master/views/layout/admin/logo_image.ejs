@@ -1,0 +1,231 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <link rel="stylesheet" href="/assets/css/admin-product-brand.css">
+    <link rel="stylesheet" href="/assets/css/admin-logo.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+
+    <style>
+        .editKeyword {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 50px;
+            margin-top: -18px;
+        }
+    </style>
+
+</head>
+
+<body class="admin-page">
+
+    <section class="main-body container-fluid row mx-0 px-0">
+        <!-- Left column navigation  -->
+        <%- include('./../../includes/adminNavigation.ejs') %>
+
+        <!-- Right column main body -->
+        <div class="col-10  main-col px-0" ">
+
+            <!-- Top navigation -->
+            <section class=" container nav-container mx-0">
+            <div class="d-flex nav-header  bg-white  py-2 px-3  " style="width: 100%;">
+
+                <div class="dropdown dropdown-menu-right ml-auto" style="color: black;">
+                    <button class="shadow-none btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown"
+                        aria-expanded="false" type="button">
+                        <% if( typeof user.images.profile.common.url != "undefined" && user.images.profile.common.url) { %>
+                        <img class="rounded-circle"
+                            src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                            style="width: 25px;height: 25px;margin-right: 5px;">
+                        <% } else { %>
+                        <i class="fad fa-user-shield font-weight-bold"></i>
+                        <% } %>
+
+                        <span class="px-1">
+                            <%= `${user.name.firstName}` %>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu text-secondary" role="menu"
+                        style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                        <i class="fal fa-angle-up" style="
+                            color: #fff;
+                            position: absolute;
+                            top: -13px;
+                            right: 10px;
+                            font-size: 22px;
+                            z-index: 999;
+                            "></i>
+                        <a class="dropdown-item" role="presentation" href="#" style="color: black;">Profile</a>
+                        <a class="dropdown-item text-dark" role="presentation" href="#">Notifications</a>
+                        <a class="dropdown-item text-dark" role="presentation" href="#">Settings</a>
+                        <hr style="margin: 0;">
+                        <form action="/auth/logout?via=admin" method="POST">
+                            <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                role="presentation">Logout</button>
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <hr>
+    </section>
+
+    <!-- Main content -->
+    <section>
+        <div class="container p-5">
+
+            <div class="main_content">
+                <form action="/admin/logo/add" method="POST" id="logo_image_form" enctype="multipart/form-data">
+                    <div style="color: red;">
+                        <p>NOTE*: Keep one logo of each purpose active to avoid broken image in email template.</p>
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        Update Logo
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="logo_image" accept="image/*"
+                                        id="logo_image">
+                                    <label class="custom-file-label" id="logo_image_label" for="logo_image_label">Choose
+                                        file</label>
+                                </div>
+                            </div>
+                            <small id="file_error" style="color: red; display: none;">Choose image file*</small>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <select class="custom-select" id="logo_purpose" name="logo_purpose">
+                                    <option value="none" selected>Select Purpose</option>
+                                    <option value="company">Company Logo</option>
+                                    <option value="facebook">Facebook Logo</option>
+                                    <option value="instagram">Instagram Logo</option>
+                                    <option value="twitter">Twitter Logo</option>
+                                    <option value="pinterest">Pinterest Logo</option>
+                                </select>
+                                <small id="purpose_error" style="color: red; display: none;">Select purpose*</small>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <button onclick="return submitLogoImageForm()" id="submit_btn" type="button"
+                                class="btn btn-success">Submit</button>
+                        </div>
+                    </div>
+                </form>
+                <div style="margin-top: 10px;">
+                    <%if(logos.length == 0){%>
+                    <div style="text-align: center;">
+                        <span>No logos added yet.</span>
+                    </div>
+                    <%}%>
+                    <%if(logos.length > 0){%>
+                    <%logos.forEach(function(logo, index){%>
+                    <div class="detail_card_holder">
+                        <div class="row">
+                            <div style="text-align: center;" class="col-md-4">
+                                <img src="/admin/logo/image/<%=logo.filename%>" class="card_image" alt="logo">
+                            </div>
+                            <div class="col-md-8">
+                                <div>
+                                    <span class="detail_title">Filename: </span> <span
+                                        class="detail_content"><%=logo.filename%></span>
+                                </div>
+                                <div>
+                                    <span class="detail_title">Purpose: </span>
+                                    <%if(logo.purpose == "company"){%><span class="detail_content">Company Logo</span><%}%>
+                                    <%if(logo.purpose == "facebook"){%><span class="detail_content">Facebook
+                                        Logo</span><%}%>
+                                    <%if(logo.purpose == "instagram"){%><span class="detail_content">Instagram
+                                        Logo</span><%}%>
+                                    <%if(logo.purpose == "twitter"){%><span class="detail_content">Twitter Logo</span><%}%>
+                                    <%if(logo.purpose == "pinterest"){%><span class="detail_content">Pinterest
+                                        Logo</span><%}%>
+                                </div>
+                                <div>
+                                    <span class="detail_title">Status: </span>
+                                    <%if(logo.status == true){%><span class="detail_content"
+                                        style="color: green;">Active</span><%}%>
+                                    <%if(logo.status == false){%><span class="detail_content"
+                                        style="color: red;">In-Active</span><%}%>
+                                </div>
+                                <div class="row" style="margin-top:  10px;">
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <form action="/admin/logo/image/set/active" method="POST">
+                                                    <input type="hidden" name="logo_purpose" value="<%=logo.purpose%>">
+                                    <input type="hidden" name="logo_id" value="<%=logo._id%>">
+                                    <button class="btn btn-success btn-block">Set</button>
+                                    </form>
+                                </div>
+                                <div class="col-md-6">
+                                    <form action="/admin/logo/image/remove/<%=logo.file_id%>" method="POST">
+                                        <input type="hidden" name="logo_id" value="<%=logo._id%>">
+                                        <button class="btn btn-danger btn-block">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%})%>
+        <%}%>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    </div>
+
+    </section>
+    <script>
+        document.querySelector("#logo_image").onchange = function () {
+            document.querySelector("#logo_image_label").textContent = this.files[0].name;
+        }
+
+        function submitLogoImageForm() {
+
+            const logo_image_file = document.getElementById('logo_image');
+            const logo_purpose = document.getElementById('logo_purpose');
+            const file_error = document.getElementById('file_error');
+            const purpose_error = document.getElementById('purpose_error');
+            const logo_image_form = document.getElementById('logo_image_form');
+            const submit_btn = document.getElementById('submit_btn');
+
+            if (logo_image_file.files.length == 0) {
+                file_error.style.display = "block";
+                return false;
+            }
+            if (logo_purpose.value == 'none') {
+                purpose_error.style.display = "block";
+                return false;
+            }
+            submit_btn.disabled = true;
+            logo_image_form.submit();
+            return true
+
+        }
+    </script>
+</body>
+
+</html>

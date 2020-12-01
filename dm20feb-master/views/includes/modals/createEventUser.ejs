@@ -1,0 +1,797 @@
+<!-- The Modal -->
+<div class="modal fade" id="createEventModal">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Create New Event</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body pt-0">
+
+
+
+                <div class="px-3">
+
+                    <form name="createEventForm" id="createEventForm" action="" method="post">
+                        <!-- <input type="hidden" name="collectionId" id="collectionId"> -->
+                        <section class="first pt-2">
+
+                            <div class="form-group">
+                                <label for="">NAME OF EVENT* </label>
+                                <input type="text" name="name" placeholder="Enter event name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="">DESCRIPTION* </label>
+                                <input type="text" name="description"
+                                    placeholder="Enter a short description about your event" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="">WEBSITE* </label>
+                                <input type="text" name="website" placeholder="e.g. http://www.event.com"
+                                    class="form-control">
+                            </div>
+                            <div class="form-group d-flex flex-column">
+                                <label for="">ADDRESS* </label>
+                                <div class="row">
+                                    <div class=" form-group col-lg-4 col-xs-12 from_datetime">
+
+                                        <select class="form-control" name="state" onchange="fetchUserDistricts()">
+                                            <option value="" hidden>State</option>
+                                        </select>
+                                    </div>
+                                    <div class=" form-group col-lg-4 col-xs-12 from_datetime">
+                                        <select class="form-control" name="district" onchange="fetchLocalities()" >
+                                            <option value="" hidden>District</option>
+                                        </select>
+                                    </div>
+                                    <div class=" form-group col-lg-4 col-xs-12 from_datetime">
+                                        <select class="form-control" placeholder="Locality" name="locality">
+                                            <option value="" hidden>Locality</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control" placeholder="Street Address"
+                                    name="street_address">
+
+                            </div>
+                            <div class="form-group d-flex flex-column">
+                                <label for="">CONTACT INFO* </label>
+                                <div class="row">
+                                    <div class=" form-group col-lg-6 col-xs-12 ">
+                                        <input type="tel" class="form-control" placeholder="Mobile" name="mobile">
+                                    </div>
+                                    <div class=" form-group col-lg-6 col-xs-12 ">
+                                        <input type="email" class="form-control" placeholder="Email" name="email">
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="custom-file form-group ">
+                                <input type="file" name="cover-image" onchange="filePreview(this)"
+                                    accept=".jpg,.jpeg,.png" class="custom-file-input" id="customFile">
+                                <label class="custom-file-label" for="customFile">Choose cover image*</label>
+                            </div>
+                            <div class="cover-image img-thumbnail">
+
+                            </div>
+
+                            <div class="d-flex flex-row row my-2">
+                                <div class=" form-group col-lg-7 col-xs-12 from_datetime">
+                                    <label for="date">Date*</label>
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <input type="date" name="from_date" class="form-control ">
+                                        <span class="mx-2">-</span>
+                                        <input type="date" name="to_date" class="form-control mr-2">
+                                        
+                                    </div>
+                                </div>
+                                
+                         
+                                
+                                <div class=" form-group col-lg-5 col-xs-12 from_datetime">
+                                    <label for="date">Time*</label>
+                                    <div class="d-flex flex-row justify-content-between">
+                                        <select name="from_time" class="form-control" >
+                                            <option value="" hidden>hr:min AM/PM</option>
+                                        </select>
+                                        <span class="mx-2">-</span>
+                                        <select name="to_time" class="form-control" >
+                                            <option value="" hidden>hr:min AM/PM</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- <div class="custom-control custom-switch d-flex flex-row px-0 my-3 mx-0">
+                                <div class="col-sm-3 pl-0 ">
+                                    <label for="collectionStatus" class="font-weight-bold">Status*</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="checkbox" name="status" class="custom-control-input"
+                                        onchange="checkStatus(event)" checked id="eventstatus">
+                                    <label class="custom-control-label pl-3" for="eventstatus">Active</label>
+                                </div>
+
+                            </div> -->
+
+
+
+
+                            <div class="form-group">
+
+                                <button onclick="submitFirstForm(event)"
+                                    class="btn btn-success px-3 float-right btn-sm px-2" type="button"
+                                    id="saveBtn">SAVE</button>
+                            </div>
+                        </section>
+
+
+
+                    </form>
+
+
+
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    let Collection;
+
+    $(document).ready(function () {
+
+
+        // Show modal
+        $("#createCollectionBtn").click((e) => {
+            e.preventDefault();
+
+            // init Collection
+            Collection = {
+                name: '',
+                places: [],
+                createdOn: Date.now(),
+                modifiedOn: Date.now(),
+                userId: '',
+                coverImage: ''
+            };
+
+            $("#createEventModal").modal('show');
+            // show create collection first tab only  and hide second tab
+            $("#createEventModal section.first").removeClass('d-none');
+            $("#createEventModal section.second").addClass('d-none');
+        });
+
+        // Reset tabs.. on modal hidden
+        $('#createEventModal').on('hidden.bs.modal', function (e) {
+            console.log('hidden')
+            $("#createEventModal section").addClass('d-none');
+            $("#createEventModal section.first").removeClass('d-none');
+            $("#createEventForm").trigger('reset');
+            // remove img
+            $('#createEventModal .cover-image').hide();
+            // $("#InCollection ").html('');
+            $("#InCollection .collection-default").show();
+            $("#InCollection .list-group").html('');
+            $("#placeNameResultList").html('');
+        });
+
+        // Reset data on modal shown
+        $('#createEventModal').on('show.bs.modal', function (e) {
+            console.log('showing');
+            $("#placeNameResultList .collection-default").show();
+            $("#placeNameResultList").siblings(".load-more").remove();
+
+            prevSkip = 0;
+            skip = 0;
+            total = null;
+            Collection = {
+                name: '',
+                places: [],
+                createdOn: Date.now(),
+                modifiedOn: Date.now(),
+                userId: '',
+                coverImage: ''
+            };
+            $("#placesCountId").html(0);
+
+
+        });
+
+        // goback
+        $("#createEventModal #backBtn").click((e) => {
+
+            e.preventDefault();
+
+            // change modal title 
+            $("#createEventModal .modal-title").html('CREATE NEW COLLECTION');
+
+            // show add places tab
+            $("#createEventModal section.first").removeClass('d-none');
+            $("#createEventModal section.second").addClass('d-none');
+
+        });
+
+        // search location
+        // <li class="list-group-item">First item</li>
+        let timer;
+        $("#locationInputId").on('keyup', (e) => {
+            let value = $(e.target).val();
+            if (value.length > 1) {
+
+                if (timer) {
+                    clearTimeout(timer);
+                }
+
+                timer = setTimeout(function () {
+
+                    console.log('Searching locations');
+                    $(e.target).siblings(".input-group-append").children("button").html(
+                        `<div class="spinner-border text-muted spinner-border-sm"></div>`
+                    );
+
+                    const rootDomain =
+                        `${location.protocol}//${window.location.hostname}${location.port ? ':'+location.port: ''}`;
+
+                    $.get(`${rootDomain}/search/ajax/location?slocation=${value}`, (data,
+                            status) => {
+                            if (status == 'success' && data.length > 0) {
+                                console.log({
+                                    data
+                                });
+                                $("#locationResultList").html('');
+                                $("#locationResultList").show();
+
+                                data.forEach(location => {
+                                    $("#locationResultList").append(
+                                        `<a href="#" class="list-group-item list-group-item-action">${location}</a>`
+                                    );
+                                });
+
+                                $(e.target).siblings(".input-group-append").children(
+                                    "button").html(
+                                    `<i class="fal fa-map-marker-alt  "></i>`
+                                );
+
+                            }
+                        })
+                        .fail((e) => {
+                            console.log({
+                                e
+                            });
+                            $(e.target).siblings(".input-group-append").children("button")
+                                .html(
+                                    `<i class="fal fa-map-marker-alt  "></i>`
+                                );
+                        });
+
+                }, 1000);
+
+
+            }
+        });
+
+        // show previous search result 
+        $("#locationInputId").on('click', (e) => {
+            $("#locationResultList").html().trim() != '' ? $("#locationResultList").show() : '';
+            $("#placeNameResultList").hide();
+
+        });
+
+        // listen for onclick events on search result
+        $(document).on('click', "#locationResultList > .list-group-item", (e) => {
+            console.log('clicked');
+            $("#locationInputId").val($(e.target).html());
+            $("#locationResultList").hide();
+        });
+
+
+
+        // show previous search result 
+        $("#placeNameInputId").on('click', (e) => {
+            $("#placeNameResultList").html().trim() != '' ? $("#placeNameResultList").show() : '';
+            $("#locationResultList").hide();
+
+        });
+
+        // listen for onclick events on search result
+        // $(document).on('click', "#placeNameResultList > .list-group-item", (e) => {
+        //     console.log('clicked');
+        //     $("#placeNameInputId").val($(e.target).html());
+        //     $("#placeNameResultList").hide();
+        // });
+
+        // listen for onclick events on search result list items
+        $(document).on('click', "#placeNameResultList > .list-group-item > button", (e) => {
+            console.log('clicked');
+            e.preventDefault();
+            e.stopPropagation();
+
+            let text = $(e.target).html();
+            let name = $(e.target).siblings('.place-name').data('name');
+            let locality = $(e.target).siblings('.place-name').data('locality'); // not working
+            let district = $(e.target).siblings('.place-name').data('district');
+            let state = $(e.target).siblings('.place-name').data('state');
+            let id = $(e.target).siblings('.place-name').data('id');
+
+            console.log({
+                text,
+                name,
+                locality,
+                district,
+                state,
+                id
+            })
+
+            if (text.trim() == 'ADD') {
+                if (Collection.places.every((item) => String(item.id) != String(id))) {
+                    Collection.places.push({
+                        id,
+                        name,
+                        district,
+                        locality,
+                        state
+                    });
+                }
+                $(e.target).html('REMOVE');
+                $(e.target).removeClass('btn-outline-success');
+                $(e.target).addClass('btn-outline-danger');
+            } else {
+                Collection.places = Collection.places.filter((item) => String(item.id) != String(id));
+                $(e.target).html('ADD');
+                $(e.target).removeClass('btn-outline-danger')
+                $(e.target).addClass('btn-outline-success');
+
+            }
+
+            if (Collection.places.length > 0) {
+
+                $("#InCollection .list-group").html('');
+                Collection.places.forEach(place => {
+                    $("#InCollection .list-group").append(
+                        `
+                        <li class="list-group-item d-flex  flex-row py-1">
+                            <div class="col-9  d-flex  flex-column">
+                                <label class="mb-0">${place.name}</label>
+                                <span class="text-muted font-weight-normal">${place.district} ${place.locality ? ', '+place.locality : ''}</span>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" data-id="${String(place.id)}" onclick="removePlace(event)" class="btn btn-link text-danger  btn-sm float-right">Remove</button>
+
+                            </div>
+                        </li>
+                        `
+                    );
+                });
+
+                $("#InCollection .collection-default").hide();
+                $("#InCollection .list-group").show();
+
+
+            } else {
+
+                $("#InCollection .collection-default").show();
+                $("#InCollection .list-group").hide();
+
+
+            }
+
+
+            console.log({
+                Collection
+            });
+
+            // update collection state
+            $("#placesCountId").html(Collection.places.length);
+
+
+
+        });
+
+
+
+    });
+
+
+    // remove place from collection
+    // remove place from collection
+    function removePlace(e) {
+        const l = Collection.places.length;
+        const id = $(e.target).data('id');
+        console.log({
+            id,
+            l
+        })
+        if (id) {
+            const a = Collection.places.filter((item) => {
+                console.log(String(item.id) != String(id) ? true : false);
+                return String(item.id) != String(id);
+            });
+
+            Collection['places'] = a;
+            $("#createEventForm #placesCountId").html(Collection.places.length);
+
+            console.log({
+                a,
+                'l': Collection.places.length
+            });
+            console.log({
+                'Places': Collection.places
+            });
+            $(e.target).parent().parent().remove();
+
+            // change remove to add on placeNameResultList
+            $(`#${id}_btn`).html('ADD').removeClass('btn-outline-danger').addClass('btn-outline-success');
+
+        }
+    }
+
+    // search places
+
+
+    function searchPosts(e, prevSkip = 0, skip = 0, total = null) {
+        e.preventDefault();
+
+        console.log("Searching...");
+        let stext = $("#placeNameInputId").val();
+        let slocation = $("#locationInputId").val();
+        if (stext.length > 1 && slocation.length > 1) {
+
+            console.log('Validate: true');
+            $("#placeNameInputId").siblings(".input-group-append").children("button").html(
+                `<div class="spinner-border text-muted spinner-border-sm"></div>`
+            );
+            const rootDomain =
+                `${location.protocol}//${window.location.hostname}${location.port ? ':'+location.port: ''}`;
+
+            $.get(rootDomain + '/search/ajax?stext=' + stext + '&slocation=' + slocation + '&total=' + total +
+                    '&skip=' + skip, (data,
+                        status) => {
+                        console.log({
+                            data
+                        });
+                        if (status == 'success' && data.posts && data.posts.length > 0) {
+
+                            if (prevSkip == 0) {
+                                $("#placeNameResultList").html('');
+                            }
+                            $("#placeNameResultList").show();
+                            console.log({
+                                data
+                            });
+                            data.posts.forEach(element => {
+                                const notAdded = Collection.places.every((item) => String(item.id) != String(
+                                    element._id));
+                                $("#placeNameResultList").append(
+                                    `<li href="#" class=" list-group-item list-group-item-action">
+                                <span 
+                                style="width: 90%" 
+                                class="place-name" 
+                                data-id="${element._id}" 
+                                data-name="${element.name}"
+                                data-state="${element.address.state.name}"
+                                data-district="${element.address.district.name}"
+                                data-locality="${element.address.locality.name}"
+                                >
+                                ${element.name}<br/>
+                                </span>
+                                <span class="text-muted font-weight-normal"> 
+                                    ${element.address.district.name} ${element.address.locality.name ? ', '+element.address.locality.name :''}
+                                </span>
+                                <button id="${element._id}_btn" class="btn btn-sm ${ notAdded ? 'btn-outline-success': 'btn-outline-danger' } shadow-none float-right" >
+                                            ${ notAdded ?  'ADD':'REMOVE' }
+                                </button>
+                                </li>`
+                                );
+                            });
+
+                            if (prevSkip < data.total && data.total > 7 && (data.total - (prevSkip + 7)) > 0) {
+
+                                skip = skip + 7;
+                                prevSkip = skip;
+                                $("#placeNameResultList").siblings(".load-more").remove();
+                                $("#placeNameResultList ").after(`
+                            <div class="load-more p-0 ">
+                                <button onclick="searchPosts(event , ${prevSkip} , ${skip}, ${data.total})" 
+                                    class="btn-sm form-control btn btn-block text-center btn-light" style="background-color: #dddfe0;">
+                                    Load more ${data.total - prevSkip}
+                                </button>
+                            </div>
+                        `);
+
+                            } else {
+                                $("#placeNameResultList").siblings(".load-more").remove();
+                            }
+
+                            $("#placeNameInputId").siblings(".input-group-append").children("button").html(
+                                `<i class="fal fa-search  "></i>`
+                            );
+
+                        } else {
+                            $("#placeNameInputId").siblings(".input-group-append").children("button").html(
+                                `<i class="fal fa-search  "></i>`
+                            );
+                        }
+                    })
+                .fail((e) => {
+                    console.log({
+                        e
+                    });
+                    $("#placeNameInputId").siblings(".input-group-append").children("button").html(
+                        `<i class="fal fa-search  "></i>`
+                    );
+                });
+
+        }
+    }
+
+    // functions --------------------
+
+    // show collection cover image
+    function filePreview(input) {
+        // const file = $(event.target).files[0]);
+        console.log({
+            input
+        });
+        const file = input.files[0];
+        console.log("input file - ", file);
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                // $('.file-preview').children().remove();
+                $('#createEventForm .first .cover-image').show();
+                $('#createEventForm .first .cover-image').css({
+                    'background-image': `url(${e.target.result})`,
+                    'height': '150px'
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // submit 1st form - cover-image,name,description
+    function submitFirstForm(e) {
+        console.log('adding places', e);
+
+
+        // trim inputs
+        const form = $("#createEventForm")[0];
+        for (let i = 0; i < form.length; i++) {
+            console.log(i + ' -' + $(form[i]).prop('name'), '-', $(form[i]).val());
+            if ( $(form[i]).prop('type') != 'file') {
+                $(form[i]).val($(form[i]).val().trim());
+            }
+        }
+
+
+        const formData = new FormData(form);
+        let keys = [];
+        for (let entries of formData.entries()) {
+            keys.push(entries[0]);
+        }
+        console.log({
+            keys
+        });
+        console.log(keys.length);
+
+        // validate form
+        for (let entries of formData.entries()) {
+            console.log(entries[0], '-', entries[1]);
+            if (!entries[1] || entries[1] == '' || entries[1] == null || typeof entries[1] == 'undefined') {
+                alert('All fields are required.');
+                return false;
+                break;
+
+            } else {
+
+            }
+            console.log("Looping...");
+
+        }
+        
+        // let status = $('#createEventForm input[name="status"]').prop('checked');
+        // formData.set('status', status);
+
+        let file = formData.get('cover-image');
+        
+         if (!file || !file.name) {
+            alert('Please select a cover image');
+        } else if (Number(file.size) / (1024 * 1024) > 5 && (file.type != 'image/png' || file.type !=
+                'image/jpg')) {
+            alert('Image size should be less than 5mb and of type jpeg or png. ');
+        } else {
+
+            // upload
+            const rootDomain =
+                `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+            formData.append('places', JSON.stringify(Collection.places));
+            $(e.target).html(`<div class="spinner-border text-white spinner-border-sm"></div> Saving`);
+            $.ajax({
+                url: `${rootDomain}/users/events/create`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (data) {
+                    console.log('Form submitted');
+                    console.log({
+                        data
+                    });
+                    console.log("Event: ", data ? data : null);
+
+                    // show erro
+                    if (!data) {
+                        // error occurred
+                        alert('Unexpected error occurred. Please try again.');
+                    } else if (data) {
+                        // success exit modal
+                        $(e.target).html(`SAVED!`);
+                        // fetchEvents();
+                        setTimeout(() => {
+                            $(e.target).html(`SAVE`);
+                            $("#createEventModal").modal('hide');
+                            showSuccessAlert('Your event will be listed shortly after completing verification process. Please wait till then.', 3000);
+                        }, 1000);
+
+
+                    }
+                },
+                error: function (data) {
+                    console.log('Error');
+                    $(e.target).html(`SAVE`);
+                    alert('Error occurred. Please try again.');
+
+                }
+            });
+        }
+    }
+
+    // show add places tab
+    function showAddPlacesTab(e) {
+        e.preventDefault();
+
+        // overwrite collection id
+        // $("#createEventForm #collectionId").val(collectionId);
+
+        // change modal title 
+        $("#createEventModal .modal-title").html('ADD PLACES');
+
+        // show add places tab
+        $("#createEventModal section.first").addClass('d-none');
+        $("#createEventModal section.second").removeClass('d-none');
+
+    };
+
+    function checkStatus(e) {
+        const checked = $(e.target).prop('checked');
+
+        $(e.target).siblings("label").html(checked ? 'Active' : 'Inactive');
+    }
+
+    $(document).ready(e => {
+        // init from
+        // let hours = [...Array(25).keys()];
+        const range = (start, stop, step = 1) =>
+            Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step);
+        let hours = range(0, 24.5, .5);
+        hours.splice(0, 1);
+        const hoursWithPeriods = hours.map(hour => {
+
+            if (hour == 12)
+                return `${hour}:00 Noon`;
+            else if (hour == 24)
+                return `${hour}:00 Midnight`;
+            else if (hour > 12 && hour < 24)
+                return Number.isInteger(hour) ? `${hour}:00 PM` : `${hour - 0.5}:30 PM`;
+            else
+                return Number.isInteger(hour) ? `${hour}:00 AM` : `${hour - 0.5}:30 AM`;
+
+        });
+
+        hoursWithPeriods.forEach(time => {
+            $('#editEventForm select[name="from_time"]').append(`<option value="${time}" >${time}</option>`);
+            $('#editEventForm select[name="to_time"]').append(`<option value="${time}" >${time}</option>`);
+            $('#createEventForm select[name="from_time"]').append(`<option value="${time}" >${time}</option>`);
+            $('#createEventForm select[name="to_time"]').append(`<option value="${time}" >${time}</option>`);
+        });
+
+        // $('#timing_day_add').html(body);
+
+        // add state 
+        $.get(`${rootDomain}/search/states/get`, (data, status) => {
+            if (status == 'success' && data.length > 0) {
+                console.log({
+                    data
+                });
+                $("#createEventForm select[name='state'] option:not(:first-child)").remove();
+
+                data.forEach(state => {
+                    $("#createEventForm select[name='state']").append(
+                        `<option data-id="${state._id}" value="${state._id}" data-name="${state.name}">${state.name}</option>`
+                    );
+                });
+            } else {
+                showDangerAlert('Error occured');
+            }
+        }).fail(e => {
+            console.log({
+                e
+            });
+            showDangerAlert('Failed to fetch states');
+        });
+
+
+    });
+
+    function fetchUserDistricts() {
+        const stateId = $("#createEventForm select[name='state'] option:selected").data('id');
+        console.log({stateId});
+        if (!stateId) {
+            return;
+        } else {
+            $.post(`${rootDomain}/search/districts/get`, {stateId}, (data, status) => {
+                if (status == 'success' && data.length > 0) {
+                    console.log({
+                        data
+                    })
+                    $("#createEventForm select[name='district'] option:not(:first-child)").remove();
+                    data.forEach(state => {
+                        $("#createEventForm select[name='district']").append(
+                            `<option data-id="${state._id}" value="${state._id}" data-name="${state.name}">${state.name}</option>`
+                        );
+                    });
+                } else {
+                    showDangerAlert('Error occured');
+                }
+            }).fail(e => {
+                console.log({
+                    e
+                });
+                showDangerAlert('Failed to fetch states');
+            });
+        }
+    }
+
+    function fetchLocalities() {
+        const districtId = $("#createEventForm select[name='district'] option:selected").data('id');
+        console.log({districtId});
+        if (!districtId) {
+            return;
+        } else {
+            $.post(`${rootDomain}/search/localities/get`, {districtId}, (data, status) => {
+                if (status == 'success' && data.length > 0) {
+                    console.log({
+                        data
+                    })
+                    $("#createEventForm select[name='locality'] option:not(:first-child)").remove();
+                    data.forEach(state => {
+                        $("#createEventForm select[name='locality']").append(
+                            `<option data-id="${state._id}" value="${state._id}" data-name="${state.name}">${state.name}</option>`
+                        );
+                    });
+                } else {
+                    showDangerAlert('Error occured');
+                }
+            }).fail(e => {
+                console.log({
+                    e
+                });
+                showDangerAlert('Failed to fetch states');
+            });
+        }
+    }
+
+</script>

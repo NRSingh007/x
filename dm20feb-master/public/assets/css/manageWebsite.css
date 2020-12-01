@@ -1,0 +1,124 @@
+body {
+  background: #f9f9f9;
+}
+
+.manage-website .right-content {
+  background-color: #fff;
+  min-height: 100vh;
+}
+
+.manage-website .modal-title {
+  text-transform: uppercase;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.manage-website .main-body .tab-content .tab-pane .tab-body {
+  padding: 15px;
+  margin: 30px 20px;
+}
+
+.manage-website .main-body .tab-content .tab-pane .tab-body form .cover-image {
+  width: 100%;
+  min-height: 200px;
+  height: auto;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-image: url("/assets/img/bg-abstract-lg.jpg");
+  display: none;
+}
+
+.manage-website .main-body .tab-content .tab-pane .tab-body form .form-group label {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.manage-website .main-body .tab-content .tab-pane .tab-body form .input-group .input-group-append {
+  position: absolute;
+  right: 1;
+  top: 2px;
+  z-index: 9999;
+  overflow: hidden;
+  background: #fff;
+  border: none;
+}
+
+.manage-website .main-body .tab-content .tab-pane .tab-body form .input-group .input-group-append i {
+  color: #b3acac;
+}
+
+.manage-website .main-body .tab-content .tab-pane .tab-body form .list-group .list-group-item {
+  padding: 5px 15px;
+  font-weight: 500;
+}
+
+.manage-website .main-body .tab-content .tab-pane .tab-body .nav-tabs .nav-link {
+  border: none;
+  border-bottom: 2px solid #e9ecef #e9ecef #dee2e6;
+}
+
+.manage-website .main-body .tab-content .tab-pane .tab-body .nav-tabs.nav-justified .nav-link {
+  border: none;
+  border-bottom: 2px solid #e9ecef #e9ecef #dee2e6;
+}
+
+.manage-website .main-body .tab-content .tab-pane .tab-body .nav-tabs.nav-justified .nav-link.active {
+  font-weight: 700;
+  border-bottom: 2px solid #1f1e1e;
+}
+
+.manage-website .main-body .tab-content .tab-pane .tab-body #placeNameResultList, .manage-website .main-body .tab-content .tab-pane .tab-body #placeNameResultListEC {
+  max-height: 42vh;
+  overflow-y: scroll;
+}
+
+.manage-website .main-body .tab-content .tab-pane .tab-body #InCollection, .manage-website .main-body .tab-content .tab-pane .tab-body #InCollectionEC {
+  max-height: 60vh;
+  overflow-y: scroll;
+}
+
+.manage-website .modal.fade .modal-dialog.modal-dialog-zoom {
+  -webkit-transform: translate(0, 0) scale(0.5);
+  transform: translate(0, 0) scale(0.5);
+}
+
+.manage-website .modal.show .modal-dialog.modal-dialog-zoom {
+  -webkit-transform: translate(0, 0) scale(1);
+  transform: translate(0, 0) scale(1);
+}
+
+.manage-website #manageSC .cover-image {
+  max-height: 150px;
+  height: 150px;
+  display: none;
+  border: 1px solid #fcfcfcb4;
+  margin: 10px 0;
+  background-position: center;
+  background-size: cover;
+}
+
+.manage-website #manageSC .form-group label {
+  font-weight: 600;
+  margin-top: 5px;
+  color: grey;
+}
+
+.cover-image {
+  max-height: 150px;
+  height: 150px;
+  display: none;
+  border: 1px solid #fcfcfcb4;
+  margin: 10px 0;
+  background-position: center;
+  background-size: cover;
+}
+
+.site-nav {
+  margin-top: 50px;
+}
+
+.site-nav a {
+  padding: 5px 15px;
+}
+/*# sourceMappingURL=manageWebsite.css.map */

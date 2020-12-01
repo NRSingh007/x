@@ -1,0 +1,2132 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    
+
+
+</head>
+
+<body class="admin-page">
+
+    <%- include('./../../includes/alert'); %>
+
+    <% if ( typeof post != 'undefined') { %>
+    <input hidden name="postId" value="<%= post._id %>" type="text" id="postId"/>
+        <% } %>
+
+    <section class="main-body container-fluid row mx-0 px-0">
+
+        <!-- Left column navigation  -->
+        <%- include('./../../includes/adminNavigation.ejs') %>
+
+        <!-- Right column main body -->
+        <div class="col-10  main-col px-0" ">
+
+            <!-- Top navigation -->
+            <section class=" container nav-container mx-0">
+                    <div class="d-flex nav-header  bg-white  py-2 px-3  " style="width: 100%;">
+
+                        <div class="dropdown dropdown-menu-right ml-auto" style="color: black;">
+                            <button class="shadow-none btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
+                                type="button">
+                                <% if( typeof user.images.profile.common.url != "undefined" && user.images.profile.common.url) { %>
+                                <img class="rounded-circle" src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                    style="width: 25px;height: 25px;margin-right: 5px;">
+                                <% } else { %>
+                                <i class="fad fa-user-shield font-weight-bold"></i>
+                                <% } %>
+
+                                <span class="px-1">
+                                    <%= `${user.name.firstName}` %>
+                                </span>
+                            </button>
+                            <div class="dropdown-menu text-secondary" role="menu"
+                                style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                                <i class="fal fa-angle-up"  style="
+                                color: #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 10px;
+                                font-size: 22px;
+                                z-index: 999;
+                                "></i>
+                                <a class="dropdown-item" role="presentation" href="#" style="color: black;">Profile</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Notifications</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Settings</a>
+                                <hr style="margin: 0;">
+                                <form action="/auth/logout?via=admin" method="POST">
+                                    <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                        role="presentation">Logout</button>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+            </section>
+
+            <!-- main content -->
+            <div class="container p-5 " id="postEditContainer">
+
+                <div class="row" style="position: absolute;
+                right: 50px;
+                top: 0;
+                z-index: 1">
+            
+                    <div class="toast" data-delay="5000">
+                        <div class="toast-header">
+                            <strong class="mr-auto text-primary"></strong>
+                            <!-- <small class="text-muted">5 mins ago</small> -->
+                            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                        </div>
+                        <div class="toast-body">
+            
+                        </div>
+                    </div>
+                </div>
+            
+            
+            
+                <section class="row px-3">
+                    <div class="col bg-white p-3 rounded border">
+                        <div class="row px-0 my-2 py-1">
+                            <div class="col text-center">
+                                <span>
+                                    <h5 class="display-4">Edit post</h5>
+                                    <hr>
+            
+                                </span>
+                            </div>
+            
+                        </div>
+            
+                        <div id="searchBoxEditPost" class="">
+                            <div class="row px-0 my-2 py-1">
+                                <div class="col-8 text-center input-group mx-auto">
+            
+                                    <input autocomplete="off" type="text" class="form-control" style="" name="searchpostAllPost"
+                                        id="searchpostEditPost" class="form-control" placeholder=" Enter post name to search..."
+                                        id="">
+            
+                                    <button class="btn btn-outline-secondary" onclick="searchpostEditPost()"
+                                        style="color: initial; cursor: pointer;">
+                                        Search
+                                        <!-- <i class="fa fa-search text-secondary"></i> -->
+                                    </button>
+                                </div>
+            
+            
+            
+                            </div>
+                            <ul class="list-group px-0 my-2 py-2" id="search_post_list">
+            
+                            </ul>
+                        </div>
+            
+            
+            
+            
+                        <form name="edit_post" id="update_edit_post_form" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="postEditId" value="" id="postEditId">
+            
+                            <div class="postEdits-list row">
+                                <div class="col-md-5 col-sm-12 col-lg-5">
+                                    <!-- <h4 class="text-capitalize my-3 text-muted font-weight-normal">Select user <span
+                                            class="text-muted font-weight-normal small">[optional]</span></h4>
+            
+                                    <div class="form-group">
+                                        <select required onchange="" class="custom-select" id="post_user_edit"
+                                            name="post_user_edit">
+                                            <option value="" selected hidden disabled>Default user</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group search-user-edit row mx-0">
+                                        <div class="col-9 px-0">
+                                            <input type="text" class="form-control" id="search-user-input"
+                                                placeholder="Search user with email or name">
+                                        </div>
+                                        <div class="col-3 pr-0">
+                                            <button type="button" class="btn-outline-secondary form-control"
+                                                id="search-user-btn-edit" onclick="searchUserEdit(event)">Search</button>
+                                        </div>
+                                    </div> -->
+            
+            
+            
+                                    <h4 class="text-capitalize my-3 text-muted font-weight-normal">Post added by</h4>
+                                    <div class="mt-3" >
+                                        <a class="badge badge-pill badge-info" href="" id="postAddedByLink" target="_blank"></a>
+                                        
+                                    </div>
+                                    <h4 class="text-capitalize my-3 text-muted font-weight-normal">Basic information</h4>
+                                    <div class="form-group">
+                                        <!-- <label for="company_name">Name</label> -->
+                                        <input required autocomplete="off" type="text" class="form-control" id="company_name_edit"
+                                            name="company_name" placeholder="Company name">
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="company_email">Email</label> -->
+                                        <input autocomplete="off" type="email" class="form-control" id="company_email_edit"
+                                            name="company_email" placeholder="Company email">
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="company_website">Email</label> -->
+                                        <input autocomplete="off" type="text" class="form-control" id="company_website_edit"
+                                            name="company_website" placeholder="Company website">
+                                    </div>
+            
+                                    <div class="form-group">
+                                        <!-- <label for="company_website">Email</label> -->
+                                        <textarea placeholder="Brief description" class="form-control" rows="5"
+                                            id="company_description_edit" name="company_description"></textarea>
+                                    </div>
+            
+            
+            
+            
+                                    <h4 class="text-capitalize my-3 text-muted font-weight-normal">Contact information</h4>
+                                    <div class="form-group">
+                                        <!-- <label for="owner_contact_name">Mobile</label> -->
+                                        <input required autocomplete="off" type="text" class="form-control"
+                                            id="owner_contact_name_edit" name="owner_contact_name" placeholder="Contact/owner name">
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="company_mobile1">Mobile</label> -->
+                                        <input autocomplete="off" type="number" class="form-control" id="owner_mobile1_edit"
+                                            name="company_mobile1" placeholder="Mobile number" minlength="10" maxlength="10">
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="company_mobile_optional">Mobile</label> -->
+                                        <input autocomplete="off" type="number" class="form-control" id="owner_mobile_optional_edit"
+                                            name="company_mobile_optional" placeholder="Optional mobile number" minlength="10"
+                                            maxlength="10">
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="owner_telephone1">Mobile</label> -->
+                                        <input autocomplete="off" type="number" class="form-control" id="owner_telephone1_edit"
+                                            name="company_telephone1" placeholder="Telephone number" minlength="6" maxlength="15">
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="owner_telephone_optional">Mobile</label> -->
+                                        <input autocomplete="off" type="number" class="form-control"
+                                            id="owner_telephone_optional_edit" name="company_telephone_optional"
+                                            placeholder="Optional telephone number" minlength="6" maxlength="15">
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="owner_email">Mobile</label> -->
+                                        <input autocomplete="off" type="email" class="form-control" id="owner_email_edit"
+                                            name="owner_email" placeholder="Email">
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="owner_email_optional_edit">Mobile</label> -->
+                                        <input autocomplete="off" type="email" class="form-control" id="owner_email_optional_edit"
+                                            name="owner_email_optional" placeholder="Optional email">
+                                    </div>
+            
+                                    <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Category</h4>
+                                    <div class="form-group">
+                                        <!-- <label for="company_locality_address">Email</label> -->
+                                        <select required onchange="fetchSubcategoryAndKeywordsEditPost()"
+                                            onchange="(function(){  $('#selected_category_name').val( $('#category_edit option').attr('selected').html() ) })()"
+                                            class="custom-select" id="category_edit" name="category">
+                                            <option value="" selected hidden disabled>Category</option>
+                                        </select>
+                                        <input type="hidden" name="selected_category_name" id="selected_category_name">
+                                        <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address_edit" name="company_locality_address"
+                                            placeholder="Locality"> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="company_locality_address">Email</label> -->
+                                        <select
+                                            onchange="(function(){  $('#selected_subcategory_name').val( $('#subcategory_edit option:selected').html() ) })()"
+                                            required class="custom-select" id="subcategory_edit" name="subcategory">
+                                            <option value="" selected hidden disabled>Sub-category</option>
+                                        </select>
+                                        <input type="hidden" name="selected_subcategory_name" id="selected_subcategory_name">
+            
+                                        <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address_edit" name="company_locality_address"
+                                            placeholder="Locality"> -->
+                                    </div>
+                                    <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Keywords</h4>
+                                    <div class="form-group">
+                                        <!-- <label for="company_locality_address">Email</label> -->
+                                        <select required multiple size="6" class="custom-select" id="company_keywords_edit"
+                                            name="company_keywords">
+                                            <option value="" selected hidden disabled>Keywords</option>
+                                        </select>
+                                        <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address_edit" name="company_locality_address"
+                                            placeholder="Locality"> -->
+                                    </div>
+                                    <script>
+                                        $("#postEditContainer #company_keywords_edit").change(function () {
+                                            console.log($(this).find("option:selected").length, ' keywords selected ');
+            
+                                            if ($(this).find("option:selected").length > 5) {
+                                                console.log('selected more than 5');
+            
+                                                let selected = $(this).find("option:selected");
+                                                selected = Object.values(selected);
+                                                for (let i = 5; i < selected.length; i++) {
+                                                    console.log('Deselecting ', $(selected[i]).html());
+                                                    $(selected[i]).prop("selected", "selected");
+                                                    $(selected[i]).prop('selected', false);
+                                                }
+            
+                                            }
+                                        });
+                                    </script>
+            
+            
+                                    <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Timings</h4>
+                                    <div class="row form-group">
+                                        <div class="col-8 pr-2">
+                                            <select class="custom-select" id="timing_day_edit" name="timing_day">
+                                                <option value="" selected hidden disabled>Day</option>
+            
+                                            </select>
+                                        </div>
+                                        <div class="col-4 pl-1">
+                                            <button onclick="timingsControl.addClosedDay(event)"
+                                                class="shadow-none  btn btn-outline-secondary btn-block">Close</button>
+                                        </div>
+            
+            
+                                    </div>
+                                    <div class="row mx-0 form-group d-flex justify-content-between">
+                                        <div class="" style="width: 31%;">
+                                            <select class="custom-select" id="timing_from_edit" name="timing_from">
+                                                <option value="" selected hidden disabled>From</option>
+            
+                                            </select>
+                                        </div>
+                                        <div class="" style="width: 31%;">
+                                            <select class="custom-select" id="timing_to_edit" name="timing_to">
+                                                <option value="" selected hidden disabled>To</option>
+            
+                                            </select>
+                                        </div>
+                                        <div class="" style="width: 31%;">
+                                            <button class="shadow-none btn btn-outline-secondary btn-block"
+                                                onclick="timingsControl.addTime(event)">Add</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group d-block" id="time-slot-display">
+            
+                                    </div>
+            
+                                    <div class="form-group mt-4 ">
+                                        <div class="d-flex  flex-fill justify-content-start align-items-center">
+                                            <h4 class="text-muted mr-3 col-4 pl-0 text-muted font-weight-normal	">Status</h4>
+            
+                                            <div class="custom-control col-6 custom-switch">
+                                                <input name="status" onchange="checkStatusEditPost(event)" type="checkbox"
+                                                    class="custom-control-input" id="StatusEdit">
+                                                <label class="custom-control-label" for="StatusEdit">Inactive</label>
+                                            </div>
+                                        </div>
+            
+                                    </div>
+                                    <div class="form-group 	mt-4">
+                                        <div class="d-flex  flex-fill  justify-content-start  align-items-center">
+                                            <h4 class="text-muted mr-3 col-4 pl-0 text-muted font-weight-normal">Verified</h4>
+            
+                                            <div class="custom-control col-6 custom-switch">
+                                                <input name="verified" type="checkbox" onchange="checkVerifiedEditPost(event)"
+                                                    class="custom-control-input" id="VerifiedEdit">
+                                                <label class="custom-control-label" for="VerifiedEdit">Not verified</label>
+                                            </div>
+                                        </div>
+            
+                                    </div>
+            
+                                    
+            
+            
+                                </div>
+                                <div class="col-lg-5 col-md-5 col-sm-12">
+                                    <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Address</h4>
+                                    <div class="form-group">
+                                        <select required onchange="updateDistrictEditPost()" class="custom-select"
+                                            id="company_state_address_edit" name="company_state_address">
+                                            <option value="" selected hidden disabled>State</option>
+            
+                                        </select>
+                                        <!-- <label for="company_state_address">Email</label> -->
+                                        <!-- <input autocomplete="off"  type="text" class="form-control" id="company_state_address_edit" name="company_state_address"
+                                            placeholder="State"> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="company_district_address">Email</label> -->
+                                        <select onchange="fetchLocalityEditPost()" required class="custom-select"
+                                            id="company_district_address_edit" name="company_district_address">
+                                            <option value="" selected hidden disabled>District</option>
+                                        </select>
+                                        <!-- <input autocomplete="off"  type="text" class="form-control" id="company_district_address_edit" name="company_district_address"
+                                            placeholder="District"> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="company_locality_address">Email</label> -->
+                                        <select required class="custom-select" id="company_locality_address_edit"
+                                            name="company_locality_address">
+                                            <option value="" selected hidden disabled>Locality</option>
+                                        </select>
+                                        <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address_edit" name="company_locality_address"
+                                            placeholder="Locality"> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="company_sublocality_address">Email</label> -->
+                                        <input required autocomplete="off" type="text" class="form-control"
+                                            id="company_street_address_edit" name="company_street_address"
+                                            placeholder="Street address">
+                                        <!-- <select class="custom-select" id="company_sublocality_address_edit"
+                                            name="company_sublocality_address">
+                                            <option value=""  selected hidden  disabled>Sub-locality</option>
+                                        </select> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="company_building_apartment_address">Email</label> -->
+                                        <input autocomplete="off" type="text" class="form-control"
+                                            id="company_building_apartment_address_edit" name="company_building_apartment_address"
+                                            placeholder="Building/Apartment">
+                                    </div>
+            
+                                    <div class="form-group">
+                                        <!-- <label for="company_landmarks_address">Email</label> -->
+                                        <input autocomplete="off" type="text" class="form-control"
+                                            id="company_landmarks_address_edit" name="company_landmarks_address"
+                                            placeholder="Landmarks">
+                                    </div>
+                                    <div class="form-group">
+                                        <!-- <label for="company_pincode_address">Email</label> -->
+                                        <input autocomplete="off" type="number" class="form-control"
+                                            id="company_pincode_address_edit" name="company_pincode_address" placeholder="Pincode"
+                                            minlength="6" maxlength="6">
+                                    </div>
+                                    <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Location</h4>
+            
+                                    <div class="form-group">
+                                        <!-- <label for="company_pincode_address">Email</label> -->
+                                        <div id="dynamic_map_edit" style="height: 350px; width: 100%; " class="form-control"></div>
+                                        <input type="text" name="lat" hidden>
+                                        <input type="text" name="lng" hidden>
+            
+                                    </div>
+            
+                                    <script>
+                                        var mapEDIT, markerEDIT, infowindowEDIT;
+                                        // const kanglaPosition = { lat: 24.807, lng: 93.938 };
+                                        var markedLocationEDIT;
+            
+                                        function googleDynamicMapEditPost() {
+            
+                                            // KANGLA TRAFFIC ISLAND
+                                            const kanglaPosition = {
+                                                lat: 24.807,
+                                                lng: 93.938
+                                            };
+            
+            
+                                            function init() {
+            
+                                                console.log('%cINIT: google map ', 'color: red');
+            
+                                                mapEDIT = new google.maps.Map(document.getElementById('dynamic_map_edit'), {
+                                                    center: kanglaPosition,
+                                                    disableDefaultUI: true,
+                                                    zoom: 9,
+                                                    mapTypeId: 'roadmap',
+                                                    mapTypeControl: false,
+                                                    streetViewControl: false,
+                                                    zoomControl: true,
+                                                    fullscreenControl: true,
+                                                    // Preventing map pan and zoom on page scroll
+                                                    gestureHandling: 'cooperative'
+                                                });
+            
+                                                console.log({
+                                                    mapEDIT
+                                                });
+            
+                                                markerEDIT = new google.maps.Marker({
+                                                    position: kanglaPosition,
+                                                    map: mapEDIT
+                                                });
+                                                infowindowEDIT = new google.maps.InfoWindow({
+                                                    content: "Selected location.",
+                                                    position: kanglaPosition
+                                                });
+            
+                                                mapEDIT.addListener('click', function (e) {
+                                                    markedLocationEDIT = {
+                                                        lat: e.latLng.lat(),
+                                                        lng: e.latLng.lng()
+                                                    };
+                                                    setSelectedLocation(e.latLng.lat(), e.latLng.lng())
+                                                    // console.log({ markedLocation });
+                                                    changeMarkerAndPanTo(e.latLng);
+                                                });
+            
+                                            }
+            
+                                            function changeMarkerAndPanTo(latLng) {
+                                                console.log('%cCHANGING: google map changeMarkerAndPanTo', 'color: red');
+                                                console.log('%GETTER: google map marker position', 'color: red');
+                                                console.log({
+                                                    markedLocationEDIT
+                                                });
+            
+                                                markerEDIT.setPosition(latLng);
+                                                mapEDIT.panTo(latLng);
+            
+                                            }
+            
+                                            function setSelectedLocation(lat, lng) {
+                                                console.log('%GETTER: google map setting position', 'color: red');
+            
+                                                $("#postEditContainer input[name='lat']").val(lat);
+                                                $("#postEditContainer input[name='lng']").val(lng);
+                                            }
+            
+                                            function resetMarker() {
+                                                console.log('%RESETTING: google map ', 'color: red');
+            
+                                                markerEDIT.setPosition(kanglaPosition);
+                                                mapEDIT.panTo(kanglaPosition);
+            
+                                            }
+            
+                                            function getMap() {
+                                                console.log('%GETTER: google map ', 'color: red');
+                                                console.log({
+                                                    mapEDIT
+                                                });
+            
+                                                return mapEDIT;
+                                            }
+            
+                                            return {
+                                                getMap,
+                                                init,
+                                                resetMarker,
+                                                changeMarkerAndPanTo
+                                            };
+            
+                                        }
+                                    </script>
+            
+            
+                                    <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Photos</h4>
+            
+                                    <div class="custom-file my-1">
+                                        <input type="file" placeholder="Logo" class="custom-file-input" id="company_logo"
+                                            name="logo" accept=".jpg, .png, .jpeg">
+                                        <label class="custom-file-label" for="company_logo">Logo</label>
+                                    </div>
+                                    <div class="custom-file my-1">
+                                        <input type="file" placeholder="cover" class="custom-file-input" id="company_coverImage"
+                                            name="coverImage" accept=".jpg, .png, .jpeg">
+                                        <label class="custom-file-label" for="company_coverImage">cover</label>
+                                    </div>
+                                    <div class="custom-file my-1">
+                                        <input type="file" class="custom-file-input" id="customFile1" name="customFile1"
+                                            accept=".jpg, .png, .jpeg">
+                                        <label class="custom-file-label" for="customFile1">Image 1</label>
+                                    </div>
+                                    <div class="custom-file my-1">
+                                        <input type="file" class="custom-file-input" id="customFile2" name="customFile2"
+                                            accept=".jpg, .png, .jpeg">
+                                        <label class="custom-file-label" for="customFile2">Image 2</label>
+                                    </div>
+                                    <div class="custom-file my-1">
+                                        <input type="file" class="custom-file-input" id="customFile3" name="customFile3"
+                                            accept=".jpg, .png, .jpeg">
+                                        <label class="custom-file-label" for="customFile3">Image 3</label>
+                                    </div>
+                                    <div class="custom-file my-1">
+                                        <input type="file" class="custom-file-input" id="customFile4" name="customFile4"
+                                            accept=".jpg, .png, .jpeg">
+                                        <label class="custom-file-label" for="customFile4">Image 4</label>
+                                    </div>
+                                    <div class="custom-file my-1">
+                                        <input type="file" class="custom-file-input" id="customFile5" name="customFile5"
+                                            accept=".jpg, .png, .jpeg">
+                                        <label class="custom-file-label" for="customFile5">Image 5</label>
+                                    </div>
+                                    <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Documents</h4>
+            
+                                    <div class="row form-group " style="display: flex; align-items: center;">
+                                        <div class="col">
+                                            <div class="">
+                                                <!-- <label for="owner_contact_name">Mobile</label> -->
+                                                <input autocomplete="off" type="text" class="form-control" id="document1_name_edit"
+                                                    name="document1_name" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-file my-1">
+                                                <input type="file" placeholder="Logo" class="custom-file-input" id="document1_edit"
+                                                    name="document1" accept=".docx, .pdf">
+                                                <label class="custom-file-label" for="document1">Document 1</label>
+                                            </div>
+                                        </div>
+                                    </div>
+            
+                                    <div class="row form-group " style="display: flex; align-items: center;">
+                                        <div class="col">
+                                            <div class="">
+                                                <!-- <label for="owner_contact_name">Mobile</label> -->
+                                                <input autocomplete="off" type="text" class="form-control" id="document2_name_edit"
+                                                    name="document2_name" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-file my-1">
+                                                <input type="file" placeholder="Logo" class="custom-file-input" id="document2_edit"
+                                                    accept=".docx, .pdf" name="document2">
+                                                <label class="custom-file-label" for="document2">Document 2</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row form-group " style="display: flex; align-items: center;">
+                                        <div class="col">
+                                            <div class="">
+                                                <!-- <label for="owner_contact_name">Mobile</label> -->
+                                                <input autocomplete="off" type="text" class="form-control" id="document3_name_edit"
+                                                    name="document3_name" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="custom-file my-1">
+                                                <input type="file" placeholder="Logo" class="custom-file-input" id="document3_edit"
+                                                    accept=".docx, .pdf" name="document3">
+                                                <label class="custom-file-label" for="document3">Document 3</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <script>
+                                        // Add the following code if you want the name of the file appear on select
+                                        $(".custom-file-input").on("change", function () {
+                                            var fileName = $(this).val().split("\\").pop();
+                                            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+            
+                            <hr>
+                            <div class="row px-3 mx-3 justify-content-between ">
+            
+                                <!-- <input type="submit" id="submit-form-post" name="Save" class="btn btn-success px-3"> -->
+                                <button type="button" id="submit-form-post-update" onclick="submitForm(event)" name="Save"
+                                    class="btn btn-success px-3">Update</button>
+                                <button type="button" id="delete=post-btn" onclick="deletePost(event)" name="Save"
+                                    class="btn btn-danger px-3">Delete</button>
+                                <button type="reset" id="reset-form-editpost" class="btn btn-warning px-3"
+                                    onclick="resetEditForm()">Cancel</button>
+            
+            
+                            </div>
+                        </form>
+            
+                    </div>
+                </section>
+            
+            
+            
+            </div>
+
+        <!-- Right column main body ends here -->
+         </div>
+
+
+    </section>
+
+
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/fontawesome-pro-5.11.1-web/js/fontawesome.min.js"></script>
+    <script src="/assets/js/admin.js"></script>
+
+    <script>
+        // const rootDomain = `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+        // tab pane bug fix - problem in switching tabs between list anchor link and upper accordion button
+        // $(document).ready(() => {
+
+        //     $("button[data-toggle='tab'] , a[data-toggle='tab']").click((event) => {
+        //         console.log('tab click href: ', $(event.target).attr('href'));
+        //         const tabIdToShow = $(event.target).attr('href');
+
+        //         // hide all open tabs by removing active class
+        //         $("div.tab-pane").removeClass('active');
+        //         $(`${$(event.target).attr('href')}`).addClass('active');
+
+        //     });
+
+        // });
+
+        
+
+    </script>
+
+
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+
+<script>
+
+    $(document).ready(e=>{
+        const postId = $("#postId").val();
+        if ( postId ) {
+            getPostForEdit(postId);
+        }
+    });
+
+    let timings = {
+        monday: {
+
+        },
+        tuesday: {},
+        wednesday: {},
+        thursday: {},
+        friday: {},
+        saturday: {},
+        sunday: {},
+    };
+
+    // handle timings 
+    const timingsControl = {
+
+
+
+        init: function () {
+            console.log('%c Calling timings init() ', 'color: orange; font-weight: bold;');
+
+            // init days
+            const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+            let body;
+            days.forEach(day => {
+                $('#postEditContainer #timing_day_edit').append(
+                    `<option value="${day}" >${day.toUpperCase()}</option>`);
+            });
+
+            // init from
+            // let hours = [...Array(25).keys()];
+            const range = (start, stop, step = 1) =>
+                Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step);
+            let hours = range(0, 24.5, .5);
+            hours.splice(0, 1);
+            const hoursWithPeriods = hours.map(hour => {
+
+                if (hour == 12)
+                    return `${hour}:00 Noon`;
+                else if (hour == 24)
+                    return `${hour}:00 Midnight`;
+                else if (hour > 12 && hour < 24)
+                    return Number.isInteger(hour) ? `${hour}:00 PM` : `${hour - 0.5}:30 PM`;
+                else
+                    return Number.isInteger(hour) ? `${hour}:00 AM` : `${hour - 0.5}:30 AM`;
+
+            });
+
+            hoursWithPeriods.forEach(time => {
+                $('#postEditContainer #timing_from_edit').append(
+                    `<option value="${time}" >${time}</option>`);
+                $('#postEditContainer #timing_to_edit').append(
+                    `<option value="${time}" >${time}</option>`);
+            });
+
+            // $('#timing_day_edit').html(body);
+        },
+
+        addTime: function (e) {
+            console.log('%c ADDTIME  ', 'color: blue; font-weight: bold;');
+
+            e.preventDefault();
+            const day = $('#postEditContainer #timing_day_edit').val().trim().toLowerCase();
+            const from = $('#postEditContainer #timing_from_edit').val().trim();
+            const to = $('#postEditContainer #timing_to_edit').val().trim();
+
+            if (day && from && to) {
+                if (timings[day].slots && timings[day].slots.length < 3) {
+                    timings[day].slots.push(`${from} - ${to}`);
+                } else if (!timings[day].slots) {
+                    timings[day].slots = [`${from} - ${to}`];
+                }
+
+                // override if closed 
+                timings[day].closed = false;
+                this.refreshTime();
+            }
+        },
+
+        addClosedDay: function (e) {
+
+            e.preventDefault();
+            const day = $('#postEditContainer #timing_day_edit').val().trim().toLowerCase();
+
+            if (day) {
+                timings[day].closed = true;
+                timings[day].slots = [];
+                console.log('%c Operation: ADDCLOSEDAY DONE!,', 'color: orange; font-weight: bold;');
+                this.refreshTime();
+            } else {
+                console.log('%c Operation: ADDCLOSEDAY Failed!,', 'color: orange; font-weight: bold;');
+            }
+        },
+
+        removeClosedDay: function (e) {
+            const day = $('#postEditContainer #timing_day_edit').val().trim().toLowerCase();
+
+            if (day && from && to) {
+                timings[day].closed = false;
+            }
+        },
+
+        removeTime: function (day) {
+            console.log('%c Operation: removeTime !,', 'color: orange; font-weight: bold;');
+
+            if (day) {
+                timings[day.trim()] = {};
+                this.refreshTime();
+            }
+        },
+        refreshTime: function () {
+            $('#postEditContainer #time-slot-display').html('');
+            const entries = Object.entries(timings);
+
+
+            let body = '';
+            entries.forEach(item => {
+
+                if (item[1].slots || item[1].closed)
+                    body = body + `
+                    <li class='list-group-item d-flex'>
+                        <div class='col-4 text-capitalize text-left'>${item[0]} </div>`;
+                if (item[1].closed) {
+                    body = body + `<div class='col-7 px-0 text-left'>Closed</div>
+                        <div class="close-time">
+                            <i class="fa fa-times" aria-hidden="true" onclick="timingsControl.removeTime('${item[0]}')"></i>
+                        </div></li>`
+                } else if (item[1].slots) {
+                    body = body + `<div class='col-7 px-0 text-left'>${item[1].slots.toString()}</div> 
+                            <div class="close-time">
+                                <i class="fa fa-times" aria-hidden="true" onclick="timingsControl.removeTime('${item[0]}')"></i>
+                            </div>      
+                        </li>`
+                }
+
+            });
+
+
+            $('#postEditContainer #time-slot-display').html(`<ul class="list-group">${body}</ul>`);
+
+
+        }
+
+    };
+
+    // init timings
+    timingsControl.init();
+
+
+    // utils
+    Array.prototype.unique = function () {
+        return this.filter(function (value, index, self) {
+            console.log(self.indexOf(value) != index ? `${value, index}` : '');
+            return self.indexOf(value) === index;
+        });
+    }
+
+
+
+    Array.prototype.uniqueAndUndefined = function () {
+        return this.filter(function (value, index, self) {
+            console.log(self.indexOf(value) != index && typeof value != 'undefined' ? `${value, index}` :
+                '');
+            return self.indexOf(value) === index && typeof value != 'undefined';
+        });
+    }
+
+    function toggleValue(e) {
+        return $(e.target).is(':checked');
+    }
+
+    function checkVerifiedEditPost(e) {
+        if (toggleValue(e)) {
+            $(e.target).siblings('label').html('Verified');
+        } else {
+            $(e.target).siblings('label').html('Not verified');
+        }
+    }
+
+    function checkStatusEditPost(e) {
+        if (toggleValue(e)) {
+            $(e.target).siblings('label').html('Active');
+        } else {
+            $(e.target).siblings('label').html('Inactive');
+        }
+    }
+
+    $(document).ready(() => {
+
+        // hide form
+        $('#postEditContainer #update_edit_post_form').css('display', 'none');
+
+        // show required fields
+        const requiredFieldsObject = $(
+            "#postEditContainer form[name='edit_post'] input:required, #postEditContainer  form[name='edit_post'] textarea:required, form[name='edit_post'] select:required"
+        );
+        const requiredFields = Object.values(requiredFieldsObject).slice(0, requiredFieldsObject.length);;
+        // const requiredFieldsId = requiredFields.map(field => $(field).removeAttr('required'));
+        const requiredFieldsId = requiredFields.map(field => $(field).attr('id'));
+        const requiredFieldsIdUnique = requiredFieldsId.uniqueAndUndefined();
+
+        // console.log(requiredFieldsObject)
+
+        requiredFields.forEach(element => {
+            console.log($(element).attr('id'));
+
+            if (typeof element != 'undefined')
+                $(element).after(`
+                <span class="required" style="margin-top: -40px;">*</required>
+            `);
+        });
+        // console.log({ requiredFieldsIdUnique });
+
+        // const notRequiredFieldsObject = $(
+        //     "#postEditContainer  input:not(form[name='edit_post'] input:required) , #postEditContainer  textarea:not(form[name='edit_post'] textarea:required) , select:not(form[name='edit_post'] select:required) "
+        // );
+        // console.log({
+        //     notRequiredFieldsObject
+        // });
+
+        // init timings
+
+
+
+    });
+
+
+    function submitFormDataEditPost(filesUploaded, upload) {
+
+        console.log('Entering submitFormDataEditPost text fields', {
+            postDataConstant
+        });
+
+        // upload formdata even if no files are submitted
+        // And post only if more than 3 inputs [ already entered = "status_edit", "verified_edit", "company_keywords" ] are enter 
+        const formFileds = Object.keys(upload);
+
+        // new 
+        const state = $("#update_edit_post_form select[name='company_state_address'] option:selected").data();
+        const district = $("#update_edit_post_form select[name='company_district_address'] option:selected").data();
+        const locality = $("#update_edit_post_form select[name='company_locality_address'] option:selected").data();
+        const areaAndStreetAddress = $("#update_edit_post_form input[name='company_street_address']").val();
+        const building = $("#update_edit_post_form input[name='company_building_apartment_address']").val();
+        const landmark = $("#update_edit_post_form input[name='company_landmarks_address']").val();
+        const pincode = $("#update_edit_post_form input[name='company_pincode_address']").val();
+
+        const address = {
+            state,
+            district,
+            locality,
+            areaAndStreetAddress,
+            building,
+            landmark,
+            pincode
+        };
+
+        let category = $("#update_edit_post_form select[name='category'] option:selected").data();
+        const subCategory = $("#update_edit_post_form select[name='subcategory'] option:selected").data();
+        category['subCategory'] = subCategory;
+
+        const keywordsObj = $("#update_edit_post_form select[name='company_keywords'] option:selected");
+        let keywords = [];
+        for (let i = 0; i < keywordsObj.length; i++) {
+            keywords.push($(keywordsObj[i]).data());
+        }
+
+
+        // clean images and docs
+        // let images, docs;
+
+        postDataConstant.images.collection = postDataConstant.images.collection.filter( image => image && image.url && typeof image.url != 'undefined' && image.url != null && image.url != '');
+        postDataConstant.docs = postDataConstant.docs.filter( doc => doc && doc != '' && doc.url && typeof doc.url != 'undefined' );
+        // if (postDataConstant.docs) {
+        //     docs = postDataConstant.docs;
+        // } else {
+        //     docs = [];
+        // }
+
+        // const docsName = ['document1_name', 'document2_name', 'documen31_name'];
+
+        // let fieldsName = Object.keys(upload);
+        // docsName.forEach((name, i) => {
+
+        //     let index = fieldsName.indexOf(name);
+        //     if (index != -1 && docs[i]) {
+        //         if ( docsName[i] == null || typeof docsName[i] == 'undefined' ) return;
+        //         docs[i]['name'] = upload[docsName[i]];
+        //     } else if (index != -1 && !docs[i]) {
+        //         if ( docsName[i] == null || typeof docsName[i] == 'undefined' ) return;
+        //         docs.push({
+        //             name: upload[docsName[i]]
+        //         })
+        //     }
+
+        // });
+
+        if (filesUploaded) {
+            const filesKey = Object.keys(filesUploaded);
+            let imagesFileName = ['customFile1', 'customFile2', 'customFile3', 'customFile4', 'customFile5'];
+            let docsFileName = ['document1', 'document2', 'document3'];
+
+
+            filesKey.forEach(key => {
+
+                let index = imagesFileName.indexOf(key);
+                
+                if (index != -1 && postDataConstant.images['collection'][index] ) {
+                    console.log({
+                        index,
+                        fileName: imagesFileName[index],
+                        link: filesUploaded[imagesFileName[index]]
+                    });
+                    postDataConstant.images['collection'][index] = {
+                        url: filesUploaded[imagesFileName[index]]
+                    };
+                } else if ( index != -1 && !postDataConstant.images['collection'][index] ) {
+                    postDataConstant.images['collection'].push({
+                        url: filesUploaded[imagesFileName[index]]
+                    });
+                }
+
+                let index1 = docsFileName.indexOf(key);
+                if (index1 != -1 && postDataConstant.docs[index1] ) {
+                    console.log({
+                        index1,
+                        filename: docsFileName[index1],
+                        link: filesUploaded[docsFileName[index1]]
+                    })
+                    postDataConstant.docs[index1] = {
+                        url: filesUploaded[docsFileName[index1]],
+                        name: upload[`${docsFileName[index1]}_name`]
+                    };
+                } else if ( index != -1 && !postDataConstant.docs[index1] ) {
+                    postDataConstant.docs.push({
+                        url: filesUploaded[docsFileName[index]]
+                    });
+                }
+
+                if (key == 'logo') {
+                    postDataConstant.images['logo'] = {
+                        url: filesUploaded['logo']
+                    }
+                }
+
+                if (key == 'coverImage') {
+                    postDataConstant.images['coverImage'] = {
+                        url: filesUploaded['coverImage']
+                    }
+                }
+
+            });
+
+        }
+
+
+
+
+
+
+
+        console.log({
+            address,
+            category,
+            keywords
+        });
+
+        // userId: upload['post_user_edit'] ? upload['post_user_edit'] : null,
+
+        if ( !upload['lat'] ||  !upload['lng'] )  {
+            alert("Please select a location on map");
+            return false;
+        }
+
+        let data = {
+            geoLocation: {
+                coordinates: {
+                    lat: parseFloat(upload['lat']),
+                    lng: parseFloat(upload['lng'])
+                }
+            },
+            ownerDetails: {
+                email: [
+                    upload['owner_email'] ? upload['owner_email'] : null,
+                    upload['owner_email_optional'] ? upload['owner_email_optional'] : null
+                ],
+                name: upload['owner_contact_name'] ? upload['owner_contact_name'] : null
+            },
+            timings: timings,
+            address: address,
+            category: category,
+            images: postDataConstant.images,
+            verified: upload['verified'] == true ? true : false,
+            status: upload['status'] == true ? true : false,
+            openingStatus: false,
+            description: {
+                short: upload['company_description'] ? upload['company_description'] : null
+            },
+            name: upload['company_name'] ? upload['company_name'] : null,
+            email: upload['company_email'] ? upload['company_email'] : null,
+            website: upload['company_website'] ? upload['company_website'] : null,
+            mobileNumber: [{
+                    number: upload['company_mobile1'] ? upload['company_mobile1'] : null
+                },
+                {
+                    number: upload['company_mobile_optional'] ? upload['company_mobile_optional'] : null
+                }
+            ],
+            telephoneNumber: [{
+                    number: upload['company_telephone1'] ? upload['company_telephone1'] : null
+                },
+                {
+                    number: upload['company_telephone_optional'] ? upload['company_telephone_optional'] : null
+                }
+            ],
+            preference: null,
+            userPackageId: null,
+            userPackageDate: null,
+            postAmount: null,
+            price: null,
+            negotiable: null,
+            postCount: null,
+            docs: postDataConstant.docs,
+            // createdOn: Date.now(),
+            modifiedOn: Date.now(),
+            keywords: keywords
+
+        }
+        console.log('Final form data: ', data);
+
+        if (formFileds.length > 3) {
+            console.log('Submitting....');
+            $(" #postEditContainer #update_edit_post_form input[type='submit']").prop("disabled", true);
+
+            $.post(`${rootDomain}/admin/posts/update-post`, {
+                    postId: upload['postEditId'],
+                    postData: data
+                },
+                (data, status) => {
+                    if (status == 'success') {
+                        // console.log(data);
+                        console.log('form submitted ');
+
+                        showSuccessAlert(data.result);
+
+                        // *** Reset form 
+                        resetEditForm();
+
+                        setTimeout(() => {
+                                    location.replace(`${rootDomain}/admin/posts/recent`);
+                                }, 2000);
+
+
+                    }
+                }).fail((error) => {
+                console.log('Fail ', error);
+                $(' #postEditContainer  #update_edit_post_form input[type="submit"]').removeAttr("disabled");
+            });
+        }
+
+    }
+
+
+    // form submit handler
+    const submitForm = function (e) {
+        e.preventDefault();
+
+        console.log('%c Form submit handled', 'color: orange; font-weight: bold;');
+
+
+
+        var upload = new FormData(document.getElementById('update_edit_post_form'));
+        console.log("Formdata ", upload);
+
+        const requiredFieldsObject = $(
+            " #postEditContainer form[name='edit_post'] input, #postEditContainer form[name='edit_post'] textarea, form[name = 'edit_post'] select"
+        );
+        const requiredFields = Object.values(requiredFieldsObject);
+        requiredFields.forEach(field => {
+            // $(field).removeAttr('required');
+
+            // console.log(field);
+            // console.log($(field).attr('name'));
+            var key = $(field).attr('name');
+            if (key && $(field).val()) {
+                if ($(field).attr('type') == 'checkbox') {
+                    upload[key] = $(field).is(':checked ');
+                } else {
+                    upload[key] = $(field).val();
+                }
+            }
+
+        });
+        console.log({
+            upload
+        });
+
+
+
+        console.log($("#postEditContainer  form[name='edit_post']")[0].checkValidity());
+        const form = $("#postEditContainer  form[name='edit_post']")[0];
+        form.classList.add('was-validated');
+
+        let filesUploaded = {};
+
+        // upload files first
+        if (upload.logo || upload.coverImage || upload.customFile1 || upload.customFile2 || upload.customFile3 ||
+            upload.customFile4 || upload.customFile5 || upload.document1 || upload.document3 || upload.document3) {
+
+            $('#postEditContainer #update_edit_post_form input[type="submit"]').prop("disabled", true);
+
+            $.ajax({
+                url: `${rootDomain}/admin/posts/add-post/upload-files`,
+                type: 'POST',
+                data: upload,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (data, status) {
+                    console.log('Files submitted Success');
+                    console.log("files", data, status);
+                    // if(status == 'success') {
+                    submitFormDataEditPost(data, upload);
+                    // }
+                },
+                error: function (data) {
+                    console.log('Error');
+                }
+            });
+
+
+        } else {
+            submitFormDataEditPost(null, upload);
+        }
+
+
+
+
+        return false;
+
+
+    }
+
+
+
+    // AJAX CALLS
+    // let state, district, locality;
+    let initDataPostEdit;
+
+    function getEditPostData() {
+
+        return new Promise((resolve, reject) => {
+
+            $.get(`${rootDomain}/admin/posts/post-common-data/init`, (data, status) => {
+                    if (status == 'success') {
+
+                        console.log(data);
+                        initDataPostEdit = data;
+                        ({
+                            state,
+                            district
+                        } = data);
+                        console.log({
+                            state,
+                            district
+                        });
+
+                        updateSelectEditPost(data.state, data.district, data.category, data.users);
+
+                        resolve(data);
+
+                    }
+                })
+                .fail((error) => {
+                    console.log('Fail ', error);
+                    reject(error);
+                });
+
+        });
+
+
+
+    }
+
+
+    // form modifiers
+    // 
+    // 
+    function updateSelectEditPost(states, districts, categories, users, ids = null) {
+
+        console.log({
+            ids
+        })
+        $('#postEditContainer #company_state_address_edit option').remove();
+        states.forEach((state) => {
+            console.log(state._id);
+
+            if (ids != null && ids.stateId == state._id) {
+                console.log({
+                    stateId: ids.stateId,
+                    stateId: state._id
+                });
+
+                $('#company_state_address_edit').append(
+                    `<option selected value="${state._id}" data-id="${state._id}" data-name="${state.name}" >${state.name}</option> `
+                );
+            } else {
+                $('#company_state_address_edit').append(
+                    `<option value="${state._id}" data-id="${state._id}" data-name="${state.name}"  >${state.name}</option> `
+                );
+            }
+
+        });
+
+
+        if (ids != null && ids.districtId) {
+            updateDistrictEditPost(ids.districtId);
+            fetchLocalityEditPost(ids.localityId);
+        } else {
+            $('#postEditContainer  #company_district_address_edit option:not(:first-child)').remove();
+            districts.forEach((district) => {
+
+                if (ids != null && ids.districtId == district._id) {
+
+                    $('#postEditContainer #company_district_address_edit').append(
+                        `<option selected value="${district._id}" data-id="${district._id}" data-name="${district.name}" >${district.name}</option> `
+                    );
+                } else {
+                    $('#postEditContainer #company_district_address_edit').append(
+                        `<option value="${district._id}" data-id="${district._id}" data-name="${district.name}"  >${district.name}</option> `
+                    );
+                }
+
+            });
+        }
+
+
+        $('#postEditContainer #category_edit option:not(:first-child)').remove();
+        categories.forEach((category) => {
+            if (ids && ids.categoryId && category._id == ids.categoryId) {
+
+                // fetch sub category and update selected 
+                fetchSubcategoryAndKeywordsEditPost(ids.categoryId, ids.subCategoryId, ids.keywordsIds);
+
+                $('#category_edit').append(
+                    `<option selected data-id="${category._id}" data-name="${category.name}"  value="${category._id}" >${category.name}</option> `
+                );
+            } else {
+                $('#category_edit').append(
+                    `<option data-id="${category._id}" data-name="${category.name}"  value="${category._id}" >${category.name}</option> `
+                );
+            }
+
+        });
+
+
+        $('#postEditContainer #post_user_edit option').remove();
+        $('#postEditContainer #post_user_edit').prop('size', 1);
+        if (ids != null && ids.user) {
+            $('#postEditContainer #post_user_edit option').remove();
+            $('#post_user_edit').append(
+                `<option selected value="${ids.user._id}" > ${ids.user.name.firstName} ( ${ids.user.role ? ids.user.role : 'user'})</option> `
+            );
+        } else {
+            users.forEach((user) => {
+                $('#post_user_edit').append(
+                    `<option data-id="${user._id}" data-name="${user.name}"  value="${user._id}" >${user.name.firstName} ( ${user.role ? user.role : 'user'})</option> `
+                );
+            });
+        }
+
+
+    }
+
+    function updateDistrictEditPost(districtId = null) {
+        console.log({
+            district
+        })
+        const stateId = $('#postEditContainer #company_state_address_edit').val();
+        const updatedDistricts = district.filter(e => e.state._id == stateId);
+        console.log({
+            updatedDistricts,
+            stateId
+        })
+
+        $('#postEditContainer #company_district_address_edit option:not(:first-child)').remove();
+        updatedDistricts.forEach((district) => {
+
+            if (districtId == district._id) {
+
+                $('#postEditContainer #company_district_address_edit').append(
+                    `<option selected value="${district._id}" data-id="${district._id}" data-name="${district.name}" >${district.name}</option> `
+                );
+            } else {
+                $('#postEditContainer #company_district_address_edit').append(
+                    `<option value="${district._id}" data-id="${district._id}" data-name="${district.name}"  >${district.name}</option> `
+                );
+            }
+
+
+        });
+    }
+
+    function fetchLocalityEditPost(localityId = null) {
+        const selectedDistrictId = $('#postEditContainer #company_district_address_edit').val();
+        $.get(`${rootDomain}/admin/address/locality/${selectedDistrictId}`, (data, status) => {
+                if (status == 'success') {
+                    console.log(data);
+                    // updateSelectEditPost(data.state, data.district, data.category);
+                    $('#postEditContainer #company_locality_address_edit').html('')
+                    data.forEach((locality) => {
+                        if (localityId == locality._id) {
+                            $('#postEditContainer #company_locality_address_edit').append(
+                                `<option data-id="${locality._id}" data-name="${locality.name}"  selected value="${locality._id}">${locality.name}</option>`
+                            );
+                        } else {
+                            $('#postEditContainer #company_locality_address_edit').append(
+                                `<option data-id="${locality._id}" data-name="${locality.name}"  value="${locality._id}">${locality.name}</option>`
+                            );
+                        }
+
+                    });
+                }
+            })
+            .fail((error) => {
+                console.log('Fail ', error)
+            });
+    }
+
+    function fetchSubcategoryAndKeywordsEditPost(catId = null, subCatId = null, keywordsIds = null) {
+        console.log("fetchSubcategoryAndKeywordsEditPost");
+        let selectedCategoryId;
+        if (catId == null) {
+            selectedCategoryId = $('#postEditContainer #category_edit').val();
+        } else {
+            selectedCategoryId = catId;
+        }
+        $.get(`${rootDomain}/admin/posts/post-common-data/category/${selectedCategoryId}`, (data, status) => {
+                if (status == 'success' && data) {
+                    console.log(data);
+                    // updateSelectEditPost(data.state, data.district, data.category);
+
+                    // update keywords
+                    $('#postEditContainer #company_keywords_edit option').remove();
+                    data.keywords.forEach((keyword) => {
+                        if (keywordsIds != null && keywordsIds.indexOf(keyword._id) != -1) {
+                            $('#postEditContainer #company_keywords_edit').append(
+                                `<option data-id="${keyword._id}" data-name="${keyword.name}"  selected value="${keyword._id}">${keyword.name}</option>`
+                            );
+                        } else {
+                            $('#postEditContainer #company_keywords_edit').append(
+                                `<option data-id="${keyword._id}" data-name="${keyword.name}"  value="${keyword._id}">${keyword.name}</option>`
+                            );
+                        }
+
+                    });
+
+                    // update subcategory
+                    $('#postEditContainer #subcategory_edit option:not(:first-child)').remove();
+                    data.subCategory.forEach((subcategory) => {
+                        if (subCatId != null && subcategory._id == subCatId) {
+                            $('#subcategory_edit').append(
+                                `<option data-id="${subcategory._id}" data-name="${subcategory.name}" selected value="${subcategory._id}">${subcategory.name}</option>`
+                            );
+                        } else {
+                            $('#subcategory_edit').append(
+                                `<option data-id="${subcategory._id}" data-name="${subcategory.name}" value="${subcategory._id}">${subcategory.name}</option>`
+                            );
+                        }
+
+                    });
+
+                }
+            })
+            .fail((error) => {
+                console.log('Fail ', error)
+            });
+    }
+
+
+    function searchUserEdit(e) {
+
+        const searchterm = $('#postEditContainer #search-user-input').val();
+        if (searchterm.length > 0) {
+            $(e.target).html(`<div class="spinner-border spinner-border-sm text-primary"></div>`);
+            // disable search button 
+            $('#postEditContainer #search-user-btn-edit').prop('disabled', true);
+
+            // fetch user
+            $.get(`${rootDomain}/admin/users/search-user/${searchterm}`, (data, status) => {
+                $(e.target).html('Search');
+                if (status == 'success' && data.length > 0) {
+                    console.log({
+                        users: data
+                    });
+                    $('#postEditContainer #post_user_edit option:not(:first-child)').remove();
+
+                    for (let user of data) {
+                        $('#postEditContainer #post_user_edit').append(
+                            ` <option value="${user._id}" >${user.name.firstName}/${user.email}  (${user.role ? user.role : 'user'})</option>
+                            `
+                        );
+                    }
+                    $('#postEditContainer #post_user_edit').prop('size', data.length > 6 ? 6 : data.length);
+
+                }
+                $('#postEditContainer #search-user-btn-edit').removeAttr('disabled');
+
+            }).fail((error) => {
+                $(e.target).html('Search');
+                console.log('User search failed');
+                $('#postEditContainer #search-user-btn-edit').removeAttr('disabled');
+            });
+        }
+    }
+
+
+    // 
+    let postDataConstant;
+    const dynamicMapEdit = googleDynamicMapEditPost();
+
+    const getPostForEdit = async (postId) => {
+
+        // show loading
+        const body = $('#postEditContainer').html();
+        $('#postEditContainer').html(`
+            <div class="loading-box d-flex justify-content-center row " style="position: absolute;
+    top: 0;
+    width: 100%;
+    height: 93vh;
+    align-items: center;">
+                <div class="spinner-border text-primary"></div>
+            </div>
+        `);
+
+        // navigate to psot edit page
+        $('#editPageNav').trigger('click');
+
+        // fetch getPostEditData
+        const wait = await getEditPostData();
+
+
+        // fetch post detail
+        if (wait) {
+            $.get(`${rootDomain}/admin/posts/post/get-post/${postId}`,
+                    (postData, status) => {
+                        console.log({
+                            postData
+                        });
+
+                        if (status == 'success' && postData) {
+
+                            postDataConstant = postData;
+
+                            // remove loading 
+                            $('#postEditContainer').html(body);
+
+                            // hide search result 
+                            $('#postEditContainer #search_post_list').html('');
+
+                            $('#postEditContainer #searchpostEditPost').val('');
+
+                            // hide search box
+                            $('#postEditContainer #searchBoxEditPost').addClass('d-none');
+
+                            // show form
+                            $('#postEditContainer #update_edit_post_form').addClass('d-block');
+
+                            // init google MAP
+                            //
+                            console.log("EDIT POST MAP EXIST", typeof dynamicMapEdit.getMap() != 'undefined');
+                            // let coordinates = {
+                            //     lat: postData.geoLocation && postData.geoLocation.coordinates && postData.geoLocation.coordinates.lat ? postData.geoLocation.coordinates.lat : null,
+                            //     lng: postData.geoLocation && postData.geoLocation.coordinates && postData.geoLocation.coordinates.lng ? postData.geoLocation.coordinates.lng : null
+                            // };
+                            let coordinates = postData.geoLocation && postData.geoLocation.coordinates ?
+                                postData.geoLocation.coordinates : null;
+
+                            console.log("coordinates exist ", coordinates && coordinates.lat && coordinates
+                                .lng ? true : false);
+
+
+                            // if (!dynamicMapEdit.getMap()) {
+                                dynamicMapEdit.init();
+                            // }
+
+                            if (coordinates && coordinates.lat && coordinates.lng) {
+                                console.log('LAT :', coordinates.lat);
+                                console.log('LNG :', coordinates.lng);
+                                dynamicMapEdit.changeMarkerAndPanTo(coordinates);
+                            } else {
+                                dynamicMapEdit.resetMarker();
+                            }
+
+
+
+                            // assign inputs
+                            // **** modify mobile number to 10 digits only - IMP
+                            // postEditId
+                            //
+                            //
+                            $("#postEditContainer input[name='lat']").val(coordinates && coordinates.lat ?
+                                coordinates.lat : '');
+                            $("#postEditContainer input[name='lng']").val(coordinates && coordinates.lng ?
+                                coordinates.lng : '');
+                            $('#postEditContainer #postEditId').val(postId);
+                            const postAddedBy = postData.userId.name ? postData.userId.name : undefined;
+                            $('#postEditContainer #postAddedByLink').attr('href','./../../users/edit/'+postData.userId._id);
+                            if ( postAddedBy.fullName ){
+                                $('#postEditContainer #postAddedByLink').text(postAddedBy.fullName);
+                            } else {
+                                $('#postEditContainer #postAddedByLink').text(postAddedBy.firstName? postAddedBy.firstName : '' + postAddedBy.lastName? postAddedBy.lastName : '');
+                            }
+                            
+                            $('#postEditContainer #company_name_edit').val(postData.name ? postData.name : '');
+                            $('#postEditContainer #company_email_edit').val(postData.email ? postData.email :
+                                '');
+                            $('#postEditContainer #company_website_edit').val(postData.website ? postData
+                                .website : '');
+                            $('#postEditContainer #company_description_edit').val(postData.description &&
+                                postData.description.short ? postData.description.short : '');
+                            $('#postEditContainer #owner_contact_name_edit').val(postData.ownerDetails &&
+                                postData.ownerDetails.name ? postData.ownerDetails.name : '');
+                            $('#postEditContainer #owner_mobile1_edit').val(postData.mobileNumber[0] && postData
+                                .mobileNumber[0].number ? postData.mobileNumber[0].number : '');
+                            $('#postEditContainer #owner_mobile_optional_edit').val(postData.mobileNumber[1] &&
+                                postData.mobileNumber[1].number ? postData.mobileNumber[1].number : '');
+                            $('#postEditContainer #owner_telephone1_edit').val(postData.telephoneNumber[0] &&
+                                postData.telephoneNumber[0].number ? postData.telephoneNumber[0].number : ''
+                            );
+                            $('#postEditContainer #owner_email_edit').val(postData.ownerDetails && postData
+                                .ownerDetails.email[1] && postData.ownerDetails.email[1] ? postData
+                                .ownerDetails.email[1] : '');
+                            $('#postEditContainer #owner_email_optional_edit').val(postData.ownerDetails &&
+                                postData.ownerDetails.email[1] ? postData.ownerDetails.email[1] : '');
+
+                            // timings
+                            const timingsArraytemp = Object.keys(postData.timings);
+                            timingsArraytemp.forEach(key => {
+                                if (postData.timings[key].closed) {
+                                    timings[key].closed = true;
+                                } else if (postData.timings[key].slots && postData.timings[key].slots
+                                    .length > 0) {
+                                    timings[key].slots = postData.timings[key].slots;
+                                }
+                            });
+                            console.log(timings);
+                            timingsControl.refreshTime();
+
+                            let ids = {
+                                user: postData.userId,
+                                stateId: postData.address.state.id,
+                                districtId: postData.address.district.id,
+                                localityId: postData.address.locality.id,
+                                categoryId: postData.category.id,
+                                subCategoryId: postData.category.subCategory && postData.category
+                                    .subCategory.id ? postData.category.subCategory.id : null,
+                                keywordsIds: postData.keywords.map(key => key.id)
+                            }
+
+                            // address and cat, subcategory, keywords
+                            updateSelectEditPost(initDataPostEdit.state, initDataPostEdit.district,
+                                initDataPostEdit.category, initDataPostEdit.users, ids);
+
+                            $('#postEditContainer #company_street_address_edit').val(postData.address &&
+                                postData.address.areaAndStreetAddress ? postData.address
+                                .areaAndStreetAddress : '');
+                            $('#postEditContainer #company_landmarks_address_edit').val(postData.address &&
+                                postData.address.landmark ? postData.address.landmark : '');
+                            $('#postEditContainer #company_building_apartment_address_edit').val(postData
+                                .address && postData.address.building ? postData.address.building : '');
+                            $('#postEditContainer #company_pincode_address_edit').val(postData.address &&
+                                postData.address.pincode ? postData.address.pincode : '');
+
+                            // status & verified
+                            if (postData.status) {
+                                $('#postEditContainer #StatusEdit').prop('checked', true);
+                                $('#postEditContainer #StatusEdit').trigger('change');
+                            }
+                            if (postData.verified) {
+                                $('#postEditContainer #VerifiedEdit').prop('checked', true);
+                                $('#postEditContainer #VerifiedEdit').trigger('change');
+                            } else {
+                                console.log('post not verified');
+                            }
+
+                            // files 
+                            let im = 1,
+                                idoc = 1;
+                            $('.remove-file').remove();
+
+                            if (postData.images && postData.images.logo &&
+                                postData.images.logo.url && postData.images.logo.url != '') {
+                                $(`#postEditContainer input[name='logo']`).parent().after(
+                                    `
+                                    <div class="remove-file">
+                                    <img class="img-thumbnail"  src="${rootDomain}/uploads/images/compressed/${postData.images.logo.url}" style="width: 100px; height: 60px;" />
+                                    <button 
+                                    onclick="removeLogoImage(event,'logo')" 
+                                    class="btn btn-sm"
+                                    
+                                    >
+                                        <i class="fa fa-times" style="font-size: 1.5em" aria-hidden="true" ></i>
+                                    </button>
+                                    </div>
+                                    `
+                                );
+
+                            }
+
+                            if (postData.images && postData.images.coverImage && postData.images.coverImage
+                                .url && postData.images.coverImage.url != '') {
+                                $(`#postEditContainer input[name='coverImage']`).parent().after(
+                                    `
+                                    <div class="remove-file">
+                                    <img class="img-thumbnail"  src="${rootDomain}/uploads/images/compressed/${postData.images.coverImage.url}" style="width: 100px; height: 60px;" />
+                                    <button 
+                                    onclick="removeCoverImage(event,'coverImage')" class="btn btn-sm">
+                                        <i class="fa fa-times" style="font-size: 1.5em" aria-hidden="true" ></i>
+                                    </button>
+                                    </div>
+                                    `
+                                );
+
+                            }
+
+                            if (postData.images && postData.images.collection && postData.images.collection
+                                .length > 0) {
+                                postData.images.collection.forEach(image => {
+
+                                    if (image && image.url) {
+                                        $(`#postEditContainer input[name='customFile${im}']`).parent()
+                                            .after(
+                                                `
+                                    <div class="remove-file">
+                                    <img class="img-thumbnail"  src="${rootDomain}/uploads/images/compressed/${image.url}" style="width: 100px; height: 60px;" />
+                                    <button 
+                                    data-id="${image._id}"
+                                    onclick="removeCollectionImage(event,'customFile${im}')" class="btn btn-sm">
+                                        <i class="fa fa-times " style="font-size: 1.5em"  aria-hidden="true" ></i>
+                                    </button>
+                                    </div>
+                                    `
+
+                                            );
+                                    }
+
+                                    im++;
+                                });
+
+                            }
+
+                            let docsCount = 0;
+                            if (postData.docs && postData.docs && postData.docs.length > 0) {
+                                postData.docs.forEach( ( doc , ii ) => {
+
+                                    if (doc && doc.name && doc.name != '') {
+                                        $(`#postEditContainer #document${idoc}_name_edit`).val(doc
+                                            .name);
+                                    }
+
+                                    if (doc && doc.url && doc.url != '') {
+                                        $(`#postEditContainer input[name='document${idoc}']`).parent()
+                                            .after(
+                                                `
+                                    <div class="remove-file">
+                                    <button 
+                                    data-id="${doc._id}"
+                                    data-no="${docsCount+1}"
+                                    onclick="removeDoc(event,'document${idoc}')" class="btn btn-sm">Remove document 
+                                        <i class="fa fa-times closeSymbol"  style="font-size: 1.5em"  aria-hidden="true" ></i>
+                                    </button>
+                                    </div>
+                                    `
+                                            );
+                                    }
+
+                                    if ((doc && doc.url && doc.url != '') || (doc && doc.name && doc
+                                            .name != '')) {
+                                        idoc++;
+
+                                    }
+                                });
+
+                            }
+
+                        }
+
+
+                    })
+                .fail((err) => {
+                    console.log(err);
+                });
+        }
+
+
+
+    }
+
+
+    var timer22;
+
+    function searchpostEditPost() {
+
+        const value = $(" #postEditContainer #searchpostEditPost").val();
+        console.log(value)
+        if (value.length > 0) {
+
+            $('#postEditContainer #search_post_list').html('');
+            $('#postEditContainer #search_post_list').append(
+                `<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+
+            if (timer22) {
+                clearTimeout(timer22);
+            }
+            timer22 = setTimeout(function () {
+                $.get(`${rootDomain}/admin/posts/post/search?searchText=${value}`, (data, status) => {
+                        // console.log(data,status)
+
+                        if (status == 'success' && data != 'undefined' && data.length > 0) {
+                            console.log(data, status)
+
+                            refreshSearchpostList(data);
+                        } else {
+                            refreshSearchpostList(null);
+                        }
+                    })
+                    .fail((error) => {
+                        console.log("error")
+                        $('#postEditContainer #search_post_list').html('');
+
+                        refreshSearchpostList(null);
+                    });
+            }, 1000)
+
+        } else {
+            clearTimeout(timer);
+            refreshpostList(recentpost);
+        }
+    }
+
+
+    function refreshSearchpostList(data) {
+
+        if (data) {
+            $('#postEditContainer #search_post_list').html('');
+            // append list header
+            $('#postEditContainer #search_post_list').append(`<li class="cus-list-header list-group-item d-flex justify-content-between align-items-center">
+    <div class="col-2 d-inline-block text-truncate">
+        <b> Company name </b>
+    </div>
+    <div class="col-2 d-inline-block text-truncate">
+        <b> Address </b>
+    </div>
+   
+    <div class="col-2 d-inline-block text-truncate">
+        <b> Category </b>
+    </div>
+    <div class="col-1 d-inline-block text-truncate">
+        <b> status </b>
+    </div>
+    <div class="col-1 d-inline-block text-truncate">
+        <b> Verified </b>
+    </div>
+    
+    <div class="col-2 d-inline-block text-truncate"><b>Modified Date</b></div>
+    <div class="col-1" >   
+        <b>Manage</b>                    
+    </div>
+</li>`);
+
+            data.forEach(post => {
+
+                let contactNumber = [];
+
+                if (post.telephoneNumber.length > 0 && post.telephoneNumber[0].number) {
+                    contactNumber = post.telephoneNumber.map(no => `<dt>${no.number}</dt>`);
+                }
+                if (post.mobileNumber.length > 0 && post.mobileNumber[0].number) {
+                    contactNumber = [...contactNumber, ...post.mobileNumber.map(no => `<dt>${no.number}</dt>`)];
+                }
+
+
+                // append list data
+                $('#postEditContainer #search_post_list').append(`
+<li class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="col-2 d-inline-block text-wrap">${post.name}</div>
+        <div class="col-2 d-inline-block text-wrap">
+            ${post.address && post.address.areaAndStreetAddress ? post.address.areaAndStreetAddress : ''}
+    </div>
+    <div class="col-2 d-inline-block text-wrap">
+        ${post.category.name ? post.category.name : post.category.id ? post.category.id.name : ''}
+    </div>
+        <input type="hidden" name="keyId" value="${post._id}" />
+        <div class="col-1 d-inline-block text-wrap">
+            ${post.status ? 'Active' : 'Inactive'}
+        </div>
+        <div class="col-1 d-inline-block text-wrap">
+            ${post.verified ? 'verified' : 'Not verified'}
+        </div>
+        <div class="col-2 d-inline-block text-wrap">${new Date(post.modifiedOn).toLocaleString()}</div>
+        <div class="col-1" >                            
+            <button  class="btn btn-outline-primary btn-sm" onclick="getPostForEdit('${post._id}')">Edit</button>                            
+        </div>
+</li>
+`);
+            });
+        }
+        console.log("refreshpostList data ", data);
+
+    }
+
+
+    const resetEditForm = () => {
+        // *** Reset form 
+        $("#update_edit_post_form").trigger('reset');
+
+        // input : not working -- should work on label since it is custom input
+        const filesInput = $(".custom-file-input");
+        let filesInputArray = Object.values(filesInput);
+        for (let index = 0; index < filesInput.length; index++) {
+            $(filesInputArray[index]).val('');
+            $(filesInputArray[index]).siblings("label").html($(filesInputArray[index]).attr('placeholder'));
+        }
+
+        // $(".custom-file-label ").html('');
+
+
+        // remove validation style
+        let editform = $("#postEditContainer  form[name='edit_post']")[0];
+        editform.classList.remove('was-validated');
+
+
+        // timings
+        $('#time-slot-display').html('');
+
+        // keywords
+        $('#postEditContainer #company_keywords_edit').html('');
+
+        $(' #postEditContainer #update_edit_post_form input[type="submit"]').removeAttr("disabled");
+
+        // hide form
+        $('#postEditContainer #update_edit_post_form').removeClass('d-block');
+
+        // show search box
+        $('#postEditContainer #searchBoxEditPost').removeClass('d-none');
+
+        // hide search result 
+        $('#postEditContainer #search_post_list').html('');
+
+        $('#postEditContainer #searchpostEditPost').val('');
+    }
+
+    function removeFile(e, name) {
+        e.preventDefault();
+        console.log({
+            e,
+            name
+        });
+
+        // remove from postData
+        if (postDataConstant && postDataConstant.images) {
+
+            if (name == 'logo' && postDataConstant.images.logo && postDataConstant.images.logo &&
+                postDataConstant.images.logo.url) {
+                postDataConstant.images.logo.url = null;
+            }
+            if (name == 'coverImage' && postDataConstant.images.coverImage && postDataConstant.images.coverImage.url) {
+                postDataConstant.images.coverImage.url = null;
+            }
+
+            if (name == 'customFile1' ||
+                name == 'customFile2' ||
+                name == 'customFile3' ||
+                name == 'customFile4' ||
+                name == 'customFile5' &&
+                postDataConstant.images.collection && postDataConstant.images.collection.length > 0) {
+                postDataConstant.images.collection.forEach(image => {
+                    if (postDataConstant.images.collection[Number(name.replace('customFile', '')) - 1]) {
+                        postDataConstant.images.collection[Number(name.replace('customFile', '')) - 1].url =
+                            null;
+                    }
+                });
+            }
+
+            if (name == 'document1' ||
+                name == 'document2' ||
+                name == 'document3' &&
+                postDataConstant.docs && postDataConstant.docs.length > 0) {
+
+                    console.log({
+            Images: postDataConstant.images,
+            Docs: postDataConstant.docs
+        });
+
+                postDataConstant.docs.forEach(image => {
+                    const no = Number(name.replace('document', '')) ;
+                    console.log({no});
+                    if (postDataConstant.docs[ no - 1]) {
+                        console.log("Doc exist", no-1, no);
+                    
+                        // postDataConstant.docs[Number(name.replace('document', '')) - 1].url = null;
+                        // postDataConstant.docs[Number(name.replace('document', '')) - 1].name = null;
+                        // postDataConstant.docs.splice(  no - 1 , no  );
+                        postDataConstant.docs[no - 1] = null;
+                        $(`#document${no}_name_edit`).val('');
+                        $(`#document${no}_edit`).val('');
+                    }
+                });
+            }
+
+        }
+
+        console.log({
+            Images: postDataConstant.images,
+            Docs: postDataConstant.docs
+        });
+
+        $(e.target).parent().parent().remove();
+        // $(`#postEditContainer input[name='${name}']`)
+
+    }
+
+    const deletePost = (e) => {
+        e.preventDefault();
+        // $('#delete=post-btn').
+        const postId = $('#postEditContainer #postEditId').val();
+        if (postId && confirm('Are you sure?')) {
+            console.log('%cDeleting post ....', "color:blue; font-size:23px");
+            console.log({
+                postId
+            });
+
+            // request server
+            $.post(`${rootDomain}/admin/posts/edit-post/delete`, {
+                    postId
+                }, (data, status) => {
+                    if (status == 'success' && data.result) {
+                        console.log('Result', data.result);
+                        showSuccessAlert(data.result);
+                        resetEditForm();
+                    } else {
+                        console.log('Response', {
+                            data
+                        }, {
+                            status
+                        });
+                        // showAlert(true, data.error);
+                    }
+                })
+                .fail(e => {
+                    console.log(e.error);
+                    showDangerAlert(e.error);
+                });
+        } else {
+            console.log('Cancelled.');
+        }
+    }
+</script>
+
+
+<script>
+
+    function removeCollectionImage(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        const id = $(e.target).data('id');
+        if ( id ) {
+            const collectionImagesIds = postDataConstant.images.collection.map( e => e._id);
+            if ( collectionImagesIds && collectionImagesIds.length > 0 && collectionImagesIds.indexOf(String(id)) != -1 ) {
+                    $(e.target).parent().parent().remove();
+                    postDataConstant.images.collection.splice(collectionImagesIds.indexOf(String(id)), collectionImagesIds.indexOf(String(id)) + 1);
+            }
+        }
+    }
+
+    function removeCoverImage(e){
+        e.preventDefault();
+        e.stopPropagation();
+        postDataConstant.images.coverImage = {
+            url: null
+        };
+        $(e.target).parent().parent().remove();
+
+    }
+
+    function removeLogoImage(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+
+        postDataConstant.images.logo = {
+            url: null
+        };
+        $(e.target).parent().parent().remove();
+
+    }
+
+    $(document).ready(function(){
+            $(document).on('click', '.closeSymbol', function(e){
+            console.log('clicked on remove - doc');
+            $(this).parent().trigger('click');
+
+            e.preventDefault();
+            e.stopPropagation();
+        });
+
+    });
+
+    function removeDoc(e){
+        e.preventDefault();
+        e.stopPropagation();
+
+        const id = $(e.target).data('id');
+        const no = $(e.target).data('no');
+
+        console.log({no, id});
+        if ( id ) {
+            const docsIds = postDataConstant.docs.map( e => e._id);
+            if ( docsIds && docsIds.length > 0 && docsIds.indexOf(String(id)) != -1 ) {
+                    $(e.target).parent().remove();
+                    $(`#document${no}_name_edit`).val('');
+                    $(`#document${no}_edit`).val('');
+                    
+                    postDataConstant.docs.splice(docsIds.indexOf(String(id)), docsIds.indexOf(String(id)) + 1);
+            }
+        }
+        
+    }
+</script>
+
+</body>
+
+</html>
+
+
+

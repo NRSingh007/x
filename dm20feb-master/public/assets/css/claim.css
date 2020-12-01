@@ -1,0 +1,8 @@
+.location-results li:hover {
+  cursor: pointer;
+}
+
+#searchPostsForm .search-result {
+  font-size: 14px;
+}
+/*# sourceMappingURL=claim.css.map */

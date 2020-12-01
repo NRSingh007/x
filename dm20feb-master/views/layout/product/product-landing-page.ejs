@@ -1,0 +1,648 @@
+<%- include('./../../includes/product/header.ejs') %>
+
+</head>
+
+<body>
+    <%- include('./../../includes/product/navBar.ejs') %>
+    <!-- product category list goes here -->
+    <section id="search_title_header">
+        <section class="container">
+            <div align="center" class="mb-4 landing_title">
+                <span id="landing_title">Find the best products online in Manipur</span>
+            </div>
+            <form action="/product/search" method="GET" autocomplete="off" name="search_form" id="search_form">
+
+                <div class="row" style="padding: 10px;">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-3 col-sm-6" style="padding:1px">
+
+                        <div class="form-group input-icons">
+
+                            <i class="fa fa-location-arrow icon" aria-hidden="true" style="color: #A6AFB4"></i>
+                            <input type="text" class="form-control input-field" id="search_input" name="searchlocation"
+                                value="Manipur" onfocus="showSearchHolder()" onfocusout="hideSearchHolder()"
+                                placeholder="Location">
+
+                            <i class="fa fa-angle-down icon-left" aria-hidden="true" style="color: #A6AFB4"></i>
+                            <div>
+                                <ul id="location_search_holder" style="display: none;">
+                                    <% if(locations.length > 0) {%>
+                                    <% locations.forEach(function(location, index){%>
+                                    <li id="<%=index%>" onMouseDown="choose_location('<%=index%>')"
+                                        data-value="<%=location.name%>">
+                                        <%=location.name%></li>
+                                    <%}) %>
+                                    <%}%>
+                                </ul>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="col-md-6 col-sm-6" style="padding:1px;">
+
+                        <div class="form-group input-icons">
+                            <i class="fa fa-search icon" aria-hidden="true" style="color: #A6AFB4"></i>
+                            <input type="text" class="form-control input-field" name="searchlocationproduct"
+                                   onfocus="showProductSearch()" onfocusout="hideProductSearch()" id="search_title" placeholder="Find Cars, Mobile Phones and more...">
+                                <div>
+                                    <ul id="location_product_search_holder" style="display: none;">
+                                        <!-- Add product search component dynamically -->
+                                    </ul>
+                                </div>
+
+                            </div>
+                    </div>
+                    <div class="col-md-1 col-sm-9" style="margin-bottom: 80px;">
+                        <button type="submit" onclick="return validateSearchForm()" class="btn btn-danger search_btn">Search</button>
+                    </div>
+                    <div class="col-md-1"></div>
+
+                </div>
+            </form>
+        </section>
+    </section>
+    <section class="product_collection_body container">
+        <!-- <div class="d-flex bd-highlight flex-wrap" style="margin-top: 30px;">
+            
+            <div class="flex-fill">
+                <div class="d-flex bd-highlight add_post_wrapper">
+                    <div class="add_post_element_1"></div>
+                    <div class="add_post_element_2">
+                       <span>Start selling your product</span> 
+                    </div>
+                    <div class="ml-auto">
+                        <form action="/product/categories">
+                            <button class="btn btn-danger add_product_btn_element">
+                                <span>Post your Ads</span> 
+                             </button>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+            
+        </div> -->
+        
+        <%if(user != null){%>
+                                    <section style="margin-top: 30px;">
+                                        <div class="d-flex bd-highlight">
+                                            <div class="product_collection_body_title">
+                                                <span>BASED ON YOUR LAST SEARCH</span>
+                                            </div>
+                                            <div class="ml-auto component_title_small_red">
+                                                <span><a href="/product/search?searchlocation=Manipur&searchlocationproduct=">SHOW MORE</a></span>
+                                            </div>
+                                        </div>
+
+                                        <section style="margin-top: 20px;">
+                                            <div class="d-flex bd-highlight align-items-center">
+                                                <div class="flex-fill">
+                                                    <span><i id="bls_lefty"
+                                                            class="fas fa-chevron-left component_slide_indicator"
+                                                            aria-hidden="true"></i></span>
+                                                </div>
+
+                                                <!-- product grid section -->
+                                                <div class="row_component flex-fill">
+                                                    <div class="d-flex bd-hightlight" id="bls_comp"
+                                                        style="overflow-x: hidden; overflow-y: hidden;">
+                                                        <%if(products.length > 0){%>
+                                                        <%products.forEach(function(product, index){%>
+                                                        <%if(index < 8){%>
+
+                                                        <div class="product_collection_wrapper">
+                                                            <a class="product_link"
+                                                                href="/product/post/<%=product._id%>">
+                                                                <div class="product_collection_component_ele">
+                                                                    <!-- product image container -->
+                                                                    <div class="collection_card_image_container"
+                                                                        style="background-image: url('/product/image/<%=product.product_photos[0].photo.image_filename%>');">
+                                                                        <div
+                                                                            class="ad_badge_overlay_container d-flex bd-highlight">
+                                                                            <div>
+                                                                                <span class="ad_badge">FEATURED</span>
+                                                                            </div>
+                                                                            <div class="ml-auto">
+                                                                                <span class="ad_badge2"><i
+                                                                                        class="fas fa-heart like_badge"
+                                                                                        aria-hidden="true"></i></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <br><br><br><br><br><br>
+		                                                        <div class="ad_badge_overlay_container d-flex flex-row-reverse">
+		                                                            <img src="https://i.imgur.com/FJDEL9O_d.webp?maxwidth=640&shape=thumb&fidelity=medium" alt="dm_icon" style="height: 20px; opacity: 0.5;">
+		                                                        </div>
+                                                                    </div>
+                                                                    <!-- product detail -->
+                                                                    <div class="col_card_detail">
+                                                                        <div class="col_title_holder">
+                                                                            <div class="col_card_ad_title flex-fill">
+                                                                                <span><%=product.product_ad_title%></span>
+                                                                            </div>
+                                                                            <div class="col_card_date_container">
+                                                                                <span
+                                                                                    class="col_card_date text-muted"><%=moment(product.createdAt).format('ll')%></span>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col_card_price">
+                                                                            <%if(product.product_price_updated > 0){%>
+                                                                                <%if(product.product_price_updated < product.product_price) {%>
+                                                                                    ₹ <span id="<%=product._id%>"></span>
+                                                                                    <script>
+                                                                                        var format = new Number('<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                                                                        document.getElementById("<%=product._id%>").innerHTML = format;
+                                                                                        console.log(format);
+                                                                                    </script>
+                                                                                    <span class="productAdPrice" style="font-size:70%; color: #99a3a4;"><del>₹ <%=product.product_price%></del></span>
+                                                                                <%}
+                                                                                else{%>
+                                                                                    ₹ <span id="<%=product._id%>"></span>
+                                                                                    <script>
+                                                                                        var format = new Number('<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                                                                        document.getElementById("<%=product._id%>").innerHTML = format;
+                                                                                        console.log(format);
+                                                                                    </script>
+                                                                                <%}%>
+                                                                                %>
+                                                                            <%}
+                                                                                else{%>
+                                                                                    ₹ <span id="<%=product._id%>"></span>
+                                                                                    <script>
+                                                                                        var format = new Number('<%=product.product_price%>').toLocaleString('en-IN');
+                                                                                        document.getElementById("<%=product._id%>").innerHTML = format;
+                                                                                        console.log(format);
+                                                                                    </script>
+                                                    
+                                                                                <%}%>
+                                                                        </div>
+                                                                        <div><span style="font-size: small;"><%=product.locality.name%></span></div>
+                                                                        <div class="col_card_desc text-muted">
+                                                                            <span
+                                                                                id="card_desc"><%=product.product_description%></span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+
+                                                            </a>
+                                                        </div>
+
+                                                        <%}%>
+                                                        
+                                                        <%})%>
+                                                        <%}%>
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex-fill" style="padding-left: 15px; text-align: end;">
+                                                    <span><i
+                                                            id="bls_righty" class="fas fa-chevron-right component_slide_indicator" aria-hidden="true"></i></span>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </section>
+                                    
+                                    
+                                    <%} else {%>
+                                                        <section style="margin-top: 30px;">
+                                                            <div class="d-flex bd-highlight">
+                                                                <div class="product_collection_body_title">
+                                                                    <span>RECENTLY ADDED</span>
+                                                                </div>
+                                                                <div class="ml-auto component_title_small_red">
+                                                                    <span><a href="/product/search?searchlocation=Manipur&searchlocationproduct=">SHOW MORE</a></span>
+                                                                </div>
+                                                            </div>
+
+                                                            <section style="margin-top: 20px;">
+                                                                <div class="d-flex bd-highlight align-items-center">
+                                                                    <div class="flex-fill">
+                                                                        <span><i id="bls_lefty"
+                                                                                class="fas fa-chevron-left component_slide_indicator"
+                                                                                aria-hidden="true"></i></span>
+                                                                    </div>
+
+                                                                    <!-- product grid section -->
+                                                                    <div class="row_component flex-fill">
+                                                                        <div class="d-flex bd-hightlight" id="bls_comp"
+                                                                            style="overflow-x: hidden; overflow-y: hidden;">
+                                                                            <%if(products.length > 0){%>
+                                                                            <%products.forEach(function(product, index){%>
+                                                                            <%if(index < 8){%>
+
+                                                                            <div class="product_collection_wrapper">
+                                                                                <a class="product_link"
+                                                                                    href="/product/post/<%=product._id%>">
+                                                                                    <div
+                                                                                        class="product_collection_component_ele">
+                                                                                        <!-- product image container -->
+                                                                                        <div class="collection_card_image_container"
+                                                                                            style="background-image: url('/product/image/<%=product.product_photos[0].photo.image_filename%>');">
+                                                                                            <div
+                                                                                                class="ad_badge_overlay_container d-flex bd-highlight">
+                                                                                                <div>
+                                                                                                    <span
+                                                                                                        class="ad_badge">FEATURED</span>
+                                                                                                </div>
+                                                                                                <div class="ml-auto">
+                                                                                                    <span
+                                                                                                        class="ad_badge2"><i
+                                                                                                            class="fas fa-heart like_badge"
+                                                                                                            aria-hidden="true"></i></span>
+                                                                                                </div>
+
+                                                                                            </div>
+                                                                                            <br><br><br><br><br><br>
+			                                                        <div class="ad_badge_overlay_container d-flex flex-row-reverse">
+			                                                            <img src="https://i.imgur.com/FJDEL9O_d.webp?maxwidth=640&shape=thumb&fidelity=medium" alt="dm_icon" style="height: 20px; opacity: 0.5;">
+			                                                        </div>
+                                                                                        </div>
+                                                                                        <!-- product detail -->
+                                                                                        <div class="col_card_detail">
+                                                                                            <div
+                                                                                                class="col_title_holder">
+                                                                                                <div
+                                                                                                    class="col_card_ad_title flex-fill">
+                                                                                                    <span><%=product.product_ad_title%></span>
+                                                                                                </div>
+                                                                                                <div
+                                                                                                    class="col_card_date_container">
+                                                                                                    <span
+                                                                                                        class="col_card_date text-muted"><%=moment(product.createdAt).format('ll')%></span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="col_card_price">
+                                                                                                <%if(product.product_price_updated > 0){%>
+                                                                                                    <%if(product.product_price_updated < product.product_price) {%>
+                                                                                                        ₹ <span id="<%=product._id%>"></span>
+                                                                                                        <script>
+                                                                                                            var format = new Number('<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                                                                                            document.getElementById("<%=product._id%>").innerHTML = format;
+                                                                                                            console.log(format);
+                                                                                                        </script>
+                                                                                                        <span class="productAdPrice" style="font-size:70%; color: #99a3a4;"><del>₹ <%=product.product_price%></del></span>
+                                                                                                    <%}
+                                                                                                    else{%>
+                                                                                                        ₹ <span id="<%=product._id%>"></span>
+                                                                                                        <script>
+                                                                                                            var format = new Number('<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                                                                                            document.getElementById("<%=product._id%>").innerHTML = format;
+                                                                                                            console.log(format);
+                                                                                                        </script>
+                                                                                                    <%}%>
+                                                                                                    %>
+                                                                                                <%}
+                                                                                                    else{%>
+                                                                                                        ₹ <span id="<%=product._id%>"></span>
+                                                                                                        <script>
+                                                                                                            var format = new Number('<%=product.product_price%>').toLocaleString('en-IN');
+                                                                                                            document.getElementById("<%=product._id%>").innerHTML = format;
+                                                                                                            console.log(format);
+                                                                                                        </script>
+                                                                        
+                                                                                                    <%}%>
+                                                                                            </div>
+                                                                                            <div><span style="font-size: small;"><%=product.locality.name%></span></div>
+                                                                                            <div
+                                                                                                class="col_card_desc text-muted">
+                                                                                                <span
+                                                                                                    id="card_desc"><%=product.product_description%></span>
+                                                                                            </div>
+                                                                                        </div>
+
+                                                                                    </div>
+
+                                                                                </a>
+                                                                            </div>
+
+                                                                            <%}%>
+                                                            
+                                                            <%})%>
+                                                                            <%}%>
+                                                        </div>
+                                                    </div>
+    
+                                                    <div class="flex-fill" style="padding-left: 15px; text-align: end;">
+                                                        <span><i
+                                                                id="bls_righty" class="fas fa-chevron-right component_slide_indicator" aria-hidden="true"></i></span>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </section>
+                                        <%}%>
+                                                                            <section style="margin-top: 40px;">
+                                                                                <div class="d-flex bd-highlight">
+                                                                                    <div class="row_component flex-fill"
+                                                                                        style="padding-left: 10px; padding-right: 10px;">
+                                                                                        <div
+                                                                                            class="d-flex bd-highlight">
+                                                                                            <div
+                                                                                                class="product_collection_body_title">
+                                                                                                <span>TRENDING
+                                                                                                    PRODUCTS</span>
+                                                                                            </div>
+                                                                                            <div
+                                                                                                class="ml-auto component_title_small_red">
+                                                                    <span><a href="/product/search?searchlocation=Manipur&searchlocationproduct=trending">SHOW MORE</a></span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                </div>
+
+                                                                                <section style="margin-top: 20px;">
+                                                                                    <div
+                                                                                        class="d-flex bd-highlight align-items-center">
+                                                                                        <div onclick="show_next_bls(4)"
+                                                                                            class="flex-fill">
+                                                                                            <span><i id="tp_lefty"
+                                                                                                    class="fas fa-chevron-left component_slide_indicator"
+                                                                                                    aria-hidden="true"></i></span>
+                                                                                        </div>
+
+                                                                                        <!-- product grid section -->
+                                                                                        <div
+                                                                                            class="row_component flex-fill">
+                                                                                            <div class="d-flex bd-hightlight"
+                                                                                                id="tp_comp"
+                                                                                                style="overflow-x: hidden; overflow-y: hidden;">
+                                                                                                <%if(products.length > 0){%>
+                                                                                                <%products.forEach(function(product, index){%>
+                                                                                                <%if(index < 8){%>
+                                                                                                <div
+                                                                                                    class="product_collection_wrapper">
+                                                                                                    <a class="product_link"
+                                                                                                        href="/product/post/<%=product._id%>">
+                                                                                                        <div
+                                                                                                            class="product_collection_component_ele">
+                                                                                                            <!-- product image container -->
+                                                                                                            <div class="collection_card_image_container"
+                                                                                                                style="background-image: url('/product/image/<%=product.product_photos[0].photo.image_filename%>');">
+                                                                                                                <div
+                                                                                                                    class="ad_badge_overlay_container d-flex bd-highlight">
+                                                                                                                    <div>
+                                                                                                                        <span
+                                                                                                                            class="ad_badge">FEATURED</span>
+                                                                                                                    </div>
+                                                                                                                    <div
+                                                                                                                        class="ml-auto">
+                                                                                                                        <span
+                                                                                                                            class="ad_badge2"><i
+                                                                                                                                class="fas fa-heart like_badge"
+                                                                                                                                aria-hidden="true"></i></span>
+                                                                                                                    </div>
+
+                                                                                                                </div>
+                                                                                                                <br><br><br><br><br><br>
+			                                                        <div class="ad_badge_overlay_container d-flex flex-row-reverse">
+			                                                            <img src="https://i.imgur.com/FJDEL9O_d.webp?maxwidth=640&shape=thumb&fidelity=medium" alt="dm_icon" style="height: 20px; opacity: 0.5;">
+			                                                        </div>
+                                                                                                            </div>
+                                                                                                            <!-- product detail -->
+                                                                                                            <div
+                                                                                                                class="col_card_detail">
+                                                                                                                <div
+                                                                                                                    class="col_title_holder">
+                                                                                                                    <div
+                                                                                                                        class="col_card_ad_title flex-fill">
+                                                                                                                        <span><%=product.product_ad_title%></span>
+                                                                                                                    </div>
+                                                                                                                    <div
+                                                                                                                        class="col_card_date_container">
+                                                                                                                        <span
+                                                                                                                            class="col_card_date text-muted"><%=moment(product.createdAt).format('ll')%></span>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <div
+                                                                                                                    class="col_card_price">
+                                                                                                                    <%if(product.product_price_updated > 0){%>
+                                                                                                                       <%if(product.product_price_updated < product.product_price) {%>
+                                                                                                                            ₹ <span id="t_<%=product._id%>"></span>
+                                                                                                                            <script>
+                                                                                                                                var format = new Number('<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                                                                                                                document.getElementById("t_<%=product._id%>").innerHTML = format;
+                                                                                                                                console.log(format);
+                                                                                                                            </script>
+                                                                                                                            <span class="productAdPrice" style="font-size:70%; color: #99a3a4;"><del>₹ <%=product.product_price%></del></span>
+                                                                                                                        <%}
+                                                                                                                        else{%>
+                                                                                                                            ₹ <span id="t_<%=product._id%>"></span>
+                                                                                                                            <script>
+                                                                                                                                var format = new Number('<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                                                                                                                document.getElementById("t_<%=product._id%>").innerHTML = format;
+                                                                                                                                console.log(format);
+                                                                                                                            </script>
+                                                                                                                        <%}%>
+                                                                                                                        %>
+                                                                                                                    <%}
+                                                                                                                        else{%>
+                                                                                                                            ₹ <span id="t_<%=product._id%>"></span>
+                                                                                                                            <script>
+                                                                                                                                var format = new Number('<%=product.product_price%>').toLocaleString('en-IN');
+                                                                                                                                document.getElementById("t_<%=product._id%>").innerHTML = format;
+                                                                                                                                console.log(format);
+                                                                                                                            </script>
+                                                                                            
+                                                                                                                        <%}%>
+                                                                                                                </div>
+                                                                                                                <div><span style="font-size: small;"><%=product.locality.name%></span></div>
+                                                                                                                <div
+                                                                                                                    class="col_card_desc text-muted">
+                                                                                                                    <span><%=product.product_description%></span>
+                                                                                                                </div>
+                                                                                                            </div>
+
+                                                                                                        </div>
+                                                                                                    </a>
+                                                                                                </div>
+                                                                                                <%}%>
+                                                            
+                                                            <%})%>
+                                                                                                <%}%>
+                                                        </div>
+                                                    </div>
+    
+                                                    <div class="flex-fill" style="text-align: end;">
+                                                        <span><i id="tp_righty"
+                                                                class="fas fa-chevron-right component_slide_indicator" aria-hidden="true"></i></span>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </section>
+
+                                        <!-- Quick Search section starts here -->
+
+                                        <section style="margin-top: 30px;">
+                                            <div>
+                                                <span class="product_collection_body_title">QUICK SEARCHES</span><br>
+                                                <small class="text-muted">Discover products by categories</small>
+                                            </div>
+                                            <div style="padding: 10px;">
+                                                <div class="row quick_search_holder">
+                                                    <div class="col-md-2 col-sm-6">
+                                                        <a href="/product/search?searchlocation=Manipur&searchlocationproduct=mobiles" style="text-decoration: none; color: black;">
+                                                            <div>
+                                                                <div class="quick_search_comp" style="background-image: url('/assets/img/product-category/phone_color.png');">
+                                                                </div>
+                                                                <div style="text-align: center;">
+                                                                    Mobiles
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    
+                                                    
+                                                    
+                                                    <div class="col-md-2 col-sm-6">
+                                                        <a href="/product/search?searchlocation=Manipur&searchlocationproduct=cars" style="text-decoration: none; color: black;">
+                                                            <div>
+                                                                <div class="quick_search_comp" style="background-image: url('/assets/img/product-category/car_color.png');">
+                                                                </div>
+                                                                <div style="text-align: center;">
+                                                                    Cars
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-6">
+                                                        <a href="/product/search?searchlocation=Manipur&searchlocationproduct=bikes" style="text-decoration: none; color: black;">
+                                                            <div>
+                                                                <div class="quick_search_comp" style="background-image: url('/assets/img/product-category/bike_color.png');">
+                                                                </div>
+                                                                <div style="text-align: center;">
+                                                                    Bikes
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-6">
+                                                        <a href="/product/search?searchlocation=Manipur&searchlocationproduct=Electronics & Appliances" style="text-decoration: none; color: black;">
+                                                            <div>
+                                                                <div class="quick_search_comp" style="background-image: url('/assets/img/product-category/laptop_color.png');">
+                                                                </div>
+                                                                <div style="text-align: center;">
+                                                                    Electronics & Appliances
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-6">
+                                                        <a href="/product/search?searchlocation=Manipur&searchlocationproduct=Home & Lifestyle" style="text-decoration: none; color: black;">
+                                                            <div>
+                                                                <div class="quick_search_comp" style="background-image: url('/assets/img/product-category/sofa_color.png');">
+                                                                </div>
+                                                                <div style="text-align: center;">
+                                                                    Home & Lifestyle
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-2 col-sm-6">
+                                                        <a href="/product/search?searchlocation=Manipur&searchlocationproduct=Bakery" style="text-decoration: none; color: black;">
+                                                            <div>
+                                                                <div class="quick_search_comp" style="background-image: url('/assets/img/product-category/bakery_color.png');">
+                                                                </div>
+                                                                <div style="text-align: center;">
+                                                                    Bakery
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </section>
+
+                                        <!-- Quick Search section ends here -->
+
+                                        <!-- Popular localities starts here -->
+
+                                        <section style="margin-top: 30px;">
+                                            <div>
+                                                <span class="product_collection_body_title">Popular Localities in and around Imphal West</span><br>
+                                                <small class="text-muted">Explore Digital Manipur Marketplace by their localities</small>
+                                            </div>
+                                            <div class="lc_container">
+                                                <div class="row">
+                                                    <%sorted_locality_list.forEach(function(lc, index){%>
+                                                                                                <%if(index < 30){%>
+                                                                                                <div class="col-md-4 lc_ele"
+                                                                                                    onclick="submitLcForm('lc_form_<%=index%>')">
+                                                                                                    <div
+                                                                                                        class="d-flex bd-highlight">
+                                                                                                        <span
+                                                                                                            class="lc_name"><%=lc.location%></span>
+                                                                                                        <span
+                                                                                                            class="text-muted lc_count">
+                                                                                                            (<%=lc.count%>
+                                                                                                            <%if(lc.count > 1){%>Products<%}else{%>Product<%}%>)
+                                                                                                        </span>
+                                                                                                    </div>
+                                                                                                    <form
+                                                                                                        action="/product/search"
+                                                                                                        id="lc_form_<%=index%>"
+                                                                                                            style="display:
+                                                                                                            none;">
+                                                                                                            <input
+                                                                                                                type="hidden"
+                                                                                                                name="searchlocation"
+                                                                                                                value="<%=lc.location%>">
+                                                                                                            <input
+                                                                                                                type="hidden"
+                                                                                                                name="searchlocationproduct"
+                                                                                                                value="">
+            </form>
+
+            </div>
+            <%}%>
+                                                                                                    
+                                                                                                    <%})%>
+            </div>
+            </div>
+
+        </section>
+
+        <!-- Popular localities ends here -->
+
+
+    </section>
+    <script>
+        $('#bls_righty').click(function () {
+            event.preventDefault();
+            $('#bls_comp').animate({
+                scrollLeft: "+=300px"
+            }, "slow");
+        });
+
+        $('#bls_lefty').click(function () {
+            event.preventDefault();
+            $('#bls_comp').animate({
+                scrollLeft: "-=300px"
+            }, "slow");
+        });
+
+
+        $('#tp_righty').click(function () {
+            event.preventDefault();
+            $('#tp_comp').animate({
+                scrollLeft: "+=300px"
+            }, "slow");
+        });
+
+        $('#tp_lefty').click(function () {
+            event.preventDefault();
+            $('#tp_comp').animate({
+                scrollLeft: "-=300px"
+            }, "slow");
+        });
+
+        function submitLcForm(formid) {
+            document.getElementById(formid).submit();
+        }
+    </script>
+    <script type="text/javascript" src="/assets/js/lozad.min.js"></script>
+    <script src="/assets/js/detail-functions.js"></script>
+    <script type="text/javascript" src="/assets/js/product-search-functions.js"></script>
+    <script src="/assets/js/product-category.js"></script>
+    <%- include('./../../includes/footer.ejs') %>

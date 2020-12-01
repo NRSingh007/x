@@ -1,0 +1,1071 @@
+<%- include('./../../includes/product/header.ejs') %>
+
+</head>
+
+<body>
+    <%- include('./../../includes/product/navBar.ejs') %>
+    <!-- product category list goes here -->
+    <section style="margin-top: 20px; background: white;" class="container">
+        <div align="center" class="post-ad-banner">
+            <span>Post Your Ad</span>
+        </div>
+        <div>
+            <div class="post-ad-banner">SELECTED CATEGORY</div>
+            <div style="padding-left: 10px;">
+                <%= category %> / <%= subcategory %>
+            </div>
+            <hr>
+        </div>
+        <!-- form test section -->
+        <!-- <section>
+            <form action="/product/create" method="POST" enctype="multipart/form-data">
+                <input type="file" name="photo1">
+                <input type="file" name="photo2">
+                <input type="text" name="testInput">
+                <button type="submit">Submit</button>
+            </form>
+        </section> -->
+        <!-- form test section: end -->
+        <section>
+            <form id="product_form" <%if(edit){%>action="/product/update" <%} else{%>action="/product/create" <%}%> method="POST" enctype="multipart/form-data">
+                <div class="row" style="padding: 10px;">
+                    <%if(edit){%> <input type="hidden" name="product_id" value="<%=product._id%>">
+                <%}%>
+                    
+                    <div class="col-md-8 col-sm-12">
+                        <div class="sub-category-form-header">INCLUDE SOME DETAILS</div>
+                        <div class="form-group">
+                            <label for="ad_title">Ad Title*</label>
+                            <input type="text" class="form-control" name="product_ad_title" id="product_ad_title" value="<%if(edit){%><%=product.product_ad_title%><%}%>">
+                            <small class="form-text text-muted">Mention the key features of your
+                                item(e.g. brand, model, age, type).</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="product_seller_type">Seller Type*</label>
+                            <select class="form-control custom-select" 
+                                id="product_seller_type" name="product_seller_type">
+                                <%if(edit == true){%>
+                <option value=" Individual" <%if(product.product_seller_type == 'Individual'){%>selected<%}%>
+                                    >Individual</option>
+                                <option value="Dealer" <%if(product.product_seller_type == 'Dealer'){%>selected<%}%>>Dealer</option>
+                                    <%} else {%> <option value="Individual">Individual</option>
+                <option value="Dealer">Dealer</option>
+                <%}%>
+                            </select>
+                        </div>
+                        <!-- ********* category - Mobiles ********* -->
+                        <% if (category === 'Mobiles') { %>
+
+                <!-- sub-category - Mobile Phones, Tablets -->
+                <% if (subcategory === 'Mobile Phones' || subcategory === 'Tablets') { %>
+                <%- include('./mobiles-phones.ejs') %>
+                <% } %>
+
+                <!-- sub-category - Accessories -->
+                <% if (subcategory === 'Mobile Accessories') { %>
+                <%- include('./mobiles-accessories.ejs') %>
+                <% } %>
+
+                <% } %>
+
+                <!-- ********* category - Cars *********** -->
+                <% if (category === 'Cars') { %>
+
+                <!-- sub-category - Cars -->
+                <% if (subcategory === 'Cars') {%>
+                <%- include('./cars-cars.ejs') %>
+                <% } %>
+
+                <!-- sub-category - Commercial & Other Vehicles -->
+                <% if (subcategory === 'Commercial & Other Vehicles') {%>
+                <%- include('./cars-commercial-vehicle.ejs') %>
+                <% } %>
+
+                <!-- sub-category - Spare Parts - Accessories -->
+                <!-- Default layout form field -->
+
+                <% } %>
+
+
+                <!-- ************ category - Bikes ************** -->
+                <% if (category === 'Bikes') { %>
+
+                <!-- sub-category - Motorcycles, Scooters -->
+                <% if (subcategory === 'Motorcycles' || subcategory === 'Scooters') {%>
+                <%- include('./bikes-motorcycles.ejs') %>
+                <% } %>
+
+                <!-- sub-category - Bicycles -->
+                <% if (subcategory === 'Bicycles') {%>
+                <%- include('./bikes-bicycles.ejs') %>
+                <% } %>
+
+                <!-- sub-category - Spare Parts - Accessories -->
+                <!-- Default layout form field -->
+
+                <% } %>
+
+
+                <!-- *********** category - Electronics & Appliances *********** -->
+                <% if (category === 'Electronics & Appliances') { %>
+
+                <!-- sub-category - Computers & Laptops,
+                        Computers & Laptops,
+                        Camera & Lenses,
+                        Hard Disks, Printers & Monitors,
+                        TVs, Video - Audio,
+                        Kitchen & Other Appliances,
+                        Fridges,
+                        ACs,
+                        Washing Machines -->
+
+                <% if (
+                            subcategory === 'Computers & Laptops' ||
+                            subcategory === 'Camera & Lenses' ||
+                            subcategory === 'Hard Disks, Printers & Monitors' ||
+                            subcategory === 'TVs, Video - Audio' ||
+                            subcategory === 'Kitchen & Other Appliances' ||
+                            subcategory === 'Fridges' || subcategory === 'ACs' ||
+                            subcategory === 'Washing Machines'
+                            ) {%>
+                <%- include('./electronics-appliances-products.ejs') %>
+                <% } %>
+
+                <!-- sub-category - Computer Accesories, Games & Entertainment -->
+                <!-- Default layout form field -->
+
+                <% } %>
+
+                <!-- *********** Home & Lifestyle *********** -->
+                <% if (category === 'Home & Lifestyle') { %>
+
+                <!-- sub-category - Clothing - Garments,
+                                    Footware,
+                                    Watches,
+                                    Bags - Luggage,
+                                    Jewellery,
+                                    Fashion Accessories -->
+                <% if (
+                                    subcategory === 'Clothing - Garments' ||
+                                    subcategory === 'Footware' ||
+                                    subcategory === 'Watches' ||
+                                    subcategory === 'Bags - Luggage' ||
+                                    subcategory === 'Jwellery' ||
+                                    subcategory === 'Fashion Accessories'
+                                    ) {%>
+                <%- include('./home-lifestyle-products.ejs') %>
+                <% } %>
+
+                <!-- sub-category - Furniture for Home & Office,
+                                Home Decor - Furnishings,
+                                Kitchenware,
+                                Paintings,
+                                Toys - Games,
+                                Baby - Infant Products,
+                                Sports - Fitness Equipment,
+                                Books - Megazines,
+                                Musical Instruments,
+                                Collectibles,
+                                Health - Beauty Products,
+                                Gifts - Stationary-->
+                <!-- Default layout form field -->
+
+                <% } %>
+
+
+                <div class=" form-group">
+                    <label for="description">Description*</label>
+                    <textarea class="form-control" id="product_description" name="product_description"
+                        rows="3"><%if(edit){%><%=product.product_description%><%}%></textarea>
+                    <small class="form-text text-muted">Include condition, features and reason for
+                        selling.</small>
+                </div>
+                <hr>
+                <div class="sub-category-form-header">SET A PRICE</div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Price*</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">₹</span>
+                                </div>
+                                <input type="number" step="0" name="product_price" class="form-control"
+                                    id="product_price" value="<%if(edit){%><%=product.product_price%><%}%>">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <%if(edit){%>
+                            <div class=" row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>New Price*</label>
+                                        <div class="input-group mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="basic-addon1">₹</span>
+                                            </div>
+                                            <input type="number" step="0" name="product_price_updated"
+                                                class="form-control" id="product_price_updated" value="<%if(edit){%><%=product.product_price_updated%><%}%>">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <%}%>
+                        
+                        <hr>
+                        
+                        
+                        <!-- ############################################### -->
+                        <div class=" sub-category-form-header">UPLOAD PHOTOS
+                                        </div>
+                                        <div class="d-flex bd-highlight flex-wrap photo_section"
+                                            id="update_photo_section">
+                                            <%if(edit && product.product_photos[0] != null){%>
+                                            <div class="upload-image-wrap flex_md_30" id="img1"
+                                                style="background-image: url('/product/image/<%=product.product_photos[0].photo.image_filename%>');">
+                                                <div class="d-flex bd-highlight flex-column">
+                                                    <div class="ml-auto delete_photo_btn"
+                                                        onclick="deleteProductImage('img1', 'output','<%=product._id%>','<%=product.product_photos[0]._id%>','<%=product.product_photos[0].photo.image_id%>')">
+                                                        <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <%}%>
+                                                    <div class="upload-image-wrap flex_md_30" id="output"
+                                                        style="<%if(edit && product.product_photos[0] != null){%>display:none; <%}%>">
+                                                        <!-- preview output image -->
+                                                        <!-- file input button -->
+                                                        <label for="input">
+                                                            <div id="input_file_holder">
+                                                                <img id="inputbutton"
+                                                                    src="/assets/img/product-category/upload-image.png"
+                                                                    alt="upload image">
+                                                            </div>
+                                                            <input type="file" accept="image/*" name="photo1" id="input"
+                                                                onchange="loadFile(event, 'output', 'inputbutton', 'remove_preview',  'input_file_holder')"
+                                                                class="inputfile">
+                                                        </label>
+
+                                                        <div class="remove_prev_section">
+                                                            <div style="display: none;" id="remove_preview">
+                                                                <!-- <button onclick="removefile()" type="button">Remove</button> -->
+                                                                <button class="remove_prev btn btn-outline-danger"
+                                                                    type="button"
+                                                                    onclick="removefile('output', 'input', 'remove_preview','inputbutton', 'input_file_holder')">Remove</button>
+                                                            </div>
+
+                                                        </div>
+                                                        <div style="color: #cb202d; display: none;"
+                                                            id="image_upload_error">
+                                                            Upload Image
+                                                        </div>
+                                                    </div>
+                                                    
+
+                            
+                                                <%if(edit && product.product_photos[1] != null){%> <div id="img2"
+                                                class="upload-image-wrap flex_md_30"
+                                                style="background-image: url('/product/image/<%=product.product_photos[1].photo.image_filename%>');">
+                                                <div class="d-flex bd-highlight flex-column">
+                                                    <div class="ml-auto delete_photo_btn"
+                                                        onclick="deleteProductImage('img2', 'output2','<%=product._id%>','<%=product.product_photos[1]._id%>','<%=product.product_photos[1].photo.image_id%>')">
+                                                        <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <%}%>
+
+                                                    <div class="upload-image-wrap flex_md_30" id="output2" style="<%if(edit && product.product_photos[1] != null){%>display:none; <%}%>">
+                                                        <!-- preview output image -->
+                                                        <!-- file input button -->
+                                                        <label for="input2">
+                                                            <div id="input_file_holder2">
+                                                                <img id="inputbutton2"
+                                                                    src="/assets/img/product-category/upload-image.png"
+                                                                    alt="upload image">
+                                                            </div>
+                                                            <input type="file" accept="image/*" name="photo2"
+                                                                id="input2"
+                                                                onchange="loadFile(event, 'output2', 'inputbutton2', 'remove_preview2', 'input_file_holder2')"
+                                                                class="inputfile">
+                                                        </label>
+
+                                                        <div class="remove_prev_section">
+                                                            <div style="display: none;" id="remove_preview2">
+                                                                <!-- <button onclick="removefile()" type="button">Remove</button> -->
+                                                                <button class="remove_prev btn btn-outline-danger"
+                                                                    type="button"
+                                                                    onclick="removefile('output2', 'input2', 'remove_preview2', 'inputbutton2','input_file_holder2')">Remove</button>
+                                                            </div>
+
+                                                        </div>
+                                                        <div style="color: #cb202d; display: none;"
+                                                            id="image_upload_error2">
+                                                            Upload Image
+                                                        </div>
+                                                    </div>
+                                                    
+
+                            <%if(edit && product.product_photos[2] != null){%>
+                                            <div class="upload-image-wrap flex_md_30" id="img3"
+                                                style="background-image: url('/product/image/<%=product.product_photos[2].photo.image_filename%>');">
+                                                <div class="d-flex bd-highlight flex-column">
+                                                    <div class="ml-auto delete_photo_btn"
+                                                        onclick="deleteProductImage('img3', 'output3', '<%=product._id%>','<%=product.product_photos[2]._id%>','<%=product.product_photos[2].photo.image_id%>')">
+                                                        <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <%}%>
+
+                                                    <div class="upload-image-wrap flex_md_30" id="output3" style="<%if(edit && product.product_photos[2] != null){%>display:none; <%}%>">
+                                                        <!-- preview output image -->
+                                                        <!-- file input button -->
+                                                        <label for="input3">
+                                                            <div id="input_file_holder3">
+                                                                <img id="inputbutton3"
+                                                                    src="/assets/img/product-category/upload-image.png"
+                                                                    alt="upload image">
+                                                            </div>
+                                                            <input type="file" accept="image/*" name="photo3"
+                                                                id="input3"
+                                                                onchange="loadFile(event, 'output3', 'inputbutton3', 'remove_preview3', 'input_file_holder3')"
+                                                                class="inputfile">
+                                                        </label>
+
+                                                        <div class="remove_prev_section">
+                                                            <div style="display: none;" id="remove_preview3">
+                                                                <!-- <button onclick="removefile()" type="button">Remove</button> -->
+                                                                <button class="remove_prev btn btn-outline-danger"
+                                                                    type="button"
+                                                                    onclick="removefile('output3', 'input3', 'remove_preview3', 'inputbutton3', 'input_file_holder3')">Remove</button>
+                                                            </div>
+
+                                                        </div>
+                                                        <div style="color: #cb202d; display: none;"
+                                                            id="image_upload_error3">
+                                                            Upload Image
+                                                        </div>
+                                                    </div>
+                                                    
+
+                            <%if(edit && product.product_photos[3] != null){%>
+                                            <div class="upload-image-wrap flex_md_30" id="img4"
+                                                style="background-image: url('/product/image/<%=product.product_photos[3].photo.image_filename%>');">
+                                                <div class="d-flex bd-highlight flex-column">
+                                                    <div class="ml-auto delete_photo_btn"
+                                                        onclick="deleteProductImage('img4', 'output4', '<%=product._id%>','<%=product.product_photos[3]._id%>','<%=product.product_photos[3].photo.image_id%>')">
+                                                        <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <%}%>
+
+                                                    <div class="upload-image-wrap flex_md_30" id="output4" style="<%if(edit && product.product_photos[3] != null){%>display:none; <%}%>">
+                                                        <!-- preview output image -->
+                                                        <!-- file input button -->
+                                                        <label for="input4">
+                                                            <div id="input_file_holder4">
+                                                                <img id="inputbutton4"
+                                                                    src="/assets/img/product-category/upload-image.png"
+                                                                    alt="upload image">
+                                                            </div>
+                                                            <input type="file" accept="image/*" name="photo4"
+                                                                id="input4"
+                                                                onchange="loadFile(event, 'output4', 'inputbutton4', 'remove_preview4', 'input_file_holder4')"
+                                                                class="inputfile">
+                                                        </label>
+
+                                                        <div class="remove_prev_section">
+                                                            <div style="display: none;" id="remove_preview4">
+                                                                <!-- <button onclick="removefile()" type="button">Remove</button> -->
+                                                                <button class="remove_prev btn btn-outline-danger"
+                                                                    type="button"
+                                                                    onclick="removefile('output4', 'input4', 'remove_preview4','inputbutton4', 'input_file_holder4')">Remove</button>
+                                                            </div>
+
+                                                        </div>
+                                                        <div style="color: #cb202d; display: none;"
+                                                            id="image_upload_error4">
+                                                            Upload Image
+                                                        </div>
+                                                    </div>
+                                                    
+
+                            <%if(edit && product.product_photos[4] != null){%>
+                                            <div class="upload-image-wrap flex_md_30" id="img5"
+                                                style="background-image: url('/product/image/<%=product.product_photos[4].photo.image_filename%>');">
+                                                <div class="d-flex bd-highlight flex-column">
+                                                    <div class="ml-auto delete_photo_btn"
+                                                        onclick="deleteProductImage('img5', 'output5', '<%=product._id%>','<%=product.product_photos[4]._id%>','<%=product.product_photos[4].photo.image_id%>')">
+                                                        <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <%}%>
+                                                    <div class="upload-image-wrap flex_md_30" id="output5" style="<%if(edit && product.product_photos[4] != null){%>display:none; <%}%>">
+                                                        <!-- preview output image -->
+                                                        <!-- file input button -->
+                                                        <label for="input5">
+                                                            <div id="input_file_holder5">
+                                                                <img id="inputbutton5"
+                                                                    src="/assets/img/product-category/upload-image.png"
+                                                                    alt="upload image">
+                                                            </div>
+                                                            <input type="file" accept="image/*" name="photo5"
+                                                                id="input5"
+                                                                onchange="loadFile(event, 'output5', 'inputbutton5', 'remove_preview5', 'input_file_holder5')"
+                                                                class="inputfile">
+                                                        </label>
+
+                                                        <div class="remove_prev_section">
+                                                            <div style="display: none;" id="remove_preview5">
+                                                                <!-- <button onclick="removefile()" type="button">Remove</button> -->
+                                                                <button class="remove_prev btn btn-outline-danger"
+                                                                    type="button"
+                                                                    onclick="removefile('output5', 'input5', 'remove_preview5','inputbutton5', 'input_file_holder5')">Remove</button>
+                                                            </div>
+
+                                                        </div>
+                                                        <div style="color: #cb202d; display: none;"
+                                                            id="image_upload_error5">
+                                                            Upload Image
+                                                        </div>
+                                                    </div>
+                                                    
+
+
+                            <%if(edit && product.product_photos[5] != null){%>
+                                            <div class="upload-image-wrap flex_md_30" id="img6"
+                                                style="background-image: url('/product/image/<%=product.product_photos[5].photo.image_filename%>');">
+                                                <div class="d-flex bd-highlight flex-column">
+                                                    <div class="ml-auto delete_photo_btn"
+                                                        onclick="deleteProductImage('img6', 'output6', '<%=product._id%>','<%=product.product_photos[5]._id%>','<%=product.product_photos[5].photo.image_id%>')">
+                                                        <i class="fas fa-trash-alt" aria-hidden="true"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <%}%>
+                                                    <div class="upload-image-wrap flex_md_30" id="output6" style="<%if(edit && product.product_photos[5] != null){%>display:none; <%}%>">
+                                                        <!-- preview output image -->
+                                                        <!-- file input button -->
+                                                        <label for="input6">
+                                                            <div id="input_file_holder6">
+                                                                <img id="inputbutton6"
+                                                                    src="/assets/img/product-category/upload-image.png"
+                                                                    alt="upload image">
+                                                            </div>
+                                                            <input type="file" accept="image/*" name="photo6"
+                                                                id="input6"
+                                                                onchange="loadFile(event, 'output6', 'inputbutton6', 'remove_preview6', 'input_file_holder6')"
+                                                                class="inputfile">
+                                                        </label>
+
+                                                        <div class="remove_prev_section">
+                                                            <div style="display: none;" id="remove_preview6">
+                                                                <!-- <button onclick="removefile()" type="button">Remove</button> -->
+                                                                <button class="remove_prev btn btn-outline-danger"
+                                                                    type="button"
+                                                                    onclick="removefile('output6', 'input6', 'remove_preview6', 'inputbutton6','input_file_holder6')">Remove</button>
+                                                            </div>
+
+                                                        </div>
+                                                        <div style="color: #cb202d; display: none;"
+                                                            id="image_upload_erro6r">
+                                                            Upload Image
+                                                        </div>
+                                                    </div>
+                                                    
+                            
+
+                        </div>
+                        
+
+
+                        <hr>
+                        <div class="sub-category-form-header">SELECT YOUR LOCATION</div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="product_ad_state">State*</label>
+                                    <select class="form-control custom-select" onchange="updateDistrict()" id="product_ad_state" name="state">
+                                        <option value="none">Select State</option>
+
+                                        <% if(states.length > 0){ %>
+                                            <%if(edit == false){%>
+                                            <% for(let state of states){%>
+                                            <option value=" <%=state._id%>"><%=state.name%></option>
+                                            <% } %>
+                                            <%}%>
+                                                    
+                                            <%if(edit == true){%>
+                                            <%states.forEach(function(state, ind){%>
+                                            <option value=" <%=state._id%>" <%if(product.state._id.toString().trim() == state._id.toString().trim() ){%>selected<%}%>
+                                                        ><%=state.name%></option>
+                                                <%})%>
+                                                <%}%>
+
+                                                    <% } %>
+                                                </select>
+                                        </div>
+
+                                    </div>
+                                    <div class=" col-md-6">
+                                        <div class="form-group">
+                                            <label for="product_ad_district">District*</label>
+                                            <select class="form-control custom-select" onchange="updateLocality()"
+                                                id="product_ad_district" name="district">
+                                                <option value="none">Select District</option>
+                                                <%if(edit == true){%>
+                                                <%if(districts.length > 0){%>
+                                                <%districts.forEach(function(district, ind){%>
+                                                <%if(district.state._id.toString().trim() == product.state._id.toString().trim()){%>
+
+                                                <option value="<%=district._id%>" <%if(district._id.toString().trim() == product.district._id.toString().trim() ){%>selected<%}%>
+                                                            ><%=district.name%></option>
+                                                    <%}%>
+                                                        <%})%>
+                                                    <%}%>
+                                                            <%}%>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="product_ad_locality">Locality*</label>
+                                            <select class="form-control custom-select" id="product_ad_locality"
+                                                name="locality">
+                                                <option value="none">Select Locality</option>
+                                                <%if(edit == true){%>
+                                                <%if(localities.length > 0){%>
+                                                <%localities.forEach(function(locality, ind){%>
+                                                <%if(locality.district._id.toString().trim() == product.district._id.toString().trim()){%>
+
+                                                <option value="<%=locality._id%>" <%if(locality._id.toString().trim() == product.locality._id.toString().trim() ){%>selected<%}%>
+                                                                ><%=locality.name%></option>
+                                                    <%}%>
+                                                            <%})%>
+                                                    <%}%>
+                                                                <%}%>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="sub-category-form-header">REVIEW YOUR DETAILS</div>
+                                <div>
+                                    <div class="form-group">
+                                        <label for="name">Name*</label>
+                                        <input type="text" class="form-control" name="name" id="name" value="<%if(edit){%><%=product.name%><%}%>">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="email">Email*</label>
+                                    <input type="email" class="form-control" name="email" id="email" value="<%if(edit){%><%=product.email%><%}%>">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Mobile Number*</label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="basic-addon1">+91</span>
+                                        </div>
+                                        <input type="number" name="phone" id="phone" class="form-control" value="<%if(edit){%><%=product.phone%><%}%>">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="view_seller_info">Seller Info*</label>
+                                    <%if(edit){%>
+                                        <select class=" form-control custom-select" id="view_seller_info"
+                                            name="view_seller_info">
+                                        <option value="false" <%if(product.view_seller_info == false){%>selected<%}%> >Hide Info</option>
+                                            <option value="true" <%if(product.view_seller_info == true){%>selected<%}%> >Show Info</option>
+                                            </select>
+                                            <%} else{%> <select class="form-control custom-select"
+                                            id="view_seller_info" name="view_seller_info">
+                                        <option value="false" selected>Hide Info</option>
+                                        <option value="true">Show Info</option>
+                                        </select>
+                                        <%}%>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div style="background-color: #cb202d;">
+                            <div
+                                style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: white; padding-top: 5px; padding-left: 5px; padding-bottom: 0px;">
+                                Type
+                                of
+                                Ads</div>
+                            <div
+                                style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: white; padding-top: 0px; padding-left: 5px;">
+                                Please choose
+                                the below</div>
+                        </div>
+
+
+
+                        <!-- Product Ad types -->
+
+                            <%if(productAdTypes.length > 0){%>
+
+                                        <%productAdTypes.forEach(function(ad,index){%>
+                                        <div style=" border: 1px solid #e7e7e7; padding-top:5px; padding-bottom: 5px;">
+
+                                            <div style=" padding-left: 5px; padding-right: 5px; padding-top: 5px;">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="product_ad_type"
+                                                        value="<%=ad._id%>" <%if(index == 0){%>checked<%}%>>
+                                            <div class="sub-category-form-ad-banner">
+                                                <span style="text-transform: capitalize;"><%=ad.name%> Ad</span>
+                                                    <span>₹<%if(ad.pricePerMonth == null || ad.pricePerMonth == 0){%>0<%}else{%><%=ad.pricePerMonth%><%}%> / Month
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="padding-bottom: 5px;">
+                                        <div style="padding: 5px;">
+                                            <div style="display: flex;">
+                                                <span style="margin-right: 5px; margin-left: 20px;"><small
+                                                        class="form-text text-muted">-</small></span><span><small
+                                                        class="form-text text-muted">Valid for <%=ad.validityIndays%>
+                                                        days.</small></span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <%})%>
+                                    <%}%>
+
+                                
+
+                                
+
+                        
+                        <input type="hidden" name="category" id="category" value="<%=category%>">
+                                    <input type="hidden" name="subcategory" id="subcategory" value="<%=subcategory%>">
+                                    <input type="hidden" name="user_id" value="<%=user_id %>">
+                                    <%if(edit){%>
+                                    <div style="margin-top: 10px;">
+                                        <button type="submit" class="btn btn-danger btn-block"
+                                            onclick="return validateFormSubmit('edit')">Post Ad</button>
+                                    </div>
+                                    <%} else {%>
+                                    <div style="margin-top: 10px;">
+                                        <button type="submit" class="btn btn-danger btn-block"
+                                            onclick="return validateFormSubmit('create')">Post Ad</button>
+                                    </div>
+                                    <%}%>
+                                    
+
+                                </div>
+                            </div>
+            </form>
+        </section>
+
+    </section>
+    <script>
+        function updateDistrict() {
+            $.get('/product/form-init-data', (data, status) => {
+                if (status == 'success') {
+                    const stateId = document.getElementById('product_ad_state').value;
+                    // console.log(data.states);
+                    // console.log(data.districts);
+                    const updatedDistricts = []
+                    console.log(stateId);
+                    for (let i = 0; i < data.districts.length; i++) {
+                        if (data.districts[i].state.trim() == stateId.trim()) {
+                            updatedDistricts.push(data.districts[i]);
+                        }
+                    }
+                    console.log(updatedDistricts.length);
+
+                    // updatedDistricts.forEach(element => {
+                    //     console.log(element);
+                    // })
+
+                    $('#product_ad_district option:not(:first-child)').remove();
+                    updatedDistricts.forEach(newDistrict => {
+                        $('#product_ad_district').append(
+                            `<option value="${newDistrict._id}">${newDistrict.name}</option>`
+                        );
+                    })
+                    // console.log(updatedDistricts.length);
+                    // console.log({ updatedDistricts, stateId });
+
+                }
+            }).fail((error) => {
+                console.log('Fail ', error)
+            });
+        }
+
+        // function updateLocality() {
+        //     $.get('/product/form-init-data', (data, status) => {
+        //         if (status == 'success') {
+        //             const districtId = document.getElementById('product_ad_district').value;
+        //             // console.log(data.states);
+        //             // console.log(data.localities);
+        //             const updatedLocalities = []
+
+        //             console.log(districtId);
+        //             for (let i = 0; i < data.localities.length; i++) {
+        //                 if (data.localities[i].district.trim() == districtId.trim()) {
+        //                     updatedLocalities.push(data.localities[i]);
+        //                 }
+        //             }
+        //             console.log(updatedLocalities.length);
+
+        //             // updatedDistricts.forEach(element => {
+        //             //     console.log(element);
+        //             // })
+
+        //             $('#product_ad_locality option:not(:first-child)').remove();
+        //             updatedLocalities.forEach(newLocality => {
+        //                 $('#product_ad_locality').append(
+        //                     `<option value="${newLocality._id}">${newLocality.name}</option>`
+        //                 );
+        //             })
+        //             // console.log(updatedDistricts.length);
+        //             // console.log({ updatedDistricts, stateId });
+
+        //         }
+        //     }).fail((error) => {
+        //         console.log('Fail ', error)
+        //     });
+        // }
+
+        const updateLocality = () => {
+            return fetch('/product/form-init-data')
+                .then(response => response.json())
+                .then(data => {
+                    const districtId = document.getElementById('product_ad_district').value;
+                    // console.log(data.states);
+                    // console.log(data.localities);
+
+                    const updatedLocalities = [];
+                    console.log(districtId);
+
+                    console.log(data.localities);
+
+                    data.localities.forEach(i => {
+                        if (i.district.trim() == districtId.trim()) {
+                            updatedLocalities.push(i);
+                        }
+
+                    })
+                    console.log(updatedLocalities.length);
+
+                    let locality_list = document.getElementById('product_ad_locality');
+                    while (locality_list.childNodes.length > 2) {
+                        locality_list.removeChild(locality_list.lastChild);
+                    }
+
+                    let prod_local = document.getElementById("product_ad_locality");
+                    updatedLocalities.forEach(element => {
+                        let opt = document.createElement('option');
+                        opt.appendChild(document.createTextNode(`${element.name}`));
+                        opt.value = `${element._id}`;
+                        prod_local.appendChild(opt);
+                    })
+
+
+
+                })
+                .catch(error => {
+                    console.log('Fail', error)
+                })
+        }
+
+        function getAdType(ad_type) {
+            let product_ad_type = document.getElementById('product_ad_type');
+            product_ad_type.value = ad_type.trim();
+            console.log(product_ad_type.value);
+        }
+
+
+        function toggle_edit_photo_section(sectionid) {
+            let photoSection = document.getElementById(sectionid);
+
+            if (photoSection.style.display == 'none') {
+                photoSection.style.display = 'block';
+                console.log('display hidden');
+            } else {
+                photoSection.style.display = 'none';
+                console.log('display visible');
+            }
+        }
+
+
+
+        function validateFormSubmit(condition) {
+            // dynamic pre inserted value
+            let category = document.getElementById('category').value;
+            let subcategory = document.getElementById('subcategory').value;
+
+            // dynamic post value insertion
+            let product_ad_title = document.getElementById('product_ad_title');
+            let product_brand = document.getElementById('product_brand');
+            let product_condition = document.getElementById('product_condition');
+            let product_type = document.getElementById('product_type');
+            let product_year = document.getElementById('product_year');
+            let product_fuel_type = document.getElementById('product_fuel_type');
+            let product_transmission_type = document.getElementById('product_transmission_type');
+            let product_no_of_owner = document.getElementById('product_no_of_owner');
+            let product_km_driven = document.getElementById('product_km_driven');
+            let product_door_style = document.getElementById('product_door_style');
+            let product_for = document.getElementById('product_for');
+            let product_description = document.getElementById('product_description');
+            let product_price = document.getElementById('product_price');
+
+            // image inputs
+            let input1 = document.getElementById('input');
+            let input2 = document.getElementById('input2');
+            let input3 = document.getElementById('input3');
+            let input4 = document.getElementById('input4');
+            let input5 = document.getElementById('input5');
+            let input6 = document.getElementById('input6');
+            let image_upload_error = document.getElementById('image_upload_error');
+
+            // location input
+            let product_state = document.getElementById('product_ad_state');
+            let product_district = document.getElementById('product_ad_district');
+            let product_locality = document.getElementById('product_ad_locality');
+
+            let name = document.getElementById('name');
+            let email = document.getElementById('email');
+            let phone = document.getElementById('phone');
+
+            let atpos = email.value.indexOf("@");
+            let dotpos = email.value.indexOf(".");
+
+
+            if (product_ad_title.value == '') {
+                product_ad_title.style.border = "1px solid red";
+                return false;
+            }
+
+
+
+            // product brand validation
+            if (subcategory.trim() == "Mobile Phones" ||
+                subcategory.trim() == "Tablets" ||
+                subcategory.trim() == "Cars" ||
+                subcategory.trim() == "Motorcycles" ||
+                subcategory.trim() == "Scooters" ||
+                subcategory.trim() == "Bicycles" ||
+                subcategory.trim() == "Computers & Laptops" ||
+                subcategory.trim() == "Camera & Lenses" ||
+                subcategory.trim() == "Hard Disks, Printers & Monitors" ||
+                subcategory.trim() == "TVs, Video - Audio" ||
+                subcategory.trim() == "Kitchen & Other Appliances" ||
+                subcategory.trim() == "Fridges" ||
+                subcategory.trim() == "ACs" ||
+                subcategory.trim() == "Washing Machines" ||
+                subcategory.trim() == "Watches"
+
+            ) {
+                if (product_brand.value == 'none') {
+                    product_brand.style.border = "1px solid red";
+                    return false;
+                }
+            }
+
+            // product condition validation
+            if (subcategory.trim() == "Mobile Phones" ||
+                subcategory.trim() == "Tablets" ||
+                subcategory.trim() == "Computers & Laptops" ||
+                subcategory.trim() == "Camera & Lenses" ||
+                subcategory.trim() == "Hard Disks, Printers & Monitors" ||
+                subcategory.trim() == "TVs, Video - Audio" ||
+                subcategory.trim() == "Kitchen & Other Appliances" ||
+                subcategory.trim() == "Fridges" ||
+                subcategory.trim() == "ACs" ||
+                subcategory.trim() == "Washing Machines"
+            ) {
+                if (product_condition.value == 'none') {
+                    product_condition.style.border = "1px solid red";
+                    return false;
+                }
+            }
+
+            // product type validation
+            if (subcategory.trim() == "Mobile Accessories" ||
+                subcategory.trim() == "Commercial & Other Vehicles" ||
+                subcategory.trim() == "Watches" ||
+                subcategory.trim() == "Bags - Luggage" ||
+                subcategory.trim() == "Jwellery" ||
+                subcategory.trim() == "Fashion Accessories"
+            ) {
+
+                if (product_type.value == 'none') {
+                    product_type.style.border = "1px solid red";
+                    console.log('this part is executed')
+                    return false;
+                }
+            }
+
+            // prouduct year validation
+            if (subcategory.trim() == "Cars" ||
+                subcategory.trim() == "Commercial & Other Vehicles" ||
+                subcategory.trim() == "Motorcycles" ||
+                subcategory.trim() == "Scooters"
+            ) {
+
+                if (product_year.value == '') {
+                    product_year.style.border = "1px solid red";
+                    return false;
+                }
+
+            }
+
+            // prouduct fuel type validation
+            if (subcategory.trim() == "Cars" ||
+                subcategory.trim() == "Commercial & Other Vehicles"
+            ) {
+
+                if (product_fuel_type.value == 'none') {
+                    product_fuel_type.style.border = "1px solid red";
+                    return false;
+                }
+            }
+
+            // prouduct transmission type validation
+            if (subcategory.trim() == "Cars" ||
+                subcategory.trim() == "Commercial & Other Vehicles"
+            ) {
+
+                if (product_transmission_type.value == 'none') {
+                    product_transmission_type.style.border = "1px solid red";
+                    return false;
+                }
+            }
+
+
+            // prouduct no of owner type validation
+            if (subcategory.trim() == "Cars" ||
+                subcategory.trim() == "Motorcycles" ||
+                subcategory.trim() == "Scooters"
+            ) {
+
+                if (product_no_of_owner.value == 'none') {
+                    product_no_of_owner.style.border = "1px solid red";
+                    return false;
+                }
+            }
+
+            // prouduct km driven validation
+            if (subcategory.trim() == "Cars" ||
+                subcategory.trim() == "Commercial & Other Vehicles" ||
+                subcategory.trim() == "Motorcycles" ||
+                subcategory.trim() == "Scooters"
+            ) {
+
+                if (product_km_driven.value == '') {
+                    product_km_driven.style.border = "1px solid red";
+                    return false;
+                }
+            }
+            // prouduct door style validation
+            if (subcategory.trim() == "Fridges") {
+
+                if (product_door_style.value == 'none') {
+                    product_door_style.style.border = "1px solid red";
+                    return false;
+                }
+            }
+
+            // prouduct for validation
+            if (subcategory.trim() == "Clothing - Garments" ||
+                subcategory.trim() == "Footware" ||
+                subcategory.trim() == "Watches") {
+
+                if (product_for.value == 'none') {
+                    product_for.style.border = "1px solid red";
+                    return false;
+                }
+            }
+
+            if (product_description.value == '') {
+                product_description.style.border = "1px solid red";
+                return false;
+            }
+            if (product_price.value == '' || parseFloat(product_price.value) < 1) {
+                product_price.style.border = "1px solid red";
+                return false;
+            }
+
+            if (condition == 'create') {
+                if (input1.files.length == 0) {
+                    image_upload_error.style.display = "";
+                    return false;
+                }
+            }
+
+            if (product_state.value == 'none') {
+                product_state.style.border = "1px solid red";
+                return false;
+            }
+            if (product_district.value == 'none') {
+                product_district.style.border = "1px solid red";
+                return false;
+            }
+            if (product_locality.value == 'none') {
+                product_locality.style.border = "1px solid red";
+                return false;
+            }
+
+            if (name.value == '') {
+                name.style.border = "1px solid red";
+                return false;
+            }
+            if (email.value == '') {
+                email.style.border = "1px solid red";
+                return false;
+            }
+
+            if (email.value != '') {
+                if (atpos < 1 || (dotpos - atpos < 2)) {
+                    email.style.border = "1px solid red";
+                    return false;
+                }
+            }
+
+            if (phone.value == '' || phone.value.length < 10 || phone.value.length > 10) {
+                phone.style.border = "1px solid red";
+                return false;
+            }
+        }
+
+
+        function deleteProductImage(product_img_id, blank_input_id, product_id, image_id, imagefile_id) {
+            let prod_img_id = document.getElementById(product_img_id);
+            let blnk_inp_id = document.getElementById(blank_input_id);
+
+            prod_img_id.style.display = 'none';
+            blnk_inp_id.style.display = 'block';
+
+            return fetch(`/product/delete/image/${product_id}/${image_id}/${imagefile_id}`)
+                .then(resposne => { console.log('Image deleted..') })
+                .catch(err => { console.log(err) });
+        }
+    </script>
+    <script type=" text/javascript" src="/assets/js/lozad.min.js"></script>
+    <script src="/assets/js/detail-functions.js"></script>
+    <script src="/assets/js/post-product.js"></script>
+    <script src="/assets/js/product-page-handler.js"></script>
+
+    <%- include('./../../includes/footer.ejs') %>

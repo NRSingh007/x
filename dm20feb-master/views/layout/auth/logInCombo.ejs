@@ -1,0 +1,62 @@
+<%- include('../../includes/header.ejs',{pageTitle:pageTitle}) %>
+
+</head>
+
+<body>
+
+        <!-- <div id="fb-root"></div>
+        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&autoLogAppEvents=1&version=v5.0&appId=471660896812212"></script>
+         -->
+
+        <%- include("../../includes/navBar.ejs") %>
+        <%- include("../../includes/shortcutBar.ejs") %>
+
+<div class="container">
+        <div class="row p-3 my-5 d-flex justify-content-center align-items-center ">
+            <div class="col-lg-5 col-md-5 col-sm-8 col-xs-6 text-center panel py-5">
+                    <div class="col text-center" id="auth-default">
+                            <a href="/auth/google">
+                            <button type="button" class="btn btn-outline-success btn-block p-3 mb-3">
+                                <i class="float-left fab fa-google"></i>
+                                Continue with Google</button>
+                            </a>
+                            <a href="/auth/facebook">
+                            <button type="button" class="btn btn-outline-primary btn-block p-3">
+                                <i class="float-left fab fa-facebook"></i>
+                                Continue with facebook</button>
+                            </a>
+                                <!-- <div class="fb-login-button" data-width="" data-size="large" data-button-type="continue_with" data-auto-logout-link="false" data-use-continue-as="false"></div> -->
+                            <h6 class="py-3">Or use your email address</h6>
+                            <div class="row px-0 mx-0">
+                                <div class="col  pl-0 pr-2 ">
+                                    <a href="/auth/login">
+                                        <button type="button" class="btn btn-danger btn-block p-3" id="loginButton">Login</button>
+                                    </a>
+                                </div>
+                                <div class="col   pl-2   pr-0">
+                                    <a href="/auth/signup">
+                                        <button type="button"  class="btn btn-outline-secondary btn-block p-3" id="signUpButton">Sign up</button>
+                                    </a>
+                                </div>
+        
+                            </div>
+                            <p class="small pt-3 lightgrey">
+                                By logging in, you agree to Digital Manipur's
+                                <a>Terms of Service</a>,
+                                <a href="">Cookie Policy</a> ,
+                                <a href="">Privacy Policy</a> and
+                                <a href="">Content Policies</a> .
+                            </p>
+                        </div>
+
+            </div>
+        </div>
+    </div>
+
+<%- include('../../includes/footer.ejs') %>
+
+</body>
+
+</html>
+
+    

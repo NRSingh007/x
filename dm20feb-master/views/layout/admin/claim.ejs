@@ -1,0 +1,407 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="/assets/css/admin.css"> -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/manageWebsite.css">
+    <style>
+        .thumbnail-cover {
+            width: 150px;
+            height: 80px;
+        }
+
+        .thumbnail-logo {
+            width: 80px;
+            height: 80px;
+        }
+    </style>
+    <script>
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-container").show();
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+
+        function showInfoAlert(message) {
+            $(".alert-container").show();
+            $(".alert-info .message").html(message);
+            $(".alert-info").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-info").hide();
+            }, 1500);
+        }
+    </script>
+</head>
+
+<body class="">
+    <section>
+        
+        <% if ( typeof messages.error != "undefined" ) { %>
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Error!</strong> <%= messages.error %>
+            </div>
+        <% } %>
+          
+
+    </section>
+    <%- include('./../../includes/alert'); %>
+
+
+
+    <section class="manage-website">
+
+
+
+        <div class="container-fluid ">
+            <div class="row">
+
+
+                <div class="col-2 left-content p-2">
+                    <div class="list-group">
+                        <%- include('./../../includes/manage-website-pages', {page}) %>
+                    </div>
+                </div>
+
+                <div class="col-10 right-content p-2 bg-white">
+
+                    <section class="nav-controls ">
+                        <ul class="nav nav-tabs">
+                         
+                            <!-- <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" >POSTs Ad Plans</a>
+                            </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#AdminCollections">Claimed posts
+                                     <%= typeof claims != 'undefined' && claims ? '('+claims.length+')': '' %>
+                                </a>
+                            </li>
+                           
+                        </ul>
+                    </section>
+
+                    <section class="main-body ">
+                        <div class="tab-content">
+
+
+                            <style>
+                                .reviews * {
+                                    font-size: 14px;
+                                }
+                            </style>
+                            <div class="my-4 px-5 d-flex flex-row align-items-center justify-content-end small">
+                                <div>
+                                    <div class="bg-success rounded text-white small mx-2" style="width: 15px; height: 15px"></div>- Resolved
+                                </div>
+                                <div>
+                                    <div class="bg-warning rounded text-white small  mx-2" style="width: 15px; height: 15px"></div>- Rejected
+                                </div>
+                                <div>
+                                    <div class="bg-secondary rounded text-white small  mx-2" style="width: 15px; height: 15px"></div>- Unresolved
+                                </div>
+                            </div>
+                            <!-- tab 1 -->
+                            <div class="tab-pane container active reviews" id="AdminCollections">
+                                <div class="tab-body d-flex flex-column">
+                                   
+
+                                    <% if ( typeof claims != 'undefined' && claims.length > 0 ) { %>
+
+                                        <% for( let i = 0; i< claims.length; i++ ) { %>
+                                            <div  class=" border
+                                            rounded p-3 flex-column d-flex my-3 flex-row justify-content-between"
+                                            style="
+                                                <%= !claims[i].rejected && !claims[i].resolved ? 'border: 2px solid #6c757d !important;' : '' %>
+                                                <%= claims[i].resolved ? 'border: 2px solid #28a745 !important;' : '' %>
+                                                <%= claims[i].rejected  && !claims[i].resolved ? 'border: 2px solid #ffc107 !important;' : '' %>
+                                            "
+                                            >
+                                                
+                                               
+                                                <div class="row px-0">
+                                                    <div class="col-5 ">
+                                                        <div class="pr-2 d-flex  features-label">
+                                                            <div 
+                                                            style="min-width: 70px;"
+                                                            class="label d-inline-flex font-weight-bold text-muted"
+                                                            >Post</div>
+                                                            <div>
+                                                                <a href="/detail?tk=<%= claims[i].post._id %>" target="new">
+                                                                <%= claims[i].post.name %>
+                                                            </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pr-2 d-flex   features-label">
+                                                            <div 
+                                                            style="min-width: 70px; color: #c7c7c7 "
+                                                            class="label d-inline-flex font-weight-bold text-muted"
+                                                            >Address</div>
+                                                            <div class="text-muted text-weight-bold">
+                                                                <%= claims[i].post.address.areaAndStreetAddress ? claims[i].post.address.areaAndStreetAddress +',':'' %>
+                                                                <%= claims[i].post.address.locality.name ? claims[i].post.address.locality.name +',' : ''  %>
+                                                                <%= claims[i].post.address.district.name ? claims[i].post.address.district.name +',' : '' %>
+                                                                <%= claims[i].post.address.state.name ? claims[i].post.address.state.name  : '' %>
+                                                            </div>
+                                                        </div>
+                                                        <div class="pr-2 d-flex   features-label">
+                                                            <div 
+                                                            style="min-width: 70px; color: #c7c7c7 "
+                                                            class="label d-inline-flex font-weight-bold text-muted"
+                                                            >Owner</div>
+                                                            <div class="text-muted text-weight-bold">
+                                                          
+                                                                <%=  claims[i].post && claims[i].post.userId && claims[i].post.userId.name && claims[i].post.userId.name.firstName ? claims[i].post.userId.name.firstName : '' %>
+                                                                <%=  claims[i].post && claims[i].post.userId && claims[i].post.userId.name && claims[i].post.userId.name.lastName ? claims[i].post.userId.name.lastName : '' %>
+                                                                <%=  claims[i].post && claims[i].post.userId && claims[i].post.userId.email? ", "+claims[i].post.userId.email : '' %>
+                                                            </div>
+                                                        </div>
+                                                      
+                                                    </div>
+                                                    <div class="col-7">
+                                                        <div class="d-flex flex-column">
+                                                            <div class="col d-flex flex-row">
+                                                                <div 
+                                                                style="min-width: 70px; "
+                                                                class="label font-weight-bold text-muted mr-3"
+                                                                >Claimed by: </div>
+                                                                <div>
+                                                                    <%= claims[i].fullName ?  claims[i].fullName: '' %>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col d-flex flex-row">
+                                                                <div 
+                                                                style="min-width: 70px; font-size: 13px;"
+                                                                class="label d-inline-flex font-weight-bold mr-3 text-muted"
+                                                                >Email:</div>
+                                                                <div> <%= claims[i].email ?  claims[i].email: '' %>
+    </div>
+                                                            </div>
+                                                            <div class="col d-flex flex-row">
+                                                                <div 
+                                                                style="min-width: 70px; font-size: 13px;"
+                                                                class="label d-inline-flex font-weight-bold mr-3 text-muted"
+                                                                >Mobile:</div>
+                                                                <div> <%= claims[i].mobile ?  claims[i].mobile: '' %>
+    </div>
+                                                            </div>
+                                                            <div class="col d-flex flex-row ">
+                                                                <div 
+                                                                style="min-width: 70px;"
+                                                                class="mr-3 pr-2 font-weight-bold text-muted"
+                                                                >Message:</div>
+                                                                <div>
+                                                                    <%= claims[i].message %>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col d-flex flex-row ">
+                                                                <div 
+                                                                style="min-width: 70px;"
+                                                                class="mr-3 pr-2 font-weight-bold text-muted"
+                                                                >Proof:</div>
+                                                                <div>
+                                                                    <% if ( claims[i].proofFile ) { %>
+                                                                    <a target="blank" href="/uploads/original/<%= claims[i].proofFile %>">
+                                                                   <i class="fas fa-download mr-2"></i>View
+                                                                </a>
+                                                                <% } else { %> 
+                                                                    Not provided
+                                                                <% } %>
+                                                                </div>
+                                                            </div>
+                                                           
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                
+                                                    <div class="mt-2 d-flex flex-row">
+                                                        <form class="my-0" method="post" action="/admin/site/claim/action/resolve">
+                                                            <input type="text" hidden name="id" value="<%= claims[i]._id  %>" >
+                                                             
+                                                            <% if ( claims[i].resolved ) { %> 
+                                                                <button disabled
+                                                                onclick="return false;"
+                                                                class="btn btn-sm btn-success  my-0  px-3" >
+                                                                Resolved
+                                                                </button>
+                                                            <% } else { %>
+                                                                <button 
+                                                                onclick="if(!confirm('Are you sure? This action will tranfer the post to claim user.')){ return false; }"
+                                                                class="btn btn-sm btn-success  my-0  px-3" >
+                                                                Resolve
+                                                                </button>
+                                                            <% } %> 
+                                                        </form>
+                                                        <form class="my-0" method="post" action="/admin/site/claim/action/reject">
+                                                            <input type="text" hidden name="id" value="<%= claims[i]._id  %>" >
+                                                            <% if ( claims[i].rejected ) { %> 
+                                                                <button disabled
+                                                                onclick="return false;"
+                                                                class=" ml-3 btn btn-sm btn-warning  my-0  px-3" >
+                                                                Rejected
+                                                                </button>
+                                                            <% } else { %>
+                                                                <button 
+                                                                onclick="if(!confirm('Are you sure? ')){ return false; }"
+                                                                class="ml-3 btn btn-sm btn-warning  my-0  px-3" >
+                                                                Reject
+                                                                </button>
+                                                            <% } %> 
+                                                        </form>
+
+                                                        <form class="my-0 ml-auto" method="post" action="/admin/site/claim/action/delete">
+                                                            <input type="text" hidden name="id" value="<%= claims[i]._id  %>" >
+                                                            
+                                                                <button 
+                                                                onclick="if(!confirm('Are you sure? This claim will be deleted. ')){ return false; }"
+                                                                class="btn btn-sm btn-danger  my-0  px-3" >
+                                                                Delete
+                                                                </button>
+                                                        </form>
+                                                    </div>
+                                                    </div>
+                                                    
+                                            </div>
+                                        
+                                        <% } %>
+        
+                                    <% } %>
+                                   
+
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+            <!-- container ends here -->
+        </div>
+
+    </section>
+
+
+    <!-- modals -->
+
+
+  <!-- The Modal -->
+  <div class="modal" id="editAdPlanModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Ad Plan</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="editAdPlanForm" >
+                    <div class="form-group">
+                        <label  class="font-weight-bold" for="">Name</label>
+                        <input type="text" name="name" required class="form-control">
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label  class="font-weight-bold" for="">Price/Month</label>
+                                <input type="number" max="999999999999" min="1" name="pricePerMonth" 
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label  class="font-weight-bold" for="">Validity (days)</label>
+                                <input type="number" max="99999999999" min="1" name="validityIndays" 
+                                    class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <style>
+                        .features-label{
+                            min-width: 250px;
+                        }
+                    </style>
+                    <div class="form-group features">
+                        <div class="font-weight-bold" for="">Features </div>
+                        <div class="col">
+                            
+                            <% if ( typeof features != 'undefined' && features.length > 0 ) { %>
+
+                                <% for( let i = 0; i< features.length; i++ ) { %>
+                                    
+                                    <div class="d-flex my-1 flex-row justify-content-between">
+                                        <div class="pr-2 features-label"><%= features[i].name %></div>
+                                        <div class="flex-grow-1">
+                                            <input 
+                                            id="features_<%= i %>"
+                                            class="form-control" 
+                                            data-id="<%= features[i]._id %>" 
+                                            data-name="<%= features[i].name %>" 
+                                            type="text" name="description"
+                                                 placeholder="">
+                                        </div>
+                                    </div>
+                                
+                                <% } %>
+
+                        <% } %>
+
+                        </div>
+
+                    </div>
+                    <input type="hidden" name="planId">
+                    <button class="btn btn-success btn-sm" id="updateBtn">Submit</button>
+
+                </form>
+
+            </div>
+
+            <!-- Modal footer -->
+            <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div> -->
+
+        </div>
+    </div>
+    </div>
+
+
+    <script>
+        const rootDomain = `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+    </script>
+
+</body>
+
+</html>

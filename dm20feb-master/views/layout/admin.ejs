@@ -1,0 +1,394 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    
+
+
+</head>
+
+<body class="admin-page">
+
+
+
+    <section class="main-body container-fluid row mx-0 px-0">
+        <div class="col-2 py-3 pl-3 pr-0 left-col " style="">
+            <h4 class="font-weight-bold d-flex align-items-center pr-3">
+                <img src="/assets/img/logo.png" style="width: 50px; margin-right: 10px" />
+                Digital Manipur</h4>
+            <hr class="bg-white mr-3">
+            <div class="py-4"></div>
+            <div class="cus-card">
+
+                <button class="btn btn-active collapsed non-accordion " data-toggle="tab" href="#overviewTab">
+                    Overview
+                </button>
+
+            </div>
+            <div class="cus-card">
+
+                <button class="btn  collapsed  non-accordion" data-toggle="tab" href="#keywordsTab"
+                    onclick="getKeywords()">
+                    Keywords
+                </button>
+
+            </div>
+            <div class="accordion" id="accordionExample">
+
+                <div class="cus-card">
+
+                    <button class="btn  collapsed include-icons posts-btn" type="button" data-toggle="collapse"
+                        data-target="#Posts" aria-expanded="false" aria-controls="collapseThree">
+                        <span>Posts</span><i class="fal fa-angle-down"></i>
+                    </button>
+
+                    <div id="Posts" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                        <ul class="list-group">
+                            <li class="list-group-item include-icons">
+                                <a onclick="getPosts()" data-toggle="tab" href="#postsAll">
+                                    <span>Recent</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+
+                            <li class="list-group-item include-icons">
+                                <a onclick="getPendingPosts()" data-toggle="tab" href="#postsPending">
+                                    <span>Pending</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+                            <li class="list-group-item include-icons">
+                                <a onclick="getAddPostInitData()" data-toggle="tab" href="#postAdd">
+                                    <span>Add</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+                            <li class="list-group-item include-icons">
+                                <a data-toggle="tab" href="#postEdit" id="editPageNav">
+                                    <span>Edit</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+                <div class="cus-card">
+
+                    <button class="btn  collapsed include-icons" type="button" data-toggle="collapse"
+                        data-target="#users" aria-expanded="false" aria-controls="collapseThree">
+                        <span>Users</span><i class="fal fa-angle-down"></i>
+                    </button>
+
+                    <div id="users" class="collapse " aria-labelledby="headingThree" data-parent="#accordionExample">
+                        <ul class="list-group">
+                            <li class="list-group-item include-icons" >
+                                <a onclick="getUsersInitData()"  href="#usersAll" data-toggle="tab">
+                                    <span>Recent</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+                            
+                            <li class="list-group-item include-icons" >
+                                <a data-toggle="tab" href="#usersAddNew">
+                                    <span>Add </span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+
+                            <li class="list-group-item include-icons" >
+                                <a data-toggle="tab" href="#usersEdit" id="usersEditPageNav">
+                                    <span>Edit </span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="cus-card">
+
+                    <button class="btn  collapsed include-icons" type="button" data-toggle="collapse"
+                        data-target="#location" aria-expanded="false" aria-controls="collapseThree">
+                        <span>Location</span><i class="fal fa-angle-down"></i>
+                    </button>
+
+                    <div id="location" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                        <ul class="list-group">
+                            <li class="list-group-item include-icons">
+                                <a data-toggle="tab" href="#countryTab" onclick="getcountry()">
+                                    <span>Country</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+                            <li class="list-group-item include-icons">
+                                <a data-toggle="tab" href="#stateTab" onclick="getstate()">
+                                    <span>State</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+                            <li class="list-group-item include-icons">
+                                <a data-toggle="tab" href="#districtTab" onclick="getdistrict()">
+                                    <span>District</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+                            <li class="list-group-item include-icons">
+                                <a data-toggle="tab" href="#localityTab" onclick="getlocality()">
+                                    <span>Locality</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="cus-card">
+
+                    <button class="btn  collapsed include-icons" type="button" data-toggle="collapse"
+                        data-target="#Category" aria-expanded="false" aria-controls="collapseThree">
+                        <span>Category</span><i class="fal fa-angle-down"></i>
+                    </button>
+
+                    <div id="Category" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                        <ul class="list-group">
+
+                            <li class="list-group-item include-icons">
+                                <a data-toggle="tab" href="#categoryTab" onclick="getCategory()">
+                                    <span>All</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+                            <li class="list-group-item include-icons">
+                                <a data-toggle="tab" href="#subCategoryTab" onclick="fetchSubCategory()">
+                                    <span>Sub-Category</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+
+
+                <div class="cus-card">
+
+                    <!-- <button class="btn  collapsed shadow-none include-icons" type="button" data-toggle="collapse"
+                        data-target="#Website" aria-expanded="false" aria-controls="collapseThree">
+                        <span>Website</span><i class="fal fa-angle-down"></i>
+
+                    </button> -->
+                    <a role="button" href="/admin/manage-website/collections" class="btn text-white collapsed shadow-none include-icons" >
+                        <span>Website</span><i class="fal fa-angle-down"></i>
+
+                </a>
+
+                    <div id="Website" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                        <ul class="list-group">
+
+                            <li class="list-group-item include-icons" data-toggle="tab" href="#websiteHome">
+                                <a>
+                                    <span>Home</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+                            <li class="list-group-item include-icons" data-toggle="tab" href="#websiteAdvertisement">
+                                <a>
+                                    <span>Advertisement</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+                            <li class="list-group-item include-icons" data-toggle="tab" href="#websiteReviews">
+                                <a>
+                                    <span>Reviews</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+                            <li class="list-group-item include-icons" data-toggle="tab" href="#websiteReports">
+                                <a>
+                                    <span>Reports</span>
+                                    <i class="fal fa-angle-right "></i>
+                                </a>
+                            </li>
+
+
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div class="col-10  main-col px-0" ">
+
+            <section class=" container nav-container mx-0">
+            <div class=" row nav-header  bg-white rounded py-2 px-3  ">
+
+                <div class="dropdown dropdown-menu-right ml-auto" style="color: black;">
+                    <button class="shadow-none btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
+                        type="button">
+                        <% if( typeof user.images.profile.common.url != "undefined" && user.images.profile.common.url) { %>
+                        <img class="rounded-circle" src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                            style="width: 25px;height: 25px;margin-right: 5px;">
+                        <% } else { %>
+                        <i class="fad fa-user-shield font-weight-bold"></i>
+                        <% } %>
+
+                        <span class="px-1">
+                            <%= `${user.name.firstName}` %>
+                        </span>
+                    </button>
+                    <div class="dropdown-menu text-secondary" role="menu"
+                        style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                        <i class="fal fa-angle-up"  style="
+                        color: #fff;
+                        position: absolute;
+                        top: -13px;
+                        right: 10px;
+                        font-size: 22px;
+                        z-index: 999;
+                        "></i>
+                        <a class="dropdown-item" role="presentation" href="#" style="color: black;">Profile</a>
+                        <a class="dropdown-item text-dark" role="presentation" href="#">Notifications</a>
+                        <a class="dropdown-item text-dark" role="presentation" href="#">Settings</a>
+                        <hr style="margin: 0;">
+                        <form action="/auth/logout?via=admin" method="POST">
+                            <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                role="presentation">Logout</button>
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+            <hr>
+    </section>
+
+    
+    <!-- Tab panes -->
+    <!-- <div class="tab-content">
+
+        <div id="overviewTab" class=" tab-pane active">
+            <%- include('./admin/overview.ejs') %>
+        </div>
+
+        <div id="keywordsTab" class=" tab-pane">
+            <%- include('./admin/keywords.ejs') %>
+        </div>
+
+        <div id="postsAll" class=" tab-pane">
+            <%- include('./admin/recent_post.ejs') %>
+        </div>
+        <div id="postEdit" class=" tab-pane">
+            <%- include('./admin/postEdit.ejs') %>
+        </div>
+        <div id="postAdd" class=" tab-pane">
+            <%- include('./admin/addpost.ejs') %>
+        </div>
+
+        <div id="postsRecent" class=" tab-pane">
+            <h3>Menu 1</h3>
+            <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat.</p>
+        </div>
+
+        <div id="postsPending" class=" tab-pane ">
+            <%- include('./admin/pending_post.ejs') %>
+        </div>
+
+        <div id="usersAll" class=" tab-pane ">
+            
+            <%- include('./admin/recent_users.ejs') %>
+
+        </div>
+
+        <div id="usersAddNew" class=" tab-pane ">
+            
+            <%- include('./admin/add_user.ejs') %>
+
+        </div>
+        <div id="usersEdit" class=" tab-pane ">
+            
+            <%- include('./admin/edit_user.ejs') %>
+
+        </div>
+        
+        <div id="countryTab" class=" tab-pane ">
+            <%- include('./admin/country.ejs') %>
+        </div>
+        <div id="stateTab" class=" tab-pane ">
+            <%- include('./admin/state.ejs') %>
+        </div>
+        <div id="districtTab" class=" tab-pane ">
+            <%- include('./admin/district.ejs') %>
+        </div>
+        <div id="localityTab" class=" tab-pane ">
+            <%- include('./admin/locality.ejs') %>
+        </div>
+
+
+        <div id="categoryTab" class=" tab-pane ">
+            <%- include('./admin/category.ejs') %>
+        </div>
+        <div id="subCategoryTab" class="tab-pane ">
+            <%- include('./admin/subcategory.ejs') %>
+        </div>
+
+    </div> -->
+
+    </div>
+    </section>
+
+    <!-- container ends here -->
+    </div>
+
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/fontawesome-pro-5.11.1-web/js/fontawesome.min.js"></script>
+    <script src="/assets/js/admin.js"></script>
+
+    <script>
+        // const rootDomain = `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+        // tab pane bug fix - problem in switching tabs between list anchor link and upper accordion button
+        $(document).ready(() => {
+
+            $("button[data-toggle='tab'] , a[data-toggle='tab']").click((event) => {
+                console.log('tab click href: ', $(event.target).attr('href'));
+                const tabIdToShow = $(event.target).attr('href');
+
+                // hide all open tabs by removing active class
+                $("div.tab-pane").removeClass('active');
+                $(`${$(event.target).attr('href')}`).addClass('active');
+
+            });
+
+        });
+
+
+        
+
+        
+
+    </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+
+</body>
+
+</html>

@@ -1,0 +1,26 @@
+Digital Manipur Credential
+ 1.SMS Gateway
+	# Text Local
+	- username: digitalmanipurinfo@gmail.com
+	- password: Singh@123456
+
+2.   Payment Gateway
+	# PayU payment gateway
+	- username: digitalmanipurinfo@gmail.com
+	- password: Leibaknew@123456
+
+3.   Deployment Server
+	- IP: 103.120.179.97
+	- password: AseYQDJSy6x6T7Py
+	- Node Version: 10.20.1
+	- server files location: /usr/share/nginx/dm20feb
+
+4.   Digital Manipur Gmail
+	# Gmail cred
+	- email: digitalmanipurinfo@gmail.com
+	- password: Leibaknew@123456
+
+5.   Digital Manipur Site Admin Cred
+	# Admin Console Cred
+	- username: digitalmanipurinfo@gmail.com
+	- password: admin@12345

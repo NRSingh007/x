@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AACI,iBADa,CACb,EAAE,AAAA,MAAM,CAAA;EACJ,MAAM,EAAE,OAAO;CAClB;;AAGL,AACI,gBADY,CACZ,cAAc,CAAA;EACV,SAAS,EAAE,IAAI;CAClB",
+    "sources": [
+        "claim.scss"
+    ],
+    "names": [],
+    "file": "claim.css"
+}

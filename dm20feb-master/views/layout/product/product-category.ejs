@@ -1,0 +1,611 @@
+<%- include('./../../includes/product/header.ejs') %>
+
+</head>
+
+<body>
+    <%- include('./../../includes/product/navBar.ejs') %>
+    <!-- product category list goes here -->
+    <section style="margin-top: 20px;" class="container">
+
+        <div class="row">
+            <div class="col-md-4 col-sm-12 category-sidebar">
+                <div style="padding: 20px;" >
+
+                    <span>Select a Category</span>
+                </div>
+                <div onclick="showMobilesSubcategory()" id="mobiles-menu" class="row category-sidebar-menu menu-active">
+                    <img src="/assets/img/product-category/mobile.png" alt="mobile image"
+                        class="category-sidebar-icon-image"> <span class="sidebar-menu-text">Mobiles</span>
+                </div>
+                <div onclick="showCarsSubcategory()" id="cars-menu" class="row category-sidebar-menu">
+                    <img src="/assets/img/product-category/car.png" alt="car image" class="category-sidebar-icon-image">
+                    <span class="sidebar-menu-text">Cars</span>
+                </div>
+                <div onclick="showBikesSubcategory()" id="bikes-menu" class="row category-sidebar-menu">
+                    <img src="/assets/img/product-category/motorcycle.png" alt="bike image"
+                        class="category-sidebar-icon-image"> <span class="sidebar-menu-text">Bikes</span>
+                </div>
+                <div onclick="showElectronicsSubcategory()" id="electronics-menu" class="row category-sidebar-menu">
+                    <img src="/assets/img/product-category/laptop.png" alt="laptop image"
+                        class="category-sidebar-icon-image"> <span class="sidebar-menu-text">Electronics &
+                        Appliances</span>
+                </div>
+                <div onclick="showHomeLifestyleSubcategory()" id='home-lifestyle-menu'
+                    class="row category-sidebar-menu">
+                    <img src="/assets/img/product-category/sofa.png" alt="sofa image"
+                        class="category-sidebar-icon-image"> <span class="sidebar-menu-text">Home & Lifestyle</span>
+                </div>
+                <div onclick="showBakerySubcategory()" id='bakery-menu' class="row category-sidebar-menu">
+                    <img src="/assets/img/product-category/bread.png" alt="bread image"
+                        class="category-sidebar-icon-image"> <span class="sidebar-menu-text">Bakery</span>
+                </div>
+
+            </div>
+            <div style="background: white; border: 1px solid #e7e7e7;" class="col-md-8 col-sm-12">
+                <div align="center" class="post-ad-banner">
+                    <img src="/assets/img/product-category/megaphone-blue.png" alt="megaphone image"
+                        class="category-sidebar-icon-image"> <span>Post Your Ad</span>
+                </div>
+                <div id="subcategories" class="container">
+                    <div id="select-subcategory" style="margin-top: 10px;">Select a Subcategory</div>
+                    <div class="sub-category-menu">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12">
+                                <div id="mobiles-subcategory" style="overflow-x: auto;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('mobile_form')">
+                                                    <form id="mobile_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory" value="Mobile Phones">
+                                                        <input type="hidden" name="category" value="Mobiles">
+                                                        <img src="/assets/img/product-category/mobile.png"
+                                                            alt="mobile image" class="sub-category-icon-image">
+                                                        <span>Mobile Phones</span>
+                                                    </form>
+
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('mobile_accessories_form')">
+                                                    <form id="mobile_accessories_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory"
+                                                            value="Mobile Accessories">
+                                                        <input type="hidden" name="category" value="Mobiles">
+                                                        <img src="/assets/img/product-category/usb.png"
+                                                            alt="accessory image" class="sub-category-icon-image">
+                                                        <span>Accessories</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('mobile_tablet_form')">
+                                                    <form id="mobile_tablet_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory" value="Tablets">
+                                                        <input type="hidden" name="category" value="Mobiles">
+                                                        <img src="/assets/img/product-category/tablet.png"
+                                                            alt="tablet image" class="sub-category-icon-image">
+                                                        <span>Tablets</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div id="cars-subcategory" style="overflow-x: auto; display: none;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('cars_cars_form')">
+                                                    <form id="cars_cars_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory" value="Cars">
+                                                        <input type="hidden" name="category" value="Cars">
+                                                        <img src="/assets/img/product-category/car.png" alt="car image"
+                                                            class="sub-category-icon-image">
+                                                        <span>Cars</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('cars_commercial_vihicles_form')">
+                                                    <form id="cars_commercial_vihicles_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory"
+                                                            value="Commercial & Other Vehicles">
+                                                        <input type="hidden" name="category" value="Cars">
+                                                        <img src="/assets/img/product-category/truck.png"
+                                                            alt="truck image" class="sub-category-icon-image">
+                                                        <span>Commercial & Other Vehicles</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('cars_accessories_form')">
+                                                    <form id="cars_accessories_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory"
+                                                            value="Car Spare Parts - Accessories">
+                                                        <input type="hidden" name="category" value="Cars">
+                                                        <img src="/assets/img/product-category/spring.png"
+                                                            alt="spring image" class="sub-category-icon-image">
+                                                        <span>Car Spare Parts - Accessories</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div id="bikes-subcategory" style="overflow-x: auto; display: none;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('bikes_motorcycles_form')">
+                                                    <form id="bikes_motorcycles_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory" value="Motorcycles">
+                                                        <input type="hidden" name="category" value="Bikes">
+                                                        <img src="/assets/img/product-category/motorcycle.png"
+                                                            alt="bike image" class="sub-category-icon-image">
+                                                        <span>Motorcycles</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('bikes_scooters_form')">
+                                                    <form id="bikes_scooters_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory" value="Scooters">
+                                                        <input type="hidden" name="category" value="Bikes">
+                                                        <img src="/assets/img/product-category/scooter.png"
+                                                            alt="scooter image" class="sub-category-icon-image">
+                                                        <span>Scooters</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('bikes_bicycles_form')">
+                                                    <form id="bikes_bicycles_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory" value="Bicycles">
+                                                        <input type="hidden" name="category" value="Bikes">
+                                                        <img src="/assets/img/product-category/bicycle.png"
+                                                            alt="bicycle image" class="sub-category-icon-image">
+                                                        <span>Bicycles</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('bikes_accessories_form')">
+                                                    <form id="bikes_accessories_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory"
+                                                            value="Bike Spare Parts - Accessories">
+                                                        <input type="hidden" name="category" value="Bikes">
+                                                        <img src="/assets/img/product-category/spring.png"
+                                                            alt="spring image" class="sub-category-icon-image">
+                                                        <span>Bike Spare Parts - Accessories</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div id="electronics-subcategory" style="overflow-x: auto; display: none;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('electronics_computers_form')">
+                                                    <form id="electronics_computers_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory"
+                                                            value="Computers & Laptops">
+                                                        <input type="hidden" name="category"
+                                                            value="Electronics & Appliances">
+                                                        <img src="/assets/img/product-category/laptop.png"
+                                                            alt="laptop image" class="sub-category-icon-image">
+                                                        <span>Computers & Laptops</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('electronics_camera_form')">
+                                                    <form id="electronics_camera_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory" value="Camera & Lenses">
+                                                        <input type="hidden" name="category"
+                                                            value="Electronics & Appliances">
+                                                        <img src="/assets/img/product-category/camera.png"
+                                                            alt="camera image" class="sub-category-icon-image">
+                                                        <span>Camera & Lenses</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('electronics_printers_form')">
+                                                    <form id="electronics_printers_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory"
+                                                            value="Hard Disks, Printers & Monitors">
+                                                        <input type="hidden" name="category"
+                                                            value="Electronics & Appliances">
+                                                        <img src="/assets/img/product-category/printer.png"
+                                                            alt="printer image" class="sub-category-icon-image">
+                                                        <span>Hard Disks, Printers & Monitors</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td
+                                                    onclick="submitSubCategoryForm('electronics_computers_accessories_form')">
+                                                    <form id="electronics_computers_accessories_form"
+                                                        action="/product/post">
+                                                        <input type="hidden" name="subcategory"
+                                                            value="Computer Accessories">
+                                                        <input type="hidden" name="category"
+                                                            value="Electronics & Appliances">
+                                                        <img src="/assets/img/product-category/keyboard-and-mouse.png"
+                                                            alt="keyboard-mouse image" class="sub-category-icon-image">
+                                                        <span>Computer Accessories</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('electronics_tv_form')">
+                                                    <form id="electronics_tv_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory"
+                                                            value="TVs, Video - Audio">
+                                                        <input type="hidden" name="category"
+                                                            value="Electronics & Appliances">
+                                                        <img src="/assets/img/product-category/tv.png" alt="tv image"
+                                                            class="sub-category-icon-image">
+                                                        <span>TVs, Video - Audio</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('electronics_games_form')">
+                                                    <form id="electronics_games_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory"
+                                                            value="Games & Entertainment">
+                                                        <input type="hidden" name="category"
+                                                            value="Electronics & Appliances">
+                                                        <img src="/assets/img/product-category/games.png"
+                                                            alt="joystick image" class="sub-category-icon-image">
+                                                        <span>Games & Entertainment</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('electronics_kitchen_form')">
+                                                    <form id="electronics_kitchen_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory"
+                                                            value="Kitchen & Other Appliances">
+                                                        <input type="hidden" name="category"
+                                                            value="Electronics & Appliances">
+                                                        <img src="/assets/img/product-category/kitchen.png"
+                                                            alt="kitchen image" class="sub-category-icon-image">
+                                                        <span>Kitchen & Other Appliances</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('electronics_fridge_form')">
+                                                    <form id="electronics_fridge_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory" value="Fridges">
+                                                        <input type="hidden" name="category"
+                                                            value="Electronics & Appliances">
+                                                        <img src="/assets/img/product-category/fridge.png"
+                                                            alt="fridge image" class="sub-category-icon-image">
+                                                        <span>Fridges</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('electronics_ac_form')">
+                                                    <form id="electronics_ac_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory" value="ACs">
+                                                        <input type="hidden" name="category"
+                                                            value="Electronics & Appliances">
+                                                        <img src="/assets/img/product-category/ac.png"
+                                                            alt="air conditoner image" class="sub-category-icon-image">
+                                                        <span>ACs</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('electronics_washing_machine_form')">
+                                                    <form id="electronics_washing_machine_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory"
+                                                            value="Washing Machines">
+                                                        <input type="hidden" name="category"
+                                                            value="Electronics & Appliances">
+                                                        <img src="/assets/img/product-category/washing-machine.png"
+                                                            alt="washing machine image" class="sub-category-icon-image">
+                                                        <span>Washing Machines</span>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                                <div id="bakery-subcategory" style="overflow-x: auto; display: none;">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr class="sub-category-menu-data">
+                                                <td onclick="submitSubCategoryForm('bakery_form')">
+                                                    <form id="bakery_form" action="/product/post">
+                                                        <input type="hidden" name="subcategory" value="Bakery Items">
+                                                        <input type="hidden" name="category" value="Bakery">
+                                                        <img src="/assets/img/product-category/bread.png"
+                                                            alt="mobile image" class="sub-category-icon-image">
+                                                        <span>Bakery Items</span>
+                                                    </form>
+
+                                                </td>
+                                            </tr>
+
+                                        </thead>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="home-lifestyle-subcategory" class="container" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="sub-category-header">
+                                Furniture & Decor
+                            </div>
+                            <div style="overflow-x: auto;">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_furniture_home_form')">
+                                                <form id="home_lifestyle_furniture_home_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory"
+                                                        value="Furniture for Home & Office">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/sofa.png"
+                                                        alt="furniture image" class="sub-category-icon-image">
+                                                    <span>Furniture for Home & Office</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_home_decor_form')">
+                                                <form id="home_lifestyle_home_decor_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory"
+                                                        value="Home Decor - Furnishings">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/home-decor.png"
+                                                        alt="home decor image" class="sub-category-icon-image">
+                                                    <span>Home Decor - Furnishings</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_kitchenware_form')">
+                                                <form id="home_lifestyle_kitchenware_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Kitchenware">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/kitchenware.png"
+                                                        alt="Kitchenware image" class="sub-category-icon-image">
+                                                    <span>Kitchenware</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_painting_form')">
+                                                <form id="home_lifestyle_painting_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Paintings">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/painting.png"
+                                                        alt="Painting image" class="sub-category-icon-image">
+                                                    <span>Paintings</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="sub-category-header">
+                                Sports, Books & Hobbies
+                            </div>
+                            <div style="overflow-x: auto;">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_sports_fitness_form')">
+                                                <form id="home_lifestyle_sports_fitness_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory"
+                                                        value="Sports - Fitness Equipment">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/fitness-equipment.png"
+                                                        alt="dumbell image" class="sub-category-icon-image">
+                                                    <span>Sports - Fitness Equipment</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_books_form')">
+                                                <form id="home_lifestyle_books_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Books - Megazines">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/book.png" alt="book image"
+                                                        class="sub-category-icon-image">
+                                                    <span>Books - Megazines</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td
+                                                onclick="submitSubCategoryForm('home_lifestyle_musincal_instrument_form')">
+                                                <form id="home_lifestyle_musincal_instrument_form"
+                                                    action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Musical Instruments">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/guitar.png"
+                                                        alt="Guitar image" class="sub-category-icon-image">
+                                                    <span>Musical Instruments</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_collectibles_form')">
+                                                <form id="home_lifestyle_collectibles_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Collectibles">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/stamp.png" alt="Stamp image"
+                                                        class="sub-category-icon-image">
+                                                    <span>Collectibles</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="sub-category-header">
+                                Kids & Toys
+                            </div>
+                            <div style="overflow-x: auto;">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_toys_form')">
+                                                <form id="home_lifestyle_toys_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Toys - Games">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/toy.png" alt="toy image"
+                                                        class="sub-category-icon-image">
+                                                    <span>Toys - Games</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_baby_products_form')">
+                                                <form id="home_lifestyle_baby_products_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory"
+                                                        value="Baby - Infant Products">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/feeding-bottle.png"
+                                                        alt="feeding bottle image" class="sub-category-icon-image">
+                                                    <span>Baby - Infant Products</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <div class="sub-category-header">
+                                Fashion
+                            </div>
+                            <div style="overflow-x: auto;">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_clothing_form')">
+                                                <form id="home_lifestyle_clothing_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Clothing - Garments">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/clothes.png"
+                                                        alt="cloth image" class="sub-category-icon-image">
+                                                    <span>Clothing - Garments</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_footware_form')">
+                                                <form id="home_lifestyle_footware_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Footware">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/footware.png"
+                                                        alt="footware image" class="sub-category-icon-image">
+                                                    <span>Footware</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_watch_form')">
+                                                <form id="home_lifestyle_watch_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Watches">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/watch.png" alt="watch image"
+                                                        class="sub-category-icon-image">
+                                                    <span>Watches</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_bag_form')">
+                                                <form id="home_lifestyle_bag_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Bags - Luggage">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/luggage.png"
+                                                        alt="luggage image" class="sub-category-icon-image">
+                                                    <span>Bags - Luggage</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_jewellery_form')">
+                                                <form id="home_lifestyle_jewellery_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Jwellery">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/jewellery.png"
+                                                        alt="Jwellery image" class="sub-category-icon-image">
+                                                    <span>Jwellery</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td
+                                                onclick="submitSubCategoryForm('home_lifestyle_fashion_accessory_form')">
+                                                <form id="home_lifestyle_fashion_accessory_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Fashion Accessories">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/glasses.png"
+                                                        alt="Sunglasses image" class="sub-category-icon-image">
+                                                    <span>Fashion Accessories</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_health_form')">
+                                                <form id="home_lifestyle_health_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory"
+                                                        value="Health - Beauty Products">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/health-beauty.png"
+                                                        alt="Beauty product image" class="sub-category-icon-image">
+                                                    <span>Health - Beauty Products</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <tr class="sub-category-menu-data">
+                                            <td onclick="submitSubCategoryForm('home_lifestyle_gifts_form')">
+                                                <form id="home_lifestyle_gifts_form" action="/product/post">
+                                                    <input type="hidden" name="subcategory" value="Gifts - Stationary">
+                                                    <input type="hidden" name="category" value="Home & Lifestyle">
+                                                    <img src="/assets/img/product-category/gift.png" alt="Gift image"
+                                                        class="sub-category-icon-image">
+                                                    <span>Gifts - Stationary</span>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript" src="/assets/js/lozad.min.js"></script>
+    <script src="/assets/js/detail-functions.js"></script>
+    <script src="/assets/js/product-category.js"></script>
+    <%- include('./../../includes/footer.ejs') %>

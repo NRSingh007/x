@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"digitalmanipur.sublocalities"},{"v":{"$numberInt":"2"},"unique":true,"key":{"name":{"$numberInt":"1"}},"name":"name_1","ns":"digitalmanipur.sublocalities","background":true}],"uuid":"46ae73e215b4458da490e2d13a1014e7"}

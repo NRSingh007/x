@@ -1,0 +1,734 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="/assets/css/admin.css"> -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/manageWebsite.css">
+    <style>
+        .thumbnail-cover {
+            width: 150px;
+            height: 80px;
+        }
+
+        .thumbnail-logo {
+            width: 80px;
+            height: 80px;
+        }
+    </style>
+    <script>
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-container").show();
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+
+        function showInfoAlert(message) {
+            $(".alert-container").show();
+            $(".alert-info .message").html(message);
+            $(".alert-info").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-info").hide();
+            }, 1500);
+        }
+    </script>
+</head>
+
+<body class="">
+    <section>
+        
+        <% if ( typeof messages.error != "undefined" ) { %>
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Error!</strong> <%= messages.error %>
+            </div>
+        <% } %>
+          
+
+    </section>
+    <%- include('./../../includes/alert'); %>
+
+
+
+    <section class="manage-website">
+
+
+
+        <div class="container-fluid ">
+            <div class="row">
+
+
+                <div class="col-2 left-content p-2">
+                    <div class="list-group">
+                        <%- include('./../../includes/manage-website-pages', {page}) %>
+                    </div>
+                </div>
+
+                <div class="col-10 right-content p-2 bg-white">
+
+                    <section class="nav-controls ">
+                        <ul class="nav nav-tabs">
+                            <!-- <li class="nav-item">
+                                  <a class="nav-link " data-toggle="tab" href="#home">Home</a>
+                                </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#AdminCollections">POSTS</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link " href="/admin/site/business/product">PRODUCTS</a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link  "  href="/admin/site/business/ledandbanner">LED and Banner </a>
+                            </li>
+                            <!-- <li class="nav-item" >
+                                    <a onclick="getUsersCollections()" class="nav-link" data-toggle="tab" href="#UsersCollections">Users Collections</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a onclick="getStaticCollections(event)" class="nav-link" data-toggle="tab" href="#StaticCollections">Static Collections</a>
+                                </li> -->
+                        </ul>
+                    </section>
+
+                    <section class="main-body ">
+                        <div class="tab-content">
+
+
+
+                            <!-- tab 1 -->
+                            <div class="tab-pane container active" id="AdminCollections">
+                                <div class="tab-body d-flex flex-column">
+                                    <div class="row border px-2 py-3 mb-5 bg-light">
+                                        <div class="px-3 col-4">
+                                            <h6>Add Features</h6>
+                                            <form action="/admin/site/business/features/post/add" method="post">
+                                                <div class="form-group">
+                                                    <input type="text" name="name" required placeholder="Enter new feature" class="form-control">
+                                                </div>
+                                                <input type="submit" value="Submit" class="btn-sm btn btn-success">
+                                            </form>
+                                        </div>
+                                        <div class="col-6 ml-auto ">
+                                            <h6 class="m-1 p-1">
+                                                List of available features
+                                            </h6>
+                                           
+                                            <% if ( features && features.length > 0 ) { %>
+
+                                                    <% for( let i = 0; i< features.length; i++ ) { %>
+                                                            <li class="py-1  d-flex flex-row list-group-item">
+                                                                <div class="col-8">
+                                                                    <%= i+1 +'. '+features[i].name %>
+                                                                </div>
+                                                                <div class="col-4">
+                                                                    <form action="/admin/site/business/features/post/delete" method="post">
+                                                                    <input 
+                                                                    onclick="if(!confirm('Are U Sure?')){ return false;}"
+                                                                    type="submit" class="float-right mr-1 btn btn-sm btn-danger" value="Delete">
+                                                                        
+                                                                    <input type="text" hidden name="id" value="<%= features[i]._id %>">
+                                                                </form>
+                                                                </div>
+                                                            </li>
+                                                    <% } %>
+
+                                            <% } else { %> 
+                                                <- Please add new Features
+                                            <% } %>
+                                        
+                                        </div>
+                                    </div>
+                                    
+                                    <hr>
+                                    <div class="mb-3">
+                                        <strong class="text-muted" style="font-size: 20px;">Available
+                                            Ad Plans</strong>
+                                        <button type="button" class="float-right btn-sm btn btn-outline-success "
+                                            id="createJob" data-toggle="modal" data-target="#addAdPlanModal">
+                                            Add New </button>
+                                    </div>
+                                    <style>
+                                        .table-ads .col{
+                                            margin: 0;
+                                            padding: 0;
+                                            max-width: 250px;
+                                        }
+                                        .table-ads .col:first-child div{
+                                            text-align: left;
+                                        }
+                                        .table-ads .col > div:first-child{
+                                            display: flex;
+                                            justify-content: center;
+                                            font-weight: 500;
+                                        }
+                                        .table-ads .col > div{
+                                            text-align: center;
+                                            height: 100px;
+                                            min-width: 150px;
+                                            padding: 15px 10px;
+                                            border: 1px solid grey
+                                        }
+                                    </style>
+
+
+                                    <!-- Table -->
+                                    <section>
+                                        <% let tableHeaderColors = [ "#d9f9f9","#b2ffb2", "lightgoldenrodyellow", "lightskyblue","lightsalmon"];  %>
+                                        <% let tableHeaderIcons = [ '', '', "fa-crown text-gold", '',''];  %>
+                                        <% let tableHeaderIconsColors = [ '', '',  "darkgoldenrod", '',''];  %>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                              <tr>
+
+                                                <%  if ( adTypes && adTypes.length > 0) { %>
+                                                    <th style="vertical-align: baseline;"  class="text-capitalize  justify-content-center align-items-center">Premium Ad benefits</th>
+                                                    <% for (let i = 0 ; i < adTypes.length; i++ ) { %> 
+                                                        <th style="background-color: <%=  tableHeaderColors[i] %>;">
+                                                            <div class="text-uppercase text-center">
+                                                               <i style="color: <%= tableHeaderIconsColors[i] %>;" class="fas <%= tableHeaderIcons[i] %>"></i> <%= adTypes[i].name ? adTypes[i].name : '' %>
+                                                            </div>
+                                                            <div class=" small text-center">
+                                                                 
+                                                                 <span class="text-black text-center">
+                                                                     <%= adTypes[i].pricePerMonth ? '₹ '+adTypes[i].pricePerMonth + ' / Month' : '₹ 0 / Month'  %>
+                                                                 </span>
+                                                                </div>
+                                                            <div class="text-black small text-center">
+                                                                Validity - 
+                                                                <span class="">
+                                                                    <%= adTypes[i].validityIndays ? adTypes[i].validityIndays + ' days': 'Unlimited'  %>
+                                                                </span>
+                                                            </div>
+                                                        </th>
+                                                <% }  %>
+
+                                                <% } else { %>
+                                                    No Plans added yet
+                                                    <% } %>
+
+                                                
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for( let e = 0; e< features.length; e++ ){ %>
+                                                    <tr>
+
+                                                            <%    if ( features[e].name ) { %>
+                                                            <td>
+                                                                <%= features[e].name %>
+                                                            </td>
+                                                            <%   } %>
+                                                            <% for ( let i = 0;  i < adTypes.length; i++ ){ %>
+                                                                    
+                                                                    <td class="text-center">
+                                                                        <%= adTypes[i].features[e] && typeof adTypes[i].features[e].description != 'undefined'  ?  adTypes[i].features[e].description : '' %>
+                                                                    </td>
+                                                                    
+                                                            <%   } %>
+
+                                                    </tr>
+                                                <% } %>
+                                                <tr>
+                                                    <td></td>
+                                                    <% for ( let i = 0;  i < adTypes.length; i++ ){ %>
+                                                    <td>
+                                                    <section class="">
+                                                        <button 
+                                                        style="min-width: 70px"
+                                                        data-target="#editAdPlanModal" 
+                                                        data-toggle="modal"  
+                                                        class="editPlan my-2 rounded  btn btn-sm btn-success" 
+                                                        data-id="<%= adTypes[i]._id %>"
+                                                        data-index="<%= i %>"
+                                                        
+                                                        >Edit</button>
+                                                </section>
+                                                <section class="" >
+
+                                                        <button 
+                                                        style="min-width: 70px"
+                                                        class="deletePlan my-2 rounded btn btn-sm btn-danger" 
+                                                        data-id="<%= adTypes[i]._id %>"
+                                                        data-index="<%= i %>"
+                                                        >
+                                                        Delete</button>
+                                                </section>
+                                            </td>
+                                                    <% } %>
+                                                </tr>
+                                              
+                                            </tbody>
+                                          </table>
+                                    </section>
+
+                                    <!-- <div class="row table-ads " >
+                                        <div class="col">
+                                           
+                                            <%  if ( adTypes && adTypes.length > 0) { %>
+                                                <div>
+                                                    Premium Ad benefits
+                                                </div>
+                                                <% features.forEach( feature => { %>
+                                                    <%    if ( feature.name ) { %>
+                                                    <div>
+                                                        <%= feature.name %>
+                                                    </div>
+                                                    <%   } %>
+                                                <% }); %>
+                                            <% } else { %>
+                                                No Plans added yet
+                                                <% } %>
+                                        </div>
+                                            
+                                            <%  if ( adTypes && adTypes.length > 0) { %>
+                                                    <% for (let i = 0 ; i < adTypes.length; i++ ) { %> 
+                                                <div class="col">
+                                                    <div class="text-success d-flex flex-column">
+                                                            <div class="text-uppercase">
+                                                                <%= adTypes[i].name ? adTypes[i].name : '' %>
+                                                            </div>
+                                                            <div class="text-secondary small">
+                                                                 Price - 
+                                                                 <span class="text-primary">
+                                                                     <%= adTypes[i].pricePerMonth ? 'Rs '+adTypes[i].pricePerMonth + '/ Month' : 'free'  %>
+                                                                 </span>
+                                                                </div>
+                                                            <div class="text-secondary small">
+                                                                Validity - 
+                                                                <span class="text-primary">
+                                                                    <%= adTypes[i].validityIndays ? adTypes[i].validityIndays + ' days': 'Unlimited'  %>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <% adTypes[i].features.forEach( feature => { %>
+                                                            <%    if ( feature.description ) { %>
+                                                            <div>
+                                                                <%= feature.description %>
+                                                            </div>
+                                                            <%   } %>
+                                                        <% }); %>
+
+                                                <section class="">
+                                                        <button 
+                                                        style="min-width: 70px"
+                                                        data-target="#editAdPlanModal" 
+                                                        data-toggle="modal"  
+                                                        class="editPlan my-2 rounded  btn btn-sm btn-success" 
+                                                        data-id="<%= adTypes[i]._id %>"
+                                                        data-index="<%= i %>"
+                                                        
+                                                        >Edit</button>
+                                                </section>
+                                                <section class="" >
+
+                                                        <button 
+                                                        style="min-width: 70px"
+                                                        class="deletePlan my-2 rounded btn btn-sm btn-danger" 
+                                                        data-id="<%= adTypes[i]._id %>"
+                                                        data-index="<%= i %>"
+                                                        >
+                                                        Delete</button>
+                                                </section>
+
+                                                </div>
+
+                                                    <% } %>
+                                                
+
+                                            <% } %>
+
+                                    </div> -->
+
+
+
+                                   
+
+                                </div>
+                            </div>
+
+                            
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+            <!-- container ends here -->
+        </div>
+
+    </section>
+
+
+    <!-- modals -->
+
+    <!-- add job modal -->
+
+    <!-- Button to Open the Modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAdPlanModal">
+                Open modal
+            </button> -->
+
+    <!-- The Modal -->
+    <div class="modal" id="addAdPlanModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">New Ad Plan</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="newJobForm" action="/admin/site/business/post/add/new" method="post">
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="">Name</label>
+                            <input type="text" name="name" required class="form-control">
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <div class="font-weight-bold" for="">Price/Month <span class="float-right">[ free - leave blank ]</span></div>
+                                    <input type="number" max="999999999999" min="1" name="pricePerMonth" 
+                                        class="form-control">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <div class="font-weight-bold" for="">Validity (days) <span class="float-right">[ Unlimited - leave blank ]</span></div>
+                                    <input type="number" max="99999999999" min="1" name="validityIndays" 
+                                        class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <style>
+                            .features-label{
+                                min-width: 250px;
+                            }
+                        </style>
+                        <div class="form-group features">
+                            <div class="font-weight-bold" for="">Features </div>
+                            <div class="col">
+                                
+                                <% if ( features && features.length > 0 ) { %>
+    
+                                    <% for( let i = 0; i< features.length; i++ ) { %>
+                                        
+                                        <div class="d-flex my-1 flex-row justify-content-between">
+                                            <div class="pr-2 features-label"><%= features[i].name %></div>
+                                            <div class="flex-grow-1">
+                                                <input 
+                                                class="form-control" 
+                                                data-id="<%= features[i]._id %>" 
+                                                data-name="<%= features[i].name %>" 
+                                                type="text" name="description"
+                                                     placeholder="">
+                                            </div>
+                                        </div>
+                                    
+                                    <% } %>
+    
+                            <% } %>
+    
+                            </div>
+    
+                        </div>
+                        <button class="btn btn-success btn-sm" id="addPlanBtn">Submit</button>
+
+                    </form>
+
+                </div>
+
+                <!-- Modal footer -->
+                <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Button to Edit the Modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAdPlanModal">
+                Open modal
+            </button> -->
+
+  <!-- The Modal -->
+  <div class="modal" id="editAdPlanModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Ad Plan</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="editAdPlanForm" >
+                    <div class="form-group">
+                        <label  class="font-weight-bold" for="">Name</label>
+                        <input type="text" name="name" required class="form-control">
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <div class="font-weight-bold" for="">Price/Month <span class="float-right">[ free - leave blank ]</span></div>
+                                <input type="number" max="999999999999" min="1" name="pricePerMonth" 
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <div class="font-weight-bold" for="">Validity (days)<span class="float-right">[ Unlimited - leave blank ]</span></div>
+                                <input type="number" max="99999999999" min="1" name="validityIndays" 
+                                    class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <style>
+                        .features-label{
+                            min-width: 250px;
+                        }
+                    </style>
+                    <div class="form-group features">
+                        <div class="font-weight-bold" for="">Features </div>
+                        <div class="col">
+                            
+                            <% if ( features && features.length > 0 ) { %>
+
+                                <% for( let i = 0; i< features.length; i++ ) { %>
+                                    
+                                    <div class="d-flex my-1 flex-row justify-content-between">
+                                        <div class="pr-2 features-label"><%= features[i].name %></div>
+                                        <div class="flex-grow-1">
+                                            <input 
+                                            id="features_<%= i %>"
+                                            class="form-control" 
+                                            data-id="<%= features[i]._id %>" 
+                                            data-name="<%= features[i].name %>" 
+                                            type="text" name="description"
+                                                 placeholder="">
+                                        </div>
+                                    </div>
+                                
+                                <% } %>
+
+                        <% } %>
+
+                        </div>
+
+                    </div>
+                    <input type="hidden" name="planId">
+                    <button class="btn btn-success btn-sm" id="updateBtn">Submit</button>
+
+                </form>
+
+            </div>
+
+            <!-- Modal footer -->
+            <!-- <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div> -->
+
+        </div>
+    </div>
+</div>
+
+
+    <script>
+        const rootDomain =
+            `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+       
+        const adTypes = <%- JSON.stringify(adTypes) %>;
+        let action;
+
+        $(".editPlan").click(e=>{
+            const id = $(e.target).data('id');
+            const index = $(e.target).data('index');
+            console.log({id, index});
+            action = $("#editAdPlanForm").prop('action');
+            $("#editAdPlanForm input[name='planId']").val(id);
+            $("#editAdPlanForm").prop('action', action+'/'+id);
+            $("#editAdPlanForm input[name='name']").val(adTypes[index].name);
+            $("#editAdPlanForm input[name='pricePerMonth']").val(adTypes[index].pricePerMonth);
+            $("#editAdPlanForm input[name='validityIndays']").val(adTypes[index].validityIndays);
+
+            for ( let i = 0; i < adTypes[index].features.length ; i++ ) {
+                $("#editAdPlanForm #features_"+i).val(adTypes[index].features[i].description);
+            }
+            // $("#editAdPlanForm input[name='fixedPosition']").val(adTypes[index].features.fixedPosition.value);
+            // $("#editAdPlanForm input[name='validity']").val(adTypes[index].features.validity.value);
+            // $("#editAdPlanForm input[name='viewsLimit']").val(adTypes[index].features.viewsLimit.value);
+            // $("#editAdPlanForm input[name='wordLimit']").val(adTypes[index].features.wordLimit.value);
+            // $("#editAdPlanForm input[name='noOfPhotosAllowed']").val(adTypes[index].features.noOfPhotosAllowed.value);
+            // $("#editAdPlanForm input[name='interestedUserDetails']").val(adTypes[index].features.interestedUserDetails.value);
+            // $("#editAdPlanForm input[name='renewal']").val(adTypes[index].features.renewal.value);
+        });
+
+        $("#editAdPlanModal").on("hide.bs.modal", e=> {
+            $("#editAdPlanForm").prop('action', action);
+            $("#editAdPlanForm").trigger('reset');
+        });
+
+
+        $(".deletePlan").click( e => {
+            const id = $(e.target).data('id');
+            const index = $(e.target).data('index');
+
+            if ( confirm('Are you sure? \nPlan to delete - '+adTypes[index].name+'\nYou cannot revert this process!')) {
+                location.replace('/admin/site/business/post/delete/'+id);
+            }
+        });
+    </script>
+
+
+<script>
+    $("#addPlanBtn").on('click', e => {
+        e.preventDefault();
+        const name = $("#newJobForm input[name='name']").val();
+        const pricePerMonth = $("#newJobForm input[name='pricePerMonth']").val();
+        const validityIndays = $("#newJobForm input[name='validityIndays']").val();
+        
+
+        const features = $("#newJobForm .features input");
+        let featuresArr = [];
+        for( let i=0; i < features.length ; i++ ) {
+            console.log($(features[i]).val());
+            console.log($(features[i]).data('id'));
+            console.log($(features[i]).data('name'));
+            const description = $(features[i]).val();
+            const id = $(features[i]).data('id');
+            const name = $(features[i]).data('name');
+
+            if (  name && id ) {
+                featuresArr.push({
+                    description,  id,  name
+                });
+            }
+        }
+
+        console.log({featuresArr, features});
+
+        const data = {
+            name,
+            pricePerMonth,
+            validityIndays,
+            features: featuresArr
+        };
+
+            $.post(`${rootDomain}/admin/site/business/post/add/new`,
+            data,
+            (data, status) => {
+                
+                    console.log('updated.');
+                    // console.log("Res: ", data);
+
+                    if (data && data.msg && data.msg == 'Done') {
+                        // showSuccessAlert('Your application has been submitted successfully.');
+                        // $("#applyJob").trigger('reset');
+                        // $(".custom-file-label").text('Choose file');
+                        location.reload();
+                    }
+                    $(e.target).html(`Submit`).prop('disabled', false);
+
+                }).fail(data =>  {
+                    console.log('Error', data);
+                });
+
+        // return false;
+
+    });
+
+
+
+    $("#updateBtn").on('click', e => {
+        e.preventDefault();
+        const name = $("#editAdPlanForm input[name='name']").val();
+        const pricePerMonth = $("#editAdPlanForm input[name='pricePerMonth']").val();
+        const validityIndays = $("#editAdPlanForm input[name='validityIndays']").val();
+        
+
+        const features = $("#editAdPlanForm .features input");
+        let featuresArr = [];
+        for( let i=0; i < features.length ; i++ ) {
+            console.log($(features[i]).val());
+            console.log($(features[i]).data('id'));
+            console.log($(features[i]).data('name'));
+            const description = $(features[i]).val();
+            const id = $(features[i]).data('id');
+            const name = $(features[i]).data('name');
+
+            if (  name && id ) {
+                featuresArr.push({
+                    description,  id,  name
+                });
+            }
+        }
+
+        console.log({featuresArr, features});
+        const planId = $("#editAdPlanForm input[name='planId']").val();
+
+        const data = {
+            name,
+            pricePerMonth,
+            validityIndays,
+            features: featuresArr
+        };
+
+            $.post(`${rootDomain}/admin/site/business/post/update/${planId}`,
+            data,
+            (data, status) => {
+                
+                    console.log('updated.');
+                    // console.log("Res: ", data);
+
+                    if (data && data.msg && data.msg == 'Done') {
+                        // showSuccessAlert('Your application has been submitted successfully.');
+                        // $("#applyJob").trigger('reset');
+                        // $(".custom-file-label").text('Choose file');
+                        location.reload();
+                    }
+                    $(e.target).html(`Submit`).prop('disabled', false);
+
+                }).fail(data =>  {
+                    console.log('Error', data);
+                });
+
+        // return false;
+
+    });
+</script>
+
+</body>
+
+</html>

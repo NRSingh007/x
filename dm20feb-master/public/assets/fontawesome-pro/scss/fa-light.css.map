@@ -1,0 +1,10 @@
+{
+    "version": 3,
+    "mappings": "AAAA;;;GAGG;AAGH,UAAU;EACR,WAAW,EAAE,oBAAoB;EACjC,UAAU,EAAE,MAAM;EAClB,WAAW,EAAE,GAAG;EAChB,GAAG,EAAE,iCAAwC;EAC7C,GAAG,EAAE,wCAA+C,CAAC,2BAA2B,EAChF,mCAA0C,CAAC,eAAe,EAC1D,kCAAyC,CAAC,cAAc,EACxD,iCAAwC,CAAC,kBAAkB,EAC3D,6CAAoD,CAAC,aAAa;;;AAGpE,AAAA,IAAI,CAAC;EACH,WAAW,EAAE,oBAAoB;EACjC,WAAW,EAAE,GAAG;CACjB",
+    "sources": [
+        "fa-light.scss",
+        "_variables.scss"
+    ],
+    "names": [],
+    "file": "fa-light.css"
+}

@@ -1,0 +1,76 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container p-5 ">
+        <div class="col-6 p-3  mx-auto">
+            <form action="/test/upload" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <!-- <input class="form-control " type="file" name="image" id=""  onclick="compress(event)"> -->
+                    <input id="file" type="file" >
+                </div>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" >
+
+                <button type="button" class="btn btn-success btn-block ">Upload</button>
+            </form>
+        </div>
+
+        <div class="col-6 p-3 mx-auto">
+            <% if ( typeof file != 'undefined' && file.filename) { %> <img style="width: 100%;" src="<%= `${rootDomain}/test/images/${file.filename}` %>" alt="">  <% } %>
+        </div>
+
+
+    </div>
+  
+
+        <script>
+
+            document.getElementById("file").addEventListener("change", function (event) {
+                compress(event);
+            });
+            
+            function compress(e) {
+                console.log('compressing');
+            
+            // return new Promise ((resolve, reject) => {
+                const width = 500;
+                const height = 300;
+                const fileName = e.target.files[0].name;
+                const reader = new FileReader();
+                reader.readAsDataURL(e.target.files[0]);
+                reader.onload = event => {
+                    const img = new Image();
+                    img.src = event.target.result;  
+                    img.onload = () => {
+                            const elem = document.createElement('canvas');
+                            elem.width = width;
+                            elem.height = height;
+                            const ctx = elem.getContext('2d');
+                            // img.width and img.height will contain the original dimensions
+                            ctx.drawImage(img, 0, 0, width, height);
+                            ctx.canvas.toBlob((blob) => {
+                                const file = new File([blob], fileName, {
+                                    type: 'image/jpeg',
+                                    lastModified: Date.now()
+                                });
+                                console.log('file',file);
+
+                            }, 'image/jpeg', 1);
+                        },
+                        reader.onerror = error => { console.log(error); ; }
+                };
+            // });
+            
+            }
+            
+            </script>
+    </body>
+
+</html>

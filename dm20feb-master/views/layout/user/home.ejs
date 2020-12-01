@@ -1,0 +1,1226 @@
+<%- include('./../../includes/header.ejs',{
+    keywords: 'User setting' ,
+    author: 'Digtal Manipur',
+    description: ``
+ }) %>
+<link rel="stylesheet" href="/assets/css/profile-setting.css">
+
+</head>
+
+<body class="user-home">
+    <%- include('./../../includes/navBar.ejs') %>
+
+    <section class="profile-setting">
+        <div class="container  p-2 p-sm-0">
+
+            <div class="row my-4 rounded lightGrey-border bg-white p-4">
+                <div class="d-flex justify-content-center profile-header">
+
+                    <div class="profile-preview-box">
+                        <div id="profile-preview" class="profilePreviewUpdate rounded-circle profile-preview" style="
+                            background-image: url('<%= user.images.profile.common.url ? `/uploads/images/mobile/${user.images.profile.common.url}` : `/assets/img/bg-abstract.jpg` %>');
+                            ">
+                        </div>
+                    </div>
+
+                    <div class="profile-desc ">
+                        <div class="name ">
+                            <%= user.name.firstName %>
+                        </div>
+                        <% if( userDistrict ) { %>
+                        <div class="address">
+                            <i class="fal fa-map-marker-alt"></i>
+                            <%= userDistrict %>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row mb-5" style="min-height: 450px;">
+                <div class="user-tabs-holder col-md-3 col-sm-12 col-xs-12 pl-0">
+                    <div class="nav-tabs-holder bg-white lightGrey-border mb-3">
+                        <div class="list-group ">
+                            <a class="list-group-item list-group-item-action active" data-toggle="tab" href="#Timeline">
+                                Timeline
+                            </a>
+                            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#Posts">
+                                Posts
+                                <span class="badge badge-secondary float-right p-1 px-2"
+                                    style="background-color: #999;"><%= extraData && extraData.postsCount ? extraData.postsCount : 0 %></span>
+
+                            </a>
+                            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#Products">
+                                Products
+                                <span class="badge badge-secondary float-right p-1 px-2"
+                                    style="background-color: #999;"><%= extraData && extraData.productsCount ? extraData.productsCount : 0 %></span>
+
+                            </a>
+                            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#wishlistProducts">
+                                Wishlist Products
+                                <span class="badge badge-secondary float-right p-1 px-2"
+                                    style="background-color: #999;"><%= user && user.wishlistProduct  && user.wishlistProduct.length  ? user.wishlistProduct.length  : 0 %></span>
+
+                            </a>
+                            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#Reviews">
+                                Reviews
+                                <span class="badge badge-secondary float-right p-1 px-2"
+                                    style="background-color: #999;"><%= user && user.reviews ? user.reviews.length : 0 %></span>
+
+                            </a>
+                            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#Bookmarks">
+                                Bookmarks
+                                <span class="badge badge-secondary float-right p-1 px-2"
+                                    style="background-color: #999;"><%= user && user.bookmarks ? user.bookmarks.length : 0 %></span>
+                            </a>
+                            <a class="list-group-item list-group-item-action" data-toggle="tab" href="#BeenThere">
+                                Been There
+                                <span class="badge badge-secondary float-right p-1 px-2"
+                                    style="background-color: #999;"><%= user && user.beenThere ? user.beenThere.length : 0 %></span>
+                            </a>
+                            <a class="list-group-item list-group-item-action" data-toggle="tab"
+                                href="#Recentlyviewedposts">
+                                Recently viewed posts
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9 col-sm-12 col-xs-12 px-0">
+                    <div class="tab-content">
+
+                        <div class="tab-pane container px-0 active" id="Timeline">
+
+
+
+                            <h5 class="mb-2">Timeline</h5>
+                            <div class="lightGrey-border  bg-white rounded p-3 tab-pane-default">
+                                <p>Started using Digital Manipur </p>
+
+
+                                <p id="timeline-duration">
+                                    <%= timelineDuration %>
+                                </p>
+                            </div>
+                            <div class="main-body"></div>
+                        </div>
+
+                        <div class="tab-pane container lightGrey-border bg-white p-3 fade" id="Reviews">
+                            <h5 class="mb-2 text-center"><%= user.name.firstName+`'s reviews` %>
+                                <span id="ReviewsCount" class="text-muted">0</span>
+                            </h5>
+                            <div class=" p-3 my-3 tab-pane-default">
+                                <div class="my-3 text-center"><i class="far fa-sad-cry text-muted"
+                                        style="font-size: 80px;"></i></div>
+                                <h4 class="text-center">You haven't written any reviews yet. </h4>
+                                <p class="text-center">Add your first review now.</p>
+                            </div>
+                            <div class="main-body"></div>
+
+                        </div>
+
+                        <div class="tab-pane container lightGrey-border bg-white p-3 fade" id="Bookmarks">
+                            <h5 class="mb-2 ">Bookmarks <span id="BookmarksCount" class="text-muted">0</span></h5>
+                            <div class=" p-3 my-3 tab-pane-default">
+                                <div class="my-3 text-center"><i class="far fa-bookmark  text-muted"
+                                        style="font-size: 80px;"></i></div>
+                                <h4 class="text-center">Nothing in your Bookmarks yet. </h4>
+                                <p class="text-center">Add posts to your Bookmarks for easy future reference.</p>
+                            </div>
+                            <div class="main-body"></div>
+
+                        </div>
+
+                        <div class="tab-pane container lightGrey-border bg-white p-3 fade" id="BeenThere">
+                            <h5 class="mb-2">Been There <span id="BeenThereCount" class="text-muted">0</span></h5>
+                            <div class=" p-3 my-3 tab-pane-default">
+                                <div class="my-3 text-center"><i class="far fa-shoe-prints fa-rotate-270 text-muted"
+                                        style="font-size: 80px;"></i></div>
+                                <h4 class="text-center">No posts added yet.</h4>
+                            </div>
+                            <div class="main-body"></div>
+
+                        </div>
+
+
+                        <div class="tab-pane container lightGrey-border bg-white p-3 fade" id="Recentlyviewedposts">
+                            <h5 class="mb-2">Recently viewed posts <span id="RecentlyviewedpostsCount"
+                                    class="text-muted">0</span></h5>
+                            <div class=" p-3 my-3 tab-pane-default">
+                                <div class="my-3 text-center"><i class="far fa-history  text-muted"
+                                        style="font-size: 80px;"></i></div>
+                                <h4 class="text-center">No posts viewed yet.</h4>
+                            </div>
+                            <div class="main-body"></div>
+
+                        </div>
+
+                        <div class="tab-pane container lightGrey-border bg-white p-3 fade" id="Posts">
+                            <h5 class="mb-4">Your Posts <span id="PostsCount" class="text-muted">0</span>
+                                <a href="/users/add-listing" role="button"
+                                    class="btn btn-sm btn-outline-secondary float-right">Add post</a>
+                            </h5>
+                            <div class=" p-3 my-3 tab-pane-default">
+                                <div class="my-3 text-center"><i class="far fa-file-plus  text-muted"
+                                        style="font-size: 80px;"></i></div>
+                                <h4 class="text-center">No posts added yet.</h4>
+                            </div>
+                            <div class="main-body"></div>
+
+                        </div>
+                        <div class="tab-pane container lightGrey-border bg-white p-3 fade" id="Products">
+                            <h5 class="mb-4">Your Products <span id="ProductsCount" class="text-muted">0</span>
+                                <a href="/product/categories" role="button"
+                                    class="btn btn-sm btn-outline-secondary float-right">Add product</a>
+                            </h5>
+                            <div class=" p-3 my-3 tab-pane-default">
+                                <div class="my-3 text-center"><i class="far fa-file-plus  text-muted"
+                                        style="font-size: 80px;"></i></div>
+                                <h4 class="text-center">No products added yet.</h4>
+                            </div>
+                            <div class="main-body"></div>
+
+                        </div>
+                        
+                        <div class="tab-pane container lightGrey-border bg-white p-3 fade" id="wishlistProducts">
+                            <h5 class="mb-4">Your wishlist Products <span id="wishlistProductCount" class="text-muted">0</span>
+                            </h5>
+                            <div class=" p-3 my-3 tab-pane-default">
+                                <div class="my-3 text-center"><i class="far fa-file-plus  text-muted"
+                                        style="font-size: 80px;"></i></div>
+                                <h4 class="text-center">No products added yet.</h4>
+                            </div>
+                            <div class="main-body"></div>
+
+                        </div>
+
+                        <!-- tab content ends here -->
+                    </div>
+                </div>
+                <!-- <div class="col-md-3 col-sm-12 col-xs-12 px-0">
+
+                </div> -->
+            </div>
+
+            <!-- container ends here -->
+        </div>
+
+        </div>
+
+        </div>
+
+        <!-- The Modal -->
+        <div class="modal fade" id="deleteAccountModal">
+            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-zoom">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Account deletion request</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <div class="p-4">
+                            <div class="feedback-warning alert alert-warning " style="display:none;">
+
+                            </div>
+                            <div class="feedback-success alert alert-warning " style="display:none;">
+
+                            </div>
+                            <p class="small">
+                                Before you leave, please tell us why you'd like to delete your account. This information
+                                will help us improve.
+                                <span class="text-muted"> (optional)</span></p>
+                            <form name="deleteAccountForm" action="" method="post">
+                                <div class="form-group">
+                                    <textarea rows="4" autocomplete="off" name="reason" class="form-control"
+                                        maxlength="500"></textarea>
+                                </div>
+                                <input type="text" hidden name="email" value="<%= user.email %>" />
+
+                                <input type="text" hidden name="userId" value="<%= user._id %>" />
+                                <button onclick="deleteAccount(event)" class="btn-sm shadow-none btn btn-danger"
+                                    type="submit">Delete my account</button>
+                            </form>
+
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- The Modal -->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit profile picture</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <div class="d-flex flex-row">
+
+                            <div class="col-md-4 col-sm-12 col-xs-12">
+                                <div>Upload Picture</div>
+                                <form name="upload-profile-image" action="" method="post" enctype="multipart/form-data">
+                                    <div class="custom-file my-2">
+                                        <input onchange="filePreview(this)" type="file" class="custom-file-input"
+                                            id="customFile" name="image" accept=".jpg, .png, .jpeg" id="">
+                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                    </div>
+                                    <input type="text" hidden name="userId" value="<%= user._id %>" />
+
+                                </form>
+                                <p class="text-secondary small">JPG/PNG formats only Maximum size 5 MB Greater than
+                                    400px in height and width
+                                </p>
+                                <hr>
+                                <button type="button" class="btn btn-link" onclick="deleteProfilePicture(event)">Delete
+                                    my profile picture</button>
+                            </div>
+                            <div
+                                class="d-none col-md-8 col-sm-12 col-xs-12 file-preview justify-content-center align-items-center flex-column">
+                                <img style="width: 70%; max-height: 400px ;max-width: 800px;"
+                                    class="imgPreview img-thumbnail my-2" src="" width="100%" />
+                                <div>
+                                    <button type="button" onclick="changeProfile()" class="shadow-none btn btn-success">
+                                        Upload
+                                        image</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div> -->
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- The Modal -->
+        <div class="modal fade" id="changeEmail">
+            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-zoom">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Change email</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="email-update-feedback-warning alert alert-warning " style="display:none;">
+
+                        </div>
+                        <div class="email-update-feedback-success alert alert-warning " style="display:none;">
+
+                        </div>
+                        <div class="px-3">
+
+
+                            <form name="changeEmailForm" action="" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="">New Email</label>
+                                    <input autocomplete="off" type="email" name="email" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Confirm new email</label>
+                                    <input autocomplete="off" type="email" name="confirm-email" class="form-control">
+                                </div>
+                                <input type="text" hidden name="userId" value="<%= user._id %>" />
+                                <button class="shadow-none btn btn-success" type="submit"
+                                    onclick="changeEmail(event)">Change</button>
+                            </form>
+
+
+                        </div>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div> -->
+
+                </div>
+            </div>
+        </div>
+
+        <!-- hidden -->
+        <input type="text" hidden id="userId" value="<%= user._id %>">
+
+
+        <!-- profile sections ends -->
+    </section>
+
+
+
+
+    <script>
+        const loadingBox = `<div
+        class="d-flex justify-content-center align-items-center "
+        style="width: 100%; min-height: 400px;">
+        <div style="text-align: center">
+            <div class="spinner-border text-danger"></div>
+            <div class="text-muted small mt-2">Loading...</div>
+        </div>
+        </div>`;
+
+        function changeProfile() {
+
+            console.log('changeProfile');
+
+            const form = $("form[name='upload-profile-image']")[0];
+            const formData = new FormData(form);
+
+            // return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${rootDomain}/users/update/upload-profile-image`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (data) {
+                    console.log('File submitted');
+                    console.log("file info: ", data);
+
+                    if (data && data.filename && data.filename != null && data.filename.length > 0) {
+                        // resolve(data.filename);
+                        // update profile
+                        updateProfilePictures(data.filename);
+                        $('#myModal').modal('hide');
+                        showAlert(false, data.message);
+                    } else {
+                        showAlert(true, data.message);
+
+                        // reject('Unexpected error: wrong filename!');
+                    }
+                },
+                error: function (error) {
+                    console.log('Error', error);
+                    if (error.message) {
+                        showAlert(true, error.message);
+                    }
+                }
+            });
+            // })
+        }
+
+        function filePreview(input) {
+            console.log("input files", input.files[0]);
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // $('.file-preview').children().remove();
+                    $('.file-preview').removeClass('d-none');
+                    $('.file-preview').addClass('d-flex');
+                    $('.file-preview .imgPreview').prop('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function updateProfilePictures(filename) {
+            console.log(filename);
+
+            const objects = $(".profilePreviewUpdate");
+            const arrays = Object.values(objects);
+            const imageUrl = filename ? `url('/uploads/images/mobile/${filename}')` :
+                `url('/assets/img/bg-abstract.jpg')`;
+            for (let i in arrays) {
+                if (i <= objects.length) {
+                    $(arrays[i]).css({
+                        "background-image": imageUrl
+                    });
+                } else {
+                    break;
+                }
+            }
+
+            if (filename) {
+                $("#avatar").prop(
+                    "src", `/uploads/images/mobile/${filename}`);
+            } else {
+                $("#avatar").prop(
+                    "src", `/assets/img/bg-abstract.jpg`);
+            }
+
+            // $("#profile-change").css({
+            //     "background-image": `url('/uploads/images/mobile/${filename}')`
+            // });
+        }
+
+        $('#myModal').on('show.bs.modal', function () {
+            console.log('dadas');
+        });
+
+        $('#myModal').on('hide.bs.modal', function () {
+            $('.file-preview').removeClass('d-flex');
+            $('.file-preview').addClass('d-none');
+
+        });
+
+        function showAlert(error, message) {
+            $('body').append(`
+                <div style="position: fixed; top: 20px; left: 35%;" class="alert alert-${error ? 'danger' : 'success'} alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">${error ? 'Error occurred!' : 'Success!'}</h4>
+                    <p>${message}</p>
+                </div>
+            `);
+            setTimeout(() => {
+                $(".alert").remove();
+            }, 2000);
+        }
+
+        $(document).ready(() => {
+            // remove placeholder
+            $('.profile-setting form input, .profile-setting form select, .profile-setting form textarea').prop(
+                'placeholder', '');
+            $('#editProfile button[type="submit"]').prop('disabled', true);
+
+            // disable form submit
+            $("button").click((e) => {
+                e.preventDefault();
+                console.log('Button clicked');
+            });
+
+        });
+
+        $('#editProfile').submit((e) => {
+            e.preventDefault();
+            // alert('asa');
+
+            let data = {};
+            const formData = new FormData($('#editProfile')[0]);
+            for (let entry of formData.entries()) {
+                data[entry[0]] = entry[1];
+            }
+            console.log({
+                data
+            });
+
+            if (data) {
+                $('#submitProfile').html(`
+                <div class="spinner-border  text-light spinner-border-sm"></div> Saving
+                `);
+                $.post(`${rootDomain}/users/update/profile`,
+                    data,
+                    (data, status) => {
+                        if (status == 'success') {
+                            // showAlert(false, data.message);
+                        } else {
+                            // showAlert(true, data.message);
+                        }
+                        $('#submitProfile').html(`Saved`);
+                    })
+                    .fail((error) => {
+                        showAlert(true, error.message);
+                        $('#submitProfile').html(`Save`);
+
+                    });
+            }
+
+        });
+
+
+        $('#editProfile').on('change', (e) => {
+            // alert('adads');
+            $('#editProfile button[type="submit"]').prop('disabled', false);
+            $('#submitProfile').html(`Save`);
+        });
+
+        function changeEmail(event) {
+            event.preventDefault();
+
+            $(".email-update-feedback-warning").hide();
+            $(".email-update-feedback-success").hide();
+
+            const email = $("form[name='changeEmailForm'] input[name='email']").val();
+            const confirmEmail = $("form[name='changeEmailForm'] input[name='confirm-email']").val();
+
+            if (email == confirmEmail) {
+
+                $("form[name='changeEmailForm'] button[type='submit']").html(
+                    ` <div class="spinner-border  text-light spinner-border-sm"></div> `);
+                let data = {};
+                const formData = new FormData($("form[name='changeEmailForm']")[0]);
+                for (let entry of formData.entries()) {
+                    data[entry[0]] = entry[1];
+                }
+                $.post(`${rootDomain}/users/update/email`,
+                    data,
+                    (data, status) => {
+                        if (status == 'success') {
+                            $("form[name='changeEmailForm'] button[type='submit']").html(`Change`);
+                            $(".email-update-feedback-success").show().html(
+                                `Verification link has been sent to your new email address.`);
+                        }
+                    })
+                    .fail((error) => {
+
+                        $(".email-update-feedback-warning").show().html(`Invalid request.`);
+                        $("form[name='changeEmailForm'] button[type='submit']").html(`Change`);
+                    });
+
+            } else {
+                $(".email-update-feedback-warning").show().html(`Email not matched.`);
+            }
+        }
+
+        $(document).ready(() => {
+
+            // email update form event listener
+            $("form[name='changeEmailForm'] button[type='submit']").prop('disabled', true);
+            $("form[name='changeEmailForm']").on('change', () => {
+                const email = $("form[name='changeEmailForm'] input[name='email']").val();
+                const confirmEmail = $("form[name='changeEmailForm'] input[name='confirm-email']")
+                    .val();
+
+                if (email == confirmEmail) {
+                    $("form[name='changeEmailForm'] button[type='submit']").prop('disabled', false);
+                } else {
+                    $("form[name='changeEmailForm'] button[type='submit']").prop('disabled', true);
+                }
+            });
+
+
+
+            loadHashPage();
+
+        });
+        // window.onhashchange = loadHashPage();
+        window.addEventListener('hashchange', loadHashPage, false);
+
+        function loadHashPage() {
+            console.log('Hash Changed')
+            // Javascript to enable link to tab
+            const url = document.location.toString();
+            const hashURL = url.split('#')[1];
+            console.log({
+                url,
+                hashURL
+            });
+
+            const tabId = "#" + hashURL;
+            const store = $(tabId).html();
+            $(tabId).html(loadingBox);
+
+            if (url.match('#')) {
+
+                $('.nav-tabs-holder .list-group  a[href="#' + hashURL + '"]').tab('show');
+                scrollTo(0, 0);
+
+                if (hashURL == 'Posts') {
+                    getPosts(store);
+                }
+                if (hashURL == 'Products') {
+                    getProducts(store);
+                }
+                if (hashURL == 'Reviews') {
+                    getReviews(store);
+                }
+                if (hashURL == 'Timeline') {
+                    setTimeout(() => {
+                        $(tabId).html(store);
+                    }, 500);
+                }
+                if (hashURL == 'Bookmarks') {
+                    getBookmarks(store);
+                }
+                if (hashURL == 'BeenThere') {
+                    getBeenThere(store);
+                }
+                if (hashURL == 'Recentlyviewedposts') {
+                    getRecentlyviewedposts(store);
+                }
+                 if (hashURL == 'wishlistProducts') {
+                    getWishlistProducts(store);
+                }
+
+
+            }
+
+            // Change hash for page-reload
+            // $('.nav-tabs-holder  a').on('shown.bs.tab', function (e) {
+            //     console.log(e.target.hash);
+            //     // window.location.hash = e.target.hash;
+            // });
+
+        }
+
+
+
+        $(".nav-tabs-holder .list-group .list-group-item").click(async (e) => {
+            const tabId = "#" + $(e.target).prop('href').split("#")[1];
+            console.log(tabId);
+
+            window.location.hash = tabId;
+
+        });
+
+        function getPosts(previousInnerHtml) {
+            const userId = $('#userId').val();
+            $.get(`${rootDomain}/users/userposts`, (data, status) => {
+                if (status == 'success' && data.length > 0) {
+                    console.log("USER POSTS");
+                    console.log({
+                        data
+                    });
+
+                    $("#Posts").html(previousInnerHtml);
+                    $("#Posts div.tab-pane-default").hide();
+                    $("#Posts div.main-body").empty();
+                    $("#PostsCount").html(data.length);
+
+                    data.forEach(element => {
+                        let viewOrPending = '';
+
+                        if (element.status) {
+                            viewOrPending = `
+
+                            <a class="btn btn-sm btn-success my-2 px-2"
+                                            href="/detail?name=${element.name}&tk=${element._id}"
+                                            role="button">
+                                                <i class="fal fa-eye mr-2"></i>
+                                                <label class="m-0">View</label>
+                                            </a>
+                                            `;
+                        } else {
+                            viewOrPending = `
+
+                            <button  class="btn btn-sm btn-danger  my-2 px-2"
+                                            disabled
+                                            type="button">
+                                                <i class="fal fa-ban mr-2"></i>
+                                                <label class="m-0">Pending</label>
+                                            </button>
+                                            `;
+                        }
+
+                        let bg_post = element.images.coverImage && element.images.coverImage.url ?
+                            `${rootDomain}/uploads/images/web_thumbnail/${element.images.coverImage.url}` :
+                            element.images.collection && element.images.collection[0] && element.images.collection[0].url ?
+                                `${rootDomain}/uploads/images/web_thumbnail/${element.images.collection[0].url}` :
+                                `/assets/img/bg-abstract.jpg`;
+                        $("#Posts div.main-body").append(`
+                    <div class="pitem rounded lightGrey-border bg-white mr-3">
+                                    <div class="bg-img" style="
+                                    background-image: url('${bg_post}')">
+                                        <div class="overlay">
+                                            <a class="btn btn-sm btn-success my-2 px-2"
+                                            href="${rootDomain}/users/editPost/${element._id}"
+                                            role="button">
+                                                <i class="fal fa-edit mr-2"></i>
+                                                <label class="m-0">Edit</label>
+                                            </a>
+                                            ${viewOrPending}
+                                        </div>
+                                    </div>
+                                    <div class="desc p-2 ">
+                                        <label for="" class="name my-0">${element.name}</label>
+                                        <p class="about my-0">${element.description.short ? element.description.short : ''}</p>
+                                    </div>
+                                </div>
+                    `);
+
+                    });
+                } else {
+                    $("#Posts").html(previousInnerHtml);
+                    $("#Posts div.tab-pane-default").show();
+                    $("#Posts div.main-body").html('');
+                    $("#PostsCount").html(data.length);
+                }
+            }).fail(error => {
+                console.log({
+                    error
+                });
+                $("#Posts").html(previousInnerHtml);
+            });
+        }
+
+        // New function added for products upload
+        function getProducts(previousInnerHtml) {
+            const userId = $('#userId').val();
+            $.get(`${rootDomain}/users/userproducts`, (data, status) => {
+                if (status == 'success' && data.length > 0) {
+                    console.log("USER PRODUCTS");
+                    console.log({
+                        data
+                    });
+
+                    $("#Products").html(previousInnerHtml);
+                    $("#Products div.tab-pane-default").hide();
+                    $("#Products div.main-body").empty();
+                    $("#ProductsCount").html(data.length);
+
+                    data.forEach(element => {
+                        let viewOrPending = '';
+
+                        if (element.product_status == 'active') {
+                            viewOrPending = `
+
+                            <a class="btn btn-sm btn-success my-2 px-2"
+                                            href="/product/post/${element._id}"
+                                            role="button">
+                                                <i class="fal fa-eye mr-2"></i>
+                                                <label class="m-0">View</label>
+                                            </a>
+                                            `;
+                        } else {
+                            viewOrPending = `
+
+                            <button  class="btn btn-sm btn-danger  my-2 px-2"
+                                            disabled
+                                            type="button">
+                                                <i class="fal fa-ban mr-2"></i>
+                                                <label class="m-0">Pending</label>
+                                            </button>
+                                            `;
+                        }
+
+                        let bg_post = element.product_photos[0] ?
+                            `${rootDomain}/product/image/${element.product_photos[0].photo.image_filename}` :
+                            element.product_photos[0] ?
+                                `${rootDomain}/product/image/${element.product_photos[0].photo.image_filename}` :
+                                `/assets/img/bg-abstract.jpg`;
+
+                        // let bg_post = '/assets/img/bg-abstract.jpg';
+
+                        $("#Products div.main-body").append(`
+                    <div class="pitem rounded lightGrey-border bg-white mr-3">
+                                    <div class="bg-img" style="
+                                    background-image: url('${bg_post}')">
+                                        <div class="overlay">
+                                            <a class="btn btn-sm btn-success my-2 px-2"
+                                            href="${rootDomain}/product/post/edit/${userId}/${element._id}"
+                                            role="button">
+                                                <i class="fal fa-edit mr-2"></i>
+                                                <label class="m-0">Edit</label>
+                                            </a>
+                                            ${viewOrPending}
+                                        </div>
+                                    </div>
+                                    <div class="desc p-2 ">
+                                        <label for="" class="name my-0">${element.product_ad_title}</label>
+                                        <p class="about my-0">${element.product_description ? element.product_description : ''}</p>
+                                    </div>
+                                </div>
+                    `);
+
+                    });
+                } else {
+                    $("#Products").html(previousInnerHtml);
+                    $("#Products div.tab-pane-default").show();
+                    $("#Products div.main-body").html('');
+                    $("#ProductsCount").html(data.length);
+                }
+            }).fail(error => {
+                console.log({
+                    error
+                });
+                $("#Products").html(previousInnerHtml);
+            });
+        }
+
+
+        function getReviews(previousInnerHtml) {
+            const userId = $('#userId').val();
+            $.get(`${rootDomain}/users/getReviews/${userId}`, (res, status) => {
+                if (status == 'success' && res && res.data.length > 0) {
+                    const data = res.data;
+                    console.log("USER Reviews");
+                    console.log({
+                        data
+                    });
+
+                    $("#Reviews").html(previousInnerHtml);
+                    $("#Reviews div.tab-pane-default").hide();
+                    $("#Reviews div.main-body").html('');
+                    $("#ReviewsCount").html(data.length);
+
+                    data.forEach(review => {
+                        let element = review.post;
+                        let bg_post = element.images.coverImage && element.images.coverImage.url ?
+                            `${rootDomain}/uploads/images/web_thumbnail/${element.images.coverImage.url}` :
+                            element.images.collection && element.images.collection[0] && element.images.collection[0].url ?
+                                `${rootDomain}/uploads/images/web_thumbnail/${element.images.collection[0].url}` :
+                                `/assets/img/bg-abstract.jpg`;
+
+                        let address;
+                        if (element.address && element.address.locality && element.address.locality.name) {
+                            address = element.address.locality.name;
+                        }
+                        if (element.address && element.address.district && element.address.district.name) {
+                            if (address) { address += ", " + element.address.district.name; } else {
+                                address = element.address.district.name;
+                            }
+                        }
+                        const description = element.description && element.description.short ? element.description.short : null;
+
+                        const col = document.createElement('div');
+                        col.classList = 'col .innerReview';
+                        $("#Reviews div.main-body").removeClass("flex-row");
+                        $("#Reviews div.main-body").addClass("flex-column p-3");
+                        $("#Reviews div.main-body").append(`
+                        <div
+                        style="
+                        border-left: 0 ;
+                        max-height: 200px;
+                        "
+                        class="review-item  row px-0 my-3 rounded lightGrey-border bg-white">
+                                <div class="review-leftCol col-xs-0 col-sm-0 col-md-3 px-0 border"
+                                style="
+                                height:auto;
+                                border-bottom: 0 ;
+                                border-top: 0 ;
+
+                                ">
+                                    <a href="/detail?tk=${review.post._id}">
+                                        <div class="bg-img"
+                                        style="
+                                            background-image: url(${bg_post});
+                                            max-height: 100px;
+                                            min-height: 100px;
+                                            ">
+                                        </div>
+                                        <div class="px-2 py-1 pb-2  text-truncate text-wrap " style="max-height: 100px; ">
+                                            <span for="" style="line-height: 1.2; max-height: 40px; "
+                                            class="name two-lines font-weight-bold text-secondary mt-1">${element.name}</span>
+                                            <p class="about small two-lines my-0">${address ? address : ''}</p>
+
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-9  p-3 pl-4 msg-body">
+                                <a href="/detail/${review.post._id}/reviews">
+
+                                    <div class="text-muted rev-header m-hide">
+                                        <span class="">
+                                            <i class="far fa-heart"></i> Likes ${review.likes.length}
+                                        </span>
+                                        <span class="mx-4">
+                                            <i class="far fa-comment-alt"></i> Comments ${review.replies.length}
+                                        </span>
+                                        <span class="float-right">
+                                            ${(new Date(review.createdOn)).toString().slice(0, 15)}
+                                        </span>
+                                    </div>
+                                    <div class="rev-header text-dark web-hide ">
+                                          <div class="name text-primary">${review.post.name} </div>
+                                          <div class="date float-left text-dark">
+                                            - ${(new Date(review.createdOn)).toString().slice(0, 15)}
+                                          </div>
+                                    </div>
+
+                                    <div style="
+                                    font-size: 14px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    width: 100%;
+    word-break: break-word;
+    -webkit-line-clamp: 5;
+                                    " class="mt-2 message text-wrap text-break text-secondary">
+                                        ${review.message}
+                                    </div>
+
+                                    </a>
+                                </div>
+                        </div>
+                    `);
+
+                    });
+                } else {
+                    $("#Reviews").html(previousInnerHtml);
+                    $("#Reviews div.tab-pane-default").show();
+                    $("#Reviews div.main-body").html('');
+                    $("#ReviewsCount").html(data.length);
+                }
+            }).fail(error => {
+                console.log({
+                    error
+                });
+                $("#Posts").html(previousInnerHtml);
+            });
+        }
+
+        function getBookmarks(previousInnerHtml) {
+            const userId = $('#userId').val();
+            $.get(`${rootDomain}/users/bookmarks`, (data, status) => {
+                if (status == 'success' && data.length > 0) {
+                    console.log("USER Bookmarks");
+                    console.log({
+                        data
+                    });
+
+                    $("#Bookmarks").html(previousInnerHtml);
+                    $("#Bookmarks div.tab-pane-default").hide();
+                    $("#Bookmarks div.main-body").html('');
+                    $("#BookmarksCount").html(data.length);
+
+                    data.forEach(element => {
+
+                        element = element.id;
+
+                        coverImage = `url('/assets/img/bg-abstract.jpg')`;
+
+                        if (element.images.logo && element.images.logo.url) {
+                            coverImage =
+                                `url(${rootDomain}/uploads/images/web_thumbnail/${element.images.logo.url})`;
+                        }
+
+                        if (element.images.coverImage && element.images.coverImage.url) {
+                            coverImage =
+                                `url(${rootDomain}/uploads/images/web_thumbnail/${element.images.coverImage.url})`;
+                        }
+
+                        $("#Bookmarks div.main-body").append(`
+                                <div class="pitem rounded lightGrey-border bg-white mr-3">
+                                    <a href="/detail?name=${element.name}&tk=${element._id}">
+                                    <div class="bg-img" style="
+                                    background-image: ${coverImage}
+                                    ">
+
+                                    </div>
+                                    <div class="desc p-2 ">
+                                        <label for="" class="name my-0">${element.name}</label>
+                                        ${element.description && element.description.short ? '<p class="about my-0">' + element.description.short + '</p>' : ''}
+                                    </div>
+                                    </a>
+                                </div>
+                        `);
+
+                    });
+                } else {
+                    $("#Bookmarks").html(previousInnerHtml);
+                    $("#Bookmarks div.tab-pane-default").show();
+                    $("#Bookmarks div.main-body").html('');
+                    $("#BookmarksCount").html(data.length);
+                }
+            }).fail(error => {
+                console.log({
+                    error
+                });
+                $("#Posts").html(previousInnerHtml);
+            });
+        }
+
+        function getBeenThere(previousInnerHtml) {
+            const userId = $('#userId').val();
+            $.get(`${rootDomain}/users/beenThere`, (data, status) => {
+
+                if (status == 'success' && data.length > 0) {
+                    console.log("USER BeenThere");
+                    console.log({
+                        data
+                    });
+
+                    $("#BeenThere").html(previousInnerHtml);
+                    $("#BeenThere div.tab-pane-default").hide();
+                    $("#BeenThere div.main-body").html('');
+                    $("#BeenThereCount").html(data.length);
+
+                    data.forEach(element => {
+
+                        element = element.id;
+
+                        coverImage = `url('/assets/img/bg-abstract.jpg')`;
+
+                        if (element.images.logo && element.images.logo.url) {
+                            coverImage =
+                                `url(${rootDomain}/uploads/images/web_thumbnail/${element.images.logo.url})`;
+                        }
+
+                        if (element.images.coverImage && element.images.coverImage.url) {
+                            coverImage =
+                                `url(${rootDomain}/uploads/images/web_thumbnail/${element.images.coverImage.url})`;
+                        }
+
+                        $("#BeenThere div.main-body").append(`
+                                <div class="pitem rounded lightGrey-border bg-white mr-3">
+                                    <a href="/detail?name=${element.name}&tk=${element._id}">
+                                    <div class="bg-img" style="
+                                    background-image: ${coverImage}
+                                    ">
+
+                                    </div>
+                                    <div class="desc p-2 ">
+                                        <label for="" class="name my-0">${element.name}</label>
+                                        ${element.description && element.description.short ? '<p class="about my-0">' + element.description.short + '</p>' : ''}
+                                    </div>
+                                    </a>
+                                </div>
+                        `);
+                    });
+
+                } else {
+                    $("#BeenThere").html(previousInnerHtml);
+                    $("#BeenThere div.tab-pane-default").show();
+                    $("#BeenThere div.main-body").html('');
+                    $("#BeenThereCount").html(data.length);
+                }
+            }).fail(error => {
+                console.log({
+                    error
+                });
+                $("#Posts").html(previousInnerHtml);
+            });
+        }
+
+
+        function getRecentlyviewedposts(previousInnerHtml) {
+            const userId = $('#userId').val();
+            $.get(`${rootDomain}/users/recentlyviewedposts`, (data, status) => {
+                if (status == 'success') {
+                    console.log("Recently viewed POSTS");
+                    console.log({
+                        data
+                    });
+
+                    $("#Recentlyviewedposts").html(previousInnerHtml);
+                    $("#Recentlyviewedposts div.tab-pane-default").hide();
+                    $("#Recentlyviewedposts div.main-body").html('');
+                    $("#RecentlyviewedpostsCount").html(data.length);
+
+                    data.forEach(element => {
+
+                        element = element.id;
+
+                        coverImage = `url('/assets/img/bg-abstract.jpg')`;
+
+                        if (element.images.logo && element.images.logo.url) {
+                            coverImage =
+                                `url(${rootDomain}/uploads/images/web_thumbnail/${element.images.logo.url})`;
+                        }
+
+                        if (element.images.coverImage && element.images.coverImage.url) {
+                            coverImage =
+                                `url(${rootDomain}/uploads/images/web_thumbnail/${element.images.coverImage.url})`;
+                        }
+
+                        $("#Recentlyviewedposts div.main-body").append(`
+            <div class="pitem rounded lightGrey-border bg-white mr-3">
+                <a href="/detail?name=${element.name}&tk=${element._id}">
+                <div class="bg-img" style="
+                background-image: ${coverImage}
+                ">
+
+                </div>
+                <div class="desc p-2 ">
+                    <label for="" class="name my-0">${element.name}</label>
+                    ${element.description && element.description.short ? '<p class="about my-0">' + element.description.short + '</p>' : ''}
+                </div>
+                </a>
+            </div>
+    `);
+                    });
+
+
+
+                }
+            }).fail(error => {
+                console.log({
+                    error
+                });
+                $("#Recentlyviewedposts").html(previousInnerHtml);
+            });
+        }
+
+        function getWishlistProducts(previousInnerHtml) {
+            const userId = $('#userId').val();
+            $.get(`${rootDomain}/users/wishlistProducts`, (data, status) => {
+                if (status == 'success' && data.length > 0) {
+                    console.log("USER wishlist PRODUCTS");
+                    console.log({
+                        data
+                    });
+
+                    $("#wishlistProducts").html(previousInnerHtml);
+                    $("#wishlistProducts div.tab-pane-default").hide();
+                    $("#wishlistProducts div.main-body").empty();
+                    $("#wishlistProductCount").html(data.length);
+
+                    data.forEach(element => {
+                        
+
+                        let bg_post = element.product_photos[0] ?
+                            `${rootDomain}/product/image/${element.product_photos[0].photo.image_filename}` :
+                            element.product_photos[0] ?
+                                `${rootDomain}/product/image/${element.product_photos[0].photo.image_filename}` :
+                                `/assets/img/bg-abstract.jpg`;
+
+                        // let bg_post = '/assets/img/bg-abstract.jpg';
+
+                        // <a class="btn btn-sm btn-success my-2 px-2"
+                        //                     href="${rootDomain}/product/post/${element._id}"
+                        //                     role="button">
+
+                        $("#wishlistProducts div.main-body").append(`
+                      
+                    <div class="pitem rounded lightGrey-border bg-white mr-3">
+                        
+                                                   
+                                    <div class="bg-img" style="
+                                    background-image: url('${bg_post}')">
+                                        <div class="overlay">
+										  <a class="btn btn-sm btn-success my-2 px-2"
+                                            href="/product/post/${element._id}"
+                                            role="button">
+                                                <i class="fal fa-eye mr-2"></i>
+                                                <label class="m-0">View</label>
+                                            </a>
+                                            
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="desc p-2 ">
+                                        <label for="" class="name my-0">${element.product_ad_title}</label>
+                                        <p class="about my-0">${element.product_description ? element.product_description : ''}</p>
+                                    </div>
+
+                                </div>
+
+                    `);
+
+                    });
+                } else {
+                    $("#wishlistProducts").html(previousInnerHtml);
+                    $("#wishlistProducts div.tab-pane-default").show();
+                    $("#wishlistProducts div.main-body").html('');
+                    $("#wishlistProductCount").html(data.length);
+                }
+            }).fail(error => {
+                console.log({
+                    error
+                });
+                $("#wishlistProducts").html(previousInnerHtml);
+            });
+        }
+
+
+    </script>
+
+
+    <%- include('./../../includes/footer.ejs') %>

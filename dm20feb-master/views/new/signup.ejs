@@ -1,0 +1,85 @@
+<%- include('../includes/header.ejs',
+    {
+        pageTitle: pageTitle, 
+        keywords: [ 'Sign up', 'Log In', 'Digital Manipur', 'Digital Imphal', 'Digital India', 'Digital North East', 'Manipur Marketing', 'Imphal Marketing', 'Digital News', 'Digital Media', 'SEO', 'Facebook Marketing', 'Youtube Marketing', 'Promotion Page', 'Hoarding Ad', 'LED Ad', 'Local Poromotion','Digital Manipur','Manipur.info','Leibaklei infotech'],
+        author: 'Digital Manipur, Manipur Info',
+        description: `Digital Manipur, known as the Leading Local Search Engine, acts as a bridge between Buyers and Sellers. Digital Manipur provides information about any products or services to customers. Digital Manipur is present online services which helps your business grow to the next level!`,
+    }
+    ) %>
+</head>
+
+
+<body class="auth  row d-flex flex-row justify-content-center">
+
+    <div class="text-center login-clean col-12 col-md-6 col-lg-5">
+        <div class="illustration illustration img-box mt-3">
+            <a href="/">
+                <img class="p-2 logo-img" src="/assets/img/logo.png"  >
+
+            </a>
+        </div>
+        <h3 style="height: 41px;font-weight: 300;font-size: 24px;">Sign up to Digital Manipur</h3>
+        <form method="post" action="/auth/signup">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" >
+            <h2 class="sr-only">Sign up Form</h2>
+            <p class="<%= messages.error ? '':'d-none' %> text-left m-0 pb-2 text-danger" style="font-size: 12px;"> <%= messages.error %></p>
+            
+            <div class="form-group">
+                <div class="form-inline d-flex flex-row justify-content-between align-items-center">
+                    <label for="">Name <span class="ml-1 text-danger">*</span></label>
+                </div>
+                <input type="text" class="form-control" name="name" value="<%= oldInput.name %>" placeholder="" required /></div>
+            <div class="form-group">
+                <div class="form-inline d-flex flex-row justify-content-between align-items-center">
+                    <label for="">Email <span class="ml-1 text-danger">*</span></label>
+                </div>
+                <input class="form-control" type="email" name="email" value="<%= oldInput.email %>" placeholder="" required=""></div>
+            <div class="form-group">
+                <div class="form-inline d-flex flex-row justify-content-between align-items-center">
+                    <label for="">Password <span class="ml-1 text-danger">*</span></label>
+                </div>
+                <input class="form-control" type="password" name="password" value="<%= oldInput.password %>" placeholder="" minlength="8" required></div>
+            <div class="form-group mt-4"><button class="btn btn-success btn-block " type="submit" role="button" >Sign up</button></div>
+            <div class="d-flex justify-content-between mt-4">
+                <div class="col">
+                    <hr>
+                </div>
+                <span>OR</span>
+                <div class="col">
+                    <hr>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <a class="py-2 px-5 btn col btn-sm rounded mr-3" href="/auth/google" style="background-color: #EA4335;color: #fff;">
+                    <i class="fab fa-google"></i>
+                </a>
+                <a class="py-2 px-5 btn  col btn-sm rounded ml-3" href="/auth/facebook" style="color: #fff;background-color: #3b5998 ;">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+            </div>
+            <div class="text-left mt-3 small">
+                <p  class=" my-0" style="font-size: 12px;">By creating an account, 
+                    you agree to the <a role="button" class="text-primary" href="/site/terms">Terms of Service and privacy practices</a>.</p>
+            </div>
+            <!-- <div class="d-flex justify-content-between mt-3">
+                <div class="col">
+                    <hr>
+                </div><span>OR</span>
+                <div class="col">
+                    <hr>
+                </div>
+            </div> -->
+            <!-- <div class="d-flex justify-content-between"><a class="py-2 px-5 rounded" href="#" style="background-color: #EA4335;color: #fff;"><i class="fab fa-google"></i></a><a class="py-2 px-5 rounded" href="#" style="color: #fff;background-color: #3b5998 ;"><i class="fa fa-facebook"></i></a></div> -->
+        </form>
+    </div>
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/js/add-listing.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
+    <script src="/assets/js/search.js"></script>
+    <script src="/assets/js/Simple-Slider.js"></script>
+    <script src="/assets/js/tools.js"></script>
+    <script src="/assets/js/untitled.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,787 @@
+<%- include('../includes/header.ejs',{
+    pageTitle: `Digital Manipur - The Leading Local Search Engine`, 
+    keywords: [ 'Digital Marketing', 'Digital Manipur', 'Digital Imphal', 'Digital India', 'Digital North East', 'Manipur Marketing', 'Imphal Marketing', 'Digital News', 'Digital Media', 'SEO', 'Facebook Marketing', 'Youtube Marketing', 'Promotion Page', 'Hoarding Ad', 'LED Ad', 'Local Poromotion','Digital Manipur','Manipur.info','Leibaklei infotech'],
+    author: 'Digital Manipur, Manipur Info',
+    description: `Digital Manipur, known as the Leading Local Search Engine, acts as a bridge between Buyers and Sellers. Digital Manipur provides information about any products or services to customers. Digital Manipur is present online services which helps your business grow to the next level!`,
+
+}) %>
+
+</head>
+
+<body class="home">
+
+    <div style="overflow-x:hidden; position: relative;">
+
+
+
+        <%- include("../includes/mainSlider.ejs", {  }) %>
+
+        <section>
+            <div class="container p-2 p-sm-0">
+                <div class="row first-row">
+                    <div class="col-sm-12 col-md-12 col-lg-8 col-xl-8">
+
+
+                        <% if( typeof ads != 'undefined' && ads.length > 0 ) { %>
+
+                        <div class="row ads-slide section-row mx-0 border rounded">
+                            <!-- <div class="col">
+                            <a class="bg-img-link" href="#">
+                                <div class="bg-img"
+                                    style="background-image: url(&quot;/assets/img/pepsi-atlanta-super-bowl-hed-page-2019.jpg&quot;);">
+                                </div>
+                            </a>
+                        </div> -->
+                            <div id="carouselId" class="carousel slide" data-ride="carousel">
+
+                                <!-- Indicators -->
+
+                                <ul class="carousel-indicators">
+                                    <% for( let i = 0; i < ads.length ; i++ ) { %>
+                                    <li data-target="#demo" data-slide-to="<%= i %>"
+                                        class="<%= i == 0 ? 'active' : '' %>"></li>
+                                    <% } %>
+                                </ul>
+
+
+                                <!-- The slideshow -->
+                                <div class="carousel-inner">
+
+                                    <% for ( let i = 0; i < ads.length ; i++ ) { %>
+
+
+                                    <% if ( ads[i].image ) { %>
+                                    <div class="carousel-item <%= i == 0 ? 'active':'' %>">
+                                        <div class="lozad ad-bg-img"
+                                            data-background-image="/uploads/original/<%=  ads[i].image %>">
+                                        </div>
+                                        <!-- <div class="carousel-caption">
+                                            <h3>Los Angeles</h3>
+                                            <p>We had such a great time in LA!</p>
+                                          </div> -->
+                                        <!-- <div class="carousel-overlay"></div> -->
+
+                                    </div>
+
+
+                                    <% }  %>
+                                    <% if ( ads[i].video ) { %>
+                                    <div class="carousel-item <%= i == 0 ? 'active':'' %>">
+                                        <video preload="none" autoplay class="ad-video" muted loop controls>
+                                            <source type="" src="/uploads/videos/<%= ads[i].video %>" type="video/mp4">
+                                        </video>
+                                        <!-- <div class="carousel-caption">
+                                            <h3>Los Angeles</h3>
+                                            <p>We had such a great time in LA!</p>
+                                          </div> -->
+                                        <!-- <div class="carousel-overlay"></div> -->
+
+                                    </div>
+
+
+                                    <% }  %>
+
+                                    <% }  %>
+
+
+                                </div>
+
+                                <!-- Left and right controls -->
+                                <a class="carousel-control-prev" href="#carouselId" data-slide="prev">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselId" data-slide="next">
+                                    <span class="carousel-control-next-icon"></span>
+                                </a>
+
+                            </div>
+
+                            <script>
+                                let prevVideo;
+                                $("#carouselId").on('slide.bs.carousel', function (e) {
+                                    console.log(e.relatedTarget);
+                                    const img = $(e.relatedTarget).children('.ad-img')[0];
+                                    const video = $(e.relatedTarget).children('.ad-video')[0];
+                                    console.log({ img, video });
+                                    if (prevVideo) {
+                                        prevVideo.pause();
+                                    }
+                                    if (video) {
+                                        prevVideo = video;
+                                        video.play();
+                                    }
+
+                                });
+                            </script>
+
+                        </div>
+
+                        <% } %>
+
+
+
+                        <div class="row">
+                            <div class="col home-districts-collections">
+                                <h3 class="mb-1">Collections in <span
+                                        style="text-transform: Capitalize"><%= state ? state : defaultState ? defaultState: 'Manipur' %></span>
+                                </h3>
+                                <p class="mb-3 py-0 text-secondary">Explore curated lists of top places<br></p>
+                                <div class="row items-holder">
+                                    <% staticCollections.forEach( collection => { %>
+                                    <% if ( collection.id == 'Trending' || collection.id == 'Finest' || collection.id == 'Newly_Opened' || collection.id == 'Events'  ) { %>
+                                    <div class="col-6 col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex flex-row item"
+                                        href="#">
+                                        <a
+                                            href="/collections/<%= typeof state != 'undefined' ? state: typeof defaultState != 'undefined'  ? defaultState : 'manipur' %>/<%= collection.id %>">
+
+                                            <div
+                                                class="d-flex flex-row flex-fill justify-content-start item-inner rounded">
+                                                <div class="item-img bg-img"
+                                                    style="background-image: url('/uploads/images/web_thumbnail/<%= collection.coverImage %>');">
+                                                </div>
+                                                <div class="p-3 item-desc">
+                                                    <h1><%= collection.name %></h1>
+                                                    <p><%= collection.description %></p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <% } %>
+                                    <% }) %>
+                                    <!-- <div class="col-6 col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex flex-row item" href="#">
+                                    <a href="/newly-opened">
+                                        <div class="d-flex flex-row flex-fill justify-content-start item-inner rounded">
+                                            <div class="item-img bg-img"
+                                                style="background-image: url(&quot;/assets/img/Ukhrul-District.jpg&quot;);">
+                                            </div>
+                                            <div class="p-3 item-desc">
+                                                <h1>Newly opened</h1>
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempor incididunt ut labore<br></p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div> -->
+                                </div>
+                                <!-- <div class="row items-holder">
+                                <div class="col-6 col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex flex-row item" href="#">
+                                    <a href="/finest">
+                                        <div class="d-flex flex-row flex-fill justify-content-start item-inner rounded">
+                                            <div class="item-img bg-img"
+                                                style="background-image: url(&quot;/assets/img/bishnupur.jpg&quot;);">
+                                            </div>
+                                            <div class="p-3 item-desc">
+                                                <h1>Manipur finest</h1>
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempor incididunt ut labore<br></p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-6 col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex flex-row item" href="#">
+                                    <a href="/events">
+                                        <div class="d-flex flex-row flex-fill justify-content-start item-inner rounded">
+                                            <div class="item-img bg-img"
+                                                style="background-image: url(&quot;/assets/img/chandel.jpg&quot;);">
+                                            </div>
+                                            <div class="p-3 item-desc">
+                                                <h1>Upcoming Events </h1>
+                                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                                                    eiusmod tempo<br></p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div> -->
+                                <div class="row px-3">
+                                    <div class="col-12 text-center py-2      bg-white border rounded">
+                                        <a class="text-center text-danger  d-block"
+                                            href="/collections/<%= typeof state != 'undefined' ? state: typeof defaultState != 'undefined'  ? defaultState : 'manipur' %>"
+                                            style="width: 100%;">
+                                            All Collections
+                                        </a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-4 col-xl-4 right-side-col">
+                        <div class="row">
+                            <div class="col side-item px-3 pt-2 mx-3 rounded">
+                                <h3>Top Places</h3>
+                             
+                                <div class="row side-row mb-0">
+                                    <div class="col">
+                                        <% topPlaces.forEach( item => { %>
+                                        <div class="side-per-item">
+                                            <a href="<%= `/detail?name=${item.name}&tk=${item._id}` %>">
+                                                <div class="d-flex flex-column side-row-item">
+                                                    <div class="d-flex flex-start item-img-side-row bg-img rounded lozad"
+                                                        <% if ( (item.images.logo && item.images.logo.url) || ( item.images.collection && item.images.collection[0] && item.images.collection[0].url ) ) {  %>
+                                                        data-background-image="/uploads/images/web_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>"
+                                                        data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 1x , 
+                                                    url('/uploads/images/web_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 2x"
+                                                        <% } else { %>
+                                                        data-background-image="/assets/img/bg-abstract.jpg" <% } %>>
+
+                                                        <% let  levelClass; %>
+                                                        <% if ( item.rating >= 0 && item.rating <= 0.5 ) { levelClass = 'level-0'; } %>
+                                                        <% if ( item.rating >= 0.6 && item.rating <= 1.0 ) { levelClass = 'level-1'; } %>
+                                                        <% if ( item.rating >= 1.1 && item.rating <= 1.5 ) { levelClass = 'level-2'; } %>
+                                                        <% if ( item.rating >= 1.6 && item.rating <= 2.0 ) { levelClass = 'level-3'; } %>
+                                                        <% if ( item.rating >= 2.1 && item.rating <= 2.5 ) { levelClass = 'level-4'; } %>
+                                                        <% if ( item.rating >= 2.6 && item.rating <= 3.0 ) { levelClass = 'level-5'; } %>
+                                                        <% if ( item.rating >= 3.1 && item.rating <= 3.5 ) { levelClass = 'level-6'; } %>
+                                                        <% if ( item.rating >= 3.6 && item.rating <= 4.0 ) { levelClass = 'level-7'; } %>
+                                                        <% if ( item.rating >= 4.1 && item.rating <= 4.5 ) { levelClass = 'level-8'; } %>
+                                                        <% if ( item.rating >= 4.6 && item.rating <= 5.0 ) { levelClass = 'level-9'; } %>
+
+
+                                                        <span
+                                                            class="badge badge-success py-1 pull-right cus-badge <%= levelClass %>"
+                                                            style="font-weight: bold;font-size: 13px;"><%= item.rating %></span>
+                                                    </div>
+                                                    <!-- <img class="rounded" src="/assets/img/breakfast.jpg"> -->
+                                                    <label class="res-name"><%= item.name %></label>
+                                                    <span
+                                                        class="text-secondary grey-text res-address"><%= item.address.locality.value %></span>
+                                                    <span
+                                                        class="text-secondary grey-text  res-desc two-lines"><%= item.description ? item.description.short : '' %></span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                        <% }) %>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="container">
+            <section style="margin-top: 30px;">
+               <div class="d-flex bd-highlight">
+                    <div >
+                        <h3>Recently Added</h3>
+                        <p class="text-muted" style="font-size: 16px;">Explore recently added products</p>
+
+                    </div>
+                    <div class="ml-auto component_title_small_red">
+                        <span><a href="/product/search?searchlocation=Manipur&searchlocationproduct=trending">SHOW MORE</a></span>
+                    </div>
+                </div>
+
+
+                <section style="margin-top: 20px;">
+                    <div class="d-flex bd-highlight align-items-center">
+                        <div class="flex-fill">
+                            <span><i id="bls_lefty" class="fas fa-chevron-left component_slide_indicator"
+                                    aria-hidden="true"></i></span>
+                        </div>
+
+                        <!-- product grid section -->
+                        <div class="row_component flex-fill">
+                            <div class="d-flex bd-hightlight" id="bls_comp"
+                                style="overflow-x: hidden; overflow-y: hidden;">
+                                <%if(products.length > 0){%>
+                                <%products.forEach(function(product, index){%>
+                                <%if(index < 8){%>
+
+                                <div class="product_collection_wrapper">
+                                    <a class="product_link" href="/product/post/<%=product._id%>">
+                                        <div class="product_collection_component_ele">
+                                            <!-- product image container -->
+                                            <div class="collection_card_image_container"
+                                                style="background-image: url('/product/image/<%=product.product_photos[0].photo.image_filename%>');">
+                                                <div class="ad_badge_overlay_container d-flex bd-highlight">
+                                                    <div>
+                                                        <span class="ad_badge">FEATURED</span>
+                                                    </div>
+                                                    <div class="ml-auto">
+                                                        <span class="ad_badge2"><i class="fas fa-heart like_badge"
+                                                                aria-hidden="true"></i></span>
+                                                    </div>
+
+                                                </div>
+                                                <br><br><br><br><br><br>
+                                                <div class="ad_badge_overlay_container d-flex flex-row-reverse">
+                                                    <div>
+                                                        <img src="https://i.imgur.com/FJDEL9O_d.webp?maxwidth=640&shape=thumb&fidelity=medium" alt="dm_icon" style="height: 20px; opacity: 0.5;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- product detail -->
+                                            <div class="col_card_detail">
+                                                <div class="col_title_holder">
+                                                    <div class="col_card_ad_title flex-fill">
+                                                        <span><%=product.product_ad_title%></span>
+                                                    </div>
+                                                    <div class="col_card_date_container">
+                                                        <span
+                                                            class="col_card_date text-muted"><%=moment(product.createdAt).format('ll')%></span>
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="col_card_price">
+                                                    ₹ <span id="<%=product._id%>"></span>
+                                                    <script>
+                                                        var format = new Number('<%=product.product_price%>').toLocaleString('en-IN');
+                                                        document.getElementById("<%=product._id%>").innerHTML = format;
+                                                        console.log(format);
+                                                    </script>
+                                                </div> -->
+                                                <div
+                                        class="col_card_price">
+                                        <%if(product.product_price_updated > 0){%>
+                                           <%if(product.product_price_updated < product.product_price) {%>
+                                                ₹ <span id="t_<%=product._id%>"></span>
+                                                <script>
+                                                    var format = new Number('<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                                    document.getElementById("t_<%=product._id%>").innerHTML = format;
+                                                    console.log(format);
+                                                </script>
+                                                <span class="productAdPrice" style="font-size:70%; color: #99a3a4;"><del>₹ <%=product.product_price%></del></span>
+                                                <!-- <h6>
+                                                    (<span id="offer"></span>
+                                                    <script>
+                                                        var off= (( ('<%=product.product_price%>' - '<%=product.product_price_updated%>') / '<%=product.product_price%>')*100).toFixed(0);
+                                                        console.log(off);
+                                                        document.getElementById("offer").innerHTML = off;
+                                                    </script>%OFF)
+                                                </h6> -->
+                                                
+                                            <%}
+                                            else{%>
+                                                ₹ <span id="t_<%=product._id%>"></span>
+                                                <script>
+                                                    var format = new Number('<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                                    document.getElementById("t_<%=product._id%>").innerHTML = format;
+                                                    console.log(format);
+                                                </script>
+                                            <%}%>
+                                            %>
+                                        <%}
+                                            else{%>
+                                                ₹ <span id="t_<%=product._id%>"></span>
+                                                <script>
+                                                    var format = new Number('<%=product.product_price%>').toLocaleString('en-IN');
+                                                    document.getElementById("t_<%=product._id%>").innerHTML = format;
+                                                    console.log(format);
+                                                </script>
+                
+                                            <%}%>
+                                    </div>
+                                    <div><span style="font-size: small;"><%=product.locality.name%></span></div>
+                                    <div class="col_card_desc text-muted">
+                                                    <span id="card_desc"><%=product.product_description%></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </a>
+                                </div>
+
+                                <%}%>
+                
+                <%})%>
+                                <%}%>
+            </div>
+        </div>
+
+        <div class="flex-fill" style="padding-left: 15px; text-align: end;">
+            <span><i
+                    id="bls_righty" class="fas fa-chevron-right component_slide_indicator" aria-hidden="true"></i></span>
+        </div>
+    </div>
+</section>
+</section>
+        </section>
+        <section>
+            <% if ( categories && categories.length> 0 ) { %>
+                                <div class="container p-3 p-sm-0">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h3>Quick Searches</h3>
+                                            <p class="mb-3 py-0 text-secondary">Discover places by their categories<br>
+                                            </p>
+                                            <div style="overflow: hidden;"
+                                                class=" d-flex flex-row  bg-white rounded border">
+
+                                                <!-- left btn -->
+                                                <!-- <div class="quick-btn-control left-btnc" 
+                                 
+                                >
+                                <button class="btn left-ctrl-quick shadow-none control-btn-quick text-black ml-2"  style="z-index: 99; opacity: 1; border-radius: 20px;">
+                                    <i class="far fa-angle-left" style="font-size: 29px; font-weight: bold;"></i>
+                                </button>
+                            </div> -->
+                                                <div style="    overflow: hidden;
+                            margin: 0 0px !important;"
+                                                    class=" d-flex px-4 mx-1 flex-row justify-content-around flex-wrap   quick-icons  ">
+
+
+
+
+                                                    <% for ( let i=0; i < categories.length ; i++) { %>
+                                                    <div class="quick-item">
+                                                        <a href="/search?scat=<%= categories[i].name ? categories[i].name : '' %><%= 
+                                                lastLocationDistrictName ? `&sdistrict=`+ lastLocationDistrictName : 
+                                                lastLocationStateName ? `&sstate=`+ lastLocationStateName 
+                                                :   `&slocation=Manipur`  %>&p=1&li=15&sk=0">
+                                                            <div
+                                                                class="text-center d-flex flex-column align-items-center p-4">
+                                                                <% if ( categories[i] && categories[i].images && categories[i].images.logo && categories[i].images.logo.url ) { %>
+
+                                                                <div class="bg-img quick-icon"
+                                                                    style="background-image: url('/uploads/images/mobile/<%= categories[i].images.logo.url %>');">
+                                                                </div>
+                                                                <% }  else { %>
+                                                                <div class="bg-img quick-icon"
+                                                                    style="background-image: url('/assets/img/logo-dim.png');">
+                                                                </div>
+                                                                <% } %>
+                                                                <label><%= categories[i].name ? categories[i].name : '' %></label>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <% } %>
+
+
+
+                                                </div>
+
+                                                <!-- right btn -->
+                                                <!-- <div class="right-btnc quick-btn-control" 
+                            style="
+                                  
+                            " 
+                            >
+                            <button class="btn shadow-none right-ctrl-quick control-btn-quick text-black mr-2"  style="z-index: 99; opacity: 1; border-radius: 20px;">
+                                <i class="far fa-angle-right" style="font-size: 29px; font-weight: bold;"></i>
+                            </button> -->
+                                                <style>
+                                                    .control-btn-quick:hover {
+                                                        background-color: #d2eaff;
+                                                    }
+
+                                                    * {
+                                                        transition: all 300ms ease-in-out 100ms;
+                                                    }
+
+                                                    .quick-btn-control {
+
+                                                        background-color: #fff;
+                                                        max-width: 66px;
+                                                        height: 69%;
+                                                        display: flex;
+                                                        justify-content: center;
+                                                        align-items: center;
+                                                        font-size: 2rem;
+                                                        position: absolute;
+
+                                                        opacity: .8;
+                                                        z-index: 9;
+                                                        border-top-left-radius: 15px;
+                                                        border-bottom-left-radius: 15px;
+
+                                                    }
+
+                                                    .left-btnc {
+                                                        left: 0;
+                                                        margin-left: 16px;
+
+                                                    }
+
+                                                    .right-btnc {
+                                                        right: 0;
+                                                        margin-right: 16px;
+
+                                                    }
+
+                                                    @media screen and (max-width: 5768px) {
+                                                        .quick-btn-control {
+                                                            height: 65%;
+                                                        }
+                                                    }
+                                                </style>
+                                                <script>
+                                                    const quickItems = $('.quick-item').length;
+                                                    const quickItemWidth = $('.quick-item').width();
+                                                    const quickItemsTotalWidth = quickItems * quickItemWidth;
+                                                    const stepLarge = $(".quick-icons").width() - quickItemWidth;
+                                                    const stepSmall = quickItemWidth;
+
+                                                    let leftX = 0, rightX = 0, translateX = 0;
+                                                    $(".right-ctrl-quick").click(e => {
+                                                        if (translateX < quickItemsTotalWidth && translateX > -(quickItemsTotalWidth + (stepLarge - quickItemWidth))) {
+                                                            translateX -= stepLarge;
+                                                            $(".quick-icons .quick-item").css('transform', `translate(${translateX}px, 0)`);
+                                                            console.log({ quickItemsTotalWidth, translateX, quickItemWidth, stepLarge });
+
+                                                        }
+                                                    });
+                                                    $(".left-ctrl-quick").click(e => {
+
+                                                        if (translateX != 0) {
+                                                            translateX += stepLarge;
+                                                            $(".quick-icons .quick-item").css('transform', `translate(${translateX}px, 0)`);
+                                                            console.log({ quickItemsTotalWidth, translateX, quickItemWidth, stepLarge });
+
+                                                        }
+                                                    });
+
+                                                    $(document).ready(e => {
+                                                        if (translateX = 0) {
+                                                            $(".left-ctrl-quick").prop('disabled', true);
+                                                            $(".left-ctrl-quick").addClass('disabled');
+                                                        }
+                                                    });
+                                                </script>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <% } %>
+
+                </section>
+                <section>
+                    <div class="container  p-3 p-sm-0">
+                        <div class="row">
+                            <div class="col">
+                                <h3>Popular localities
+                                    <%=   typeof lastLocationDistrictName != 'undefined' &&  lastLocationDistrictName ? ' in and around ' + lastLocationDistrictName : 
+                            typeof lastLocationStateName != 'undefined' && lastLocationStateName ? ' in '+ lastLocationStateName :
+                        'in and around Imphal West' %></h3>
+                                <p class="mb-3 py-0 text-secondary">Explore places by their localities<br></p>
+                                <div
+                                    class="d-flex justify-content-start p-4 bg-white rounded border places-list row mx-1 px-0 px-sm-0">
+                                    <% popularLocalities.forEach( locality => { %>
+                                    <%  if (locality._id.name) { %>
+                                    <div class="col-sm-12 col-xs-12 col-md-4 py-0">
+                                        <a
+                                            href="/search?slocality=<%= locality._id.name %>&slocation=<%= locality._id.name %>&p=1&li=10&sk=0">
+                                            <%= locality._id.name %>
+                                            <span class="text-secondary ml-1">
+                                                <%= locality.totalPostsPerLocality ? `(${locality.totalPostsPerLocality} places)` : '' %>
+                                            </span>
+                                        </a>
+                                    </div>
+                                    <% } %>
+                                    <% }) %>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <div class="container p-3 p-sm-0">
+                        <div class="row">
+                            <div class="col">
+                                <div class="d-flex justify-content-center bg-white rounded border places-list row mx-1 py-5  px-0 px-sm-0"
+                                    style="padding-top: 45px;">
+                                    <div
+                                        class="col-sm-12 col-md-4 col-lg-4 col-xl-4 d-flex flex-column align-items-center">
+                                        <img class="app-img" src="/assets/img/app.png"></div>
+                                    <div
+                                        class="col-sm-12 col-md-5 col-lg-5 col-xl-5 text-center d-flex flex-column app-links-desc">
+                                        <h3 class="text-left"><strong>Get the Digital Manipur App</strong></h3>
+                                        <p class="text-left text-secondary">Find point of interest &nbsp;and bookmark
+                                            your
+                                            favorite
+                                            places on the go<br></p>
+                                        <p class="text-left" style="font-size: 14px;">We'll send you a link, open it on
+                                            your
+                                            phone
+                                            to download the app<br></p>
+                                        <div class="input-group app-links-input-group">
+                                            <div class="input-group-prepend"></div><input class="form-control"
+                                                type="text" id="mobile-code" style="width: 37px;"
+                                                placeholder="+91"><input class="form-control" type="text" id="mobile-no"
+                                                placeholder="Enter phone number">
+                                            <div class="input-group-append" placeholder="Enter your email id"><button
+                                                    class="btn btn-success" type="button">Text App Link!</button></div>
+                                        </div>
+                                        <div class="d-lg-flex align-items-center seperator">
+                                            <div class="line-1"></div><span
+                                                style="margin-right: 10px;margin-left: 10px;font-size: 16px;font-weight: bold;">OR</span>
+                                            <div class="line-1"></div>
+                                        </div>
+                                        <div class="input-group app-links-input-group">
+                                            <div class="input-group-prepend d-none"><span
+                                                    class="input-group-text">Addon</span>
+                                            </div><input class="form-control" type="text"
+                                                placeholder="Enter your email id">
+                                            <div class="input-group-append"><button class="btn btn-success"
+                                                    type="button">Email
+                                                    App
+                                                    Link!</button></div>
+                                        </div>
+                                        <div class="d-flex justify-content-start app-links my-3"><a href="#"><img
+                                                    src="/assets/img/googleplay@2x.png"></a><a href="#"><img
+                                                    src="/assets/img/applestore@2x.png"></a></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="trophy">
+                    <div class="container p-0">
+                        <div class="row">
+                            <div class="col ">
+                                <div class="d-flex justify-content-around p-4 row mx-1 trophy-holder">
+                                    <div>
+                                        <div class="text-center d-flex flex-column align-items-center p-4 trophy">
+                                            <div class="milestone" id="posts_trophy">
+                                                <span class="num"></span>
+                                                <span class="sym"></span>
+                                            </div>
+                                            <label class="text-uppercase">POSTS</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-center d-flex flex-column align-items-center p-4 trophy">
+                                            <div class="milestone" id="viewers_trophy"
+                                                style="background-image: url(&quot;/assets/img/cafe_restaurant_254155.png&quot;);">
+                                                <span class="num"></span>
+                                                <span class="sym"></span>
+                                            </div><label class="text-uppercase">VIEWERS</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-center d-flex flex-column align-items-center p-4 trophy">
+                                            <div class="milestone" id="reviews_trophy"
+                                                style="background-image: url(&quot;/assets/img/cafe_restaurant_254155.png&quot;);">
+                                                <span class="num"></span>
+                                                <span class="sym"></span>
+                                            </div><label class="text-uppercase">REVIEWS</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-center d-flex flex-column align-items-center p-4 trophy">
+                                            <div class="milestone" id="localities_trophy"
+                                                style="background-image: url(&quot;/assets/img/cafe_restaurant_254155.png&quot;);">
+                                                <span class="num"></span>
+                                                <span class="sym"></span>
+                                            </div><label class="text-uppercase">LOCALITIES</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-center d-flex flex-column align-items-center p-4 trophy">
+                                            <div class="milestone" id="districts_trophy"
+                                                style="background-image: url(&quot;/assets/img/cafe_restaurant_254155.png&quot;);">
+                                                <span class="num"></span>
+                                                <span class="sym"></span>
+                                            </div><label class="text-uppercase">DISTRICTS</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="text-center d-flex flex-column align-items-center p-4 trophy">
+                                            <div class="milestone" id="states_trophy"
+                                                style="background-image: url(&quot;/assets/img/cafe_restaurant_254155.png&quot;);">
+                                                <span class="num"></span>
+                                                <span class="sym"></span>
+                                            </div><label class="text-uppercase">STATE</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <%- include('../includes/footer.ejs') %>
+
+    </div>
+    <script type="text/javascript" src="/assets/js/lozad.min.js"></script>
+    <script>
+
+        // image lazy load
+        const observer = lozad('.lozad', {
+
+            loaded: function (el) {
+                // Custom implementation on a loaded element
+                console.log('loaded element');
+                console.log($(el.target));
+
+                el.classList.add('zoom-bg');
+            }
+        }); // lazy loads elements with default selector as '.lozad'
+        observer.observe();
+
+
+        // fetch stats
+        $(document).ready(e => {
+            const rootDomain =
+                `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+            $(".trophy").hide();
+
+            $.get(`${rootDomain}/site/stats`, (res, status) => {
+                if (status == 'success') {
+                    console.log({ res });
+                    const data = res.data ? res.data : null;
+                    if (data) {
+                        $(".trophy").show();
+                        $("#posts_trophy .sym").html(data.posts.symbol);
+                        $("#posts_trophy .num").html(data.posts.count);
+                        $("#viewers_trophy .sym").html(data.views.symbol);
+                        $("#viewers_trophy .num").html(data.views.count);
+                        $("#states_trophy .sym").html(data.states.symbol);
+                        $("#states_trophy .num").html(data.states.count);
+                        $("#districts_trophy .sym").html(data.districts.symbol);
+                        $("#districts_trophy .num").html(data.districts.count);
+                        $("#reviews_trophy .sym").html(data.reviews.symbol);
+                        $("#reviews_trophy .num").html(data.reviews.count);
+                        $("#localities_trophy .sym").html(data.localities.symbol);
+                        $("#localities_trophy .num").html(data.localities.count);
+                    }
+
+                }
+            })
+        });
+
+
+
+
+        // product operation
+        $('#bls_righty').click(function () {
+            event.preventDefault();
+            $('#bls_comp').animate({
+                scrollLeft: "+=300px"
+            }, "slow");
+        });
+
+        $('#bls_lefty').click(function () {
+            event.preventDefault();
+            $('#bls_comp').animate({
+                scrollLeft: "-=300px"
+            }, "slow");
+        });
+
+
+        $('#tp_righty').click(function () {
+            event.preventDefault();
+            $('#tp_comp').animate({
+                scrollLeft: "+=300px"
+            }, "slow");
+        });
+
+        $('#tp_lefty').click(function () {
+            event.preventDefault();
+            $('#tp_comp').animate({
+                scrollLeft: "-=300px"
+            }, "slow");
+        });
+
+    </script>
+
+
+</body>
+
+</html>

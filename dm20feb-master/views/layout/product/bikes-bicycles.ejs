@@ -1,0 +1,34 @@
+<div class="form-group">
+    <label for="brand">Brand*</label>
+    <select class="form-control custom-select" id="product_brand" name="product_brand">
+        <option value="none">Select Brand</option>
+        <%if(edit == true){%>
+
+        <%brands.forEach(function(brand, index){%>
+
+        <%if(brand.product_subcategory == subcategory){%>
+
+        <option value="<%=brand._id%>"
+            <%if(product.product_brand.toString().trim() == brand._id.toString().trim()){%>selected<%}%> ><%=brand.brand_name%></option>
+            <%}%>
+                
+                <%})%>
+
+            <%}%>
+
+            <!-- if edit is false -->
+            <%if(edit == false){%>
+
+            <%brands.forEach(function(brand, index){%>
+
+            <%if(brand.product_subcategory == subcategory){%>
+
+        <option value="<%=brand._id%>"><%=brand.brand_name%></option>
+        <%}%>
+                        
+                        <%})%>
+
+        <%}%>
+
+    </select>
+</div>

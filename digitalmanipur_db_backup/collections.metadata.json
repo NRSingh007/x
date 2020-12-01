@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"digitalmanipur.collections"}],"uuid":"250fd9ede31041d4a904120bc35f4361"}

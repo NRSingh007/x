@@ -1,0 +1,1080 @@
+<%- include('../includes/header.ejs',{ 
+    keywords: [slocation,stext] , 
+    author: 'Digtal Manipur',
+    description: `search result for ${stext ? stext : ''} in ${slocation ? slocation: ''}`
+ }) %>
+</head>
+
+<body>
+    <%- include('../includes/navBar.ejs', {slocation: slocation, stext: stext } ) %>
+
+    <section class="main-content p-2 p-sm-0">
+        <div class="container modi-container">
+            <div class="mt-2 mb-2 path">
+
+                <% if (typeof sstate != 'undefined' && sstate) { %>
+                <a href="/search?sstate=<%= sstate %>&p=1&li=15&sk=0&via=searchpage">
+                    <%= sstate %>
+                </a>
+                <span>&gt;</span>
+
+                <% } %>
+                <% if ( typeof sdistrict != 'undefined'   && sdistrict) { %>
+               
+                <a href="/search?sdistrict=<%= sdistrict %>&p=1&li=15&sk=0&via=searchpage"><%= sdistrict %></a>
+                <span>&gt;</span>
+                <% } %>
+                <% if ( typeof slocation != 'undefined'  && String(sstate).toLowerCase() != String(slocation).toLowerCase()   && String(sdistrict).toLowerCase() != String(slocation).toLowerCase()  && slocation && ( !sdistrict || !sstate ) ) { %>
+               
+                    <a href="/search?slocation=<%= slocation %>&p=1&li=15&sk=0&via=searchpage"><%= slocation %></a>
+                    <span>&gt;</span>
+                    <% } %>
+                <% if (stext) { %>
+                
+                <a class="disabled" href="#"><%= stext %></a>
+                
+                <% } else { %>
+                <a class="disabled" href="#">All </a>
+                <% } %>
+
+            </div>
+            <div class="d-flex flex-row mt-3 mt-sm-0  px-3">
+                <div class="col-10 px-0 search-result-overview">
+                    <div class="row px-0 align-items-center  d-flex text-capitalize">
+                        <% if((stext || scat) && (slocation || sdistrict || slocality || sstate )) { %>
+                        <h3 class="search-title my-0 py-0 px-xs-0">
+                            
+                            <%= skeyword ? skeyword + ', ' : '' %>
+                            <%= stext ? stext + ', ' : '' %>
+                            <%= scat ? scat + ', ' : '' %>
+                            <%= slocation && slocation != sstate && slocation != sdistrict && slocation != slocality 
+                              ? slocality || sdistrict ? slocation+ ', ' : slocation : '' %>
+                            <%= slocality ? sdistrict ? slocality + ', ' : slocality  : '' %>
+                            <%= sdistrict ? slocality || skeyword || stext || scat  ? sdistrict + ', ' : sdistrict  : '' %>
+                            <%= (sstate && !slocation) || ( slocation == sstate ) ? sstate  : '' %>
+                            
+                        </h3>
+
+                        
+
+                        <% } else if (!stext && ( slocation || sdistrict || slocality )) { %>
+                        <h3 class="search-title">All places <%=  `in ${ slocality ? slocality : sdistrict ? sdistrict : slocation ? slocation : 'Manipur'}` %> </h3>
+                        
+                        <% } %>
+                    </div>
+
+                    <% if ( totalResult && totalResult > 0 ) { %>
+                    <div class="row d-flex results text-muted px-0 ">
+                         <%=   totalResult > 1 ?  "Showing " +totalResult + " search results " : "Showing " + totalResult + " search result" %> 
+                    </div>
+                    <% } %>
+                </div>
+                
+
+                <div class="col-2 pr-0 d-flex flex-column justify-content-start web-hide seach-controls align-items-end">
+                    <i class="fas fa-map-marked text-info m-show-map" id="m-show-map" >
+                    </i>
+
+                    <i 
+                       
+                    class="  fas fa-sort-amount-down text-info" id="m-show-filter" type="button">
+                </i>
+                    <script>
+                        $('#m-show-filter').click( e => {
+                            $('.filter').removeClass('filter-box');
+
+                        });
+
+                    </script>
+                </div>
+            </div>
+            <div class="row mx-0 mt-3 main-content">
+                <div class="col-sm-12 col-md-3 col-lg-2 col-xl-2 pr-0">
+                    <div class="row filter filter-box cus-panel bg-white py-3">
+                        <div class="col pr-3">
+                            <%- include('./../includes/filter.ejs', { filterLocations, filterCategories, slocation, stext }) %>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-9 col-lg-10 col-xl-10 pr-0">
+                    <div class="row map-holder px-3">
+                        <div class="col">
+                            <div id="mapId" class="map bg-img cus-panel rounded p-3 mb-4"
+                                style="background-image: url(&quot;FireShot Capture 026 - 7-29-2017+11-14-59+AM.jpg (1600×792) - lh3.googleusercontent.com.png&quot;);">
+                                
+                            </div>
+                            <div
+                            class="map-controls"
+                            style="
+                            position: absolute;
+                            display: none;
+                            top: 0;
+                            padding: 1px 20px;
+                            z-index: 99999999;
+                            "
+                            >
+                            <div class="row controls" style="height: 100%;">
+                                <div
+                                    class="p-2 col d-lg-flex flex-row justify-content-around justify-content-lg-end align-items-lg-start">
+                                    <!-- <div class="d-inline-flex cus-panel" style="margin-right: 30px;">
+                                        <button class="btn btn-light btn-sm" type="button"
+                                            style="margin-right: 0;padding-right: 12px;padding-left: 12px;">
+                                            <i class="fas fa-search-plus" style="margin-right: 8px;"></i>
+                                        </button>
+                                        <button class="btn btn-light btn-sm text-center" type="button"
+                                            style="margin-right: 0;padding-right: 12px;padding-left: 12px;">
+                                            <i class="fas fa-search-minus" style="margin-right: 8px;"></i>
+                                        </button>
+                                    </div> -->
+                                    <button 
+                                   
+                                    class="btn btn-light btn-sm shadow" id="mapCloseBtn" type="button">
+                                        <i class="fas fa-times" style="margin-right: 8px;"></i>Close</button>
+                                </div>
+                            </div>
+
+                            <!-- <div class="row default d-flex flex-row justify-content-center align-items-center" style="height: 100%;">
+                                <div class="spinner-grow text-danger"></div>
+                            </div> -->
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row mt-0">
+                        <div class="col-sm-12 col-lg-7 col-xl-7 center-main-search-results">
+                            <% if (searchResult.length == 0) { %>
+                            <div class="col result-item "
+                                style="width: 100%; height: 60vh; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                                <h5>No results found</h5>
+                                <button class="btn btn-danger my-2">
+                                    <a class="text-white"
+                                        href="/search?p=1&li=10&sk=0&via=searchpage<%= slocality ? `&slocality=${slocality}` : '' %><%= sstate ? `&sstate=${sstate}` : '' %><%= sdistrict ? `&sdistrict=${sdistrict}` : '' %><%= slocation ? `&slocation=${slocation}` : '' %>">See
+                                        all posts <%= slocation ? `in ${slocation} >`:'' %></a>
+                                </button>
+                            </div>
+
+                            <% } else { %>
+
+                            <% searchResult.forEach( function(item) { %>
+                            <div class="row result-item">
+                                <div class="col cus-panel bg-white px-3 pt-3 pb-0 rounded">
+                                    <a
+                                        href="<%= `/detail?slocation=${slocation}&name=${item.name}&tk=${item._id}&via=searchpage` %>">
+                                        <div class="row sr-item-info">
+                                            <div class="col-3 pr-0">
+                                                <div class="bg-img search-item-img rounded lozad" 
+                                               <% if ( (item.images.logo && item.images.logo.url) || ( item.images.collection && item.images.collection[0] && item.images.collection[0].url ) ) {  %>
+                                                    data-background-image="/uploads/images/web_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>"
+                                                    data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 1x , 
+                                                    url('/uploads/images/web_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 2x"
+                                               <% } else { %>
+                                                    data-background-image="/assets/img/logo-dim.png"
+                                                <% } %>
+                                                >
+                                                </div>
+                                            </div>
+                                            <div class="col-7 result-item-desc">
+                                                <!-- <%= item.category %> -->
+                                                <h6 class="text-secondary post-cat-name"><%= item.category.id && item.category.name ? item.category.name :'' %>
+                                                </h6>
+                                                <% let pAddress = item.address; %>
+                                                <% let postFullAddress = ''; %>
+                                                <% if(pAddress.areaAndStreetAddress){ postFullAddress += pAddress.areaAndStreetAddress; } %>
+                                                <% if(pAddress.building){ postFullAddress += postFullAddress ? ', '+  pAddress.building :  pAddress.building; } %>
+                                                <% if(pAddress.landmark){ postFullAddress += postFullAddress ? ', '+  pAddress.landmark :  pAddress.landmark; } %>
+                                            
+                                                    <!-- <div>
+
+                                                    <li>
+                                                            <%= "areaAndStreetAddress - "+pAddress.areaAndStreetAddress %>
+                                                    </li>
+                                                    
+                                                    <li>
+                                                            <%= "building - "+pAddress.building %>
+                                                    </li>
+                                                    <li>
+                                                            <%= "landmark - "+pAddress.landmark %>
+                                                    </li>
+                                                    <li>
+
+                                                    <%= "postFullAddress - "+postFullAddress %>
+                                                    </li>
+                                                </div> -->
+                                                <h5 class="text-danger post-name"><%= item.name %></h5>
+                                                <h6 class="text-dark post-district-name">
+                                                    <b><%= pAddress.district.id && pAddress.district.id.name  ? pAddress.district.id.name : '' %></b>
+                                                </h6>
+                                                <!-- <h6 class="text-secondary post-locality-name"><%= `${pAddress.locality.id && pAddress.locality.id.name  ? pAddress.locality.id.name : ''} ` %></h6> -->
+                                                <h6 class="text-secondary post-address-or-landmark nowrap "
+                                                    data-toggle="tooltip" data-placement="bottom" title="<%= postFullAddress %>"  >
+                                                    <%= postFullAddress %>
+                                                </h6>
+                                            </div>
+                                            <div
+                                                class="col-2 d-flex flex-column justify-content-start align-items-lg-end">
+                                                <% let levelClass; %>
+    <% if ( item.calcRating >= 0 && item.calcRating <= 0.5 ) { levelClass = 'level-0'; } %>
+    <% if ( item.calcRating >= 0.6 && item.calcRating <= 1.0 ) { levelClass = 'level-1'; } %>
+    <% if ( item.calcRating >= 1.1 && item.calcRating <= 1.5 ) { levelClass = 'level-2'; } %>
+    <% if ( item.calcRating >= 1.6 && item.calcRating <= 2.0 ) { levelClass = 'level-3'; } %>
+    <% if ( item.calcRating >= 2.1 && item.calcRating <= 2.5 ) { levelClass = 'level-4'; } %>
+    <% if ( item.calcRating >= 2.6 && item.calcRating <= 3.0 ) { levelClass = 'level-5'; } %>
+    <% if ( item.calcRating >= 3.1 && item.calcRating <= 3.5 ) { levelClass = 'level-6'; } %>
+    <% if ( item.calcRating >= 3.6 && item.calcRating <= 4.0 ) { levelClass = 'level-7'; } %>
+    <% if ( item.calcRating >= 4.1 && item.calcRating <= 4.5 ) { levelClass = 'level-8'; } %>
+    <% if ( item.calcRating >= 4.6 && item.calcRating <= 5.0 ) { levelClass = 'level-9'; } %>
+                                                <span class="badge badge-success   py-1 
+                                            <%= levelClass %>
+                                            " style="font-weight: bold;font-size: 16px; width: 36px; "><%=  item.rating %></span>
+                                            <% if (item.totalVotes > 0 ){ %>
+                                                <label class="text-secondary"
+                                                style="font-size: 12px;margin-top: 8px;"><%= item.totalVotes %>
+                                                votes</label>
+                                            <% } %>   
+                                        </div>
+
+                                        </div>
+                                    </a>
+                                    <hr class="py-0 my-0 mt-2">
+
+                                    <div class="row py-2">
+                                        <div class="col">
+                                            <div class="row">
+                                                <div class="col-3 py-0">
+                                                    <label class="col-form-label text-uppercase text-secondary py-0"
+                                                        style="font-size: 13px;">Hours:</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <label class="col-form-label py-0" style="font-size: 13px;">
+
+
+                                                        <%= item.timings[day].closed == true ? `closed - ${day}`: `${ item.timings[day].slots ? item.timings[day].slots.toString() : ''} (Today)` %>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <!-- <%= item.category %> -->
+                                            
+                                            <% if ( item.category && item.category.subCategory && item.category.subCategory.name ) { %> 
+                                            <div class="row">
+                                                <div class="col-3 py-0">
+                                                    <label class="col-form-label text-uppercase text-secondary py-0"
+                                                        style="font-size: 13px;">Sub-category:</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <label class="col-form-label py-0" style="font-size: 13px;">
+
+
+                                                        <%= item.category && item.category.subCategory && item.category.subCategory.name ? item.category.subCategory.name :'' %>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                            <!-- <div class="row">
+                                                <div class="col-3 py-0">
+                                                    <label class="col-form-label text-uppercase text-secondary py-0"
+                                                        style="font-size: 13px;">Costs:</label>
+                                                </div>
+                                                <div class="col-9">
+                                                    <label class="col-form-label py-0" style="font-size: 13px;">₹300
+                                                        <br>
+                                                    </label>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+
+                                    <script>
+                                        function loadCallDetail(mobile, tel) {
+                                       
+
+                                            var body = `<dl>`;
+                                            console.log({mobile, tel});
+                                            mobileArray = mobile.map( e => e.number );
+                                            console.log({mobileArray});
+
+                                            mobileArray = mobileArray.filter( e => typeof e != 'undefined' && e != null && e != '' );
+                                            console.log({mobileArray});
+
+                                            if (mobileArray.length > 0) {
+                                                body += `<dt ><bold>Mobile</bold></dt>`;
+                                                mobile.forEach(no => {
+                                                    if (typeof no.number != 'undefined' || no.number != null ||
+                                                        no.number.trim() != '')
+                                                        body +=
+                                                        `<a href="tel:${no.number}"><dd class="text-dark">${no.number}</dd></a>`;
+                                                });
+                                            }
+                                        
+                                        telArray = tel.map( e => e.number );
+                                        telArray = telArray.filter( e => typeof e != 'undefined' && e != null && e != '' );
+                                            if (telArray.length > 0) {
+                                                body += `<dt><bold>Telephone</bold></dt>`;
+                                                tel.forEach(no => {
+                                                    if (typeof no.number != 'undefined' || no.number != null ||
+                                                        no.number.trim() != '')
+                                                        body +=
+                                                        `<a href="tel:${no.number}"><dd class="text-dark">${no.number}</dd></a>`;
+                                                });
+                                            }
+                                            if (mobileArray.length <= 0 && telArray.length <= 0) {
+                                                body += `<dt>Sorry no contact number available</dt>`;
+                                            }
+                                            body += `<dl>`;
+
+                                            $('#myModal .modal-body').html(body);
+                                        }
+                                    </script>
+
+                                    <div class="row sr-item-btn-holder">
+                                        <div class="col sr-item-btn mx-0 px-0">
+                                            <button
+                                                onclick="loadCallDetail( <%= JSON.stringify(item.mobileNumber) %> , <%= JSON.stringify(item.telephoneNumber) %> )"
+                                                data-toggle="modal" data-target="#myModal"
+                                                class="btn btn-light btn-block  rounded-0 p-3" type="button"
+                                                style="height: 100%;">
+                                                <i class="fas fa-phone" style="margin-right: 5px;"></i>
+                                                <label class="m-hide" type="" style="height: 100%;">Call</label>
+                                            </button>
+                                        </div>
+                                        <div class="col sr-item-btn mx-0 px-0">
+                                            <a
+                                            href="<%= `/detail?slocation=${slocation}&name=${item.name}&tk=${item._id}&via=searchpage` %>">
+                                            <button class="btn btn-light btn-block  rounded-0 p-3" type="button"
+                                                style="height: 100%;">
+                                                <i class="far fa-list-alt" style="margin-right: 5px;"></i>
+                                                <label class="m-hide" type="" style="height: 100%;">View</label>
+                                            </button>
+                                            </a>
+                                        </div>
+                                        <!-- <div class="col sr-item-btn mx-0 px-0">
+                                            <button class="btn btn-light btn-block  rounded-0 p-3" type="button"
+                                                style="height: 100%;">
+                                                <i class="far fa-calendar" style="margin-right: 5px;"></i>
+                                                <label class="m-hide" type="" style="height: 100%;">Book a Table</label>
+                                            </button>
+                                        </div>
+                                        <div class="col sr-item-btn mx-0 px-0">
+                                            <button class="btn btn-light btn-block  rounded-0 p-3" role="button"
+                                                style="height: 100%;" href="/cart.html">
+                                                <i class="fa fa-shopping-cart" style="margin-right: 5px;"></i>
+                                                <label class="m-hide" type="" style="height: 100%;">Order Now</label>
+                                            </button>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                            <% }) %>
+
+
+                            <!-- Hidden search results to show on map infoWindow -->
+
+
+                            <div style="display: none;">
+                            <% searchResult.forEach( function(item) { %>
+                                <div class="row result-item info-window-item" >
+                                    <div class="col cus-panel bg-white px-3 pt-3 pb-0 rounded">
+                                        <a
+                                            href="<%= `/detail?slocation=${slocation}&name=${item.name}&tk=${item._id}&via=searchpage` %>">
+                                            <div class="row sr-item-info">
+                                                <!-- <div class="col-3 pr-0">
+                                                    <div class="bg-img search-item-img rounded lozad" 
+                                                   <% if ( (item.images.logo && item.images.logo.url) || ( item.images.collection && item.images.collection[0] && item.images.collection[0].url ) ) {  %>
+                                                        data-background-image="/uploads/images/web_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>"
+                                                        data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 1x , 
+                                                        url('/uploads/images/web_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 2x"
+                                                   <% } else { %>
+                                                        data-background-image="/assets/img/logo-dim.png"
+                                                    <% } %>
+                                                    >
+                                                    </div>
+                                                </div> -->
+                                                <div class="col-9 result-item-desc">
+                                                    <h6 class="text-secondary post-cat-name"><%= item.category.id && item.category.name ? item.category.name :'' %>
+                                                    </h6>
+                                                    <h5 class="text-danger post-name"><%= item.name %></h5>
+                                                    <h6 class="text-dark post-district-name">
+                                                        <b><%= item.address.district.id && item.address.district.id.name  ? item.address.district.id.name : '' %></b>
+                                                    </h6>
+                                                    <% let pAddress = item.address; %>
+                                                    <% let postFullAddress = ''; %>
+                                                    <% if(pAddress.areaAndStreetAddress){ postFullAddress += pAddress.areaAndStreetAddress; } %>
+                                                    <% if(pAddress.building){ postFullAddress += postFullAddress ? ', '+  pAddress.building :  pAddress.building; } %>
+                                                    <% if(pAddress.landmark){ postFullAddress += postFullAddress ? ', '+  pAddress.landmark :  pAddress.landmark; } %>
+                                                
+                                                    <!-- <h6 class="text-secondary post-locality-name"><%= `${item.address.locality.id && item.address.locality.id.name  ? item.address.locality.id.name : ''} ` %></h6> -->
+                                                    <h6 class="text-secondary post-address-or-landmark nowrap "
+                                                        data-toggle="tooltip" data-placement="bottom" title="
+                                                <%= postFullAddress %>
+                                            ">
+                                                        <%= postFullAddress %>
+                                                    </h6>
+                                                </div>
+                                                <div
+                                                    class="col-2 d-flex flex-column justify-content-start align-items-lg-end">
+                                                    <% let levelClass; %>
+                                                    <% if ( item.calcRating >= 0 && item.calcRating <= 0.5 ) { levelClass = 'level-0'; } %>
+                                                    <% if ( item.calcRating >= 0.6 && item.calcRating <= 1.0 ) { levelClass = 'level-1'; } %>
+                                                    <% if ( item.calcRating >= 1.1 && item.calcRating <= 1.5 ) { levelClass = 'level-2'; } %>
+                                                    <% if ( item.calcRating >= 1.6 && item.calcRating <= 2.0 ) { levelClass = 'level-3'; } %>
+                                                    <% if ( item.calcRating >= 2.1 && item.calcRating <= 2.5 ) { levelClass = 'level-4'; } %>
+                                                    <% if ( item.calcRating >= 2.6 && item.calcRating <= 3.0 ) { levelClass = 'level-5'; } %>
+                                                    <% if ( item.calcRating >= 3.1 && item.calcRating <= 3.5 ) { levelClass = 'level-6'; } %>
+                                                    <% if ( item.calcRating >= 3.6 && item.calcRating <= 4.0 ) { levelClass = 'level-7'; } %>
+                                                    <% if ( item.calcRating >= 4.1 && item.calcRating <= 4.5 ) { levelClass = 'level-8'; } %>
+                                                    <% if ( item.calcRating >= 4.6 && item.calcRating <= 5.0 ) { levelClass = 'level-9'; } %>
+                                                    <span class="badge badge-success   py-1 
+                                                <%= levelClass %>
+                                                " style="font-weight: bold;font-size: 16px; width: 36px; "><%=  item.rating %></span>
+                                                <% if (item.totalVotes > 0 ){ %>
+                                                    <label class="text-secondary"
+                                                    style="font-size: 12px;margin-top: 8px;"><%= item.totalVotes %>
+                                                    votes</label>
+                                                <% } %>   
+                                            </div>
+    
+                                            </div>
+                                        </a>
+                                        <hr class="py-0 my-0 mt-2">
+    
+                                        <div class="row py-2">
+                                            <div class="col">
+                                                <div class="row">
+                                                    <div class="col-3 py-0">
+                                                        <label class="col-form-label text-uppercase text-secondary py-0"
+                                                            style="font-size: 13px;">Hours:</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <label class="col-form-label py-0" style="font-size: 13px;">
+    
+    
+                                                            <%= item.timings[day].closed == true ? `closed - ${day}`: `${ item.timings[day].slots ? item.timings[day].slots.toString() : ''} (Today)` %>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <% if ( item.category && item.category.subCategory && item.category.subCategory.name ) { %> 
+                                                    <div class="row">
+                                                        <div class="col-3 py-0">
+                                                            <label class="col-form-label text-uppercase text-secondary py-0"
+                                                                style="font-size: 13px;">Sub-category:</label>
+                                                        </div>
+                                                        <div class="col-9">
+                                                            <label class="col-form-label py-0" style="font-size: 13px;">
+        
+        
+                                                                <%= item.category && item.category.subCategory && item.category.subCategory.name ? item.category.subCategory.name :'' %>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                    <% } %>
+                                                <!-- <div class="row">
+                                                    <div class="col-3 py-0">
+                                                        <label class="col-form-label text-uppercase text-secondary py-0"
+                                                            style="font-size: 13px;">Costs:</label>
+                                                    </div>
+                                                    <div class="col-9">
+                                                        <label class="col-form-label py-0" style="font-size: 13px;">₹300
+                                                            <br>
+                                                        </label>
+                                                    </div>
+                                                </div> -->
+                                            </div>
+                                        </div>
+    
+                                        
+    
+                                        
+                                    </div>
+                                </div>
+                                <% }) %>
+                            </div>
+
+
+                            <!-- InfoWindow data - Ends here -->
+
+                            <% } %>
+
+
+
+
+                            <div class="row mt-5">
+
+                                <% if (Number(totalResult) >= 1) { %>
+                                <div
+                                    class="col-sm-12 col-md-3 col-lg-3 col-xl-3 d-md-flex d-lg-flex align-items-center p-0">
+                                    <p>Page&nbsp;
+                                        <span style="font-weight: bold;"><%= page %></span> of
+                                        <span
+                                            style="font-weight: bold;"><%= Math.ceil(Number(totalResult/limit)) %></span>
+                                    </p>
+                                </div>
+                                <div class="col-sm-12 col-md-9 col-lg-9 col-xl-9 p-0">
+                                    <div class="btn-group pagination pull-left" role="group">
+                                        <button <% if (page != 1) { %> onclick="navToPage(
+                                                '<%=  slocation %>',
+                                                '<%=  stext %>',
+                                                '<%=  scat %>',
+                                                '<%=  skeyword %>',
+                                                <%=  Number(limit) %>,
+                                                <%=  Number(skip)-Number(limit) %>,
+                                                <%=  Number(totalResult) %>,
+                                                <%=  Number(page)-1 %>,
+                                                <%=  page == paginationMin ? paginationMax - (paginationMax - paginationMin + 1)   : paginationMax  %>,
+                                                <%=  page == paginationMin ? paginationMin   - (paginationMax - paginationMin + 1)  : paginationMin   %>
+                                                
+                                                )" <% } %> class="btn btn-light
+                                            <%= page ==  1  ? '  disabled ':''  %> 
+
+                                            " type="button" style="height: 100%;">
+                                            <i class="fas fa-angle-left"></i>
+                                        </button>
+
+                                        <% for (let i = paginationMin; i <= Math.ceil(Number(totalResult/limit)) ; i++ ) { %>
+                                        <% if ( i <= paginationMax ) {  %>
+                                        <button class="btn btn-light pagination-btn <%= i == page ? '  active':''  %> "
+                                            onclick="navToPage(
+                                                        '<%=  slocation %>',
+                                                        '<%=  stext %>',
+                                                        '<%=  scat %>',
+                                                '<%=  skeyword %>',
+                                                        <%=  limit %>,
+                                                        <%=  limit*(i-1) %>,
+                                                        <%=  totalResult %>,
+                                                        <%=  i %>,
+                                                        <%=  paginationMax  %>,
+                                                        <%=  paginationMin  %>
+                                                        )" type="button" style="height: 100%;"><%= i %></button>
+                                        <% } else { %>
+                                        <button onclick="navToPage(
+                                                        '<%=  slocation %>',
+                                                        '<%=  stext %>',
+                                                        '<%=  scat %>',
+                                                '<%=  skeyword %>',
+                                                        <%=  limit %>,
+                                                        <%=  limit*(i-1) %>,
+                                                        <%=  totalResult %>,
+                                                        <%=  i %>,
+                                                        <%=  paginationMax + (paginationMax - paginationMin + 1)   %>,
+                                                        <%=  paginationMax + 1   %>
+                                                        
+                                                        )" class="btn btn-light" type="button"
+                                            style="height: 100%;">...</button>
+
+                                        <% break; } %>
+                                        <% } %>
+
+                                        <button <% if (page !=  Math.ceil(Number(totalResult/limit)) ) { %> onclick="navToPage(
+                                                '<%=  slocation %>',
+                                                '<%=  stext %>',
+                                                '<%=  scat %>',
+                                                '<%=  skeyword %>',
+                                                <%=  Number(limit) %>,
+                                                <%=  Number(skip)+Number(limit) %>,
+                                                <%=  Number(totalResult) %>,
+                                                <%=  Number(page)+1 %>,
+                                                <%=  page == paginationMax ? paginationMax + (paginationMax - paginationMin + 1)   : paginationMax  %>,
+                                                <%=  page == paginationMax ? paginationMin   + (paginationMax - paginationMin + 1)  : paginationMin   %>
+                                                )" <% } %>
+                                            class="btn btn-light 
+                                                <%= page ==  Math.ceil(Number(totalResult/limit))  ? '  disabled ':''  %> "
+                                            type="button" style="height: 100%;">
+                                            <i class="fas fa-angle-right"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <% } %>
+                            </div>
+                            <div class="row" style="height: 2px;;">
+                                <div>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-lg-5 col-xl-5 sponsors-right-side pr-0">
+                            <div class="row mb-1">
+                                <div class="col mb-0">
+                                    <button class="btn btn-block cus-panel py-3 bg-img" id="showMap" type="button"
+                                        style="font-weight: 600;opacity: 0.91;background-image: url(&quot;/assets/img/imphalmap.png&quot;);">View
+                                        search results on map</button>
+                                </div>
+                            </div>
+
+                            <% if ( sidebarData &&  sidebarData.length > 0  ) { %>
+                                
+                                <div class="row mb-1">
+                                    <div class="col">
+                                <!-- <%= JSON.stringify(sidebarData) %> -->
+
+                                        <label class="col-form-label text-uppercase text-info small"
+                                            style="font-weight: bold;font-size: 10px;">Sponsored &amp; popular&nbsp;</label>
+                                    </div>
+                                </div>
+                                <!-- <%= JSON.stringify(categories.map( e =>  e.images+e.name   )) %> -->
+                                <% let luck=false; sidebarData.forEach( cat_items => { %>
+                                    <% if ( cat_items._id && cat_items._id.category ) { %>
+                                        <div class="row">
+                                            <div class="col side-item px-3 pt-3 mx-3 rounded">
+                                                <div class="row mb-2">
+                                                    <div class="col-9 pr-0">
+                                                        <% let foundCat =  categories.find( function (currValue, index, arr ) { return  String(cat_items._id.category) == String(currValue.name) })  %>
+
+                                                        <h3 class="group-title"> <%= cat_items._id.category.toLowerCase() %></h3>
+                                                        <p class="my-0 grey-text group-short-desc"><%= foundCat && foundCat.description ? foundCat.description : '' %></p>
+                                                    </div>
+                                                    <div class="col-3 group-cat-icon-holder">
+                                                        <!-- <%= foundCat %> -->
+                                                        <% if (typeof foundCat != 'undefined' &&  foundCat.images && foundCat.images.logo && foundCat.images.logo.url ) { %>
+                                                        <img  class="group-cat-icon" alt="" src="/uploads/images/mobile/<%= foundCat.images.logo.url %>">
+                                                        <% } else { %>
+                                                            <img class="group-cat-icon" alt="" src="/assets/img/logo-dim.png">
+                                                        <% } %> 
+                                                    </div>
+                                                </div>
+                                                <div class="row side-row mb-0">
+                                                    <div class="col">
+                                                        <% let i = 0; for ( let item of cat_items.top_six ) {  if ( i == 3 && Math.random() > 1 ) { break;  } else { i++; } %>
+                                                        <div class="side-per-item">
+                                                            <a
+                                                                href="<%= `detail?name=${item.name}&tk=${item._id}&via=searchpage` %>">
+                                                                <div class="d-flex flex-column side-row-item">
+                                                                    <div class="d-flex flex-start item-img-side-row bg-img rounded lozad"
+                                                                    <% if ( (item.images.logo && item.images.logo.url) || ( item.images.collection && item.images.collection[0] && item.images.collection[0].url ) ) {  %>
+                                                                        data-background-image="/uploads/images/web/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>"
+                                                                        data-background-image-set="url('/uploads/images/mobile/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 1x , 
+                                                                        url('/uploads/images/web_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 2x"
+                                                                <% } else { %>
+                                                                        data-background-image="/assets/img/logo-dim.png"
+                                                                    <% } %>
+                                                                    >
+
+                                                                    <% let levelClass; %>
+                <% if ( item.calcRating >= 0 && item.calcRating <= 0.5 ) { levelClass = 'level-0'; } %>
+                <% if ( item.calcRating >= 0.6 && item.calcRating <= 1.0 ) { levelClass = 'level-1'; } %>
+                <% if ( item.calcRating >= 1.1 && item.calcRating <= 1.5 ) { levelClass = 'level-2'; } %>
+                <% if ( item.calcRating >= 1.6 && item.calcRating <= 2.0 ) { levelClass = 'level-3'; } %>
+                <% if ( item.calcRating >= 2.1 && item.calcRating <= 2.5 ) { levelClass = 'level-4'; } %>
+                <% if ( item.calcRating >= 2.6 && item.calcRating <= 3.0 ) { levelClass = 'level-5'; } %>
+                <% if ( item.calcRating >= 3.1 && item.calcRating <= 3.5 ) { levelClass = 'level-6'; } %>
+                <% if ( item.calcRating >= 3.6 && item.calcRating <= 4.0 ) { levelClass = 'level-7'; } %>
+                <% if ( item.calcRating >= 4.1 && item.calcRating <= 4.5 ) { levelClass = 'level-8'; } %>
+                <% if ( item.calcRating >= 4.6 && item.calcRating <= 5.0 ) { levelClass = 'level-9'; } %>
+                                                                        <span class=" badge badge-success py-1 pull-left cus-badge <%= levelClass %>"
+                                                                            style="font-weight: bold;font-size: 13px;"><%= item.calcRating %></span>
+                                                                    </div>
+                                                                    <!-- <img class="rounded" src="/assets/img/breakfast.jpg"> -->
+                                                                    <label class="res-name"
+                                                                        style="font-size: 13px;"><%= item.name %></label>
+                                                                    <span class="text-secondary nowrap grey-text res-address"
+                                                                        style="font-size: 11px;"><%= item.address.locality.value %></span>
+                                                                    <span class="text-secondary grey-text  res-desc two-lines"
+                                                                        style="font-size: 11px;"><%= item.description ? item.description.short : '' %></span>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                        <% } %>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    <% } %>
+                                <% }) %>
+
+                            <% } %>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Modal -->
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header ">
+                    <h4 class="modal-title text-primary">Contact information</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body ">
+
+                </div>
+
+                <!-- Modal footer -->
+                <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div> -->
+
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+
+    <%- include("./../includes/alert") %>
+    <script>
+          function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").show();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+
+        function showInfoAlert(message) {
+            $(".alert-info .message").html(message);
+            $(".alert-info").show();
+            setTimeout(() => {
+                $(".alert-container").show();
+                $(".alert-info").hide();
+            }, 1500);
+        }
+
+    </script>
+    <script type="text/javascript" src="/assets/js/lozad.min.js"></script>
+    <script>
+        // $(document).ready(e => {
+        //     $('.lozad').on('load', function (e) {
+        //         $(e.target).addClass('zoom-in');
+        //     });
+        // });
+
+         // image lazy load
+         const observer = lozad('.lozad', {
+            // load: function (el) {
+            //     console.log('loading element');
+
+            //     // Custom implementation to load an element
+            //     // e.g. el.src = el.getAttribute('data-src');
+            // },
+            loaded: function (el) {
+                // Custom implementation on a loaded element
+                console.log('loaded element');
+                console.log($(el.target));
+
+                el.classList.add('zoom-bg');
+            }
+        }); // lazy loads elements with default selector as '.lozad'
+        observer.observe();
+        
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+
+
+    <script>
+        
+        const postsGeolocations = <%- JSON.stringify(searchResult.map( item => {
+            return { 
+                name: item.name,
+                geoLocation: item.geoLocation,
+                rating: item.rating
+            };
+        })) %>;
+
+        // clean search data
+        var clean1 = postsGeolocations.map( item => {
+            return { 
+                name: item.name,
+                geoLocation: item.geoLocation,
+                rating: item.rating
+            };
+        });
+        var clean = clean1.filter( item => {
+            if ( typeof item.geoLocation != 'undefined' 
+            && item.geoLocation.coordinates 
+            && item.geoLocation.coordinates.lat 
+            &&  item.geoLocation.coordinates.lng 
+            && item.name ) {
+                return true;
+            }
+            return false;
+        } );
+
+        var detect;
+        $('#showMap, #m-show-map').click(function(e){
+            
+            if ( clean.length <= 0 ) {
+                $("#mapId .default").text('No places available');
+                showInfoAlert('No markers available at the moment.')
+                return false;
+            }
+
+            $(".map-controls").show();
+            $("#mapId .controls").hide();
+            $("#mapId .default").show();
+            
+            $('#mapId').show();
+            detect = this.id;
+            // $('.center-main-search-results').css('margin-top',0);
+            $(this).hide();   
+
+            // init google MAP
+            const dynamicMap = googleDynamicMap();
+            console.log("Search page map exist! ", typeof dynamicMap.getMap() != 'undefined');
+            if (dynamicMap.getMap()) {
+                dynamicMap.resetMarker();
+            } else {
+                dynamicMap.init();
+            }
+
+        });
+
+        $('#mapCloseBtn').click(function(e){
+            $(".map-controls").hide();
+
+            $('#mapId').hide();
+            if ( detect === 'm-show-map') {
+                $('#m-show-map').show();   
+            } else if ( detect === 'showMap' ) {
+                $('#showMap').show();   
+            }
+            // $('.center-main-search-results').css('margin-top', '70px');
+        });
+
+// $(document).ready(function(){
+//     // $('#subtotal').css('width',$( '#cart-upper' ).width());
+    
+//     var fixed_top_Offset = $("#showMap").offset().top;
+//     // var footer_top_offest = $(".footer-section").offset().top;
+//     var width = $("#showMap").width();
+    
+//     // var fixed_bottom_Offset = $(".cart-total").offset().top;
+    
+//     console.log("originalHeight",fixed_top_Offset);
+//     console.log("footer_top_offest",footer_top_offest);
+
+//     $(window).scroll(function() {
+    
+//         var scrollTop     = $(window).scrollTop();
+//         var distance      = (fixed_top_Offset - scrollTop);
+//         console.log("scrollTop",scrollTop);
+        
+//         // console.log("fixed_top_Offset",fixed_top_Offset);
+    
+//         // alert('ss');
+//       if ( $(window).scrollTop() > fixed_top_Offset) {
+//         var parentWidth = $( '#right-side-cart' ).width(); 
+          
+//         $("#cart-upper").addClass("fixed-top-cart");
+//         $("#cart-upper").css("width", parentWidth+5);
+          
+//       } else  {
+//         $("#cart-upper").removeClass("fixed-top-cart");
+//       }
+      
+        
+//     });
+    
+// });
+
+
+
+
+
+
+function googleDynamicMap() {
+
+    // KANGLA TRAFFIC ISLAND
+    const kanglaPosition = {
+        lat: 24.807,
+        lng: 93.938
+    };
+    var markedLocation;
+
+    
+    var map, marker ;
+    var bounds = new google.maps.LatLngBounds();
+    var mapOptions = {
+                center: kanglaPosition,
+                disableDefaultUI: true,
+                zoom: 12,
+                mapTypeId: 'roadmap',
+                mapTypeControl: false,
+                streetViewControl: false,
+                zoomControl: true,
+                fullscreenControl: true,
+                // Preventing map pan and zoom on page scroll
+                gestureHandling: 'cooperative'
+            };
+            
+    function init() {
+        console.log( "INIT Google map: ");
+
+        
+
+
+        // Don't initialise google map if no markers are available
+        if ( clean.length <= 0 ) {
+            
+            return false;
+        }
+
+        // console.log({clean1 , clean, postsGeolocations });
+
+        // coordinates: {
+        //     lat: Number,
+        //     lng: Number
+        // };
+
+
+        // console.log('%cINIT: google map ', 'color: red');
+
+        map = new google.maps.Map(document.getElementById('mapId'), mapOptions );
+
+        console.log({
+            map
+        });
+
+       
+
+        // marker = new google.maps.Marker({
+        //     position: kanglaPosition,
+        //     map: map
+        // });
+        // infowindow = new google.maps.InfoWindow({
+        //     content: "Selected location.",
+        //     position: kanglaPosition
+        // });
+        // var infoWindow = new google.maps.InfoWindow({disableAutoPan: true});
+        var infoWindow = new google.maps.InfoWindow();
+
+        for( i = 0; i < clean.length; i++ ) {
+
+            let position = new google.maps.LatLng(  clean[i].geoLocation.coordinates.lat , clean[i].geoLocation.coordinates.lng  );
+            bounds.extend(position);
+            marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: clean[i].rating ? clean[i].rating : 'Default'
+            });
+            
+            // Add info window to marker    
+            google.maps.event.addListener(marker, 'mouseover', (function(marker, i) {
+                console.log("mouseover on marker");
+                const ele = Object.freeze($(".info-window-item")[i]);
+                return function() {
+                    infoWindow.setContent( ele );
+                    infoWindow.open(map, marker);
+                    infoWindow.setZIndex(9999999);
+                }
+            })(marker, i));
+
+            // google.maps.event.addListener(marker, 'mouseout', (function(marker, i) {
+            //     console.log("mouseout on marker");
+            //     return function() {
+            //         infoWindow.close();
+            //     }
+            // })(marker, i));
+
+            // Center the map to fit all markers on the screen
+            map.fitBounds(bounds);
+        }
+
+         // Set zoom level
+        // var boundsListener = google.maps.event.addListener((map), 'bounds_changed', function(event) {
+        //     this.setZoom(14);
+        //     google.maps.event.removeListener(boundsListener);
+        // });
+
+        // map.addListener('click', function (e) {
+        //     markedLocation = {
+        //         lat: e.latLng.lat(),
+        //         lng: e.latLng.lng()
+        //     };
+        //     setSelectedLocation(e.latLng.lat(), e.latLng.lng())
+        //     // console.log({ markedLocation });
+        //     changeMarkerAndPanTo(e.latLng);
+        // });
+
+        // Create the DIV to hold the control and call the CenterControl()
+        // constructor
+        // passing in this DIV.
+        var centerControlDiv = document.createElement('div');
+        var centerControl = new CenterControl(centerControlDiv, map, chicago);
+
+        centerControlDiv.index = 1;
+        centerControlDiv.style['padding-top'] = '10px';
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
+
+
+    }
+
+    function changeMarkerAndPanTo(latLng) {
+        console.log('%cCHANGING: google map changeMarkerAndPanTo', 'color: red');
+        console.log('%GETTER: google map marker position', 'color: red', {
+            markedLocation
+        });
+
+        marker.setPosition(latLng);
+        map.panTo(latLng);
+
+    }
+
+    function setSelectedLocation(lat, lng) {
+        console.log('%GETTER: google map setting position', 'color: red', {
+            markedLocation
+        });
+        $("#add_post_form input[name='lat']").val(lat);
+        $("#add_post_form input[name='lng']").val(lng);
+    }
+
+    function resetMarker() {
+        console.log('%RESETTING: google map ', 'color: red');
+
+        marker.setPosition(kanglaPosition);
+        map.panTo(kanglaPosition);
+
+    }
+
+    function getMap() {
+        console.log('%GETTER: google map ', 'color: red');
+        console.log({
+            map
+        });
+
+        return map;
+    }
+
+    return {
+        getMap,
+        init,
+        resetMarker,
+        changeMarkerAndPanTo
+    };
+
+}
+
+$(document).on( "click", "#mapCloseBtn", e => {
+    e.preventDefault();
+    console.log('clicked');
+    
+});
+    </script>
+
+    <%- include('../includes/footer.ejs') %>

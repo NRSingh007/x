@@ -1,0 +1,532 @@
+<%- include('../includes/header.ejs',{ 
+    pageTitle: 'Claim Listing',
+    keywords: ['business claim','onwer claim','listing'] , 
+    author: 'Digtal Manipur',
+    description: `Claim your listing in Digital Manipur`
+ }) %>
+<link rel="stylesheet" href="/assets/css/claim.css">
+</head>
+
+<body>
+    <%- include('./../includes/alert'); %>
+    <%- include('./../includes/site/header') %>
+
+    <section>
+        <div class="container">
+            <div class="my-3 path"><a href="/">Home</a><span>&gt;</span><a href="#">Partners Claim</a></div>
+            <div class="col mt-3 cus-panel px-0 rounded bg-white">
+                <div class="bg-img claim-img-lanscape"
+                    style="background-image: url('/assets/img/social-media-busineess.jpg'); min-height: 200px;"></div>
+                <div class="row d-flex flex-column align-items-center my-5">
+                    <div class="col-sm-12 col-xs-12 col-md-7 px-5">
+                        <div class="text-center " style="font-size: 30px; font-weight: light;"><b>Digital
+                                Manipur</b> for businesses</div>
+                        <p class="text-center my-3">Get more out of your business, without losing focus on what is
+                            most important — delighting your customers<br></p>
+                        <p class="text-center text-secondary small" style="letter-spacing: 0px;font-size: 13px;">
+                            From managing your store information directly from your phone to streamlining your
+                            operations, Digital Manipur has got you covered<br></p>
+                    </div>
+                </div>
+            </div>
+
+                <div class="col  bg-white cus-panel rounded  my-5 pt-5 pb-4">
+            <form action="" id="searchPostsForm">
+
+                    <div class="d-lg-flex justify-content-lg-center ">
+                        <div class="col-sm-12 col-lg-3 col-xl-3 d-flex justify-content-center mb-3">
+                            <input autocomplete="off" class=" form-control" type="text" class="py-2 px-3" name="location"
+                                placeholder="Location" style="width: 98%;">
+                                <div class="my-1 px-2 loading" style="background-color: white;position: absolute;right: 20px;height: 80%;"> 
+                                    <i class="far small fa-search text-secondary"></i>
+                                </div>
+                            <ul class="location-results list-group"
+                                style="position: absolute; width: 100%; top: 46px; z-index: 1; left: 15px; "></ul>
+                        </div>
+                        <div class="col-sm-12  col-lg-7 col-xl-7 d-flex justify-content-center mb-3">
+                            <input autocomplete="off" type="text" class="py-2  px-3  form-control" name="name"
+                                placeholder="Establishment name" style="width: 98%;">
+                        </div>
+                        <div class="col-sm-12 col-lg-2 col-xl-2 mb-3">
+                            <button class="form-control btn btn-danger btn-block align-items-center justify-content-center" data-name="search" role="button" 
+                                onclick="searchPosts(event)">Search</button>
+                        </div>
+                    </div>
+                </form>
+                    <div id="search-result" class="search-result px-5 mx-3 py-3" style="display: none;">
+                        <p class="py-1 mb-0 ">You searched for "<span id="searchQueryPreview"></span>" in "<span
+                                id="searchLocationPreview"></span>"</p>
+                        <!-- <p class="py-1 mb-0 searchResultsCount">Displaying <span id="searchLimitPreview"></span> of
+                            <span id="searchTotalPreview"></span> results</p> -->
+                        <ul class="list-group results my-3">
+
+                        </ul>
+                    </div>
+                </div>
+            
+
+
+
+            <div class="row d-lg-flex justify-content-center my-5 py-5 bg-white cus-panel rounded mx-0 px-3">
+                <div class="col-md-8 col-xs-12 col-sm-12 d-flex d-lg-flex flex-column align-items-lg-center">
+                    <h4><strong>Cannot find your Establishment?</strong><br></h4>
+                    <p class="text-secondary">Fill the form below to create a listing on Digital Manipur<br></p>
+                    <a role="button" href="/site/add-listing" class="btn btn-danger" type="button">Add a Listing</a>
+                </div>
+            </div>
+            <div></div>
+        </div>
+    </section>
+
+    <input type="text" name="userId" hidden  id="userId" value="<%= user ? user._id : '' %>">
+    <input type="text" name="email" hidden  id="emailId" value="<%= user && user.email ? user.email : '' %>">
+    <input type="text" name="mobile" hidden  id="mobileId" value="<%= user && user.mobileNumber[0] && user.mobileNumber[0].number ? user.mobileNumber[0].number : '' %>">
+    <input type="text" name="fullName" hidden  id="fullNameId" value="<%= user && user.name && user.name.fullName ? user.name.fullName : user && user.name && user.name.firstName ? user.name.firstName : '' %>">
+
+
+
+
+    <!-- The Claim form Modal -->
+<div class="modal" id="claimFormModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Please fill up the form</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+          <form id="claimForm" action="" >
+            <div class="form-group">
+                <label for="fullName">Full name*</label>
+                <input type="text" required class="form-control" name="fullName" >
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail*</label>
+                <input type="text" required class="form-control"  name="email" >
+            </div>
+            <div class="form-group">
+                <label for="mobile">Mobile*</label>
+                <input type="number" required min="1" maxlength="10"  class="form-control"  name="mobile" >
+            </div>
+            <div class="form-group">
+                <label for="mobile">Proof of establishment*</label>
+                <div class="custom-file">
+                    <input type="file" required name="proof" accept=".jpeg,.jpg,.pdf,.png" class="custom-file-input" id="proofFile">
+                    <label class="custom-file-label" for="proofFile">Choose file</label>
+                  </div>
+            </div>
+           
+              <script>
+                // Add the following code if you want the name of the file appear on select
+                $(".custom-file-input").on("change", function() {
+                  var fileName = $(this).val().split("\\").pop();
+                  $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                });
+                </script>
+            <div class="form-group">
+                <label for="mobile">Message</label>
+                <textarea name="message"  class="form-control"  cols="30" rows="3"></textarea>
+            </div>
+            <div class="form-group mt-2">
+                <button onclick="sendClaim(event)" class="btn btn-sm btn-success" id="submitFormId">
+                    Submit
+                </button>
+            </div>
+
+            <input type="text" hidden name="postId" id="postId">
+
+          </form>
+
+        </div>
+  
+        <!-- Modal footer -->
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div> -->
+  
+      </div>
+    </div>
+  </div>
+
+<style>
+    #claimForm .form-group{
+        margin-bottom: 3px;
+    }
+    #claimForm .form-group label{
+        margin-bottom: 2px;
+        overflow: hidden;
+    }
+</style>
+
+
+    <script>
+
+        $(document).ready(() => {
+
+        });
+
+
+
+        const rootDomain =
+            `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+        // location search
+        let timer;
+        $("#searchPostsForm input[name='location']").on('keyup', (e) => {
+            e.preventDefault();
+
+
+
+            const location = $(e.target).val().trim();
+            if (location.length > 1) {
+
+
+                // show loading
+                const spinner = `
+                <div class="my-1 px-2 loading" style="background-color: white;position: absolute;right: 20px;height: 80%;"> 
+                    <div class="spinner-border text-secondary spinner-border-sm "></div>
+                </div> 
+                `;
+
+                $(e.target).siblings('.loading').remove();
+                $(e.target).after(spinner);
+
+                if ( timer ) {
+                    clearTimeout(timer);
+                }
+                timer = setTimeout(() => {
+                    
+                $.get(`${rootDomain}/search/ajax/location?slocation=${location}`,
+                    (data, status) => {
+                        console.log({
+                            data
+                        });
+
+                        if (data && status == 'success') {
+
+                            $(e.target).siblings('.loading').remove();
+                            $("#searchPostsForm .location-results").show();
+
+                            // show locations
+
+                            $(e.target).siblings('.location-results').empty();
+                            data.forEach(element => {
+                                $(e.target).siblings(".location-results").append(
+                                    `<li class="list-group-item font-weight-bold " style="font-size: 14px;" >${element}</li>`
+                                );
+                            });
+
+
+                        }
+
+                    })
+
+                }, 1500);
+                
+            } else if ( location.length == 0) {
+                // hide loaction result when input is empty 
+                $("#searchPostsForm .location-results").empty();
+            }
+
+        });
+
+        // listen for click on location search result
+        $(document).on("click", "#searchPostsForm .location-results li", (e) => {
+
+            // alert('clicked');
+            $("#searchPostsForm .location-results").hide();
+            $("#searchPostsForm input[name='name']").focus();
+            const val = $(e.target).html().trim();
+            $("#searchPostsForm input[name='location']").val(val);
+
+        });
+
+        // show location results when clicked on input
+        $("#searchPostsForm input[name='location']").click((e) => {
+            $("#searchPostsForm .location-results").show();
+        });
+
+        // hide location result when click outside input
+        $(document).click((e) => {
+            console.log(e.target)
+            if (!$("#searchPostsForm input[name='location']").is(e.target) && $(
+                    "#searchPostsForm input[name='location']").has(e.target).length === 0) {
+                $("#searchPostsForm .location-results").hide();
+            }
+        });
+
+
+        // search posts
+        let prevSkip = 0;
+        // show loading
+        const spinner = `
+                                <div class="loading" style="height: 100%;"> 
+                                    <div class="spinner-border text-white spinner-border-sm"></div>
+                                </div> 
+                        `;
+        const spinnerSm = `<div class="spinner-border text-white spinner-border-sm"></div>`;
+
+        function searchPosts(e, skip = 0, total = null) {
+            e.preventDefault();
+
+            const location = $("#searchPostsForm input[name='location']").val().trim();
+            const name = $("#searchPostsForm input[name='name']").val().trim();
+
+            if (!location) {
+                $("#searchPostsForm input[name='location']").focus();
+                $("#searchPostsForm input[name='location']").css('border', '1px solid red');
+            } else if (!name) {
+                $("#searchPostsForm input[name='name']").focus();
+                $("#searchPostsForm input[name='name']").css('border', '1px solid red');
+                return;
+            } else if (name && location) {
+                $("#searchPostsForm input[name='location']").css('border', '1px solid lightgrey');
+                $("#searchPostsForm input[name='name']").css('border', '1px solid lightgrey');
+
+                
+
+                $(e.target).html(spinner);
+
+                // ajax search
+                $.get(rootDomain + '/search/ajax?stext=' + name + '&total=' + total + '&skip=' + skip + '&slocation=' +
+                        location, (data, status) => {
+
+                            console.log('searching....');
+                            if (status == 'success' && data.posts && data.posts.length > 0) {
+                                console.log('Result : ', data.length, ' items');
+                                console.log('Result : ', data);
+
+                                $("#search-result").show();
+                                $("#searchQueryPreview").text(name);
+                                $("#searchLocationPreview").text(location);
+
+                                if ($(e.target).data('name') == 'search') {
+                                    //reset prevSkip
+                                    prevSkip = 0;
+                                    $("#search-result .results").empty();
+                                }
+
+
+
+                                data.posts.forEach(element => {
+
+                                    element.mobileNumber = element.mobileNumber.filter( e => typeof e.number != 'undefined' );
+                                    element.telephoneNumber = element.telephoneNumber.filter( e => typeof e.number != 'undefined' );
+                                    let contact = [...element.mobileNumber.map(e =>
+                                            `<span class="pl-1">${e.number}</span>`),
+                                        ...element.telephoneNumber.map(e =>
+                                            `<span class="pl-1">${e.number}</span>`)
+                                    ];
+                                    contact = contact.toString();
+
+                                    let address;
+                                    if (element.address.locality && element.address.locality.name) {
+                                        address = element.address.locality.name;
+                                    }
+                                    if (element.address.district && element.address.district.name) {
+                                        if (address) {
+                                            address = address + ', ' + element.address.district.name;
+                                        } else {
+                                            address = element.address.district.name;
+                                        }
+                                    }
+
+                                    $("#search-result .results").append(` 
+
+                                    <li class="list-group-item d-flex">
+                                        <div class="col-sm-12 col-xs-12 col-md-8">
+                                            <div class="p-2">
+                                                <small class="text-secondary item-category">${element.category.id  && element.category.id.name  ? element.category.id.name : ''}</small>
+                                                <h6>${element.name}</h6>
+                                                <div>
+                                                    <i class="far fa-phone-rotary"></i>
+                                                    <label for="">${contact ? contact : "Not available"}</label>
+                                                </div>
+                                                <div class="item-location">
+                                                    ${ address ? address : "Not available" }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex col-xs-12 col-sm-12 col-md-4 justify-content-end align-items-center">
+                                        ${ typeof element.claimed != 'undefined' && element.claimed ?
+                                        `
+                                        <button  disabled data-id="${element._id}" class="btn btn-outline-danger alreadyClaimedBtn">Already Claimed</button>
+                                        `
+                                        :
+                                        `
+                                        <button data-toggle="modal" data-target="#claimFormModal" data-id="${element._id}" class="btn btn-outline-success claimBtn">Claim this listing</button>
+                                        `}
+                                    </div>
+                                        
+                                    </li>
+              
+                                `);
+                                });
+
+                                if (prevSkip < data.total && data.total > 7 && (data.total - (prevSkip + 7)) > 0) {
+
+                                    prevSkip = prevSkip + 7;
+                                    $("#search-result .load-more").remove();
+                                    $("#search-result .results").after(`
+                                        <div class="load-more p-2 ">
+                                            <button onclick="searchPosts(event , ${prevSkip} , ${total})" class="form-control btn btn-block text-center btn-secondary">
+                                                Load more ${data.total - prevSkip}
+                                                </button>
+                                            </div>
+                                    `);
+                                } else {
+                                    $("#search-result .load-more").remove();
+                                }
+                            }
+
+                            if ($(e.target).data('name') == 'search') {
+                                $(e.target).html('Search');
+                            }
+
+
+                        })
+                    .fail(e => {
+                        if ($(e.target).data('name') == 'search') {
+                            $(e.target).html('Search');
+                        }
+                        console.log("error : searching posts");
+                    });
+
+            }
+            return false;
+        }
+
+        // show loading on load more
+        $(document).on('click', '.load-more button', (e) => {
+            const spinner = `
+                        <div class="     loading" style=""> 
+                            <div class="spinner-border text-white spinner-border-sm "></div>
+                        </div> 
+                `;
+            $(e.target).html(spinner);
+            e.preventDefault();
+        })
+    
+    </script>
+
+    <script>
+         function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 2500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-container").show();
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-danger").hide();
+            }, 2500);
+        }
+
+        function showInfoAlert(message) {
+            $(".alert-container").show();
+            $(".alert-info .message").html(message);
+            $(".alert-info").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-info").hide();
+            }, 2500);
+        }
+    </script>
+
+    <script>
+        $(document).on('click','.claimBtn', e => {
+            
+            $("#claimForm input[name='fullName']").val($("#fullNameId").val());
+            $("#claimForm input[name='email']").val($("#emailId").val());
+            $("#claimForm input[name='mobile']").val($("#mobileId").val());
+            $("#claimForm input[name='postId']").val($(e.target).data('id'));
+        });
+
+        $("#claimFormModal").on("show.bs.modal", function (e) {
+            if (!$("#userId").val() || $("#userId").val() == '') {
+                showInfoAlert("Please log In to continue.");
+                return false;
+            }
+        } );
+        
+        function sendClaim(e){
+            e.preventDefault();
+            
+
+            // validate file
+            const fileInput = $("#proofFile")[0];
+            const file = $("#proofFile")[0].files[0];
+            console.log({fileInput, file}, file ? file.size/(1024*1024*5): 'no file');
+            if( !file || (file.size && file.size/(1024*1024*5) > 5)  ) {
+                showInfoAlert("please select a file. And maximum file size limit is 5mb.");
+                return;
+            }
+
+            const userId = $("#userId").val();
+
+            // if(!userId){
+            //     showInfoAlert('Please log in to continue.');
+            //     return;
+            // }
+
+            const formData = new FormData($("#claimForm")[0]);
+            formData.append('post', $("#postId").val());
+
+            // const data = {
+            //     post: $("#postId").val()
+            // };
+            $(e.target).html(spinnerSm+' Submitting');
+            $.ajax({
+                url: `${rootDomain}/site/claim-listing/add`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (res) {
+                    console.log('Claim submitted');
+                    console.log({res});
+                    if(  res &&  res.data ) {
+                        $("#claimForm").trigger("reset");
+                        $("#claimFormModal").modal('hide');
+                        setTimeout(() => {
+                        showSuccessAlert("Your claim has been submitted successfully.");
+                        }, 1000);
+                    } 
+                    $(e.target).html('Submit');
+
+                },
+                error: function (error) {
+                    console.log('Error', error);
+                    $(e.target).html('Submit');
+
+                    
+                        showDangerAlert(error.responseJSON && error.responseJSON.message ?  error.responseJSON.message : "Please try again");
+                }
+            });
+
+            return false;
+            
+        }
+    </script>
+
+    <%- include('../includes/footer.ejs') %>
+
+
+</body>
+
+</html>

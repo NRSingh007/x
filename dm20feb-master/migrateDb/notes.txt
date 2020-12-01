@@ -1,0 +1,16 @@
+Run in order
+
+1. country.js
+2. states.js
+3. district.js
+4. locality.js
+5. category.js
+6. users.js
+7. posts.js
+
+
+
+
+<!-- 
+{"name":{"firstName":"jackichand konjengbam"},"cart":{"items":[]},"images":{"collection":[]},"role":"admin","activated":true,"email":"jackychand.k@gmail.com","password":"$2a$10$hfi8ZUUJ4rWjWs1yXT6pneWltOue3TTMTxSN7XGWGFV0f5p7I3ZBO","createdOn":"2020-01-22T13:36:48.240Z","modifiedOn":"2020-01-22T13:36:48.240Z","emailVerificationToken":null,"mobileNumber":[],"telephoneNumber":[],"__v":0}
+{"name":{"firstName":"Naorem karline Singh"},"cart":{"items":[]},"images":{"collection":[]},"role":"admin","activated":true,"email":"naoremkarline@gmail.com","password":"$2a$10$Qgtvy68qUwYbGCylLypSL.R/Afbs5mWWzWqLOKHl/uZ8b1xig8me6","createdOn":"2020-01-05T16:18:17.897Z","modifiedOn":"2020-01-05T16:18:17.897Z","emailVerificationToken":null,"mobileNumber":[],"telephoneNumber":[],"__v":0} -->

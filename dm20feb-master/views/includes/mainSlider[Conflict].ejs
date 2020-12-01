@@ -1,0 +1,250 @@
+<section>
+    <nav class="navbar navbar-light navbar-expand-md navigation-clean m-hide" style="padding: 0px;">
+        <div class="container">
+            <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1">
+                <span class="sr-only">Toggle navigation</span>
+                <i class="icon ion-android-menu"></i>
+            </button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav ml-auto" style="width: 100%;font-size: 14px;color: #33373D;">
+                    <li class="nav-item mr-auto" role="presentation" style="margin-left: -30px;">
+                        <a class="nav-link " style="cursor: pointer;">
+                            <i class="fas fa-mobile-alt"></i>&nbsp;Get the App</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="#">
+                            <i class="fa fa-building"></i>&nbsp;Find Hotels</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-hamburger"></i>&nbsp;Find Restaurant</a>
+                    </li>
+                    <li class="nav-item" role="presentation" style="margin-right: -30px;">
+                        <a class="nav-link" href="#">
+                            <i class="far fa-hospital"></i>&nbsp;Find Hospital</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="bg-slide" style="background-image: url(&quot;/assets/img/1200px-City_of_Imphaqeql.jpg&quot;);">
+        <div class="overlay-full">
+            <div class="inner-holder container p-3">
+
+                <div class="row justify-content-end auth-links px-sm-4 px-xs-4 px-md-0 px-lg-0 px-xl-0 ">
+                    <%- include('./mobile-profile.ejs',{ user}) %>
+
+                    <% if (user) { %>
+                    <div class="m-hide dropdown dropdown-menu-right ml-auto" style="color: black;">
+
+                        <button class="shadow-none btn btn-light btn-sm dropdown-toggle" style="min-width: 160px;"
+                            data-toggle="dropdown" aria-expanded="false" type="button">
+                            <% if( user.images.profile.common.url ) { %>
+                            <img class="rounded-circle"
+                                src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                style="width: 25px;height: 25px;margin-right: 5px;">
+                            <% } else { %>
+                            <i class="p-1 rounded border-secondary far fa-user font-weight-bold"></i>
+                            <% } %>
+
+                            <span class="px-2">
+                                <%= `${user.name.firstName.trim().split(' ')[0]}` %>
+                            </span>
+                        </button>
+                        <div class="dropdown-menu text-secondary" role="menu"
+                            style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                            <i class="fas fa-caret-up" style="
+                                color: #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 10px;
+                                font-size: 22px;
+                                z-index: 999;
+                                "></i>
+                            <a class="dropdown-item" role="presentation"
+                                href="/users/<%= `${encodeURI(user.name.firstName.replace(/\s/g,'-'))}` %>"
+                                style="color: black;">Profile</a>
+                            <a class="dropdown-item text-dark" role="presentation"
+                                href="/users/<%= `${encodeURI(user.name.firstName.replace(/\s/g,'-'))}` %>/notifications">Notifications</a>
+                            <a class="dropdown-item text-dark" role="presentation"
+                                href="/users/<%= `${encodeURI(user.name.firstName.replace(/\s/g,'-'))}` %>#Bookmarks">Bookmarks</a>
+                            <a class="dropdown-item text-dark" role="presentation"
+                                href="/users/<%= `${encodeURI(user.name.firstName.replace(/\s/g,'-'))}` %>#Reviews">Reviews</a>
+                            <a class="dropdown-item text-dark" role="presentation"
+                                href="/users/<%= `${encodeURI(user.name.firstName.replace(/\s/g,'-'))}` %>/edit">Settings</a>
+                            <hr style="margin: 0;">
+                            <form action="/auth/logout" method="POST">
+                                <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                    role="presentation">Logout</button>
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            </form>
+
+                        </div>
+                    </div>
+
+
+                    <div class="web-hide dropdown dropdown-menu-right px-3 " id="dd-custom" style="color: black; ">
+
+                        <button class="shadow-none btn p-0" onclick="(function(){$('#mobileProfile').toggle();})()"
+                            type="button">
+
+                            <% if( user.images.profile.common.url ) { %>
+                            <div class="rounded-circle " 
+                                id="avatar"
+                                style="
+                                    border: 2px solid #fff;
+                                    width: 35px;
+                                    height: 35px;
+                                    background-image:  url('/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>');
+                                    margin-right: 5px;"
+                                    ></div>
+
+                            <% } else { %>
+                            <i class="p-1 rounded border-secondary far fa-user font-weight-bold"></i>
+                            <% } %>
+
+
+
+                        </button>
+
+
+                    </div>
+
+
+                    <% } else {  %>
+                        <i class="web-hide text-white fas fa-user" onclick="(function(){$('#mobileProfile').toggle();})()"></i>
+                    <a class="m-hide" href="/auth/login">Log in</a>
+                    <a class="m-hide cus-btn-border border-white" href="/auth/signup">Create account</a>
+                    <% }  %>
+
+                </div>
+                <div class="container d-flex flex-column justify-content-around py-3 pb-sm-5 " style="height: 100%;">
+                    <div class="d-flex d-xl-flex justify-content-center row" style="margin-bottom: 5px;"><img
+                            class="rounded img-fluid logo" src="/assets/img/logo.png"></div>
+                    <div class="text-center d-flex d-xl-flex justify-content-center row" style="margin: 0px;">
+                        <h3 class="display-4 text-center pt-4 pb-5 pitch-motto" style="
+                            color: rgb(255,255,255);
+                            margin: 0;
+                            font-size: 30px;
+                            ">
+                            Find the best restaurants, cafés, and bars in Manipur</h3>
+                    </div>
+                    <form autocomplete="off" method="GET" action="/search" name="search-form">
+                        <input type="text" hidden name="p" value="1">
+                        <input type="text" hidden name="li" value="10">
+                        <div class="text-center d-flex justify-content-center align-items-md-center row p-0 px-sm-3"
+                            id="home-combo-c">
+
+                            <div class="location-holder">
+                                <div class="bg-white d-flex flex-row justify-content-around align-items-center cus-panel rounded"
+                                    id="cus-dd-input-holder" style="color: #A6AFB4;"><i class="fa fa-location-arrow"
+                                        style="color: #A6AFB4;"></i>
+                                    <input autocomplete="off" type="text" id="location-input" style="color: #373636;"
+                                        name="slocation" placeholder="Location" value="<%= 
+                                        user && user.lastLocation && user.lastLocation.locality && user.lastLocation.locality.name ? user.lastLocation.locality.name :
+                                        user && user.lastLocation && user.lastLocation.district && user.lastLocation.district.name ? user.lastLocation.district.name  :
+                                        user && user.lastLocation && user.lastLocation.state && user.lastLocation.state.name ? user.lastLocation.state.name : ''
+                                         %>"><i class="fas fa-angle-down" style="color: #A6AFB4;"></i>
+                                </div>
+                                <ul class="cus-dd-list " style="display: none;">
+
+                                    <div class="text-center loading " id="lsr-loading"
+                                        style="display: none; width: 100%; height: 100px;">
+                                        <div class="spinner-border text-danger"></div>
+                                    </div>
+
+                                    <div id="lsrError" style="background: rgb(255,248,235); text-align: center;"></div>
+
+                                    <div class="default_dd_menu location-dd-list ">
+
+
+                                    </div>
+                                    <div class="sr_locations_menu">
+
+                                    </div>
+                                </ul>
+                            </div>
+                            <div class="search-holder">
+                                <div class="bg-white d-flex flex-row justify-content-around align-items-center cus-panel rounded"
+                                    id="cus-dd-input-holder" style="color: #A6AFB4;"><i class="fas fa-search"
+                                        style="color: #A6AFB4;"></i><input type="text" id="search-input"
+                                        style="color: #373636;" name="stext" placeholder="Search for places..."></div>
+                                <div class="cus-dd-list" style="display: none;">
+
+                                    <div class="text-center loading" id="sr-loading"
+                                        style="display: none; width: 100%; height: 300px;">
+                                        <div class="spinner-border text-danger"></div>
+                                    </div>
+
+                                    <div id="searchResultError"
+                                        style="background: rgb(255,248,235); text-align: center;"></div>
+
+                                    <div class="default_dd_menu  p-2">
+                                        <h6 class="text-secondary"
+                                            style="font-weight: light;font-size: 13px; cursor: default; color: #89959B;">
+                                            Trending searches</h6>
+                                        <div class="d-flex bg-white default-dd-item mb-2" href="#">
+                                            <a class="p-1" style="font-size: 14px;"><img class="m-1"
+                                                    style="width: 25px;height: 25px;"
+                                                    src="/assets/img/cafe_restaurant_254155.png"><span
+                                                    style="margin-left: 10px;" class="stext">School</span></a>
+                                        </div>
+                                        <div class="d-flex bg-white default-dd-item mb-2" href="#">
+                                            <a class="p-1" href="<%= domain %>/search/hostel"
+                                                style="font-size: 14px;"><img class="m-1"
+                                                    style="width: 25px;height: 25px;"
+                                                    src="/assets/img/64732248-icono-de-albergue-estilo-glifo-es-símbolo-icónico-plana-de-color-negro-fondo-blanco-%20(Custom).jpg"><span
+                                                    style="margin-left: 10px;" class="stext">Hostel</span></a>
+                                        </div>
+
+                                        <h6 class="text-secondary"
+                                            style="font-weight: light;font-size: 13px; cursor: default; color: #89959B;">
+                                            Suggested searches</h6>
+                                        <div class="d-flex bg-white default-dd-item mb-2" href="#">
+                                            <a class="p-1" href="<%= domain %>/search/ngo"><img class="m-1"
+                                                    style="width: 25px;height: 25px;"
+                                                    src="/assets/img/cafe_restaurant_254155.png"><span
+                                                    style="margin-left: 10px;" class="stext">NGO</span></a>
+                                        </div>
+                                        <div class="d-flex bg-white default-dd-item mb-2" href="#">
+                                            <a class="p-1" href="<%= domain %>/search/store"><img class="m-1"
+                                                    style="width: 25px;height: 25px;"
+                                                    src="/assets/img/cafe_restaurant_254155.png"><span
+                                                    style="margin-left: 10px;" class="stext">store</span></a>
+                                        </div>
+                                    </div>
+                                    <div class="search_result_menu">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-inline-block d-xs-block">
+                                <button id="form-search-btn"
+                                    class="btn btn-danger rounded btn-sm-block btn-xs-block btn-md" role="button"
+                                    style="height: 40px;" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="demo"></div>
+<script>
+    var x = document.getElementById("demo");
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        x.innerHTML = "Latitude: " + position.coords.latitude +
+            "<br>Longitude: " + position.coords.longitude;
+    }
+</script>

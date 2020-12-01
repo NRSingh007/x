@@ -1,0 +1,116 @@
+<style>
+    .site-header{
+        padding: 10px 0 !important;
+    }
+    .site-header .logo{
+        width: 44px !important;
+        height: 44px !important;
+    }
+</style>
+<section class="site-header">
+    <div class="container">
+        <nav class="my-0 py-0 navbar navbar-light navbar-expand-sm navigation-clean px-0"
+            style="background-color: rgba(255,255,255,0);">
+            <div class="container px-0">
+                <a class="navbar-brand d-flex flex-row align-items-end" href="/" style="font-style: italic;font-weight: bold;font-size: 21px;">
+                    <img src="/assets/img/logo.png" class="logo" >
+                    <span id="BrandId">Digital Manipur</span>
+                </a>
+                <button data-toggle="collapse" class="navbar-toggler" data-target="#navcol-1"><span
+                        class="sr-only">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav ml-auto">
+                        <% if ( typeof adPageFlag != 'undefined' && adPageFlag ) { %>
+                            
+                        <% } else { %>
+                            <li class="nav-item" role="presentation">
+                                <a class="nav-link " href="/site/promote">Advertisement</a>
+                            </li>
+                            <% } %>
+                        
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" href="/site/add-listing">Add
+                                Listing</a></li>
+                                <% if (user) { %>
+                                    <!-- hide-in-mobile  -->
+                                    <div class=" px-0  dropdown dropdown-menu-right ml-auto hide-in-mobile"
+                                        style="color: black; ">
+                        
+                                        <button style="
+                                        overflow: hidden;
+                                        max-width: 180px;
+                                        min-width: 160px; color: rgb(63, 60, 60); height: 42px;"
+                                            class="px-2 d-flex align-items-center justify-content-between mx-0 float-right border rounded shadow-none btn btn-sm dropdown-toggle" data-toggle="dropdown"
+                                            aria-expanded="false" type="button">
+                        
+                                            <% if( user.images.profile.common.url ) { %>
+                                            <img class="rounded-circle " id="avatar"
+                                                src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                                style="width: 25px;height: 25px;margin-right: 5px;">
+                                            <% } else { %>
+                                            <i id"profilePreviewUpdateDe"
+                                                class="text-white p-1 rounded border-secondary far fa-user font-weight-bold"></i>
+                                            <% } %>
+                        
+                                            <span class="px-2 d-flex-inline" 
+                                            style="max-width: 150px;
+                                            display: inline-block;
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;"
+                                            >
+                                                <%= `${ user.name && user.name.firstName ? user.name.firstName.trim().split(' ')[0] : ''}` %>
+                                            </span>
+                        
+                                        </button>
+                        
+                                        <div class="dropdown-menu text-secondary" role="menu"
+                                            style="
+                                            padding-top: 4px;
+                                            padding-bottom: 4px;
+                                            margin-right: 0; 
+                                            margin-top: 5px; 
+                                            max-width: 160px;
+                                           
+                                            right:0">
+                                            <i class="fas fa-caret-up" style="
+                                                        color: #fff;
+                                                        position: absolute;
+                                                        top: -13px;
+                                                        right: 10px;
+                                                        font-size: 22px;
+                                                        z-index: 999;
+                                                        "></i><a class="dropdown-item" role="presentation"
+                                                        href="/users/home"
+                                                        style="color: black;">Profile</a>
+                                                    <a class="dropdown-item text-dark" role="presentation"
+                                                        href="/users/notifications">Notifications</a>
+                                                    <a class="dropdown-item text-dark" role="presentation"
+                                                        href="/users/home#Bookmarks">Bookmarks</a>
+                                                    <a class="dropdown-item text-dark" role="presentation"
+                                                        href="/users/home#Reviews">Reviews</a>
+                                                    <a class="dropdown-item text-dark" role="presentation"
+                                                        href="/users/setting">Settings</a><hr style="margin: 0;">
+                                            <form action="/auth/logout" method="POST">
+                                                <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                                    role="presentation">Logout</button>
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            </form>
+                        
+                                        </div>
+                        
+                                    </div>
+                                    <% } else { %>
+                                       
+                                                <li class="ml-3 nav-item d-flex align-items-center" role="presentation">
+                                                    <a class="nav-link btn btn-outline-secondary py-1"
+                                                    style="border: 2px solid grey"
+                                                        href="/auth/login">Log In</a></li>
+                                        <% } %>
+                    </ul>
+                    
+                </div>
+            </div>
+        </nav>
+    </div>
+</section>
+

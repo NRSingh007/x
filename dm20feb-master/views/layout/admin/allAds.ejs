@@ -1,0 +1,947 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="/assets/css/admin.css"> -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/manageWebsite.css">
+    <style>
+        .thumbnail-cover {
+            width: 150px;
+            height: 80px;
+        }
+
+        .thumbnail-logo {
+            width: 80px;
+            height: 80px;
+        }
+    </style>
+    <script>
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-container").show();
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+
+        function showInfoAlert(message) {
+            $(".alert-container").show();
+            $(".alert-info .message").html(message);
+            $(".alert-info").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-info").hide();
+            }, 1500);
+        }
+    </script>
+</head>
+
+<body class="">
+    <section>
+        
+        <% if ( typeof messages.error != "undefined" ) { %>
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Error!</strong> <%= messages.error %>
+            </div>
+        <% } %>
+          
+
+    </section>
+    <%- include('./../../includes/alert'); %>
+
+
+
+    <section class="manage-website">
+
+
+
+        <div class="container-fluid ">
+            <div class="row">
+
+
+                <div class="col-2 left-content p-2">
+                    <div class="list-group">
+                        <%- include('./../../includes/manage-website-pages', {page}) %>
+                    </div>
+                </div>
+
+                <div class="col-10 right-content p-2 bg-white">
+
+                    <section class="nav-controls ">
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" 
+                                >All Ads (<%= typeof ads != 'undefined' ? ads.length : 0 %>)</a>
+                            </li>
+                            
+                        </ul>
+                    </section>
+
+                    <section class="main-body ">
+                        <div class="tab-content">
+
+
+
+                            <div class="tab-content">
+
+
+                                    <style>
+                                        .reviews * {
+                                            font-size: 14px;
+                                        }
+                                        .pricing-list{
+                                            margin-top: 5px;
+                                            margin-bottom: 5px;
+                                        }
+                                        .pricing-list li{
+                                            display: flex;
+                                            padding: 3px 10px;
+                                        }
+                                        .pricing-list li span{
+                                            min-width: 100px;
+                                            font-weight: 500;
+                                        }
+                                    </style>
+
+                                    <div class="my-4 px-5 d-flex flex-row align-items-center justify-content-end small">
+                                        <div  class="mx-2">
+                                            <div class="bg-success rounded text-white small mx-2" style="width: 15px; height: 15px"></div>- Approved / Enabled
+                                        </div>
+                                        <!-- <div>
+                                            <div class="bg-warning rounded text-white small  mx-2" style="width: 15px; height: 15px"></div>- Rejected
+                                        </div> -->
+                                        <div class="mx-2">
+                                            <div class="bg-secondary rounded text-white small  mx-2" style="width: 15px; height: 15px"></div>- Not approved / Disabled
+                                        </div>
+                                    </div>
+
+                                    <!-- tab 1 -->
+                                    <div class="tab-pane container active reviews" id="AdminCollections">
+                                        <div class="tab-body d-flex flex-column">
+                                        
+        
+                                            <% if ( typeof ads != 'undefined' && ads.length > 0 ) { %>
+        
+                                                <% for( let i = 0; i< ads.length; i++ ) { %>
+                                                    <div  class=" border
+                                                    rounded p-3 flex-column d-flex my-3 flex-row justify-content-between"
+                                                    style="
+                                                        <%= ads[i].status ? 'border: 2px solid #28a745 !important;' : 'border: 2px solid #6c757d !important;'  %>
+                                                    "
+                                                    >
+                                                        
+                                                    
+                                                        <div class="row px-0">
+                                                            <div class="col-5 ">
+                                                                <div class="pr-2 d-flex  features-label">
+                                                                    <div 
+                                                                    style="min-width: 70px;"
+                                                                    class="label d-inline-flex font-weight-bold text-muted"
+                                                                    >Ad Type:</div>
+                                                                    <div>
+                                                                    <% if ( typeof ads[i].ad != 'undefined' && ads[i].ad.type && ads[i].ad.type.name ) { %>
+                                                                        <span style="font-size: 16px;" class="text-info font-weight-bold  p-2"><%= ads[i].ad.type.name %></span>
+                                                                        <% } %> 
+                                                                    </div>
+                                                                </div>
+                                                                <div class="pr-2 d-flex  flex-column features-label">
+                                                                    <div 
+                                                                    style="min-width: 70px; color: #c7c7c7 "
+                                                                    class="label d-inline-flex font-weight-bold text-muted"
+                                                                    >Pricing:
+                                                                <hr class="my-2"></div>
+                                                                    <div class="">
+                                                                        <div class="col">
+                                                                            <ul class="list-group pricing-list">
+                                                                                <li class="list-group-item d-flex flex-row">
+                                                                                    <span>Name</span>
+                                                                                    <dd>- <%= ads[i].pricing && ads[i].pricing.name ? ads[i].pricing.name : '' %></dd>
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex flex-row">
+                                                                                    <span>Price</span>
+                                                                                    <dd>- <%= ads[i].pricing && ads[i].pricing.price ? '₹ '+ads[i].pricing.price : '' %></dd>
+
+                                                                                </li>
+                                                                                <li class="list-group-item d-flex flex-row">
+                                                                                    <span>Validity (days)</span>
+                                                                                <dd>- <%= ads[i].pricing && ads[i].pricing.validityInDays ? +ads[i].pricing.validityInDays : '' %></dd>
+
+                                                                                </li>
+                                                                              </ul>
+                                                                           
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <% if ( typeof ads[i].expiresOn != 'undefined'  ) { %>
+                                                                <div class="pr-2 d-flex  features-label">
+                                                                    <div 
+                                                                    style="min-width: 70px;"
+                                                                    class="label d-inline-flex font-weight-bold text-muted"
+                                                                    >Expires On:</div>
+                                                                    <div>
+                                                                    <% if ( typeof ads[i].expiresOn != 'undefined'  ) { %>
+                                                                        <span style="font-size: 16px;" class="text-info font-weight-bold  p-2"><%= ads[i].expiresOn %></span>
+                                                                        <% } %> 
+                                                                    </div>
+                                                                </div>
+                                                                <% } %> 
+                                                            
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <h6 style="">User details : <hr class="my-2"> </h6>
+                                                                <div class="d-flex flex-column">
+                                                                    <div class="col d-flex flex-row">
+                                                                        <div 
+                                                                        style="min-width: 70px; "
+                                                                        class="label font-weight-bold text-muted mr-3"
+                                                                        >Company: </div>
+                                                                        <div>
+                                                                            <%= ads[i].companyName ?  ads[i].companyName: '' %>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col d-flex flex-row">
+                                                                        <div 
+                                                                        style="min-width: 70px; "
+                                                                        class="label font-weight-bold text-muted mr-3"
+                                                                        >Name: </div>
+                                                                        <div>
+                                                                            <%= ads[i].fullName ?  ads[i].fullName: '' %>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col d-flex flex-row">
+                                                                        <div 
+                                                                        style="min-width: 70px; font-size: 13px;"
+                                                                        class="label d-inline-flex font-weight-bold mr-3 text-muted"
+                                                                        >Email:</div>
+                                                                        <div> <%= ads[i].email ?  ads[i].email: '' %>
+            </div>
+                                                                    </div>
+                                                                    <div class="col d-flex flex-row">
+                                                                        <div 
+                                                                        style="min-width: 70px; font-size: 13px;"
+                                                                        class="label d-inline-flex font-weight-bold mr-3 text-muted"
+                                                                        >Mobile:</div>
+                                                                        <div> <%= ads[i].mobile ?  ads[i].mobile: '' %>
+            </div>
+                                                                    </div>
+                                                                    <div class="col d-flex flex-row">
+                                                                        <div 
+                                                                        style="min-width: 70px; font-size: 13px;"
+                                                                        class="label d-inline-flex font-weight-bold mr-3 text-muted"
+                                                                        >Address:</div>
+                                                                        <div> <%= ads[i].streetAddress ?  ads[i].streetAddress: '' %>,
+                                                                            <%= ads[i].district ?  ads[i].district: '' %>,
+                                                                            <%= ads[i].state ?  ads[i].state: '' %>
+
+            </div>
+                                                                    </div>
+                                                                    
+                                                                    <div class="col d-flex flex-row ">
+                                                                        <div 
+                                                                        style="min-width: 70px;"
+                                                                        class="mr-3 pr-2 font-weight-bold text-muted"
+                                                                        >File:</div>
+
+                                                                        <div>
+                                                                            <% if ( ads[i].image ) { %>
+                                                                            <a target="blank" href="/uploads/original/<%= ads[i].image %>">
+                                                                        <i class="fas fa-download mr-2"></i>View Banner image
+                                                                        </a>
+                                                                        <% } else if ( ads[i].video )  { %> 
+                                                                            <a target="blank" href="/uploads/videos/<%= ads[i].video %>">
+                                                                                <i class="fas fa-download mr-2"></i>View Banner video
+                                                                            </a>
+                                                                        <% } else { %> 
+                                                                            NA
+                                                                        <% } %>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <% if ( ads[i].image || ads[i].video ) { %>
+                                                                        <div class="col d-flex flex-row " >
+                                                                         <form enctype="multipart/form-data" method="post" action="/admin/site/allads/update/<%= ads[i].image ? 'image':'' %><%= ads[i].video ? 'video':'' %>">
+                                                                            <div class="col-9">
+                                                                                <div class="custom-file">
+                                                                                    <input type="file" name="file" accept="<%= ads[i].image ? '.jpeg,.jpg,.png':'' %><%= ads[i].video ? '.mp4':'' %>" class="custom-file-input"
+                                                                                        id="customFile">
+                                                                                    <label class="custom-file-label" for="customFile" style="overflow-x: hidden;"
+                                                                                        class="text-truncate custom-file-label"> Choose file to <%= ads[i].image ? 'Edit image':'' %>
+                                                                                        <%= ads[i].video ? 'Edit video':'' %> </label>
+                                                                                </div>
+                                                                    <div class="my-1 text-left small text-info text-italicize"> * Maximum file size for image is 5mb and video is 20mb.</div>
+                                            
+                                                                            </div>
+                                                                            <div class="col">
+                                                                                <input type="text" hidden name="id" value="<%= ads[i]._id  %>" >
+
+                                                                                <button class="btn btn-sm btn-secondary " type="submit" >Upload</button>
+                                                                            </div>
+                                                                        </form>
+                                                                        </div>
+                                                                    <% } %>
+                                                                
+                                                                </div>
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        
+                                                            <div class="mt-2 d-flex flex-row">
+                                                                <form class="my-0" method="post" action="/admin/site/allads/enable">
+                                                                    <input type="text" hidden name="id" value="<%= ads[i]._id  %>" >
+                                                                    
+                                                                    <% if ( ads[i].image || ads[i].video ) { %> 
+                                                                        <!-- onclick="return false;" -->
+                                                                        <button  <%=  ads[i].status ? 'disabled ': ''  %>
+                                                                        
+                                                                        class="btn btn-sm btn-success  my-0  px-3" >
+                                                                        <%=  ads[i].status ? 'Enabled ': 'Enable'  %>
+                                                                        </button>
+                                                                    <% } else { %>
+                                                                        <!-- onclick="if(!confirm('Are you sure? This action will tranfer the post to claim user.')){ return false; }" -->
+
+                                                                        <button 
+                                                                        class="btn btn-sm btn-success  my-0  px-3" >
+                                                                        <%=  ads[i].status ? 'Approved ': 'Approve'  %>
+                                                                        </button>
+                                                                    <% } %> 
+                                                                </form>
+                                                                <form class="my-0" method="post" action="/admin/site/allads/disable">
+                                                                    <input type="text" hidden name="id" value="<%= ads[i]._id  %>" >
+                                                                    <% if (  ads[i].image || ads[i].video ) { %> 
+                                                                        <!-- onclick="return false;" -->
+                                                                        <button  <%=  !ads[i].status ? 'disabled ': ''  %>
+                                                                        
+                                                                        class=" ml-3 btn btn-sm btn-warning  my-0  px-3" >
+                                                                        <%=  !ads[i].status ? 'Disabled ': 'Disable'  %>
+                                                                        </button>
+                                                                    <% } else { %>
+                                                                        <!-- <button 
+                                                                        onclick="if(!confirm('Are you sure? ')){ return false; }"
+                                                                        class="ml-3 btn btn-sm btn-warning  my-0  px-3" >
+                                                                        <%=  !ads[i].status ? 'Rejected ': 'Reject'  %>
+                                                                        </button> -->
+                                                                    <% } %> 
+                                                                </form>
+        
+                                                                <form class="my-0 ml-auto" method="post" action="/admin/site/allads/delete">
+                                                                    <input type="text" hidden name="id" value="<%= ads[i]._id  %>" >
+                                                                    
+                                                                        <button 
+                                                                        onclick="if(!confirm('Are you sure? This ad will be deleted. ')){ return false; }"
+                                                                        class="btn btn-sm btn-danger  my-0  px-3" >
+                                                                        Delete
+                                                                        </button>
+                                                                </form>
+                                                            </div>
+                                                            
+                                                            </div>
+                                                            
+                                                    
+                                                
+                                                <% } %>
+                
+                                            <% } %>
+                                        </div>
+        
+                                    </div>
+                                    <!-- tab 1  ends -->
+                            </div>
+
+                        </div>
+                    </section>
+
+                </div>
+
+            </div>
+            <!-- container ends here -->
+        </div>
+
+    </section>
+
+
+    <!-- modals -->
+
+    <!-- add job modal -->
+
+    <!-- Button to Open the Modal -->
+    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAdPlanModal">
+                Open modal
+            </button> -->
+
+    <!-- The Modal -->
+    <div class="modal" id="addFormModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">New Ad Plan</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="addForm"  method="post">
+                        <div class="row">
+                        <!-- <div class="form-group col-8">
+                            <label for="" class="font-weight-bold">Name</label>
+                            <input type="text" name="name" required class="form-control">
+                        </div> -->
+                            <div class="form-group col-4">
+                                <label for=""  class="font-weight-bold">Ad Type</label>
+                                <select required name="type" class="form-control">
+                                    <option selected disabled hidden>Select</option>
+                                    <% for( let i = 0; i< [0,2].length; i++ ) { %>
+                                    <option value="<%=  %>"><%= %></option>
+                                    <% } %>>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                           
+                            <div class="col">
+                                <label for=""  class="font-weight-bold">Pricing</label> 
+                                <button class="addMorePricing  float-right btn btn-sm btn-outline-secondary">Add more</button>
+                                <div class="d-flex flex-column pricingHolder">
+                                    <div class="row mt-2 pricingTemplate"> 
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <input placeholder="Name eg. 1 Month" type="text" name="pricingName" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                
+                                                <input placeholder="Price" type="number" max="999999999999" min="1" name="pricingPrice" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                               
+                                                <input placeholder="Validity (days)" type="number" max="99999999999" min="1" name="pricingValidityInDays" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                
+                                
+                            </div>
+                            
+                        </div>
+                        <style>
+                            .features-label{
+                                min-width: 250px;
+                            }
+                        </style>
+                        <div class="form-group features">
+                            <label class="font-weight-bold" for="">Features </label> <button  class="addMoreFeature float-right btn btn-sm btn-outline-secondary">Add more</button>
+                            <div class="col mt-2 featuresHolder">
+                                <div class="row featureTemplate">
+                                    <div class="col">
+                                        <div class="form-group">
+                                           
+                                            <input placeholder="Name" type="text" name="featureName" 
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            
+                                            <input placeholder="Description" type="text" name="featureDescription" 
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+    
+                            </div>
+    
+                        </div>
+                        <button class="btn btn-success btn-sm" type="submit" id="submitAddFormBtn">Submit</button>
+
+                    </form>
+
+                </div>
+
+                <!-- Modal footer -->
+                <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- The Modal -->
+    <div class="modal" id="editFormModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Edit Ad Plan</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <form id="editForm" action="#" method="post">
+                        <div class="row">
+                        <!-- <div class="form-group col-8">
+                            <label for="" class="font-weight-bold">Name</label>
+                            <input type="text" name="name" required class="form-control">
+                        </div> -->
+                            <div class="form-group col-4">
+                                <label for=""  class="font-weight-bold">Ad Type</label>
+                                <select required name="type" class="form-control">
+                                    <option selected disabled hidden>Select</option>
+                                   
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                           
+                            <div class="col">
+                                <label for=""  class="font-weight-bold">Pricing</label> 
+                                <button class="addMorePricing  float-right btn btn-sm btn-outline-secondary">Add more</button>
+                                <div class="d-flex flex-column pricingHolder">
+                                    <!-- <div class="row mt-2 pricingTemplate"> 
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <input placeholder="Name" type="text" name="pricingName" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                
+                                                <input placeholder="Price" type="number" 
+                                                max="999999999999" min="1" name="pricingPrice" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                               
+                                                <input placeholder="Validity (days)" type="number" 
+                                                max="99999999999" min="1" name="pricingValidityInDays" 
+                                                    class="form-control">
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                                
+                                
+                                
+                            </div>
+                            
+                        </div>
+                        <style>
+                            .features-label{
+                                min-width: 250px;
+                            }
+                        </style>
+                        <div class="form-group features">
+                            <label class="font-weight-bold" for="">Features </label> <button  class="addMoreFeature float-right btn btn-sm btn-outline-secondary">Add more</button>
+                            <div class="col mt-2 featuresHolder">
+                                <!-- <div class="row featureTemplate">
+                                    <div class="col">
+                                        <div class="form-group">
+                                           
+                                            <input placeholder="Name" type="text" name="featureName" 
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            
+                                            <input placeholder="Description" type="text" name="featureDescription" 
+                                                class="form-control">
+                                        </div>
+                                    </div>
+                                </div> -->
+                                
+    
+                            </div>
+    
+                        </div>
+                        <input type="text" name="adId" hidden>
+                        <button class="btn btn-success btn-sm" id="submitEditFormBtn">Submit</button>
+
+                    </form>
+
+                </div>
+
+                <!-- Modal footer -->
+                <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+
+<script>
+
+     $(".addMorePricing").click( e => {
+        e.preventDefault();
+
+        const template = `
+        <div class="row mt-2 pricingTemplate"> 
+            <div class="col">
+                <div class="form-group">
+                    <input placeholder="Name eg. 1 Month" type="text" name="pricingName" 
+                        class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    
+                    <input placeholder="Price" type="number" max="999999999999" min="1" name="pricingPrice" 
+                        class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    
+                    <input placeholder="Validity (days)" type="number" max="99999999999" min="1" name="pricingValidityInDays" 
+                        class="form-control">
+                </div>
+            </div>
+        </div>
+        `;
+        console.log({template});
+        $(e.target).siblings('.pricingHolder').append(template);
+    });
+
+    $(".addMoreFeature").click( e => {
+        e.preventDefault();
+
+        const template = `
+        <div class="row featureTemplate">
+            <div class="col">
+                <div class="form-group">
+                    
+                    <input placeholder="Name" type="text" name="featureName" 
+                        class="form-control">
+                </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                    
+                    <input placeholder="Description" type="text" name="featureDescription" 
+                        class="form-control">
+                </div>
+            </div>
+        </div>
+        `;
+        console.log({template});
+        $(e.target).siblings('.featuresHolder').append(template);
+    });
+</script>
+
+    <script>
+        const rootDomain =
+            `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+       
+
+        $("#submitAddFormBtn").click( e  =>{
+            e.preventDefault();
+
+            // const name = $("#addForm input[name='name']").val();
+            const type = $("#addForm select[name='type']").val();
+
+            const pricingsObj = $("#addForm .pricingTemplate");
+            let pricings = [];
+            for ( let i = 0; i < pricingsObj.length; i++) {
+                const pricingName = $(pricingsObj[i]).find('input[name="pricingName"]').val();
+                const pricingPrice = $(pricingsObj[i]).find('input[name="pricingPrice"]').val();
+                const pricingValidityInDays = $(pricingsObj[i]).find('input[name="pricingValidityInDays"]').val();
+                console.log({pricingName, pricingPrice, pricingValidityInDays});
+                if ( pricingName && pricingPrice && pricingValidityInDays ){
+                    pricings.push({
+                        name: pricingName,
+                        price: pricingPrice,
+                        validityInDays: pricingValidityInDays
+                    });
+                }
+            }
+
+            const featuresObj = $("#addForm .featureTemplate");
+            let features = [];
+            for ( let i =0; i< featuresObj.length; i++) {
+                const featureName = $(featuresObj[i]).find('input[name="featureName"]').val();
+                const featureDescription = $(featuresObj[i]).find('input[name="featureDescription"]').val();
+                console.log({featureName, featureDescription});
+                if (featureName && featureDescription ){
+                    features.push({
+                        name: featureName,
+                        description: featureDescription
+                    });
+                }
+            }
+
+            console.log({ type, pricings, features });
+
+            if (  type &&  pricings.length>0 && features.length > 0 ) {
+
+            }else {
+                showInfoAlert('Please enter all required fields');
+                return;
+            }
+            $.post(`${rootDomain}/admin/site/business/ledandbanner/add/new`, 
+            {
+                name, type, pricings, features 
+            }, (res, status) => {
+                console.log({res});
+                if ( status == 'success' && res.data ) {
+                    showSuccessAlert( res.message ? res.message : 'Ad submitted.');
+
+                    location.reload();
+                }
+            }).fail( e=> {
+                console.log({e});
+                showDangerAlert( e.message ? e.message : 'Error occurred');
+            });
+            return false;
+
+          });
+
+        $("#editAdPlanModal").on("hide.bs.modal", e=> {
+            $("#editAdPlanForm").prop('action', action);
+            $("#editAdPlanForm").trigger('reset');
+        });
+
+
+        $(".deletePlan").click( e => {
+            const id = $(e.target).data('id');
+            const index = $(e.target).data('index');
+
+            if ( confirm('Are you sure? \nPlan to delete - '+adTypes[index].name+'\nYou cannot revert this process!')) {
+                location.replace('/admin/site/business/product/delete/'+id);
+            }
+        });
+    </script>
+
+    <script>
+        $(".edit-ad-btn").click(async e => {
+            console.log(e);
+            e.preventDefault();
+
+            const id = $(e.target).data('id');
+            if (id){
+                try {
+                    const ad = await getAd(id);
+                    updateEditmodal(ad); 
+                } catch (error) {
+                    console.log({error});
+                    showDangerAlert(error.message);
+
+                }
+               
+            } else {
+                showInfoAlert('Empty ad ID');
+            }
+        });
+
+        function getAd (id) {
+            return new Promise( ( resolve, reject ) => {
+                $.get(`${rootDomain}/admin/site/business/ledandbanner/get/${id}`, 
+                (res, status) => {
+                    console.log({res});
+                    if ( res.data ) {
+                        resolve(res.data);
+                    } else {
+                        reject(res.message);
+                    }
+                })
+                .fail( e=> {
+                    reject(e);
+                });
+            });
+        }
+
+        function updateEditmodal(ad){
+            // $("#editForm input[name='name']").val(ad.name);
+            $("#editForm input[name='adId']").val(ad._id);
+            $("#editForm select[name='type'] option[value='"+ad.type+"']").prop('selected',true);
+
+            $("#editForm .pricingHolder").html('');
+            for ( let i =0; i< ad.pricings.length; i++) {
+
+                const template = 
+                `
+                <div class="row mt-2 pricingTemplate"> 
+                    <div class="col">
+                        <div class="form-group">
+                            <input placeholder="Name" type="text" name="pricingName"  value="${ad.pricings[i].name}"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            
+                            <input placeholder="Price" type="number" 
+                            max="999999999999" min="1" name="pricingPrice" 
+                            value="${ad.pricings[i].price}"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            
+                            <input placeholder="Validity (days)" type="number" 
+                            max="99999999999" min="1" name="pricingValidityInDays" 
+                            value="${ad.pricings[i].validityInDays}"
+
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+                `;
+                $("#editForm .pricingHolder").append(template);
+
+            }
+
+            let features = [];
+            $("#editForm .featuresHolder").html('');
+            for ( let i =0; i< ad.features.length; i++) {
+         
+               const template =
+               `
+               <div class="row featureTemplate">
+                    <div class="col">
+                        <div class="form-group">
+                            
+                            <input placeholder="Name" type="text" name="featureName" 
+                            value="${ad.features[i].name}"
+                                class="form-control">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            
+                            <input placeholder="Description" type="text" name="featureDescription" 
+                            value="${ad.features[i].description}"
+                                class="form-control">
+                        </div>
+                    </div>
+                </div>
+                `;
+
+                $("#editForm .featuresHolder").append(template);
+            }
+
+            $("#editFormModal").modal('show');
+
+
+        }
+
+        $("#editFormModal").on("hide.bs.modal", e => {
+            $("#editForm").trigger('reset');
+        });
+    </script>
+
+
+<script>
+    $("#submitEditFormBtn").click( e  =>{
+            e.preventDefault();
+
+            // const name = $("#editForm input[name='name']").val();
+            const type = $("#editForm select[name='type']").val();
+
+            const pricingsObj = $("#editForm .pricingTemplate");
+            let pricings = [];
+            for ( let i =0; i< pricingsObj.length; i++) {
+                const pricingName = $(pricingsObj[i]).find('input[name="pricingName"]').val();
+                const pricingPrice = $(pricingsObj[i]).find('input[name="pricingPrice"]').val();
+                const pricingValidityInDays = $(pricingsObj[i]).find('input[name="pricingValidityInDays"]').val();
+                console.log({pricingName, pricingPrice, pricingValidityInDays});
+                if (pricingName && pricingPrice && pricingValidityInDays ){
+                    pricings.push({
+                        name: pricingName,
+                        price: pricingPrice,
+                        validityInDays: pricingValidityInDays
+                    });
+                }
+            }
+
+            const featuresObj = $("#editForm .featureTemplate");
+            let features = [];
+            for ( let i =0; i< featuresObj.length; i++) {
+                const featureName = $(featuresObj[i]).find('input[name="featureName"]').val();
+                const featureDescription = $(featuresObj[i]).find('input[name="featureDescription"]').val();
+                console.log({featureName, featureDescription});
+                if (featureName && featureDescription ){
+                    features.push({
+                        name: featureName,
+                        description: featureDescription
+                    });
+                }
+            }
+
+            console.log({  type, pricings, features });
+            const adId = $("#editForm input[name='adId']").val();
+
+
+            if ( adId &&  type &&  pricings.length>0 && features.length > 0 ) {
+
+            }else {
+                showInfoAlert('Please enter all required fields');
+                return;
+            }
+            $.post(`${rootDomain}/admin/site/business/ledandbanner/update/${adId}`, 
+            {
+                 type, pricings, features 
+            }, (res, status) => {
+                console.log({res});
+                if ( status == 'success' && res.data ) {
+                    showSuccessAlert( res.message ? res.message : 'Ad updated.');
+
+                    location.reload();
+                }
+            }).fail( e=> {
+                console.log({e});
+                showDangerAlert( e.message ? e.message : 'Error occurred');
+            });
+            return false;
+
+          });
+
+    
+</script>
+
+</body>
+
+</html>

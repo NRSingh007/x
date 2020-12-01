@@ -1,0 +1,67 @@
+.message-body {
+  font-size: 14px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+  word-break: break-word;
+}
+
+.see-less {
+  -webkit-line-clamp: 4;
+}
+
+.jobs {
+  margin-top: 20px;
+}
+
+.jobs .jobs-header div {
+  margin: 0;
+  padding: 0;
+}
+
+.jobs .job {
+  margin: 10px 0;
+  border-bottom: 1px solid #5a5a5a1f;
+}
+
+.jobs .job div {
+  margin: 0;
+  padding: 0 10px 0 0;
+  text-transform: capitalize;
+}
+
+.jobs .job div div.row {
+  margin: 0;
+  padding: 0;
+}
+
+.jobs .job div div.row div {
+  text-transform: capitalize;
+  margin: 0;
+  padding: 0;
+}
+
+.jobs .job div div.row div .badge {
+  cursor: pointer;
+}
+
+.jobs .job .div:first-child {
+  font-weight: 300 !important;
+}
+
+#applyJob .form-group > div:first-child {
+  -webkit-box-pack: start !important;
+      -ms-flex-pack: start !important;
+          justify-content: flex-start !important;
+}
+
+#applyJob .form-group > div:first-child label {
+  text-align: right;
+}
+
+#applyJob .form-group input, #applyJob .form-group select {
+  background-color: rgba(236, 236, 236, 0.582);
+}
+/*# sourceMappingURL=site.css.map */

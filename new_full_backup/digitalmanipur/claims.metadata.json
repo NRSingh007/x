@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"digitalmanipur.claims"}],"uuid":"b8c87bd132ac4cb58649c3403e1628b1"}

@@ -1,0 +1,323 @@
+
+
+<div class="filters d-block" id="filters">
+    <h5 class="d-flex flex-row align-items-center">
+        <i class="fa fa-angle-left exitFilter web-hide" style="width: 39px;"></i>
+        Filters 
+        <% if ( scat || skeyword || slocality  ) { %>
+        <a class="float-right ml-auto" href="/search?stext=<%= typeof stext != 'undefined' ? stext : '' %>&slocation=<%=  slocation ? slocation : '' %>&p=1&li=15&sk=0" class="a-cus">
+        <div >Clear</div>
+        <!-- <i class="far fa-undo float-right text-primary" style=""></i> -->
+        </a>
+        <% } %>
+    </h5>
+
+    <!-- <div class="form-check">
+        <label class="form-check-label a-cus">
+            <input type="checkbox" class="form-check-input" value=""> Book a Table
+        </label>
+    </div>
+    <hr>
+    <div class="form-check">
+        <label class="form-check-label a-cus">
+            <input type="checkbox" class="form-check-input" value=""> Order Food Online
+        </label>
+    </div>
+    <p class="text-success">
+        Use code
+        <span>DIGITAL MANIPUR</span> to get up to 50% OFF. T&Cs apply.
+    </p> -->
+
+    <div class="allFilters">
+
+
+    <% if ( filterCategories && filterCategories.categories && filterCategories.categories.length > 0 ) { %>
+        <%- include('./modals/filterByCategories.ejs') %>
+
+    <div class="group" id="categoriesFilter">
+
+        <div>
+            <h6>Categories</h6>
+        </div>
+        <div class="d-flex flex-column mt-0 f-lists">
+            <% if ( typeof scat != 'undefined' && filterCategories.categories.map( e => e.name).some( w => w == scat) ) { %>
+                <a href="/search?stext=<%= typeof stext != 'undefined' ? stext : '' %>&slocation=<%=  slocation ? slocation : '' %>&sdistrict=<%= typeof sdistrict != 'undefined' ? sdistrict : '' %>&slocality=<%= typeof slocality != 'undefined'? slocality : '' %>&sstate=<%= typeof sstate != 'undefined'? sstate : '' %>&scat=<%= scat ? scat : '' %>&p=1&li=15&sk=0" 
+                    class="a-cus text-primary "
+                    >
+                    <%= scat  %>
+                    <i class="fal fa-check float-right text-primary"></i>
+                </a>
+            <% } %>
+            <% for ( let i =0; i <= 6 ; i++  ) { %>
+                <% if ( typeof scat == 'undefined' || ( typeof scat != 'undefined' && scat != filterCategories.categories[i].name ) ) { %>
+                <a href="/search?stext=<%= typeof stext != 'undefined' ? stext : '' %>&slocation=<%=  slocation ? slocation : '' %>&sdistrict=<%= typeof sdistrict != 'undefined' ? sdistrict : '' %>&slocality=<%= typeof slocality != 'undefined'? slocality : '' %>&sstate=<%= typeof sstate != 'undefined'? sstate : '' %>&scat=<%= filterCategories.categories[i].name %>&p=1&li=15&sk=0" class="a-cus">
+                    <%= filterCategories.categories[i].name  %>
+                </a>
+                <% } %>
+            <% } %>
+
+        </div>
+        <% if (filterCategories && filterCategories.categories && filterCategories.categories.length > 7 ) { %>
+            <button class="btn btn-sm btn-link px-0 text-danger my-0 py-0"  data-toggle="modal" data-target="#filterByCategories" >See more</button>
+                    <% } %>
+
+    </div>
+    <% } %>
+
+    <% if ( filterCategories && filterCategories.keywords && filterCategories.keywords.length > 0 ) { %>
+        <%- include('./modals/filterByKeywords.ejs') %>
+
+    <div class="group" id="keywordsFilter">
+
+        <div>
+            <h6>Features</h6>
+        </div>
+
+        <div class="d-flex flex-column mt-0 f-lists">
+            <% if ( typeof skeyword != 'undefined' && filterCategories.keywords.map( e => e.name).some( w => w == skeyword) ) { %>
+                <a href="/search?stext=<%= typeof stext != 'undefined' ? stext : '' %>&slocation=<%=  slocation ? slocation : '' %>&sdistrict=<%= typeof sdistrict != 'undefined' ? sdistrict : '' %>&slocality=<%= typeof slocality != 'undefined' ? slocality : '' %>&scat=<%= scat ? scat : '' %>&sstate=<%= typeof sstate != 'undefined'? sstate : '' %>&skeyword=<%= skeyword ? skeyword : '' %>&p=1&li=15&sk=0" 
+                    class="a-cus text-primary "
+                    >
+                    <%= skeyword  %>
+                    <i class="fal fa-check float-right text-primary"></i>
+                </a>
+            <% } %>
+
+            <% for ( let i =0; i <= 6 ; i++  ) { %>
+                <% if ( filterCategories.keywords[i] && filterCategories.keywords[i].name ) { %>
+                    <% if ( typeof skeyword == 'undefined' || ( typeof skeyword != 'undefined' && skeyword != filterCategories.keywords[i].name ) ) { %>
+                        <a href="/search?stext=<%= typeof stext != 'undefined' ? stext : '' %>&slocation=<%=  slocation ? slocation : '' %>&sdistrict=<%= typeof sdistrict != 'undefined' ? sdistrict : '' %>&slocality=<%= typeof slocality != 'undefined' ? slocality : '' %>&scat=<%= scat %>&sstate=<%= typeof sstate != 'undefined'? sstate : '' %>&skeyword=<%= filterCategories.keywords[i].name  %>&p=1&li=15&sk=0" class="a-cus">
+                            <%= filterCategories.keywords[i].name %>
+                        </a>
+                    <% } %>
+                 <% } %>
+            <% } %>
+
+        </div>
+        <% if (filterCategories && filterCategories.keywords && filterCategories.keywords.length > 7 ) { %>
+            <button class="btn btn-sm btn-link px-0 text-danger my-0 py-0"  data-toggle="modal" data-target="#filterByKeywords" >See more</button>
+                    <% } %>
+
+    </div>
+    <% } %>
+
+
+    <!-- <div class="group" id="categoryFilter">
+        <div>
+            <h6>Category</h6>
+        </div>
+        <div class="d-flex flex-column mt-0">
+            <a href="" class="a-cus">
+                Popularity
+                <span class="lightgrey">- high to low</span>
+            </a>
+            <a href="" class="a-cus">
+                Rating
+                <span class="lightgrey">- high to low</span>
+            </a>
+            <a href="" class="a-cus">
+                Cost
+                <span class="lightgrey">- high to low</span>
+            </a>
+            <a href="" class="a-cus">
+                Cost
+                <span class="lightgrey">- low to high</span>
+            </a>
+            <a href="" class="a-cus">
+                Recently Added
+                <span class="lightgrey">- new to old</span>
+            </a>
+        </div>
+    </div> -->
+
+    <% if ( filterLocations  && filterLocations.districts && filterLocations.districts.length > 0 ) { %>
+        <%- include('./modals/filterByDistrict.ejs') %>
+    <div class="group" id="districtsFilter">
+
+        <div>
+            <h6>Districts</h6>
+        </div>
+        <div class="d-flex flex-column my-0 f-lists">
+            <% if (
+                 ( typeof sdistrict != 'undefined' 
+            && filterLocations.districts.map( e => e.name).some( w => w == sdistrict) )
+            ) { %>
+                <a href="/search?stext=<%= typeof stext != 'undefined' ? stext : '' %>&slocation=<%=  slocation ? slocation : '' %>&sdistrict=<%= typeof sdistrict != 'undefined' ? sdistrict : '' %>&sstate=<%= typeof sstate != 'undefined'? sstate : '' %>&scat=<%= scat ? scat : '' %>&skeyword=<%= skeyword ? skeyword : '' %>&p=1&li=15&sk=0" 
+                    class="a-cus text-primary "
+                    >
+                    <%= sdistrict ? sdistrict : slocation ? slocation : ''  %>
+                    <i class="fal fa-check float-right text-primary"></i>
+                </a>
+            <% } %>
+
+            <% for ( let i =0; i <= 6; i++  ) { %>
+
+                <% if ( filterLocations.districts[i]  && filterLocations.districts[i].name  &&  ( ( typeof slocation != 'undefined' &&  filterLocations.districts[i].name != slocation ) || ( typeof sdistrict != 'undefined' && filterLocations.districts[i] && sdistrict != filterLocations.districts[i].name ) ) ) { %>
+                        
+                    <% if ( filterLocations && filterLocations.districts[i] &&  typeof filterLocations.districts[i].name != 'undefined' ) { %>
+                    <a href="/search?stext=<%= typeof stext != 'undefined' ? stext : '' %>&slocation=<%=  slocation ? slocation : '' %>&sdistrict=<%= typeof filterLocations.districts[i].name != 'undefined' ? filterLocations.districts[i].name : '' %>&sstate=<%= typeof sstate != 'undefined'? sstate : '' %>&scat=<%= scat ? scat : '' %>&skeyword=<%= skeyword ? skeyword : '' %>&p=1&li=15&sk=0" class="a-cus">
+                    <%= filterLocations.districts[i].name  %>
+                    </a>
+
+                    <% } %>
+                <% } %>
+            <% } %>
+
+        </div>
+
+        <% if (filterLocations && filterLocations.districts && filterLocations.districts.length > 7 ) { %>
+        <button class="btn btn-sm btn-link px-0 text-danger my-0 py-0"  
+        data-toggle="modal" data-target="#filterByDistrict" >See more</button>
+                <% } %>
+
+    </div>
+    <% } %>
+
+
+    <% if ( filterLocations  && filterLocations.localities&& filterLocations.localities.length > 0 ) { %>
+<%- include('./modals/filterByLocalities.ejs') %>
+
+    <div class="group" id="localitiesFilter">
+
+        <div>
+            <h6>Localities</h6>
+        </div>
+        <div class="d-flex flex-column my-0 f-lists">
+            <% if (
+                ( typeof slocation != 'undefined' 
+            && filterLocations.localities.reduce( (store, cur) => { return [ ...store, ...cur.group.map( i => i.name ) ] } , [] ).some( w => w == slocation) 
+            )
+            || ( typeof slocality != 'undefined' 
+            && filterLocations.localities.reduce( (store, cur) => { return [ ...store, ...cur.group.map( i => i.name ) ] } , [] ).some( w => w == slocality) 
+            )) { %>
+                <a href="/search?stext=<%= typeof stext != 'undefined' ? stext : '' %>&slocation=<%=  slocation ? slocation : '' %>&slocality=<%= typeof slocality != 'undefined' ? slocality : '' %>&sdistrict=<%= typeof sdistrict != 'undefined' ? sdistrict : '' %>&sstate=<%= typeof sstate != 'undefined'? sstate : '' %>&scat=<%= scat ? scat : '' %>&skeyword=<%= skeyword ? skeyword : '' %>&p=1&li=15&sk=0" 
+                    class="a-cus text-primary "
+                    >
+                    <%= slocality ? slocality : slocation ? slocation : ''  %>
+                    <i class="fal fa-check float-right text-primary"></i>
+                </a>
+            <% } %>
+
+            <% let localityCount = 0; for ( let {group} of filterLocations.localities  ) { %>
+
+
+                <%  for ( let locality of group ) { localityCount++; if (localityCount <= 7 ){  %>
+                    <% if ( locality.name && typeof slocality == 'undefined' || ( typeof slocality != 'undefined' && slocality != locality.name ) ) { %>
+
+                        <a href="/search?stext=<%= typeof stext != 'undefined' ? stext : '' %>&slocation=<%=  slocation ? slocation : '' %>&slocality=<%= typeof locality.name != 'undefined' ? locality.name : '' %>&sdistrict=<%= typeof sdistrict != 'undefined' ? sdistrict : '' %>&sstate=<%= typeof sstate != 'undefined'? sstate : '' %>&scat=<%= scat ? scat : '' %>&skeyword=<%= skeyword ? skeyword : '' %>&p=1&li=15&sk=0" class="a-cus">
+
+                        <%= locality.name  %>  
+                        </a>
+                    <% } %>
+
+
+            <% } else { break} } if (localityCount > 7 ){ break; } %>
+            <% } %>
+
+
+        </div>
+        <% if (filterLocations && filterLocations.localities && localityCount > 6 ) { %>
+        <button class="btn btn-sm btn-link px-0 text-danger my-0 py-0" data-toggle="modal" data-target="#filterByLocality">See more</button>
+            <% } %>
+    </div>
+
+    <% } %>
+
+</div>
+
+    <!-- <div class="group">
+        <h6>Category</h6>
+        <div class="d-flex flex-column mt-0 filters-categories">
+            <a href="" class="a-cus">
+                Delivery
+                <span class="lightgrey float-right ">510</span>
+            </a>
+            <a href="" class="a-cus">
+                Dine-out
+                <span class="lightgrey float-right ">110</span>
+            </a>
+            <a href="" class="a-cus">
+                Drinks & Nightlife
+                <span class="lightgrey float-right ">50</span>
+            </a>
+            <a href="" class="a-cus">
+                Cafes
+                <span class="lightgrey float-right ">84</span>
+            </a>
+
+        </div>
+    </div>
+
+    <div class="group">
+
+        <h6>Locations</h6>
+        <div class="d-flex flex-column mt-0 filters-categories">
+            <a href="" class="a-cus">
+                Gurgaon (Gurugram)
+                <span class="lightgrey float-right ">141</span>
+            </a>
+            <a href="" class="a-cus">
+                South Delhi
+                <span class="lightgrey float-right ">135</span>
+            </a>
+            <a href="" class="a-cus">
+                West Delhi
+                <span class="lightgrey float-right ">50</span>
+            </a>
+            <a href="" class="a-cus">
+                North Delhi
+                <span class="lightgrey float-right ">84</span>
+            </a>
+            <a href="" class="a-cus">
+                Noida
+                <span class="lightgrey float-right ">20</span>
+            </a>
+            <a href="" class="a-cus">
+                Central Delhi
+                <span class="lightgrey float-right ">24</span>
+            </a>
+            <a href="" class="a-cus">
+                See all locations
+            </a>
+
+        </div>
+    </div>
+
+
+    <div class="group">
+        <h6>Restaurant Offers</h6>
+
+        <div class="form-check">
+            <label class="form-check-label a-cus">
+                <input type="checkbox" class="form-check-input" value=""> Promotions
+            </label>
+        </div>
+    </div>
+
+    <div class="group">
+
+        <h6>More filters</h6>
+        <div class="d-flex flex-column mt-0 filters-categories"></div>
+        <div class="form-check mt-1">
+            <label class="form-check-label a-cus">
+                <input type="checkbox" class="form-check-input" value=""> Sneakpeek
+            </label>
+        </div>
+        <div class="form-check mt-1">
+            <label class="form-check-label a-cus">
+                <input type="checkbox" class="form-check-input" value=""> Wifi
+            </label>
+        </div>
+        <div class="form-check mt-1">
+            <label class="form-check-label a-cus">
+                <input type="checkbox" class="form-check-input" value=""> Sunday Brunch
+            </label>
+        </div>
+    </div> -->
+</div>
+
+<script>
+    $(document).on('click',".exitFilter", e => {
+        $('.filter').addClass('filter-box');
+    });
+</script>

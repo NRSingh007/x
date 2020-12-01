@@ -1,0 +1,327 @@
+<%- include('../includes/header.ejs',{ 
+    keywords: ['business claim','onwer claim','listing'] , 
+    author: 'Digtal Manipur',
+    description: `Claim your listing in Digital Manipur`
+ }) %>
+<link rel="stylesheet" href="/assets/css/claim.css">
+</head>
+
+<body>
+    
+    <%- include('./../includes/alert'); %>
+
+    <%- include('./../includes/site/header') %>
+        <div class="container">
+
+            <section>
+                <div class="my-3 path"><a href="/">Home</a><span>&gt;</span><a href="#" class="cur-link" >Mobile App</a></div>
+            </section>
+            <style>
+                a.cur-link:hover{
+                    text-decoration: none;
+                    cursor: initial;
+                }
+            </style>
+
+            <section>
+                <div class="container p-3 p-sm-0">
+                    <div class="row">
+                        <div class="col">
+                            <div class="d-flex justify-content-center bg-white rounded border places-list row mx-1 py-5  px-0 px-sm-0"
+                                style="padding-top: 45px;">
+                                <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 d-flex flex-column align-items-center"><img
+                                        class="app-img" src="/assets/img/app.png"></div>
+                                <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5 text-center d-flex flex-column app-links-desc">
+                                    <h3 class="text-left"><strong>Get the Digital Manipur App</strong></h3>
+                                    <p class="text-left text-secondary">Find point of interest &nbsp;and bookmark your favorite
+                                        places on the go<br></p>
+                                    <p class="text-left" style="font-size: 14px;">We'll send you a link, open it on your phone
+                                        to download the app<br></p>
+                                    <div class="input-group app-links-input-group">
+                                        <div class="input-group-prepend"></div><input class="form-control" type="text"
+                                            id="mobile-code" style="width: 37px;" placeholder="+91"><input class="form-control"
+                                            type="text" id="mobile-no" placeholder="Enter phone number">
+                                        <div class="input-group-append" placeholder="Enter your email id"><button
+                                                class="btn btn-success" type="button">Text App Link!</button></div>
+                                    </div>
+                                    <div class="d-lg-flex align-items-center seperator">
+                                        <div class="line-1"></div><span
+                                            style="margin-right: 10px;margin-left: 10px;font-size: 16px;font-weight: bold;">OR</span>
+                                        <div class="line-1"></div>
+                                    </div>
+                                    <div class="input-group app-links-input-group">
+                                        <div class="input-group-prepend d-none"><span class="input-group-text">Addon</span>
+                                        </div><input class="form-control" type="text" placeholder="Enter your email id">
+                                        <div class="input-group-append"><button class="btn btn-success" type="button">Email App
+                                                Link!</button></div>
+                                    </div>
+                                    <div class="d-flex justify-content-start app-links my-3"><a href="#"><img
+                                                src="/assets/img/googleplay@2x.png"></a><a href="#"><img
+                                                src="/assets/img/applestore@2x.png"></a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+            
+        </div>
+    
+
+
+    <script>
+
+        $(document).ready(() => {
+
+        });
+
+
+
+        const rootDomain =
+            `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+        // location search
+        let timer;
+        $("#searchPostsForm input[name='location']").on('keyup', (e) => {
+            e.preventDefault();
+
+
+
+            const location = $(e.target).val().trim();
+            if (location.length > 1) {
+
+
+                // show loading
+                const spinner = `
+                <div class="my-1 px-2 loading" style="background-color: white;position: absolute;right: 20px;height: 80%;"> 
+                    <div class="spinner-border text-secondary spinner-border-sm "></div>
+                </div> 
+                `;
+
+                $(e.target).siblings('.loading').remove();
+                $(e.target).after(spinner);
+
+                if ( timer ) {
+                    clearTimeout(timer);
+                }
+                timer = setTimeout(() => {
+                    
+                $.get(`${rootDomain}/search/ajax/location?slocation=${location}`,
+                    (data, status) => {
+                        console.log({
+                            data
+                        });
+
+                        if (data && status == 'success') {
+
+                            $(e.target).siblings('.loading').remove();
+                            $("#searchPostsForm .location-results").show();
+
+                            // show locations
+
+                            $(e.target).siblings('.location-results').empty();
+                            data.forEach(element => {
+                                $(e.target).siblings(".location-results").append(
+                                    `<li class="list-group-item font-weight-bold " style="font-size: 14px;" >${element}</li>`
+                                );
+                            });
+
+
+                        }
+
+                    })
+
+                }, 1500);
+                
+            } else if ( location.length == 0) {
+                // hide loaction result when input is empty 
+                $("#searchPostsForm .location-results").empty();
+            }
+
+        });
+
+        // listen for click on location search result
+        $(document).on("click", "#searchPostsForm .location-results li", (e) => {
+
+            // alert('clicked');
+            $("#searchPostsForm .location-results").hide();
+            $("#searchPostsForm input[name='name']").focus();
+            const val = $(e.target).html().trim();
+            $("#searchPostsForm input[name='location']").val(val);
+
+        });
+
+        // show location results when clicked on input
+        $("#searchPostsForm input[name='location']").click((e) => {
+            $("#searchPostsForm .location-results").show();
+        });
+
+        // hide location result when click outside input
+        $(document).click((e) => {
+            console.log(e.target)
+            if (!$("#searchPostsForm input[name='location']").is(e.target) && $(
+                    "#searchPostsForm input[name='location']").has(e.target).length === 0) {
+                $("#searchPostsForm .location-results").hide();
+            }
+        });
+
+
+        // search posts
+        let prevSkip = 0;
+
+        function searchPosts(e, skip = 0, total = null) {
+            e.preventDefault();
+
+            const location = $("#searchPostsForm input[name='location']").val().trim();
+            const name = $("#searchPostsForm input[name='name']").val().trim();
+
+            if (!location) {
+                $("#searchPostsForm input[name='location']").focus();
+                $("#searchPostsForm input[name='location']").css('border', '1px solid red');
+            } else if (!name) {
+                $("#searchPostsForm input[name='name']").focus();
+                $("#searchPostsForm input[name='name']").css('border', '1px solid red');
+                return;
+            } else if (name && location) {
+                $("#searchPostsForm input[name='location']").css('border', '1px solid lightgrey');
+                $("#searchPostsForm input[name='name']").css('border', '1px solid lightgrey');
+
+                // show loading
+                const spinner = `
+                        <div class="loading" style="height: 100%;"> 
+                            <div class="spinner-border text-white spinner-border-sm "></div>
+                        </div> 
+                `;
+
+                $(e.target).html(spinner);
+
+                // ajax search
+                $.get(rootDomain + '/search/ajax?stext=' + name + '&total=' + total + '&skip=' + skip + '&slocation=' +
+                        location, (data, status) => {
+
+                            console.log('searching....');
+                            if (status == 'success' && data.posts && data.posts.length > 0) {
+                                console.log('Result : ', data.length, ' items');
+                                console.log('Result : ', data);
+
+                                $("#searchPostsForm .search-result").show();
+                                $("#searchQueryPreview").text(name);
+                                $("#searchLocationPreview").text(location);
+
+                                if ($(e.target).data('name') == 'search') {
+                                    //reset prevSkip
+                                    prevSkip = 0;
+                                    $("#searchPostsForm .search-result .results").empty();
+                                }
+
+
+
+                                data.posts.forEach(element => {
+
+                                    let contact = [...element.mobileNumber.map(e =>
+                                            `<span class="pl-1">${e.number}</span>`),
+                                        ...element.telephoneNumber.map(e =>
+                                            `<span class="pl-1">${e.number}</span>`)
+                                    ];
+                                    contact = contact.toString();
+
+                                    let address;
+                                    if (element.address.locality && element.address.locality.name) {
+                                        address = element.address.locality.name;
+                                    }
+                                    if (element.address.district && element.address.district.name) {
+                                        if (address) {
+                                            address = address + ', ' + element.address.district.name;
+                                        } else {
+                                            address = element.address.district.name;
+                                        }
+                                    }
+
+                                    $("#searchPostsForm .search-result .results").append(` 
+
+                                    <li class="list-group-item d-flex">
+                                        <div class="col-sm-12 col-xs-12 col-md-8">
+                                            <div class="p-2">
+                                                <small class="text-secondary item-category">${element.category.id  && element.category.id.name  ? element.category.id.name : ''}</small>
+                                                <h6>${element.name}</h6>
+                                                <div>
+                                                    <i class="far fa-phone-rotary"></i>
+                                                    <label for="">${contact ? contact : "Not available"}</label>
+                                                </div>
+                                                <div class="item-location">
+                                                    ${ address ? address : "Not available" }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex col-xs-12 col-sm-12 col-md-4 justify-content-end align-items-center">
+                                        ${ element.verified ?
+                                        `
+                                        <button class="btn btn-outline-danger claim">Already Claimed</button>
+                                        `
+                                        :
+                                        `
+                                        <button class="btn btn-outline-success claimed">Claim this listing</button>
+                                        `}
+                                    </div>
+                                        
+                                    </li>
+              
+                                `);
+                                });
+
+                                if (prevSkip < data.total && data.total > 7 && (data.total - (prevSkip + 7)) > 0) {
+
+                                    prevSkip = prevSkip + 7;
+                                    $("#searchPostsForm .search-result .load-more").remove();
+                                    $("#searchPostsForm .search-result .results").after(`
+                                        <div class="load-more p-2 ">
+                                            <button onclick="searchPosts(event , ${prevSkip} , ${total})" class="form-control btn btn-block text-center btn-secondary">
+                                                Load more ${data.total - prevSkip}
+                                                </button>
+                                            </div>
+                                    `);
+                                } else {
+                                    $("#searchPostsForm .search-result .load-more").remove();
+                                }
+                            }
+
+                            if ($(e.target).data('name') == 'search') {
+                                $(e.target).html('Search');
+                            }
+
+
+                        })
+                    .fail(e => {
+                        if ($(e.target).data('name') == 'search') {
+                            $(e.target).html('Search');
+                        }
+                        console.log("error : searching posts");
+                    });
+
+            }
+            return false;
+        }
+
+        // show loading on load more
+        $(document).on('click', '.load-more button', (e) => {
+            const spinner = `
+                        <div class="     loading" style=""> 
+                            <div class="spinner-border text-white spinner-border-sm "></div>
+                        </div> 
+                `;
+            $(e.target).html(spinner);
+            e.preventDefault();
+        })
+    
+    </script>
+
+
+    <%- include('../includes/footer.ejs') %>
+
+
+</body>
+
+</html>

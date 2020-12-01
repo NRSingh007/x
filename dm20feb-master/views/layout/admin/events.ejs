@@ -1,0 +1,468 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="/assets/css/admin.css"> -->
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/assets/css/manageWebsite.css">
+
+</head>
+
+<body class="">
+
+
+    <%- include('./../../includes/modals/createEvent.ejs') %>
+
+    <%- include('./../../includes/modals/editEvent.ejs') %>
+
+
+    <div class="d-flex flex-row justify-content-center alert-container"
+        style=" position: fixed; top: 30px; width: 100%; height: auto;z-index: 999999;">
+        <div class="col-8 " style="">
+            <div class="alert alert-success alert-dismissible" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong class="mr-3">Success!</strong> <span class="message"></span>
+            </div>
+
+            <div class="alert alert-danger alert-dismissible" style="display: none;;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong class="mr-3">Error!</strong> <span class="message"></span>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").show();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+    </script>
+    <section>
+
+    </section>
+    <section class="manage-website">
+
+        
+
+        <div class="container-fluid ">
+            <div class="row">
+
+
+                <div class="col-2 left-content p-2">
+                    <div class="list-group">
+                        <%- include('./../../includes/manage-website-pages', {page}) %>
+                         </div>
+                </div>
+                <div class="col-10 right-content p-2">
+
+                    <section class="nav-controls ">
+                        <ul class="nav nav-tabs">
+                            <!-- <li class="nav-item">
+                              <a class="nav-link " data-toggle="tab" href="#home">Home</a>
+                            </li> -->
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#AdminCollections">Admin
+                                    Events</a>
+                            </li>
+                            <li class="nav-item">
+                                <a onclick="getUsersEvents(event)" 
+                                class="nav-link" 
+                                data-toggle="tab" 
+                                href="#UsersEvents">Users Events</a>
+                            </li>
+                        </ul>
+                    </section>
+                    <section class="main-body ">
+                        <div class="tab-content">
+                            <div class="tab-pane container active" id="AdminCollections">
+                                <div class="tab-body d-flex flex-column">
+
+                                    <div class="mb-3">
+                                        <strong class="text-muted" style="font-size: 18px;">Available
+                                            Events</strong>
+                                        <button type="button" class="float-right btn btn-outline-success "
+                                            id="createCollectionBtn">Create Event</button>
+
+
+                                           
+
+
+                                    </div>
+                                    <div>
+                                        <ul class="list-group" id="collections-list">
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- <div class="tab-pane container fade" id="home">..menu1.</div> -->
+                            <div class="tab-pane container fade" id="UsersEvents">
+                                <div class="tab-body d-flex flex-column">
+
+                                    <div class="mb-3">
+                                        <strong class="text-muted" style="font-size: 18px;">Available
+                                            Events</strong>
+                                    </div>
+                                    <div>
+                                        <ul class="list-group collections-list">
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="tab-pane container fade" id="StaticCollections">
+                               
+                                
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+            <!-- container ends here -->
+        </div>
+
+    </section>
+
+
+    
+    <script>
+        const rootDomain =
+            `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+        $(document).ready(() => {
+
+
+
+            fetchEvents();
+        });
+
+        function fetchEvents() {
+            // fetch admin collections
+            $("#collections-list").html(`<div class="spinner-border text-primary"></div>`);
+
+            $.get(`${rootDomain}/admin/site/events/all`, (data, status) => {
+                console.log('Collections', {
+                    data
+                })
+                if (status == 'success' && data.length > 0) {
+                    $("#collections-list").empty();
+                    data.forEach(item => {
+                        if (item && item.name) {
+                            $("#collections-list").append(`
+                            <li class="list-group-item d-flex flex-row" > 
+                                <div class="col-8">
+                                    <div>${item.name}</div>
+                                    <div class="text-muted font-weight-normal">${new Date(item.timings.date.from).toString().slice(0,16)}</div>
+
+                                    <div/>
+                                </div>
+                                
+                                <div class="col-2 d-flex justify-content-center align-items-center">
+                                    ${item.status ? `<span class="text-success">Active</span>`: `<span class="text-danger">Inactive</span>`}
+                                </div>
+                                <div class="col-2 d-flex  justify-content-center align-items-center">
+                                <button onclick="editEvent(event)" data-id="${item._id}" class="btn btn-light">Edit</button>
+                                </div>
+                            </li>
+                        `);
+                        }
+                    });
+                } else {
+            $("#collections-list .spinner-border").remove();
+            $("#collections-list ").html('No collections added yet!');
+
+                }
+            }).fail(e => {
+            $("#collections-list .spinner-border").remove();
+
+                console.log({
+                    e
+                });
+            });
+        }
+
+        // edit collections
+        function editEvent(e) {
+            console.log({
+                e
+            })
+            console.log("Editing collection : ", $(e.target).data('id'));
+            let id = $(e.target).data('id');
+            if (id) {
+                fetchEvent(id);
+            }
+        }
+
+        // fetch single collection
+        function fetchEvent(id) {
+            $("#editCollectionModal").modal('show');
+            $("#editCollectionModal .modal-body .spinner-border").show();
+
+            $("#editCollectionModal .modal-body .main-content").hide();
+
+            // fetch admin collections
+            $.get(`${rootDomain}/admin/site/events/event/${id}`, (data, status) => {
+                
+                if (status == 'success' && data) {
+
+                    CollectionToEdit = data;
+                    console.log({CollectionToEdit});
+                    $("#editCollectionModal .modal-body .main-content").show();
+                    $("#editCollectionModal .modal-body .spinner-border").hide();
+
+                    // assign values
+                    $("#editEventForm #documentId").val(id);
+                    $("#editEventForm input[name='status']").prop('checked', data.status);
+                    $("#editEventForm input[name='status']").trigger('change');
+                    
+                    // $("#editEventForm input[name='isAdmin']").prop('checked', data.isAdmin);
+
+                    $("#editEventForm input[name='name']").val(data.name);
+                    $("#editEventForm input[name='description']").val(data.description);
+                    $("#editEventForm input[name='website']").val(data.website);
+
+                    // address state, district, locality
+                    $("#editEventForm input[name='street_address']").val(data.address.street_address);
+                    updateAddress(data.address);
+
+                    $("#editEventForm input[name='mobile']").val(data.mobile);
+                    $("#editEventForm input[name='email']").val(data.email);
+
+                    let from_date = new Date(data.timings.date.from);
+                    let fromyear = from_date.getFullYear();
+                    let frommonth = from_date.getMonth();
+                    frommonth = (frommonth+1) >= 10 ? frommonth+1 : String('0'+(frommonth+1));
+
+                    let fromDate = from_date.getDate();
+                    fromDate = fromDate >= 10 ? fromDate :   String('0'+ fromDate);
+                    let from = `${fromyear}-${frommonth}-${fromDate}`;
+
+                    $("#editEventForm input[name='from_date']").val(from);
+
+                    let to_date = new Date(data.timings.date.to);
+                    let toyear = to_date.getFullYear();
+                    let tomonth = to_date.getMonth();
+                    tomonth = (tomonth+1) >= 10 ? tomonth+1 : String('0'+(tomonth+1));
+                    let toDate = to_date.getDate();
+                    toDate = toDate >= 10 ? toDate :   String('0'+ toDate);
+                    let to = `${toyear}-${tomonth}-${toDate}`;
+
+                    // alert(from+'-'+to);
+                    $("#editEventForm input[name='to_date']").val(to);
+
+                    
+                    $("#editEventForm select[name='from_time'] option[value='"+data.timings.time.from+"']").prop('selected', true);
+                    $("#editEventForm select[name='to_time'] option[value='"+data.timings.time.to+"']").prop('selected', true);
+
+
+                    $("#editEventForm input[name='coverImageURL']").val(data.coverImage);
+                    $('#editEventForm .first .cover-image').css('background-image',
+                        `url('/uploads/images/web_thumbnail/${data.coverImage}')`);
+                    $('#editEventForm .first .cover-image').show();
+
+                    
+                    console.log('Edit update Done!');
+                }
+            }).fail(e => {
+                console.log({
+                    e
+                });
+            });
+        }
+
+
+        function getUsersEvents(e){
+            // e.preventDefault();
+
+            // fetch admin collections
+            $("#UsersEvents .collections-list").html(`<div class="spinner-border text-primary"></div>`);
+
+            $.get(`${rootDomain}/admin/site/events/users`, (data, status) => {
+                console.log('Collections', {
+                    data
+                })
+                if (status == 'success' && data.length > 0) {
+                    $("#UsersEvents .collections-list").empty();
+                    data.forEach(item => {
+                        if (item && item.name) {
+                            $("#UsersEvents .collections-list").append(`
+                            <li class="list-group-item d-flex flex-row" > 
+                                <div class="col-8">
+                                    <div>${item.name}</div>
+                                    <div class="text-muted font-weight-normal">${new Date(item.timings.date.from).toString().slice(0,16)}</div>
+                                </div>
+                                
+                                <div class="col-2 d-flex justify-content-center align-items-center">
+                                    ${item.status ? `<span class="text-success">Active</span>`: `<span class="text-danger">Inactive</span>`}
+                                </div>
+                                <div class="col-2 d-flex  justify-content-center align-items-center">
+                                <button onclick="editEvent(event)" data-id="${item._id}" class="btn btn-light">Edit</button>
+                                </div>
+                            </li>
+                        `);
+                        }
+                    });
+                } else {
+            $("#UsersEvents .collections-list .spinner-border").remove();
+            $("#UsersEvents .collections-list ").html('No collections added yet!');
+
+                }
+            }).fail(e => {
+            $("#UsersEvents .collections-list .spinner-border").remove();
+
+                console.log({
+                    e
+                });
+            });
+        }
+
+        function updateAddress(address) {
+
+        
+        $.get(`${rootDomain}/search/states/get`, (data, status) => {
+            if (status == 'success' && data.length > 0) {
+                console.log({
+                    data
+                });
+                $("#editEventForm select[name='state'] option:not(:first-child)").remove();
+
+                data.forEach(state => {
+                    if ( String(state._id) == String(address.state._id) ) {
+                        $("#editEventForm select[name='state']").append(
+                        `<option selected data-id="${state._id}" value="${state._id}" data-name="${state.name}">${state.name}</option>`
+                    );
+                    } else {
+                    $("#editEventForm select[name='state']").append(
+                        `<option data-id="${state._id}" value="${state._id}" data-name="${state.name}">${state.name}</option>`
+                    );
+                    }
+                });
+                
+                updateDistricts(address);
+
+            } else {
+                showDangerAlert('Error occured');
+            }
+        }).fail(e => {
+            console.log({
+                e
+            });
+            showDangerAlert('Failed to fetch states');
+        });
+
+    }
+
+
+
+    function updateDistricts(address) {
+        const stateId = $("#editEventForm select[name='state'] option:selected").data('id');
+        console.log({stateId});
+        if (!stateId) {
+            return;
+        } else {
+            $.post(`${rootDomain}/search/districts/get`, {stateId}, (data, status) => {
+                if (status == 'success' && data.length > 0) {
+                    console.log({
+                        data
+                    })
+                    $("#editEventForm select[name='district'] option:not(:first-child)").remove();
+                    data.forEach(state => {
+                    if ( String(state._id) == String(address.district._id) ) {
+
+                        $("#editEventForm select[name='district']").append(
+                            `<option selected data-id="${state._id}" value="${state._id}" data-name="${state.name}">${state.name}</option>`
+                        );
+                    } else {
+                        $("#editEventForm select[name='district']").append(
+                            `<option data-id="${state._id}" value="${state._id}" data-name="${state.name}">${state.name}</option>`
+                        );
+                    }
+                    });
+
+                    updateLocalities(address);
+                } else {
+                    showDangerAlert('Error occured');
+                }
+            }).fail(e => {
+                console.log({
+                    e
+                });
+                showDangerAlert('Failed to fetch states');
+            });
+        }
+    }
+
+    function updateLocalities(address) {
+
+        console.log('updateLocalities!');
+
+        const districtId = $("#editEventForm select[name='district'] option:selected").data('id');
+        console.log({districtId});
+        if (!districtId) {
+            return;
+        } else {
+            $.post(`${rootDomain}/search/localities/get`, {districtId}, (data, status) => {
+                if (status == 'success' && data.length > 0) {
+                    console.log({
+                        data
+                    })
+                    $("#editEventForm select[name='locality'] option:not(:first-child)").remove();
+                    data.forEach(state => {
+                        if ( String(state._id) == String(address.locality._id) ) {
+
+                            $("#editEventForm select[name='locality']").append(
+                                `<option selected data-id="${state._id}" value="${state._id}" data-name="${state.name}">${state.name}</option>`
+                            );
+                        } else {
+                            $("#editEventForm select[name='locality']").append(
+                                `<option data-id="${state._id}" value="${state._id}" data-name="${state.name}">${state.name}</option>`
+                            );
+                        }
+                    });
+                console.log('Loop Done!');
+
+                } else {
+                    showDangerAlert('Error occured');
+                }
+                console.log('Done!');
+
+            }).fail(e => {
+                console.log({
+                    e
+                });
+                showDangerAlert('Failed to fetch states');
+            });
+        }
+    }
+
+    </script>
+</body>
+
+</html>

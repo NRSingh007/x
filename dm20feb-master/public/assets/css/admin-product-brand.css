@@ -1,0 +1,17 @@
+.main_content {
+  background-color: white;
+  border: 1px solid #d5d8dc;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+img #imageSlide {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.imageSlideWrapper {
+  background-color: #242424;
+  padding-top: 10px;
+  border-radius: 10px;
+}

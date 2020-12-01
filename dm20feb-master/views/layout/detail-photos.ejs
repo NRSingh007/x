@@ -1,0 +1,787 @@
+<%- include('../includes/header.ejs',{ 
+    keywords: [...post.keywords.map(e => e.name), 
+        post.address.state.name, 
+        post.address.district.name ,
+        post.address.locality.name,
+        post.address.subLocality,
+        post.address.areaAndStreetAddress,
+        post.address.building,
+        post.address.landmark
+        ] , 
+    author: post.ownerDetails.name,
+    description: post.description.short ? post.description.short : post.name
+ }) %>
+
+</head>
+
+<body>
+    <%- include('../includes/navBar.ejs', {slocation: slocation } ) %>
+
+
+    <!-- The Modal -->
+    <div class="modal fade" id="callModal" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-zoom modal-dialog-centered">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header ">
+                    <h4 class="modal-title text-dark">Contact information</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body py-3 px-5">
+                    <% if ( post.mobileNumber && post.mobileNumber.length > 0 )  { %>
+                    <div>
+                        <i class="far fa-mobile-android " style="font-size: 1.3rem;"></i>
+                        <label for="" class="font-weight-bold">Mobile </label>
+                    </div>
+                    <ul class="list-group">
+                        <%  for ( let no of post.mobileNumber ) { if ( no && no.number ) { %>
+                        <li class="list-group-item py-1">
+                            <a href="tel:<%= no.number %>">
+                                <%= no.number %>
+                            </a>
+                        </li>
+                        <% } } %>
+                    </ul>
+                    <% } %>
+                    <% if ( post.telephoneNumber && post.telephoneNumber.length > 0 )  { %>
+                    <div class="mt-3">
+                        <i class="far fa-phone-rotary " style="font-size: 1.3rem;"></i>
+                        <label for="" class="font-weight-bold">Telephone </label>
+                    </div>
+                    <ul class="list-group">
+                        <%  for ( let no of post.telephoneNumber ) { if ( no && no.number ) { %>
+                        <li class="list-group-item py-1">
+                            <a href="tel:<%= no.number %>">
+                                <%= no.number %>
+                            </a>
+                        </li>
+                        <% } } %>
+                    </ul>
+                    <% } %>
+                    <% if ( post.telephoneNumber && post.telephoneNumber.length <= 0 && post.mobileNumber && post.mobileNumber.length <= 0 )  { %>
+                        <p class="p-4">
+                            Sorry, no contact number available at this moment.
+                        </p>
+                        <% } %>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <input type="text" name="userId" id="userId" value="<%= user && user._id ? user._id : '' %>" hidden>
+    <input type="text" name="postId" id="postId" value="<%= post && post._id ? post._id : '' %>" hidden>
+    <input type="text" name="userReviewsCount" id="userReviewsCount"
+        value="<%= user && user.reviews ? user.reviews.length: '' %>" hidden>
+
+
+    <!-- Pop Check -->
+    <% const colors = ["#CD1C26", "#FF7800", "#CDD614", "#5BA829" , "#305D02"]; const userRating = user ? user.ratings.find( i => String(i.post) == String(post._id) ) : null; %>
+    <!-- <%= user ? JSON.stringify(user.ratings) : false %> -->
+    <div class="popover-markup" style="display: none;">
+        <div id="ratingcontainer" class="rating-container d-inline-flex flex-row align-items-center py-3">
+            <span class="font-weight-bold">Rate</span>
+            <div class="rating-boxes d-flex flex-row mx-2 ">
+                <!-- <div class="rating-box  one-star" data-weight="1" style="<%= userRating && userRating.weight >= 1 ? `background-color: ${colors[userRating.weight-1]} !important` : '' %>"  ></div>
+                <div class="rating-box two-star" data-weight="2"  style="<%= userRating && userRating.weight >= 2 ? `background-color: ${colors[userRating.weight-1]} !important` : '' %>" ></div>
+                <div class="rating-box three-star" data-weight="3" style="<%= userRating && userRating.weight >= 3 ? `background-color: ${colors[userRating.weight-1]} !important` : '' %>" ></div>
+                <div class="rating-box four-star" data-weight="4" style="<%= userRating && userRating.weight >= 4 ? `background-color: ${colors[userRating.weight-1]} !important` : '' %>" ></div>
+                <div class="rating-box five-star" data-weight="5" style="<%= userRating && userRating.weight >= 5 ? `background-color: ${colors[userRating.weight-1]} !important` : '' %>" ></div>
+            -->
+                <div class="rating-box  one-star" data-weight="1"></div>
+                <div class="rating-box two-star" data-weight="2"></div>
+                <div class="rating-box three-star" data-weight="3"></div>
+                <div class="rating-box four-star" data-weight="4"></div>
+                <div class="rating-box five-star" data-weight="5"></div>
+
+            </div>
+            <span class="rating-weight">
+
+            </span>
+            <span class="rating-weight-next">
+                <% if( userRating && userRating.weight) { %>
+                <%= userRating.weight %>
+                <i class="ml-2 fas fa-star"></i>
+                <% } %>
+            </span>
+            <button id="removeRating" class="clear btn btn-link p-0 mx-2 <%= userRating ? '': 'd-none' %>">
+                clear
+            </button>
+
+        </div>
+    </div>
+
+    <div class="popover-markup-view-rating" style="display: none;">
+        <div class="container view-rating p-2" id="view-rating">
+            <div style="background-color: #f0f1f6;" class="p-2 mb-2">
+                <h6>100% genuine reviews from real users</h6>
+            </div>
+            <div class="row pb-3">
+                <div class="col-3 pr-0">
+
+                    <% let  levelClass; %>
+                    <% if ( post.rating >= 0 && post.rating <= 0.5 ) { levelClass = 'level-0'; } %>
+                    <% if ( post.rating >= 0.6 && post.rating <= 1.0 ) { levelClass = 'level-1'; } %>
+                    <% if ( post.rating >= 1.1 && post.rating <= 1.5 ) { levelClass = 'level-2'; } %>
+                    <% if ( post.rating >= 1.6 && post.rating <= 2.0 ) { levelClass = 'level-3'; } %>
+                    <% if ( post.rating >= 2.1 && post.rating <= 2.5 ) { levelClass = 'level-4'; } %>
+                    <% if ( post.rating >= 2.6 && post.rating <= 3.0 ) { levelClass = 'level-5'; } %>
+                    <% if ( post.rating >= 3.1 && post.rating <= 3.5 ) { levelClass = 'level-6'; } %>
+                    <% if ( post.rating >= 3.6 && post.rating <= 4.0 ) { levelClass = 'level-7'; } %>
+                    <% if ( post.rating >= 4.1 && post.rating <= 4.5 ) { levelClass = 'level-8'; } %>
+                    <% if ( post.rating >= 4.6 && post.rating <= 5.0 ) { levelClass = 'level-9'; } %>
+
+                    <span class="badge px-2 py-1  text-white  <%= levelClass %>"
+                        style="font-size: 33px;"><%= post && post.rating ? post.rating : '2.5' %>
+                        <span class=" small font-weight-bold" style="opacity: .8;">/5</span>
+                    </span>
+                    <% if ( post.calcTotalVotes != 0 ) { %>
+                    <div class="grey-text  mt-1 mr-3">
+                        <%= post && post.calcTotalVotes ? post.calcTotalVotes : '0' %> votes</div>
+                    <% } %>
+                </div>
+                <div class="col-9 d-flex flex-column align-items-center p-0 ">
+
+                    <%  const ratingsTemp = Object.values(JSON.parse(JSON.stringify(post.ratings))); const votes = ratingsTemp.map(i => i.votes); const totalVotes = votes.reduce( ( total, i ) =>  total + i ); for ( let item of ratingsTemp ) { %>
+                    <div style="width: 90%; font-size: 13px;"
+                        class="  d-flex flex-row  align-items-center justify-content-around">
+                        <div class="col-3 "> <%= item.weight %> star</div>
+
+                        <div class="rounded col-6 mx-1 d-flex flex-start p-0"
+                            style="background-color: rgb(223, 219, 219); width: 30%; height: 11px;">
+                            <div class="rounded"
+                                style="background-color: <%= colors[item.weight-1] %>; width: <%= (item.votes/totalVotes)*100 %>%; height: 11px;">
+                            </div>
+                        </div>
+                        <div class="col-3 ">
+                            <%= Math.round((item.votes/totalVotes)*100) ? Math.round((item.votes/totalVotes)*100)+'%' : 0+'%' %>
+                        </div>
+
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <section class="main-content detail-page">
+        <div class="container modi-container">
+            <!-- <div class="mt-2 mb-4 path"><a href="#">Manipur</a><span>&gt;</span><a
+                    href="#">Imphal-West</a><span>&gt;</span><a href="#">Buyer's Choice Multi Market</a></div> -->
+            <div class="mt-2 mb-4 path">
+                <a href="<%= `/search?slocation=${post.address.state.name}&p=1&li=7&sk=0&via=searchpage` %>">
+                    <%= post.address.state.name %>
+                </a>
+                <span>&gt;</span>
+                <a
+                    href="<%= `/search?slocation=${post.address.district.name}&p=1&li=7&sk=0&via=searchpage` %>"><%= post.address.district.name %></a>
+                <span>&gt;</span>
+                <a class="disabled" href="#"><%= post.name %></a>
+
+            </div>
+            <div class="row mx-0">
+                <div 
+                style="overflow: hidden;"
+                class="col-xs-12 col-sm-12 col-md-12 col-lg-8  col-xl-8 pr-0 pr-sm-1 px-0">
+                    <div class="row">
+                        <div class="col main-left-side">
+
+                            <div class="border rounded" style="background-color: #fff;">
+                                
+                                    <div class="p-3">
+                                        <div class="row">
+                                            <% if ( post.images && post.images.logo && post.images.logo.url ) { %>
+                                            <div class="col-2 m-hide">
+                                                <img class="rounded " style="width: 100px; height: 100px;" src="/uploads/images/web_thumbnail/<%= post.images.logo.url %>">
+                                            </div>
+                                            <% } %>
+                                            <div class="col">
+                                                <a class="post-link" href="/detail?name=<%= post.name %>&tk=<%= post._id %>">
+                                                    <h2 class=""><%= post.name %></h2>
+                                                </a>
+                                                <p class="grey-text">
+                                                    <%= `
+                                                    ${ post.address.areaAndStreetAddress && post.address.areaAndStreetAddress != null ? post.address.areaAndStreetAddress:''} 
+                                                    ${ post.address.building && post.address.building != null ? ( ( post.address.areaAndStreetAddress && post.address.areaAndStreetAddress != null ) ? ', ' + post.address.building : post.address.building): ''} 
+                                                    ${ (post.address.landmark && post.address.landmark  != null)? ( ( post.address.building && post.address.building != null ) || ( post.address.areaAndStreetAddress && post.address.areaAndStreetAddress != null ) ? ', '+ post.address.landmark: post.address.landmark) : ''}
+                                                    ${ !post.address.landmark && !post.address.building &&  !post.address.areaAndStreetAddress  &&  post.address.locality && post.address.locality.name != null ? post.address.locality.name : ''}
+                                                    ` %>
+                                                </p>
+                                            </div>
+                                            <div class="col-2 pl-0 text-right">
+                                                <span id="viewRating"
+                                                    class=" badge  px-2 py-1 text-white  <%= levelClass %>"
+                                                    style="font-size: 28px;"><%= post && post.rating ? post.rating : '2.5' %>
+                                                    <span class=" small font-weight-bold" style="opacity: .8;">/5</span>
+                                                </span>
+                                                <% if (post.calcTotalVotes != 0 ) { %>
+                                                <div class="grey-text small mt-1 mr-3">
+                                                    <%= post && post.calcTotalVotes ? post.calcTotalVotes : '0' %> votes
+                                                </div>
+                                                <% } %>
+                                            </div>
+                                        </div>
+                                        <!-- <p><%= `${post.address.subLocality && post.address.subLocality != undefined ? post.address.subLocality : ''} ${post.address.locality ? post.address.locality.name : ''}` %></p> -->
+                                        
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="btn-group btns-grp-place-detail d-flex flex-wrap"
+                                                    role="group">
+                                                    <button data-toggle="modal" data-target="#callModal"
+                                                        class="btn btn-light btn-sm border rounded  shadow-none"
+                                                        type="button"><i
+                                                            class="fas fa-phone"></i><label>Call</label></button>
+                                                    <button class="
+                                                btn btn-light btn-sm border rounded shadow-none
+                                                <%= user &&  user.bookmarks.some( i => String(i.id) == String(post._id)) ? 'action-done':'asda' %>
+                                                " id="BookmarkPost" data-id="<%= post._id %>" type="button">
+                                                        <i class="fas fa-bookmark "></i>
+                                                        <label>
+                                                            <%= user && user.bookmarks.some( i => String(i.id) == String(post._id)) ? 'Bookmarked':'Bookmark' %>
+                                                        </label>
+                                                    </button>
+                                                    <button class="
+                                                btn btn-light btn-sm border rounded shadow-none
+                                                <%= user &&  user.beenThere.some( i => String(i.id) == String(post._id)) ? 'action-done':'asda' %>
+                                                " id="BeenHerePost" data-id="<%= post._id %>" type="button">
+                                                        <i class="fas fa-shoe-prints fa-rotate-270 "></i>
+                                                        <label>Been Here
+                                                        </label>
+                                                    </button>
+
+
+                                                    <button class="btn btn-light btn-sm border rounded shadow-none"
+                                                        type="button" id="ratingPopover"
+                                                        style="<%= userRating ? `border-color: ${colors[userRating['weight']-1]} !important` : '' %>"
+                                                        data-mode="<%= userRating ? 'remove' : 'add' %>"
+                                                        data-weight="<%= userRating && userRating.weight ?  userRating.weight : '' %>">
+                                                        <% if (!userRating) { %>
+                                                        <i class="fas fa-star "></i><label>Rate</label>
+                                                        <% }  else { %>
+                                                        <i class="fas fa-star "></i> Rated <span
+                                                            style="font-weight: bold;color: <%= colors[userRating['weight']-1] + " !important;" %> ">
+                                                            <%= userRating['weight'] %></span> ` %>
+                                                        <% } %>
+                                                    </button>
+                                                    
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        
+
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+                                <% if (post && post.images && post.images.collection && post.images.collection.length > 0  ){ %>
+                                <div class="d-flex flex-column p-3" style="background-color: #ffffff;">
+                                    <h4 class="mb-3">Photos</h4>
+                                    
+                                    <ul class="nav nav-tabs" id="navs-tab">
+                                        <li class="nav-item">
+                                          <a class="nav-link active" data-toggle="tab" href="#Owner">Owner</a>
+                                        </li>
+                                        <% if ( reviewImages && reviewImages.length > 0 ) { %> 
+                                        <li class="nav-item">
+                                          <a class="nav-link" data-toggle="tab" href="#Users">Users</a>
+                                        </li>
+                                        <% } %> 
+
+                                      </ul>
+
+
+                                      <div class="tab-content">
+                                        <div class="tab-pane container my-3 active px-0" id="Owner">
+                                            <div class="row">
+                                                <div id="photos-box" class="photos-box col d-flex flex-row justify-content-start flex-wrap">
+                                                    <!-- <%= post.images.collection.length %> -->
+                                                    <% for ( let i = 0; i < post.images.collection.length ; i++ ){ %>
+        
+                                                        <!-- show only 30  -->
+                                                        <% if (i == 30 ) { break; } %>
+                                                    
+                                                        
+                                                        <div data-imageindex="<%= i %>"
+                                                            class="post-image lozad  border rounded d-flex flex-column justify-content-end align-items-center bg-img menu-square-img"
+                                                            data-background-image="/uploads/images/web_thumbnail/<%=  post.images.collection && post.images.collection[i] && post.images.collection[i].url ? post.images.collection[i].url : '' %>"
+                                                            data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  post.images.collection && post.images.collection[i] && post.images.collection[i].url ? post.images.collection[i].url : ''  %>') 1x , 
+                                                            url('/uploads/images/web_thumbnail/<%=  post.images.collection && post.images.collection[i] && post.images.collection[i].url ? post.images.collection[i].url : ''  %>') 2x">
+                                                        </div>
+        
+                                                    <% } %>
+        
+                                                   
+                                                </div>
+                                                
+                                            </div>
+                                            <% if ( post.images.collection.length - 30 > 0 ) { %>
+                                                <div class="my-1">
+                                                    <button id="loadMorePhotos" class="btn-block  btn  bg-light ">
+                                                        Load more
+                                                        (<%= post.images.collection.length-30 %>)
+                                                    </button>
+                                                </div>
+                                            <% } %>
+                                        </div>
+
+
+                                        <div class="tab-pane container fade my-3 px-0" id="Users">
+
+
+                                            <div class="row">
+                                                <div id="reviews-photos-box" class="photos-box col d-flex flex-row justify-content-start flex-wrap">
+                                                    <!-- <%= post.images.collection.length %> -->
+                                                    <% for ( let i = 0; i < reviewImages.length ; i++ ){ %>
+        
+                                                        <!-- show only 30  -->
+                                                        <% if (i == 30 ) { break; } %>
+                                                    
+                                                        
+                                                        <div data-imageindex="<%= i %>"
+                                                            class="photos-review-image lozad  border rounded d-flex flex-column justify-content-end align-items-center bg-img menu-square-img"
+                                                            data-background-image="/uploads/images/web_thumbnail/<%=  reviewImages[i] && reviewImages[i].url ? reviewImages[i].url : '' %>"
+                                                            data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  reviewImages[i] && reviewImages[i].url ? reviewImages[i].url : '' %>') 1x , 
+                                                            url('/uploads/images/web_thumbnail/<%=  reviewImages[i] && reviewImages[i].url ? reviewImages[i].url : '' %>') 2x">
+                                                        </div>
+        
+                                                    <% } %>
+        
+                                                   
+                                                </div>
+                                                
+                                            </div>
+                                            <% if ( reviewImages.length - 30 > 0 ) { %>
+                                                <div class="my-1">
+                                                    <button id="loadMoreReviewPhotos" class="btn-block  btn  bg-light ">
+                                                        Load more
+                                                        (<%= reviewImages.length - 30 %>)
+                                                    </button>
+                                                </div>
+                                            <% } %>
+
+
+                                        </div>
+                                      </div>
+                                    
+                                </div>
+                                <% } %>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4 col-xl-4  right-side-col-place-detail ">
+                        <h6 class="sponsor-header small" style="color: rgb(150,136,61);">SPONSORED &amp; POPULAR</h6>
+                        <div class="row px-0">
+                            <div class="col flex-wrap px-0 justify-content-start d-flex sponsors-holder">
+                                <% let i = 0; for ( let item of relatedPosts ) {  if ( i == 6 ) { break;  }  %>
+                                <% if ( item.name == post.name ) { continue; } else { i++; } %>
+
+                                <div class="col-6 two-col-item-holder">
+                                    <a href="/detail?<%= `name=${item.name}&tk=${item._id}&via=searchpage` %>">
+
+                                        <div class="two-col-item">
+                                            <div class="two-col-item-img  bg-img rounded lozad"
+                                                <% if ( (item.images && item.images.logo && item.images.logo.url) || ( item.images.collection && item.images.collection[0] && item.images.collection[0].url ) ) {  %>
+                                                data-background-image="/uploads/images/web/<%=  item.images.coverImage && item.images.coverImage.url ? item.images.coverImage.url :  item.images.collection && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>"
+                                                data-background-image-set="url('/uploads/images/mobile/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 1x , 
+                                            url('/uploads/images/web_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 2x"
+                                                <% } else { %> data-background-image="/assets/img/logo-dim.png" <% } %>>
+
+                                                <% let levelClass; %>
+                                                <% if ( item.rating >= 0 && item.rating <= 0.5 ) { levelClass = 'level-0'; } %>
+                                                <% if ( item.rating >= 0.6 && item.rating <= 1.0 ) { levelClass = 'level-1'; } %>
+                                                <% if ( item.rating >= 1.1 && item.rating <= 1.5 ) { levelClass = 'level-2'; } %>
+                                                <% if ( item.rating >= 1.6 && item.rating <= 2.0 ) { levelClass = 'level-3'; } %>
+                                                <% if ( item.rating >= 2.1 && item.rating <= 2.5 ) { levelClass = 'level-4'; } %>
+                                                <% if ( item.rating >= 2.6 && item.rating <= 3.0 ) { levelClass = 'level-5'; } %>
+                                                <% if ( item.rating >= 3.1 && item.rating <= 3.5 ) { levelClass = 'level-6'; } %>
+                                                <% if ( item.rating >= 3.6 && item.rating <= 4.0 ) { levelClass = 'level-7'; } %>
+                                                <% if ( item.rating >= 4.1 && item.rating <= 4.5 ) { levelClass = 'level-8'; } %>
+                                                <% if ( item.rating >= 4.6 && item.rating <= 5.0 ) { levelClass = 'level-9'; } %>
+                                                <span class="
+                                        <%= levelClass %>
+                                        badge badge-success py-1 cus-badge"
+                                                    style="font-weight: bold;font-size: 13px;"><%= item.rating %></span>
+                                            </div>
+                                            <div class="bg-white two-col-item-desc">
+                                                <label class="res-name"><%= item.name %></label>
+                                                <% if(item.address.locality && item.address.locality.name != null) { %>
+                                                <span
+                                                    class="grey-text res-address"><%= item.address.locality.name %></span>
+                                                <% } %>
+                                                <!-- <span
+                                                    class="grey-text  res-desc two-lines"><%= item.description ? item.description.short : '' %>
+                                                </span> -->
+                                            </div>
+
+                                        </div>
+                                    </a>
+                                </div>
+                                <% } %>
+
+
+
+                            </div>
+
+                        </div>
+                        <div class="bg-white rounded cus-panel p-3 right-side-row-list">
+                            <h5 class="sidebar-header">Similar Places</h5>
+
+                            <% let ii = 0; for ( let item of RelatedSubcategoryPost.similarRecent ) {  if ( ii == 6 ) { break;  }  %>
+                            <% if ( item.name == post.name ) { continue; } else { ii++; } %>
+                            <div class=" py-2 sidebar-row-item">
+                                <a href="/detail?<%= `name=${item.name}&tk=${item._id}&via=searchpage` %>">
+                                    <div class="row mx-0 px-0">
+                                        <div
+                                            class="col-2 d-flex d-xl-flex justify-content-start align-items-center align-items-xl-center px-0">
+                                            <div class="  bg-img rounded lozad"
+                                                <% if ( (item.images && item.images.logo && item.images.logo.url) || ( item.images.collection && item.images.collection[0] && item.images.collection[0].url ) ) {  %>
+                                                data-background-image="/uploads/images/web/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>"
+                                                data-background-image-set="url('/uploads/images/mobile/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 1x , 
+                                            url('/uploads/images/web_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 2x"
+                                                <% } else { %> data-background-image="/assets/img/logo-dim.png" <% } %>>
+                                            </div>
+                                        </div>
+                                        <div class="col-8 px-0 sidebar-row-item-desc-holder" style="width: auto;">
+
+                                            <label class="sidebar-row-item-label nowrap"><%= item.name %></label>
+                                            <p style="height: 14px;" class="sidebar-row-item-desc grey-text two-lines">
+                                                <%= `
+                                    ${ item.address.areaAndStreetAddress && item.address.areaAndStreetAddress != null ? item.address.areaAndStreetAddress:''} 
+                                    ${ item.address.building && item.address.building != null ? ( ( item.address.areaAndStreetAddress && item.address.areaAndStreetAddress != null ) ? ', ' + item.address.building : item.address.building): ''} 
+                                    ${ (item.address.landmark && item.address.landmark  != null)? ( ( item.address.building && item.address.building != null ) || ( item.address.areaAndStreetAddress && item.address.areaAndStreetAddress != null ) ? ', '+ item.address.landmark: item.address.landmark) : ''}
+                                    ${ !item.address.landmark && !item.address.building &&  !item.address.areaAndStreetAddress  &&  item.address.locality && item.address.locality.name != null ? item.address.locality.name : ''}
+                                    ` %>
+                                            </p>
+                                        </div>
+                                        <div
+                                            class="col-2 d-flex d-xl-flex justify-content-start align-items-center align-items-xl-center">
+                                            <% let levelClass; %>
+                                            <% if ( item.rating >= 0 && item.rating <= 0.5 ) { levelClass = 'level-0'; } %>
+                                            <% if ( item.rating >= 0.6 && item.rating <= 1.0 ) { levelClass = 'level-1'; } %>
+                                            <% if ( item.rating >= 1.1 && item.rating <= 1.5 ) { levelClass = 'level-2'; } %>
+                                            <% if ( item.rating >= 1.6 && item.rating <= 2.0 ) { levelClass = 'level-3'; } %>
+                                            <% if ( item.rating >= 2.1 && item.rating <= 2.5 ) { levelClass = 'level-4'; } %>
+                                            <% if ( item.rating >= 2.6 && item.rating <= 3.0 ) { levelClass = 'level-5'; } %>
+                                            <% if ( item.rating >= 3.1 && item.rating <= 3.5 ) { levelClass = 'level-6'; } %>
+                                            <% if ( item.rating >= 3.6 && item.rating <= 4.0 ) { levelClass = 'level-7'; } %>
+                                            <% if ( item.rating >= 4.1 && item.rating <= 4.5 ) { levelClass = 'level-8'; } %>
+                                            <% if ( item.rating >= 4.6 && item.rating <= 5.0 ) { levelClass = 'level-9'; } %>
+                                            <span class="badge badge-success 
+                                        <%= levelClass %>
+                                        " style="font-size: 16px;"><%= item.rating %></span></div>
+                                    </div>
+
+                                </a>
+                            </div>
+                            <% } %>
+                        </div>
+                        <div class="bg-white rounded cus-panel p-3 right-side-row-list">
+                            <h5 class="sidebar-header">Nearby Places</h5>
+
+                            <% let isi = 0; for ( let item of RelatedSubcategoryPost.similarNearbyUnsorted ) {  if ( isi == 6 ) { break;  }  %>
+                            <% if ( item.name == post.name ) { continue; } else { isi++; } %>
+                            <div class=" py-2 sidebar-row-item">
+                                <a href="/detail?<%= `name=${item.name}&tk=${item._id}&via=searchpage` %>">
+                                    <div class="row mx-0 px-0">
+                                        <div
+                                            class="col-2 d-flex d-xl-flex justify-content-start align-items-center align-items-xl-center px-0">
+                                            <div class="  bg-img rounded lozad"
+                                                <% if ( (item.images && item.images.logo && item.images.logo.url) || ( item.images.collection && item.images.collection[0] && item.images.collection[0].url ) ) {  %>
+                                                data-background-image="/uploads/images/web/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>"
+                                                data-background-image-set="url('/uploads/images/mobile/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 1x , 
+                                            url('/uploads/images/web_thumbnail/<%=  item.images.logo && item.images.logo.url ? item.images.logo.url :  item.images.collection  && item.images.collection[0] && item.images.collection[0].url ? item.images.collection[0].url : '' %>') 2x"
+                                                <% } else { %> data-background-image="/assets/img/logo-dim.png" <% } %>>
+                                            </div>
+                                        </div>
+                                        <div class="col-8 px-0 sidebar-row-item-desc-holder" style="width: auto;">
+
+                                            <label class="sidebar-row-item-label nowrap"><%= item.name %></label>
+                                            <p style="height: 14px;" class="sidebar-row-item-desc grey-text two-lines">
+                                                <%= `
+                                    ${ item.address.areaAndStreetAddress && item.address.areaAndStreetAddress != null ? item.address.areaAndStreetAddress:''} 
+                                    ${ item.address.building && item.address.building != null ? ( ( item.address.areaAndStreetAddress && item.address.areaAndStreetAddress != null ) ? ', ' + item.address.building : item.address.building): ''} 
+                                    ${ (item.address.landmark && item.address.landmark  != null)? ( ( item.address.building && item.address.building != null ) || ( item.address.areaAndStreetAddress && item.address.areaAndStreetAddress != null ) ? ', '+ item.address.landmark: item.address.landmark) : ''}
+                                    ${ !item.address.landmark && !item.address.building &&  !item.address.areaAndStreetAddress  &&  item.address.locality && item.address.locality.name != null ? item.address.locality.name : ''}
+                                    ` %>
+                                            </p>
+                                        </div>
+                                        <div
+                                            class="col-2 d-flex d-xl-flex justify-content-start align-items-center align-items-xl-center">
+                                            <% let levelClass; %>
+                                            <% if ( item.rating >= 0 && item.rating <= 0.5 ) { levelClass = 'level-0'; } %>
+                                            <% if ( item.rating >= 0.6 && item.rating <= 1.0 ) { levelClass = 'level-1'; } %>
+                                            <% if ( item.rating >= 1.1 && item.rating <= 1.5 ) { levelClass = 'level-2'; } %>
+                                            <% if ( item.rating >= 1.6 && item.rating <= 2.0 ) { levelClass = 'level-3'; } %>
+                                            <% if ( item.rating >= 2.1 && item.rating <= 2.5 ) { levelClass = 'level-4'; } %>
+                                            <% if ( item.rating >= 2.6 && item.rating <= 3.0 ) { levelClass = 'level-5'; } %>
+                                            <% if ( item.rating >= 3.1 && item.rating <= 3.5 ) { levelClass = 'level-6'; } %>
+                                            <% if ( item.rating >= 3.6 && item.rating <= 4.0 ) { levelClass = 'level-7'; } %>
+                                            <% if ( item.rating >= 4.1 && item.rating <= 4.5 ) { levelClass = 'level-8'; } %>
+                                            <% if ( item.rating >= 4.6 && item.rating <= 5.0 ) { levelClass = 'level-9'; } %>
+                                            <span class="
+                                        <%= levelClass %>
+                                         badge badge-success" style="font-size: 16px;"><%= item.rating %></span></div>
+                                    </div>
+
+                                </a>
+                            </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </section>
+
+
+
+    </div>
+
+    <div class="d-flex flex-row justify-content-center alert-container"
+        style=" position: fixed; top: 30px; z-index: 9999; width: 100%; height: auto;">
+        <div class="col-sm-10 col-lg-8 " style="z-index: 9999; font-size: 22px;">
+            <div class="alert alert-success alert-dismissible" style="display: none;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong class="mr-3">Success!</strong> <span class="message"></span>
+            </div>
+
+            <div class="alert alert-danger alert-dismissible" style="display: none;;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong class="mr-3">Error!</strong> <span class="message"></span>
+            </div>
+
+            <div class="alert alert-info alert-dismissible" style="display: none;;">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong class="mr-3">Info!</strong> <span class="message"></span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Image view Modal starts here -->
+
+    <div class="modal fade" id="reviewImageViewModal" role="dialog">
+
+        <div class="modal-dialog modal-xl modal-dialog-zoom modal-dialog-centered">
+
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <!-- <div class="modal-header">
+          <button type="button" class="close shadow-none" data-dismiss="modal">&times;</button>
+        </div> -->
+
+                <!-- Modal body -->
+                <div class="modal-body">
+
+                    <div class="img-viewer" id="imageViewer">
+                        <div class="controls col-1 left">
+                            <div></div>
+                            <div>
+                                <i id="prevImage" class="fas  fa-angle-left rounded-circle"></i>
+                            </div>
+                            <div></div>
+                        </div>
+                        <div class="image-holder col-10">
+                            <img src="" alt="">
+                        </div>
+                        <div class="controls col-1 right">
+                            <div class="d-flex justify-content-start flex-column">
+                                <button type="button" class="close shadow-none" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div>
+                                <i id="nextImage" class="fas fa-angle-right  rounded-circle"></i>
+                            </div>
+                            <div class="nav"></div>
+                        </div>
+                    </div>
+                    <div class="image-details-more d-flex flex-row ">
+                        <div class="col-1"></div>
+                        <div class="col-xs-12 col-sm-5 image-details ">
+                            <div src="" alt="" id="image-details-avatar"></div>
+                            <div class="d-flex flex-column justify-content-center ml-2">
+                                <span class="username" id="image-details-username"></span>
+                                <span class=" small text-muted uploadedDate" id="image-details-date"></span>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-12 col-sm-5 d-flex flex-row justify-content-end ">
+                            <div class="nav" id="imagesCounter"></div>
+                            <!-- <button class="btn shadow-none">
+                                <i class="fal fa-thumbs-up"></i>
+                                Likes
+                            </button>
+                            <button class="btn shadow-none">
+                                <i class="fal fa-comments"></i>
+                                Comments
+                            </button>
+                            <button class="btn shadow-none">
+                                <i class="fal fa-share"></i>
+                                Share
+                            </button> -->
+                        </div>
+                        <div class="col-1"></div>
+
+                    </div>
+
+                </div>
+
+                <!-- Modal footer -->
+                <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-success" id="submitReview" style="min-width: 100px;">Submit</button>
+        </div> -->
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Image view modal ends -->
+
+
+
+
+    <script type="text/javascript" src="/assets/js/lozad.min.js"></script>
+    <script>
+        // image lazy load
+        const observer = lozad('.lozad', {
+            
+            loaded: function (el) {
+                // Custom implementation on a loaded element
+                console.log('loaded element');
+                // console.log($(el.target));
+
+                el.classList.add('zoom-bg');
+            }
+        }); // lazy loads elements with default selector as '.lozad'
+        observer.observe();
+
+
+        const postImages = <%- JSON.stringify(post.images) %>;
+        // const postUser = <%- JSON.stringify(post.user) %>;
+    </script>
+    
+    <script type="text/javascript" src="/assets/js/lozad.min.js"></script>
+    <script src="/assets/js/detail-functions.js"></script>
+    <script>
+
+        // 30 images shown by default
+        let skipPhotos = 30;
+        let stepPhotos = 15;
+        $(document).ready(function () {
+            console.log({
+            });
+
+        });
+
+
+        function loadMorePhotos(){
+            let breakCount = skipPhotos + stepPhotos;
+            for ( let i = skipPhotos; i < postImages.collection.length; i++ ) {
+                    if ( i == breakCount ) {
+                        break;
+                    }
+                let image = 
+                `<div data-imageindex="${i}"
+                    class="post-image lozad  border rounded d-flex flex-column justify-content-end align-items-center bg-img menu-square-img"
+                    style="background-image: url('/uploads/images/web_thumbnail/${ postImages.collection && postImages.collection[i] && postImages.collection[i].url ? postImages.collection[i].url : '' }')"
+                    >
+                </div>`;
+                $("#photos-box").append(image);
+                skipPhotos++;
+
+            }
+
+            if ( (postImages.collection.length - skipPhotos) > 0  ) {
+                $("#loadMorePhotos").show();
+                $("#loadMorePhotos").text(`Load more (${postImages.collection.length - skipPhotos})`);
+            } else  {
+                $("#loadMorePhotos").hide();
+            }
+
+        }
+
+        $(document).on('click', "#loadMorePhotos", e => {
+            loadMorePhotos();
+        });
+
+       
+
+
+        // Review photos
+        const reviewImages = <%- JSON.stringify(reviewImages) %>;
+        // 30 images shown by default
+        let reviewImagesSkipPhotos = 30;
+        let reviewImagesStep = 15;
+        $(document).ready(function () {
+            console.log({
+                reviewImages
+            });
+
+        });
+
+
+        function loadMoreReviewPhotos(){
+            console.log("loadMoreReviewPhotos");
+            let breakCount = reviewImagesSkipPhotos + reviewImagesStep;
+            for ( let i = reviewImagesSkipPhotos; i < reviewImages.length; i++ ) {
+                    if ( i == breakCount ) {
+                        break;
+                    }
+                let image = 
+                `<div data-imageindex="${i}"
+                    class="photos-review-image lozad  border rounded d-flex flex-column justify-content-end align-items-center bg-img menu-square-img"
+                    style="background-image: url('/uploads/images/web_thumbnail/${ reviewImages && reviewImages[i] && reviewImages[i].url ? reviewImages[i].url : '' }')"
+                    >
+                </div>`;
+                $("#reviews-photos-box").append(image);
+                reviewImagesSkipPhotos++;
+
+            }
+
+            if ( (reviewImages.length - reviewImagesSkipPhotos) > 0  ) {
+                $("#loadMoreReviewPhotos").show();
+                $("#loadMoreReviewPhotos").text(`Load more (${reviewImages.length - reviewImagesSkipPhotos})`);
+            } else  {
+                $("#loadMoreReviewPhotos").hide();
+            }
+
+        }
+
+        $(document).on('click', "#loadMoreReviewPhotos", e => {
+            loadMoreReviewPhotos();
+        });
+
+        $(document).on('click', ".photos-review-image", e => {
+            $("#reviewImageViewModal").modal("show");
+            const imageIndex = $(e.target).data('imageindex');
+            const reviewId = $(e.target).data('reviewid');
+            renderImageModal(reviewId, imageIndex, "photos-review-image" );
+
+        });
+
+    </script>
+    <%- include('../includes/footer.ejs') %>

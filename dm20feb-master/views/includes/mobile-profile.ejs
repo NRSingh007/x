@@ -1,0 +1,112 @@
+<div class=" " id="mobileProfile" style="color: black; ">
+    <div class="d-flex flex-column box" style="font-size: 24px;">
+
+        <div class="row   py-2 text-white d-flex justify-content-around" style="background-color: #ba1e2b;">
+
+            <div class="col-3">
+                <button class="float-left btn text-white px-3 font-weight-bold mr-1"
+                    onclick="(function(){$('#mobileProfile').toggle();})()">
+                    <i class="far fa-angle-left  font-weight-bold " style="font-size: 18px;"></i>
+                </button>
+            </div>
+
+            <div class="text-white col-6S">
+                <span class=" font-weight-bold " style=" font-size: 20px; font-style: italic;">
+                    Digital Manipur
+                </span>
+            </div>
+            <div class="col-3"></div>
+            <!-- <button class="btn text-white px-3 font-weight-bold mr-1"
+                onclick="(function(){$('#mobileProfile').toggle();})()">
+                <i class="fa fa-search" style="cursor: pointer;"
+                    onclick="(function(){$('#mobileProfile').toggle();})()"></i>
+            </button> -->
+
+        </div>
+
+
+
+        <% if( user ) { %>
+
+
+        <div class="text-secondary group list-items" role="menu"
+            style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+
+            <a class="dropdown-item" role="presentation" href="/users/home" style="color: black;">
+                <span>Profile</span>
+                <i class="far fa-angle-right "></i>
+            </a>
+            <a class="dropdown-item text-dark" role="presentation" href="/users/notifications">
+                <span>Notifications</span>
+                <i class="far fa-angle-right "></i>
+            </a>
+            <a class="dropdown-item text-dark" role="presentation" href="/users/home#Bookmarks">
+                <span>Bookmarks</span>
+                <i class="far fa-angle-right "></i></a>
+            <a class="dropdown-item text-dark" role="presentation" href="/users/home#Reviews">
+                <span>Reviews</span>
+                <i class="far fa-angle-right "></i>
+            </a>
+
+            <a class="dropdown-item text-dark" role="presentation" style="border-bottom: 0 !important;"
+                href="/users/setting">
+                <span>Settings</span>
+                <i class="far fa-angle-right "></i>
+            </a>
+
+        </div>
+
+
+        <% } else { %>
+        <div class="group list-items">
+            <a class="dropdown-item text-dark" role="presentation" href="/auth/login">
+                <span>Log In</span>
+                <i class="far fa-angle-right "></i>
+            </a>
+
+            <a class="dropdown-item text-dark" role="presentation" href="/auth/signup">
+                <span>Sign Up</span>
+                <i class="far fa-angle-right "></i>
+            </a>
+        </div>
+        <% } %>
+
+        <div class="group list-items">
+            <!-- <a class="dropdown-item text-dark" role="presentation" href="/product">
+                <span>Product</span>
+                <i class="far fa-angle-right "></i>
+            </a> -->
+            <a class="dropdown-item text-dark" role="presentation" href="/site/claim-listing">
+                <span>Claim your Listing</span>
+                <i class="far fa-angle-right "></i>
+            </a>
+
+            <a class="dropdown-item text-dark" role="presentation" href="/site/add-listing">
+                <span>Add Listing</span>
+                <i class="far fa-angle-right "></i>
+            </a>
+            <a class="dropdown-item text-dark" role="presentation" href="/site/promote">
+                <span>Advertisement</span>
+                <i class="far fa-angle-right "></i>
+            </a>
+            <a class="dropdown-item text-dark" role="presentation" href="/site/mobile-app">
+                <span>Mobile App</span>
+                <i class="far fa-angle-right "></i>
+            </a>
+        </div>
+        <% if( user ) { %>
+
+        <div class="text-secondary group list-items" role="menu"
+            style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+            <form action="/auth/logout" method="POST">
+                <button type="submit" class="dropdown-item btn btn-light text-dark" role="presentation">
+                    <span>Logout</span>
+                    <i class="far fa-angle-right "></i>
+                </button>
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            </form>
+        </div>
+        <% } %>
+
+    </div>
+</div>

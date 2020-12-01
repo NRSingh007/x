@@ -1,0 +1,246 @@
+<section>
+    <div class="search_wrap">
+        <div class="container">
+            <div class="search_container">
+                <div class="brand_logo">
+                    <a href="/"><span style="margin-right: 10px;">Digital</span><span>Manipur</span></a>
+
+                </div>
+                <div class="profile_logo" onclick="return toggleProfileDropdown()">
+                    <% if(user) { %>
+                    <%if(user.images.profile.common.url){%>
+                    <img class="rounded-circle " id="avatar"
+                        src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                        style="width: 25px;height: 25px;margin-right: 5px;" alt="Profile image">
+                    <%}%>
+                    <% } else { %>
+                    <i id="profilePreviewUpdateDe"
+                        class="text-white p-1 rounded border-secondary far fa-user font-weight-bold"></i>
+                    <% } %>
+                </div>
+
+                <div class="form-group search_nav_input_field1 search_input_icons">
+
+                    <i class="fa fa-location-arrow search_icons" aria-hidden="true" style="color: #A6AFB4"></i>
+                    <input type="text" class="form-control search_input_field" id="nav_search_location_input"
+                        onfocus="showNavSearchHolder()" onblur="hideNavSearchHolder()" placeholder="Location"
+                        value="<%=search_location_query%>">
+                    <div>
+                        <ul id="search_nav_location_holder" style="display: none;">
+                            <% if(states.length > 0) {%> <% states.forEach(function(state, index){%> <li id="<%=index%>"
+                                onMouseDown="choose_location('<%=index%>')" data-value="<%=state.name%>">
+                                <%=state.name%></li>
+                            <%}) %>
+                            <%}%>
+                        </ul>
+                    </div>
+
+                </div>
+
+
+
+                <div class="form-group search_nav_input_field2 search_input_icons">
+                    <i class="fa fa-search search_icons" aria-hidden="true" style="color: #A6AFB4"></i>
+                    <input type="text" class="form-control search_input_field" id="nav_search_product_input" onfocus="showNavSearchProductHolder()"
+                    onblur="hideNavSearchProductHolder()" placeholder="Find Cars, Mobile Phones and more...">
+                        <div>
+                            <ul id="search_nav_product_holder" style="display: none;">
+                                <!-- Add product search dynamically -->
+                            </ul>
+                        </div>
+                </div>
+
+
+                <div style="flex-grow: 1;">
+                    <button type="button" onclick="return validateNavFormSubmit()" class="btn search_nav_button">Search</button>
+                </div>
+                <%if(user){%>
+                            <div class="dropdown">
+                                <button class="btn profile_nav_button dropdown-toggle" type="button"
+                                    id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                    aria-expanded="false">
+                                    <% if(user) { %>
+                                    <%if(user.images.profile.common.url){%>
+                                    <img class="rounded-circle " id="avatar"
+                                        src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                        style="width: 25px;height: 25px;margin-right: 5px;" alt="Profile image">
+
+                                    <span class="px-2 ">
+                                        <%= `${ user.name && user.name.firstName ? user.name.firstName.trim().split(' ')[0] : ''}` %>
+                                    </span>
+                                    <%}%>
+                                <% } else { %>
+                                    <i id="profilePreviewUpdateDe"
+                                        class="text-white p-1 rounded border-secondary far fa-user font-weight-bold"></i>
+                                    <% } %>
+
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="/users/home">Profile</a>
+                                    <a class="dropdown-item" href="/users/notifications">Notifications</a>
+                                    <a class="dropdown-item" href="/users/home#Bookmarks">Bookmarks</a>
+                                    <a class="dropdown-item" href="/users/home#Reviews">Reviews</a>
+                                    <a class="dropdown-item" href="/users/setting">Settings</a>
+                                    <div class="dropdown-divider"></div>
+                                    <form action="/auth/logout" method="POST">
+                                        <button onclick="location.replace('/auth/logout');" type="submit"
+                                            class="dropdown-item btn btn-light text-dark"
+                                            role="presentation">Logout</button>
+                                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    </form>
+
+                                </div>
+                            </div>
+                            <%} else{%>
+                            <div>
+                                <a href="/auth/login">
+                                    <button class="btn profile_nav_button">Log In</button>
+                                </a>
+                            </div>
+                            <%}%>
+                
+
+            </div>
+            <section class="search_section2">
+                <div style="padding: 5px;">
+                    <button class="btn btn-block search_btn2" onclick="return validateNavFormSubmit()">Search</button>
+                </div>
+            </section>
+
+        </div>
+
+    </div>
+    <div style="display: none;">
+        <form action="/product/search" method="GET" id="search_form" autocomplete="off" name="search_form">
+            <input type="hidden" name="searchlocation" id="navSearchLocationInput">
+            <input type="hidden" id="navSearchProductInput" name="searchlocationproduct">
+        </form>
+    </div>
+</section>
+<%- include("../product/shortcutBar.ejs"); %>
+                            <section>
+                                <div id="section2_profile_menu_wrap" style="display: none;">
+                                    <div class="section2_profile_menu" style="padding-bottom: 15px;">
+                                        <%if(user){%>
+                                        <a href="/users/home">
+                                            <div class="profile_menu_wrap">
+                                                <div class="profile_menu_item">
+                                                    Profile <span class="ml-auto"><i class="fa fa-chevron-right"
+                                                            aria-hidden="true"></i></span>
+                                                </div>
+                                            </div>
+
+                                        </a>
+                                        <a href="/users/notifications">
+                                            <div class="profile_menu_wrap">
+                                                <div class="profile_menu_item">
+                                                    Notifications <span class="ml-auto"><i class="fa fa-chevron-right"
+                                                            aria-hidden="true"></i></span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="/users/home#Bookmarks">
+                                            <div class="profile_menu_wrap">
+                                                <div class="profile_menu_item">
+                                                    Bookmarks <span class="ml-auto"><i class="fa fa-chevron-right"
+                                                            aria-hidden="true"></i></span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="/users/home#Reviews">
+                                            <div class="profile_menu_wrap">
+                                                <div class="profile_menu_item">
+                                                    Reviews <span class="ml-auto"><i class="fa fa-chevron-right"
+                                                            aria-hidden="true"></i></span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <a href="/users/setting">
+                                            <div class="profile_menu_wrap" style="margin-bottom: 15px;">
+                                                <div class="profile_menu_item">
+                                                    Settings <span class="ml-auto"><i class="fa fa-chevron-right"
+                                                            aria-hidden="true"></i></span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <%} else{%>
+                                        <a href="/auth/login">
+                                            <div class="profile_menu_wrap" style="margin-bottom: 15px;">
+                                                <div class="profile_menu_item">
+                                                    Login <span class="ml-auto"><i class="fa fa-chevron-right"
+                                                            aria-hidden="true"></i></span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <%}%>
+                                
+                                <!-- quicknav shortcut section -->
+                                <a href="/product">
+                                    <div class="profile_menu_wrap">
+                                        <div class="profile_menu_item">
+                                            Product <span class="ml-auto"><i class="fa fa-chevron-right"
+                                                    aria-hidden="true"></i></span>
+                                        </div>
+                                    </div>
+
+                                </a>
+                                
+                                <a href="/site/add-listing">
+                                    <div class="profile_menu_wrap">
+                                        <div class="profile_menu_item">
+                                            Add Listing <span class="ml-auto"><i class="fa fa-chevron-right"
+                                                    aria-hidden="true"></i></span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="/product/categories">
+                                    <div class="profile_menu_wrap">
+                                        <div class="profile_menu_item">
+                                            Add Product <span class="ml-auto"><i class="fa fa-chevron-right"
+                                                    aria-hidden="true"></i></span>
+                                        </div>
+                                    </div>
+                                </a>
+                                <a href="/site/mobile-app">
+                                    <div class="profile_menu_wrap" style="margin-bottom: 15px;">
+                                        <div class="profile_menu_item">
+                                            Mobile App <span class="ml-auto"><i class="fa fa-chevron-right"
+                                                    aria-hidden="true"></i></span>
+                                        </div>
+                                    </div>
+                                </a>
+
+                                <%if(user){%>
+                                        <div class="profile_menu_wrap">
+                                            <div class="profile_menu_item">
+                                                Logout <span class="ml-auto"><i class="fa fa-chevron-right"
+                                                        aria-hidden="true"></i></span>
+                                            </div>
+                                        </div>
+
+
+                                        <div style="display: none;">
+                                            <form action="/auth/logout" method="POST" align="center">
+                                                <button onclick="location.replace('/auth/logout');" type="submit"
+                                                    class="dropdown-item btn btn-light text-dark"
+                                                    role="presentation">Logout</button>
+                                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            </form>
+                                        </div>
+                                        <%}%>
+
+                                
+
+                            </div>
+                        </div>
+                        <script>
+                            const toggleProfileDropdown = () => {
+                                profileDropDown = document.getElementById('section2_profile_menu_wrap')
+                                if (profileDropDown.style.display == 'none') {
+                                    return profileDropDown.style.display = '';
+                                } else {
+                                    return profileDropDown.style.display = 'none';
+                                }
+                            }
+                        </script>
+                    </section>

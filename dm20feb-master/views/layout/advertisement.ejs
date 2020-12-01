@@ -1,0 +1,619 @@
+<%- include('../includes/header.ejs',{ 
+    keywords: ['business claim','onwer claim','listing'] , 
+    author: 'Digtal Manipur',
+    description: `Claim your listing in Digital Manipur`
+ }) %>
+<link rel="stylesheet" href="/assets/css/claim.css">
+</head>
+
+<body>
+    <%- include('./../includes/alert'); %>
+
+    <%- include('./../includes/site/header') %>
+
+
+    <style>
+        
+        @media screen and (max-width: 576px){
+            .ads-slide, #carouselId, .carousel-inner, .carousel-item{
+                height: 100px ;
+                width: 100%;
+                overflow: hidden;
+            }
+        }
+        @media screen and (max-width: 768px){
+            .ads-slide, #carouselId, .carousel-inner, .carousel-item{
+                height: 150px;
+                width: 100%;
+                overflow: hidden;
+            }
+        }
+        @media screen and (min-width: 768px){
+            .ads-slide ,#carouselId, .carousel-inner, .carousel-item{
+                height: 300px;
+                width: 100%;
+                overflow: hidden;
+            }
+        }
+
+    </style>
+    
+    <section>
+        <div class="container">
+            <div class="my-3 path"><a href="/">Home</a><span>&gt;</span><a href="#">Advertisement</a></div>
+            <div class="col mt-3 cus-panel px-0 rounded bg-white">
+                <div class="bg-img claim-img-lanscape"
+                   style="">
+                    <section style="width: 100%;">
+                        <div id="demo" class="carousel slide" data-ride="carousel">
+
+                            <!-- Indicators -->
+                            <!-- <ul class="carousel-indicators">
+                              <li data-target="#demo" data-slide-to="0" class="active"></li>
+                              <li data-target="#demo" data-slide-to="1"></li>
+                              <li data-target="#demo" data-slide-to="2"></li>
+                            </ul> -->
+                          
+                            <!-- The slideshow -->
+                            <div class="carousel-inner">
+                              <div class="carousel-item active">
+                                  <div 
+                                  class="bg-img d-block"
+                                  style="background-image: url('/assets/img/site/1.jpg');"
+                                  ></div>
+                                <!-- <img src="/assets/img/site/1.jpg" alt="Los Angeles"> -->
+                              </div>
+                              <div class="carousel-item">
+                                <div 
+                                class="bg-img d-block"
+                                style="background-image: url('/assets/img/site/2.jpg');"
+                                ></div>
+                                <!-- <img src="/assets/img/site/2.jpg" alt="Chicago"> -->
+                              </div>
+                              <div class="carousel-item">
+                                <div 
+                                class="bg-img d-block"
+                                style="background-image: url('/assets/img/site/3.jpg');"
+                                ></div>
+                                <!-- <img src="/assets/img/site/3.jpg" alt="New York"> -->
+                              </div>
+                            </div>
+                          
+                            <!-- Left and right controls -->
+                            <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                              <span class="carousel-control-prev-icon"></span>
+                            </a>
+                            <a class="carousel-control-next" href="#demo" data-slide="next">
+                              <span class="carousel-control-next-icon"></span>
+                            </a>
+                          
+                          </div>
+                    </section>
+                </div>
+                <div class="row d-flex flex-column align-items-center my-5">
+                    <div class="col-sm-12 col-xs-12 col-md-7 px-5">
+                        <div class="text-center " style="font-size: 30px; font-weight: light;"><b>Digital
+                                Manipur</b> for businesses</div>
+                        <p class="text-center my-3">Get more out of your business, without losing focus on what is
+                            most important — delighting your customers<br></p>
+                        <p class="text-center text-secondary small" style="letter-spacing: 0px;font-size: 13px;">
+                            From managing your store information directly from your phone to streamlining your
+                            operations, Digital Manipur has got you covered<br></p>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+    </section>
+
+    <section class="container">
+        <div class="mt-5 bg-white p-4">
+            <h3 class=" text-center mb-5">Book your Advertisement</h3>
+            
+
+            <form id="applyJob" action="/site/promote/add" method="POST" enctype="multipart/form-data">
+
+                <div class="row justify-content-center">
+                    <div class="col">
+                        
+                        <div class="form-group row d-flex justify-content-center">
+                            <div class="col-xs-12 col-md-3  d-flex mb-3">
+                                <div style="width: 100%;" class="font-weight-bold text-muted  text-sm-left text-md-center text-lg-right  text-xl-right">Type</div>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <select name="adType" id="adTypeId" class="form-control">
+                                    <option value="" selected hidden disabled>Select</option>
+                                    <% if (typeof ads != 'undefined') { for ( let  ad of ads) { %>
+                                    <option value="<%= types.find( cur => String(cur._id) == String(ad.type))._id %>" 
+                                        data-id="<%= types.find( cur => String(cur._id) == String(ad.type))._id %>" 
+                                        data-type="<%= JSON.stringify(types.find( cur => String(cur._id) == String(ad.type))) %>" 
+                                        data-name="<%= types.find( cur => String(cur._id) == String(ad.type)).name %>" 
+                                        data-adcontent="<%= JSON.stringify(ad) %>" 
+                                        data-adid="<%= ad._id %>" 
+                                        >
+                                        <div class="text-break">
+                                            <%= types.find( cur => String(cur._id) == String(ad.type)).name %>
+                                        </div>
+                                    </option>
+                                    <% } } %>
+                                </select>
+                            </div>
+                            <div class="col-xs-12 col-md-2  d-flex ">
+                            </div>
+
+                        </div>
+                        <style>
+                            .price-item{
+                                min-width: 150px;
+                                height: 120px;
+                                padding: 10px;
+                                border: 1px solid rgb(113, 218, 113);
+                                background-color: rgb(185, 255, 185);
+                                margin-right: 10px;
+                                margin-bottom: 10px;
+                                border-radius: 10px;
+                                display: flex;
+                                justify-content: flex-start;
+                                align-items: center;
+                                flex-direction: column;
+                                
+                            }
+                            .price-item .radiobox{
+                                   margin-top: 15px;
+                                }
+                                .price-item .name{
+                                    font-weight: 500;
+                                }
+                                .price-item .price{
+                                font-weight: 400;
+                                }
+                            @media screen and ( max-width: 996px ) {
+                                .price-holder{
+                                    display: flex;
+                                    flex-wrap: wrap;
+                                }
+                            }
+                            
+                        </style>
+                        
+                         <% if (typeof ads != 'undefined') { %> 
+                            <div class="row d-flex justify-content-center">
+                                
+                                <div class="col-12 col-xs-12 col-md-10 col-lg-9 ad-details" >
+                                    <% for ( let  ad of ads) {  %>
+                                    <div  id="<%= types.find( cur => String(cur._id) == String(ad.type))._id+'Id' %>" class="pricings" style="display: none;" >
+                                    <div class="text-center text-primary" style="font-weight: 500;">Pricing Plans
+                                        <hr class="bg-primary my-2" style="height: 0px; width: 30%">
+                                    </div>
+                                    <div class="d-flex flex-row justify-content-center p-3 price-holder">
+                                        <% for ( let  price of ad.pricings) { %>
+                                        <div class="price-item">
+                                            <div class="name"><%= price.name %></div>
+                                            <div class="price"><%= "₹ "+price.price %></div>
+                                            <div class="validity"><%= price.validity %></div>
+                                            <div class="radiobox custom-control custom-radio">
+                                                <input type="radio"  class="custom-control-input" 
+                                                id="<%= price._id %>" 
+                                                data-price="<%= JSON.stringify(price) %>"
+                                                 value="<%= price._id %>" name="price">
+                                                <label class="custom-control-label" for="<%= price._id %>">Select</label>
+                                              </div> 
+                                        </div>
+                                        <% }  %>
+                                    </div>
+                                    <div class=" d-flex flex-column  px-3  justify-content-center mb-3">
+                                        
+                                        <div class="row px-0 d-flex justify-content-center">
+                                            <div class="col-xs-10 col-md-6">
+                                                <div class="label my-2 text-primary" style="font-weight: 500;">Features</div>
+                                       
+                                                <table class="table  table-sm">
+                                                    <tbody>
+                                                        <% for ( let  feature of ad.features) { %>
+                                                        <tr>
+                                                        <td  style="font-weight: 400;"><%= feature.name %></td>
+                                                        <td class="text-muted"><%= feature.description %></td>
+                                                        </tr>
+                                                        <% } %>
+                                                    </tbody>
+                                                    </table>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    </div>
+                                    <% } %>
+                                
+                                </div>
+                            </div>
+                            <% } %>
+                            <script>
+
+                                const types = <%- JSON.stringify(types); %>;
+                                $("#adTypeId").on( 'change', e => {
+                                    const id = $("#adTypeId option:selected").data('id');
+                                    console.log("#"+id+"Id");
+                                    const Id = "#"+id+"Id";
+                                    $(".pricings").hide();
+                                    $(Id).show();
+
+                                    const selectedType =  types.find( cur => String(cur._id) == String(id));
+                                    if ( selectedType && selectedType.features && selectedType.features.image && selectedType.features.video ) {
+                                        $("#imageVideoSelector").show();
+                                    } else {
+                                        $("#imageVideoSelector").hide();
+
+                                    }
+                                    
+
+                                });
+                            </script>
+                        
+                        <div style="display: none;" id="imageVideoSelector">
+                            <div class="form-group row d-flex justify-content-center" >
+                                <div class="col-xs-12 col-md-3  d-flex ">
+                                    <label style="width: 100%;" class="font-weight-bold text-muted  text-sm-left text-md-center text-lg-right  text-xl-right">Banner image / video</label>
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <div class="custom-file">
+                                        <input type="file" name="file" accept=".mp4,.jpeg,.jpg,.png" class="custom-file-input"
+                                            id="customFile">
+                                        <label class="custom-file-label" for="customFile" style="overflow-x: hidden;"
+                                            class="text-truncate custom-file-label">Choose file</label>
+                                    </div>
+                        <div class="my-2 text-left small text-info text-italicize"> * Maximum file size for image is 5mb and video is 20mb.</div>
+                        <div class="my-0 text-left small text-info text-italicize"> * Aspect ratio of image/video should be 3:1 .</div>
+
+                                </div>
+                                <div class="col-xs-12 col-md-2  d-flex ">
+                                </div>
+                            </div>
+
+                            
+
+                        </div>
+
+                        <div class="form-group row d-flex justify-content-center">
+                            <div class="col-xs-12 col-md-3  d-flex ">
+                                <label style="width: 100%;" class="font-weight-bold text-muted  text-sm-left text-md-center text-lg-right  text-xl-right">Company name</label>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <input type="text" name="companyName" class="form-control">
+                            </div>
+                            <div class="col-xs-12 col-md-2  d-flex ">
+                            </div>
+                        </div>
+
+                        <div class="form-group row d-flex justify-content-center">
+                            <div class="col-xs-12 col-md-3  d-flex ">
+                                <label style="width: 100%;" class="font-weight-bold text-muted  text-sm-left text-md-center text-lg-right  text-xl-right">Full name</label>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <input type="text" name="fullName" class="form-control">
+                            </div>
+                            <div class="col-xs-12 col-md-2  d-flex ">
+                            </div>
+                        </div>
+                        <div class="form-group row d-flex justify-content-center">
+                            <div class="col-xs-12 col-md-3  d-flex ">
+                                <label style="width: 100%;" class="font-weight-bold text-muted  text-sm-left text-md-center text-lg-right  text-xl-right">Email</label>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <input type="email" name="email" class="form-control">
+                            </div>
+                            <div class="col-xs-12 col-md-2  d-flex ">
+                            </div>
+                        </div>
+                        <div class="form-group row d-flex justify-content-center">
+                            <div class="col-xs-12 col-md-3  d-flex ">
+                                <label style="width: 100%;" class="font-weight-bold text-muted  text-sm-left text-md-center text-lg-right  text-xl-right">Mobile</label>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <input type="number" name="mobile" class="form-control">
+                            </div>
+                            <div class="col-xs-12 col-md-2  d-flex ">
+                            </div>
+                        </div>
+                        <div class="form-group row d-flex justify-content-center">
+                            <div class="col-xs-12 col-md-3  d-flex ">
+                                <label style="width: 100%;" class="font-weight-bold text-muted  text-sm-left text-md-center text-lg-right  text-xl-right">Address</label>
+                            </div>
+                            <div class="col-xs-12 col-md-6">
+                                <input type="text" placeholder="Street address" name="streetAddress" class="form-control">
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <select required class="form-control" name="state" onchange="getAddressDistricts(event)">
+                                            <option value="" disabled selected hidden>State</option>
+
+                                            <% if ( typeof states != "undefined" ) { %>
+                                                <% for ( let state of states ) { %>
+                                                    <option value="<%= state.name %>" data-id="<%= state._id %>"><%= state.name %></option>
+                                                <% } %>
+                                                <% } %>
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <select required class="form-control" name="district" id="districtsId" >
+                                                    <option value="" disabled selected hidden>District</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-md-2  d-flex ">
+                            </div>
+                        </div>
+                        
+                       
+                               <script>
+                                    // Add the following code if you want the name of the file appear on select
+                                    $(".custom-file-input").on("change", function () {
+                                        var fileName = $(this).val().split("\\").pop();
+                                        $(this).siblings(".custom-file-label").addClass("selected").html(
+                                            fileName);
+                                    });
+                                </script>
+                           
+                        <div class="my-3 text-center small text-info text-italicize"> * All input fields are required.</div>
+
+                        <div class="form-group row d-flex justify-content-center justify-content-center mt-4">
+                            <button id="submitApplication" class="btn btn-success px-5 rounded"
+                                style="border-radius: 25px !important;">Submit</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </section>
+
+
+    <script>
+
+        //  apply job
+        $("#submitApplication").click( async e => {
+            e.preventDefault();
+
+            const formData = new FormData($("#applyJob")[0]);
+
+            if ( $("#applyJob input[name='price']:checked").length <= 0 ) {
+                showInfoAlert("Please select your prefer ad type and pricing.");
+                return false;
+            } 
+
+            for ( let val of formData.values() ) {
+                console.log({val});
+                if ( !val || $("#applyJob select[name='district']").val() == null) {
+                    showInfoAlert('All input fields are required.');
+                    return;
+                }
+            }
+
+            
+            
+
+            
+
+            // 5 mb limit
+            console.log("File size ", formData.get('file').size / (1024 * 1024) +'Mb');
+            console.log(formData.get('file').type);
+            console.log(formData.get('file').type.search('image'));
+            
+            if ( ( formData.get('file') && formData.get('file').type && formData.get('file').type.search('image') != -1 && formData.get('file').size / (1024 * 1024) ) > 5 ) {
+                showInfoAlert('File size exceeded. Please select a smaller image.');
+                    return;
+            }
+
+            if ( ( formData.get('file') && formData.get('file').type && formData.get('file').type.search('video') != -1 && formData.get('file').size / (1024 * 1024) ) > 20 ) {
+                showInfoAlert('File size exceeded. Please select a smaller video.');
+                    return;
+            }
+
+
+            $(e.target).html(`<div class="mr-3 spinner-border text-light spinner-border-sm "></div> Submitting...`).prop('disabled', false);
+
+            let image, video;
+            if ( formData.get('file').type.search('image') != -1 ) {
+                try {
+                    image = await uploadImage(formData);
+                } catch (error) {
+                    console.log({error});
+                }
+            }
+
+            if ( formData.get('file').type.search('video') != -1 ) {
+                try {
+                    video = await uploadVideo(formData);
+                } catch (error) {
+                    console.log({error});
+                }
+            }
+
+            // check if type is Banner
+            const id = $("#adTypeId option:selected").data('id');
+            const selectedType =  types.find( cur => String(cur._id) == String(id));
+                                    
+            if ( selectedType && selectedType.features && (selectedType.features.image || selectedType.features.video) ) {
+                    if ( image || video ) {
+
+                    } else {
+                        showInfoAlert("Please select Banner image/video.");
+                        $(e.target).html(`Submit`).prop('disabled', false);
+
+                        return false;
+                    }
+            } else {
+                // continue
+            }
+
+
+
+            
+
+            
+
+            let data = {
+                ad: {
+                    id: $("#adTypeId option:selected").data('adid'),
+                    original : $("#adTypeId option:selected").data('adcontent'),
+                    type: $("#adTypeId option:selected").data('type')
+                },
+                pricing:  $("#applyJob input[name='price']:checked").data('price'),
+                companyName: $("#applyJob input[name='companyName']").val(),
+                fullName: $("#applyJob input[name='fullName']").val(),
+                email: $("#applyJob input[name='email']").val(),
+                mobile: $("#applyJob input[name='mobile']").val(),
+                streetAddress: $("#applyJob input[name='streetAddress']").val(),
+                state: $("#applyJob select[name='state']").val(),
+                district: $("#applyJob select[name='district']").val(),
+                image: image ? image : null,
+                video: video ? video : null
+            };
+            console.log({data});
+            $.post( `${rootDomain}/site/promote/add`,
+                    data
+                , (data, status) => {
+                    console.log('Job applied.');
+                    console.log("Res: ", data);
+
+                    if (status == 'success' && data && data.message) {
+                        showSuccessAlert( data.message);
+                        $("#imageVideoSelector").hide();
+                        $(".custom-file-label").text('Choose file');
+                        
+                        const PricingBoxId = "#"+$("#adTypeId option:selected").data('id')+"Id";
+                        $(PricingBoxId).hide();
+
+                        // reset should be done last
+                        $("#applyJob").trigger('reset');
+
+                    }
+                    $(e.target).html(`Submit`).prop('disabled', false);
+
+                }).fail( error =>  {
+                    console.log('Error', error);
+                    showDangerAlert('Please try again after some time.');
+                    $(e.target).html(`Submit`).prop('disabled', false);
+            });
+
+            return false;
+
+        });
+
+        function uploadImage(formData){
+            console.log("uploadImage.... ");
+            return new Promise( (resolve, reject ) => {
+                $.ajax({
+                url: `${rootDomain}/site/promote/add/image`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (res) {
+                    console.log("Res: ", res);
+
+                        if (res && res.data ) {
+                        resolve(res.data);
+                        } else {
+                            reject();
+                        }
+                    },
+                    error: function (error) {
+                        reject(error);
+                    }
+                });
+            });
+        }
+
+        function uploadVideo(formData){
+            console.log("uploadVideo.... ");
+
+            return new Promise( (resolve, reject ) => {
+                $.ajax({
+                url: `${rootDomain}/site/promote/add/video`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (res) {
+                    console.log("Res: ", res);
+
+                        if (res && res.data ) {
+                        resolve(res.data);
+                        } else {
+                            reject();
+                        }
+                    },
+                    error: function (error) {
+                        reject(error);
+                    }
+                });
+            });
+        }
+
+        function getAddressDistricts(e) {
+            const stateId = $("#applyJob select[name='state'] option:selected").data('id');
+
+            console.log("getAddressDistricts",stateId);
+            if ( stateId) {
+                $.post(`${rootDomain}/search/districts/get`, 
+                {stateId: stateId},
+                (res, status) => {
+                    console.log({res});
+                    if (status == 'success' && res.length > 0 ) {
+                        $("#districtsId option:not(':first-child')").remove();
+                        for ( let district of res ) {
+                            $("#districtsId").append(`<option value="${district.name}">${district.name}</option>`);
+                        }
+                    } else {
+                        $("#districtsId option:not(':first-child')").remove();
+
+                    }
+                }).fail( e => {
+                    console.log({e});
+                });
+            }
+        }
+
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 2500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-container").show();
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-danger").hide();
+            }, 2500);
+        }
+
+        function showInfoAlert(message) {
+            $(".alert-container").show();
+            $(".alert-info .message").html(message);
+            $(".alert-info").show();
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-info").hide();
+            }, 2500);
+        }
+    </script>
+
+
+    <%- include('../includes/footer.ejs') %>
+
+
+</body>
+
+</html>

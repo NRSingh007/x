@@ -1,0 +1,698 @@
+<!-- The Modal -->
+<div class="modal fade" id="createCollectionModalEC">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Edit Collection</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body pt-0">
+                <div class="spinner-border text-primary spinner-border mt-3"></div>
+
+                <div class="px-3 main-content">
+
+                    <form name="createCollectionFormEC" id="createCollectionFormEC" action="" method="post">
+                        <input type="hidden" name="collectionIdEC" id="collectionIdEC">
+                        <section class="first pt-2">
+
+                            <div class="form-group">
+                                <label for="">NAME OF COLLECTION* </label>
+                                <input type="text" name="name" placeholder="e.g. Best Hotels" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="">DESCRIPTION* </label>
+                                <input type="text" name="description"
+                                    placeholder="e.g. My favorite places to stay on holidays" class="form-control">
+                            </div>
+                            <div class="custom-file form-group ">
+                                
+                                <input type="hidden" name="coverImageURL">
+                                <input type="file" name="cover-image" onchange="filePreviewEC(this)"
+                                    accept=".jpg,.jpeg,.png" class="custom-file-input" id="customFileEC">
+                                <label class="custom-file-label" for="customFileEC">Choose cover image*</label>
+                            </div>
+                            <div class="cover-image img-thumbnail">
+
+                            </div>
+                            <!-- <div class="custom-control custom-switch d-flex flex-row px-0 pt-3 mx-0">
+                                <div class="col-sm-3 pl-0 ">
+                                    <label for="collectionStatusEC" class="font-weight-bold">Status*</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="checkbox" name="collectionStatus" 
+                                    class="custom-control-input" 
+                                    onchange="checkStatusEC(event)" 
+                                    checked 
+                                    id="collectionStatusEC">
+                                    <label class="custom-control-label pl-3" for="collectionStatusEC">Active</label>
+                                </div>
+                                
+                              </div> -->
+
+
+
+
+                            <input type="text" hidden name="userId" value="<%= user && user._id ? user._id : '' %>" />
+                            <button onclick="deleteCollection(event)" 
+                                class="my-3 float-left btn-sm shadow-none btn btn-outline-danger" type="button">
+                                <i class="fas fa-trash mr-2"></i>
+                                DELETE COLLECTION                            </button>
+                            <button onclick="showAddPlacesT(event)"
+                                class="my-3 float-right btn-sm shadow-none btn btn-success" type="button">EDIT PLACES
+                            </button>
+                        </section>
+
+
+                        <section class="second d-none">
+                            <ul class="nav nav-tabs nav-justified">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#AddPlacesEC">Add Places</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#InCollectionEC">In Collection (<span
+                                            class="text-muted" id="placesCountIdEC">0</span>) </a>
+                                </li>
+
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div class="tab-pane container   active p-3" id="AddPlacesEC">
+                                    <div class="input-group mb-3">
+                                        <input autocomplete="off" type="text" name="location" id="locationInputIdEC"
+                                            value="Imphal" placeholder="Search location" class="form-control">
+                                        <div class="input-group-append ">
+                                            <button class="btn btn-default" type="button">
+                                                <i class="fal fa-map-marker-alt  "></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <ul class="list-group my-3" id="locationResultListEC" style="display: none;">
+
+                                    </ul>
+                                    <div class="input-group mb-3">
+                                        <input autocomplete="off" type="text" name="place-name"
+                                            onkeyup="searchPostsEC(event)" id="placeNameInputIdEC" value=""
+                                            placeholder="Search for places by name" class="form-control">
+                                        <div class="input-group-append ">
+                                            <button class="btn btn-default" type="button">
+                                                <i class="fal fa-search  "></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <ul class="list-group my-3" id="placeNameResultListEC" style="display: none;">
+
+                                    </ul>
+                                </div>
+                                <div class="tab-pane container fade p-3" id="InCollectionEC">
+                                    <p class="collection-default">No places added yet!</p>
+                                    <ul class="list-group">
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="p-3">
+                                <button class="btn btn-danger float-left btn-sm px-2" type="button"
+                                    id="backBtnEC">BACK</button>
+                                <button onclick="submitFirstFormEC(event)" class="btn btn-success float-right btn-sm px-2"
+                                    type="button" id="saveBtnEC">SAVE</button>
+                            </div>
+                        </section>
+                    </form>
+
+
+
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var CollectionToEdit;
+
+
+    $(document).ready((e) => {
+
+        // Show modal
+        // $("#createCollectionBtn").click((e) => {
+        //     e.preventDefault();
+
+        //     // init CollectionToEdit
+        //     CollectionToEdit = {
+        //         name: '',
+        //         places: [],
+        //         createdOn: Date.now(),
+        //         modifiedOn: Date.now(),
+        //         userId: '',
+        //         coverImage: ''
+        //     };
+
+        //     $("#createCollectionModalEC").modal('show');
+        //     // show create collection first tab only  and hide second tab
+        //     $("#createCollectionModalEC section.first").removeClass('d-none');
+        //     $("#createCollectionModalEC section.second").addClass('d-none');
+        // });
+
+        // Reset tabs.. on modal hidden
+        $('#createCollectionModalEC').on('hidden.bs.modal', function (e) {
+            console.log('hidden')
+            $("#createCollectionModalEC section").addClass('d-none');
+            $("#createCollectionModalEC section.first").removeClass('d-none');
+            $("#createCollectionFormEC").trigger('reset');
+            // remove img
+            $('#createCollectionModalEC .cover-image').hide();
+            $("#InCollectionEC .collection-default").show();
+            $("#InCollectionEC .list-group").html('');
+            $("#placeNameResultListEC").html('');
+        });
+
+        // Reset data on modal shown
+        $('#createCollectionModalEC').on('show.bs.modal', function (e) {
+            console.log('showing');
+            $("#placeNameResultListEC .collection-default").show();
+            $("#placeNameResultListEC").siblings(".load-more").remove();
+
+            prevSkips = 0;
+            skips = 0;
+            totals = null;
+            CollectionToEdit = {
+                name: '',
+                places: [],
+                createdOn: Date.now(),
+                modifiedOn: Date.now(),
+                userId: '',
+                coverImage: ''
+            };
+            $("#placesCountIdEC").html(0);
+
+
+        });
+
+        // goback
+        $("#createCollectionModalEC #backBtnEC").click((e) => {
+
+            e.preventDefault();
+
+            // change modal title 
+            $("#createCollectionModalEC .modal-title").html('EDIT COLLECTION');
+
+            // show add places tab
+            $("#createCollectionModalEC section.first").removeClass('d-none');
+            $("#createCollectionModalEC section.second").addClass('d-none');
+
+        });
+
+        // search location
+        // <li class="list-group-item">First item</li>
+        let timers;
+        $("#locationInputIdEC").on('keyup', (e) => {
+            let value = $(e.target).val();
+            if (value.length > 1) {
+
+                if (timers) {
+                    clearTimeout(timers);
+                }
+
+                timers = setTimeout(function () {
+
+                    console.log('Searching locations');
+                    $(e.target).siblings(".input-group-append").children("button").html(
+                        `<div class="spinner-border text-muted spinner-border-sm"></div>`
+                    );
+
+                    const rootDomain =
+                        `${location.protocol}//${window.location.hostname}${location.port ? ':'+location.port: ''}`;
+
+                    $.get(`${rootDomain}/search/ajax/location?slocation=${value}`, (data,
+                            status) => {
+                            if (status == 'success' && data.length > 0) {
+                                console.log({
+                                    data
+                                });
+                                $("#locationResultListEC").html('');
+                                $("#locationResultListEC").show();
+
+                                data.forEach(location => {
+                                    $("#locationResultListEC").append(
+                                        `<a href="#" class="list-group-item list-group-item-action">${location}</a>`
+                                    );
+                                });
+
+                                $(e.target).siblings(".input-group-append").children(
+                                    "button").html(
+                                    `<i class="fal fa-map-marker-alt  "></i>`
+                                );
+
+                            }
+                        })
+                        .fail((e) => {
+                            console.log({
+                                e
+                            });
+                            $(e.target).siblings(".input-group-append").children("button")
+                                .html(
+                                    `<i class="fal fa-map-marker-alt  "></i>`
+                                );
+                        });
+
+                }, 1000);
+
+
+            }
+        });
+
+        // show previous search result 
+        $("#locationInputIdEC").on('click', (e) => {
+            $("#locationResultListEC").html().trim() != '' ? $("#locationResultListEC").show() : '';
+            $("#placeNameResultListEC").hide();
+
+        });
+
+        // listen for onclick events on search result
+        $(document).on('click', "#locationResultListEC > .list-group-item", (e) => {
+            console.log('clicked');
+            $("#locationInputIdEC").val($(e.target).html());
+            $("#locationResultListEC").hide();
+        });
+
+
+
+        // show previous search result 
+        $("#placeNameInputIdEC").on('click', (e) => {
+            $("#placeNameResultListEC").html().trim() != '' ? $("#placeNameResultListEC").show() : '';
+            $("#locationResultListEC").hide();
+
+        });
+
+        // listen for onclick events on search result
+        // $(document).on('click', "#placeNameResultListEC > .list-group-item", (e) => {
+        //     console.log('clicked');
+        //     $("#placeNameInputIdEC").val($(e.target).html());
+        //     $("#placeNameResultListEC").hide();
+        // });
+
+        // listen for onclick events on search result list items
+        $(document).on('click', "#placeNameResultListEC > .list-group-item > button", (e) => {
+            console.log('clicked');
+            e.preventDefault();
+            e.stopPropagation();
+
+            let text = $(e.target).html();
+            let name = $(e.target).siblings('.place-name').data('name');
+            let locality = $(e.target).siblings('.place-name').data('locality'); // not working
+            let district = $(e.target).siblings('.place-name').data('district');
+            let state = $(e.target).siblings('.place-name').data('state');
+            let id = $(e.target).siblings('.place-name').data('id');
+
+            console.log({
+                text,
+                name,
+                locality,
+                district,
+                state,
+                id
+            });
+
+            if (CollectionToEdit.places.length > 0 && CollectionToEdit.places.every((item) => String(item.state) != String(state))) {
+                alert('All places should be from same state');
+            }
+
+
+            if (text.trim() == 'ADD') {
+                if (CollectionToEdit.places.every((item) => String(item.id) !== String(id))) {
+
+                    CollectionToEdit.places.push({
+                        id,
+                        name,
+                        district,
+                        locality,
+                        state
+                    });
+                }
+
+                $(e.target).html('REMOVE');
+                $(e.target).removeClass('btn-outline-success').addClass(
+                    'btn-outline-danger');
+            } else {
+                CollectionToEdit.places = CollectionToEdit.places.filter((item) => String(item
+                        .id) !=
+                    String(id));
+                $(e.target).html('ADD');
+                $(e.target).removeClass('btn-outline-danger').addClass('btn-outline-success');
+
+            }
+
+            if (CollectionToEdit.places.length > 0) {
+
+                $("#InCollectionEC .list-group").html('');
+                CollectionToEdit.places.forEach(place => {
+                    $("#InCollectionEC .list-group").append(
+                        `
+                                        <li class="list-group-item d-flex  flex-row py-1">
+                                            <div class="col-9  d-flex  flex-column">
+                                                <label class="mb-0">${place.name}</label>
+                                                <span class="text-muted font-weight-normal">
+                                                    ${ place.district }
+                                                    ${ place.locality ? ', '+  place.locality :'' }
+                                                    </span>
+                                            </div>
+                                            <div class="col-3">
+                                                <button type="button" data-id="${ String(place.id) }" onclick="removePlaceEC(event)" class="btn btn-link text-danger  btn-sm float-right">Remove</button>
+                                            </div>
+                                        </li>
+                                        `
+                    );
+                });
+
+                $("#InCollectionEC .collection-default").hide();
+                $("#InCollectionEC .list-group").show();
+
+
+            } else {
+
+                $("#InCollectionEC .collection-default").show();
+                $("#InCollectionEC .list-group").hide();
+
+
+            }
+
+
+            console.log({
+                CollectionToEdit
+            });
+
+            // update collection state
+            $("#placesCountIdEC").html(CollectionToEdit.places.length);
+
+
+
+        });
+
+
+
+
+
+
+    });
+
+
+
+
+    // functions -----------------------------------------------------------------------
+
+
+    // search places
+
+
+    function searchPostsEC(e, prevSkips = 0, skips = 0, totals = null) {
+        e.preventDefault();
+
+        console.log("Searching...");
+        let stext = $("#placeNameInputIdEC").val();
+        let slocation = $("#locationInputIdEC").val();
+        if (stext.length > 1 && slocation.length > 1) {
+
+            console.log('Validate: true');
+            $("#placeNameInputIdEC").siblings(".input-group-append").children("button").html(
+                `<div class="spinner-border text-muted spinner-border-sm"></div>`
+            );
+            const rootDomain =
+                `${location.protocol}//${window.location.hostname}${location.port ? ':'+location.port: ''}`;
+
+            $.get(rootDomain + '/search/ajax?stext=' + stext + '&slocation=' + slocation + '&total=' + totals +
+                    '&skip=' + skips, (data,
+                        status) => {
+                        console.log({
+                            data
+                        });
+                        if (status == 'success' && data.posts && data.posts.length > 0) {
+
+                            if (prevSkips == 0) {
+                                $("#placeNameResultListEC").html('');
+                            }
+                            $("#placeNameResultListEC").show();
+                            console.log({
+                                data
+                            });
+                            data.posts.forEach(element => {
+                                const notAdded = CollectionToEdit.places.every((item) => String(item.id) !=
+                                    String(element._id));
+
+                                $("#placeNameResultListEC").append(
+                                    `<li href="#" class=" list-group-item list-group-item-action">
+                                <span 
+                                style="width: 90%" 
+                                class="place-name" 
+                                data-id="${element._id}" 
+                                data-name="${element.name}"
+                                data-state="${element.address.state.name}"
+                                data-district="${element.address.district.name}"
+                                data-locality="${element.address.locality.name}"
+                                >
+                                ${element.name}<br/>
+                                </span>
+                                <span class="text-muted font-weight-normal"> 
+                                    ${element.address.district.name} ${element.address.locality.name ? ', '+element.address.locality.name :''}
+                                </span>
+                                <button id="${element._id}_btn_EC" class="btn btn-sm ${ notAdded ? 'btn-outline-success': 'btn-outline-danger' } shadow-none float-right" >
+                                            ${ notAdded ?  'ADD':'REMOVE' }
+                                </button>
+                                `
+                                );
+                            });
+
+                            console.log({
+                                skips,
+                                prevSkips,
+                                totals: data.totals
+                            })
+                            console.log(prevSkips < data.totals);
+                            console.log(data.totals > 7);
+                            console.log((data.totals - (prevSkips + 7)) > 0);
+
+                            if (prevSkips < data.total && data.total > 7 && (data.total - (prevSkips + 7)) > 0) {
+
+                                skips = skips + 7;
+                                prevSkips = skips;
+                                $("#placeNameResultListEC").siblings(".load-more").remove();
+                                $("#placeNameResultListEC ").after(`
+                                            <div class="load-more p-0 ">
+                                                <button onclick="searchPostsEC(event , ${prevSkips} , ${skips}, ${data.total})" 
+                                                    class="btn-sm form-control btn btn-block text-center btn-light" style="background-color: #dddfe0;">
+                                                    Load more ${data.total - prevSkips}
+                                                </button>
+                                            </div>
+                                        `);
+
+                            } else {
+                                $("#placeNameResultListEC").siblings(".load-more").remove();
+                            }
+
+                            $("#placeNameInputIdEC").siblings(".input-group-append").children("button").html(
+                                `<i class="fal fa-search  "></i>`
+                            );
+
+                        }
+                    })
+                .fail((e) => {
+                    console.log({
+                        e
+                    });
+                    $("#placeNameInputIdEC").siblings(".input-group-append").children("button").html(
+                        `<i class="fal fa-search  "></i>`
+                    );
+                });
+
+        }
+    }
+
+
+    // // show collection cover image
+    function filePreviewEC(input) {
+        // const file = $(event.target).files[0]);
+        console.log({
+            input
+        });
+        const file = input.files[0];
+        console.log("input file - ", file);
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                // $('.file-preview').children().remove();
+                $('#createCollectionFormEC .first .cover-image').show();
+                $('#createCollectionFormEC .first .cover-image').css('background-image',
+                    `url(${e.target.result})`);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // // submit 1st form - cover-image,name,description
+    function submitFirstFormEC(e) {
+        console.log('adding places', e);
+
+        // trim inputs
+        const form = $("#createCollectionFormEC")[0];
+        for (let i = 0; i < form.length; i++) {
+            console.log($(form[0]).prop('name'), '-', $(form[0]).val());
+            $(form[0]).val($(form[0]).val().trim());
+        }
+
+
+        const formData = new FormData(form);
+        for (let entries of formData.entries()) {
+            console.log(entries[0], '-', entries[1]);
+        }
+        console.log({
+            formData
+        });
+
+        // validate form
+        let file = formData.get('cover-image');
+        let coverImageURL = formData.get('coverImageURL');
+        let name = formData.get('name');
+        let description = formData.get('description');
+        let userId = formData.get('userId');
+        // let status = $('#createCollectionFormEC input[name="collectionStatus"]').prop('checked');
+
+        // formData.set('status', Boolean(status));
+        formData.append('places', JSON.stringify(CollectionToEdit.places));
+        
+        // formData.append()
+        if ( (!name || name.trim() == '') || (!description || description.trim() == '')) {
+            alert('Please enter required fields ( * )');
+        } else if (!coverImageURL ) { 
+            if (  !file || !file.name  ) {
+                alert('Please select a cover image');
+            } else if (Number(file.size) / (1024 * 1024) > 5 && (file.type != 'image/png' || file.type !=
+                'image/jpg')) {
+                alert('Image size should be less than 5mb and of type jpeg or png. ');
+            }
+        }  else {
+
+            // upload
+            const rootDomain =
+                `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+            $(e.target).html(`<div class="spinner-border text-white spinner-border-sm"></div> Saving`);
+            $.ajax({
+                url: `${rootDomain}/users/collections/update`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (data) {
+                    console.log('Form submitted');
+                    console.log({
+                        data
+                    });
+                    console.log("Collection: ", data ? data : null);
+
+                    // show erro
+                    if (!data) {
+                        // error occurred
+                        alert('Unexpected error occurred. Please try again.');
+                    } else if (data) {
+                        // success exit modal
+                        fetchMyCollections();
+                        $(e.target).html(`SAVED!`);
+                        setTimeout(() => {
+                            $(e.target).html(`SAVE`);
+                            $("#createCollectionModalEC").modal('hide');
+                        }, 1500);
+
+                    }
+                },
+                error: function (data) {
+                    console.log('Error');
+                    $(e.target).html(`SAVE`);
+                    alert('Error occurred. Please try again.');
+
+                }
+            });
+        }
+    }
+
+    // remove place from collection
+    function removePlaceEC(e) {
+        const l = CollectionToEdit.places.length;
+        const id = $(e.target).data('id');
+        console.log({
+            id,
+            l
+        })
+        if (id) {
+            const a = CollectionToEdit.places.filter((item) => {
+                console.log(String(item.id) != String(id) ? true : false);
+                return String(item.id) != String(id);
+            });
+
+            CollectionToEdit['places'] = a;
+            $("#createCollectionFormEC #placesCountIdEC").html(CollectionToEdit.places.length);
+            console.log({
+                a,
+                'l': CollectionToEdit.places.length
+            });
+            console.log({
+                'Places': CollectionToEdit.places
+            });
+            $(e.target).parent().parent().remove();
+
+            // change remove to add on placeNameResultList
+            $(`#${id}_btn_EC`).html('ADD').removeClass('btn-outline-danger').addClass('btn-outline-success');
+
+        }
+    }
+
+    // show add places tab
+    function showAddPlacesT(e) {
+
+        // change modal title 
+        $("#createCollectionModalEC .modal-title").html('EDIT PLACES');
+
+        // show add places tab
+        $("#createCollectionModalEC section.first").addClass('d-none');
+        $("#createCollectionModalEC section.second").removeClass('d-none');
+
+    }
+
+    function checkStatusEC( e){
+        const checked = $(e.target).prop('checked');
+
+        $(e.target).siblings("label").html(checked? 'Active': 'Inactive');
+    }
+
+    function deleteCollection(e){
+        e.preventDefault();
+
+        const id = $("#createCollectionFormEC #collectionIdEC").val();
+        if (id && confirm('Please confirm to delete collection')) {
+            // alert(id);
+            const rootDomain = `${location.protocol}//${window.location.hostname}${location.port ? ':'+location.port: ''}`;
+
+            $.post(`${rootDomain}/users/collections/delete/${id}`,
+            (data, status) => {
+                console.log(data);
+                if ( status == 'success' && data ) {
+                    $("#createCollectionModalEC").modal('hide');
+                    fetchMyCollections();
+                }
+            })
+            .fail(e=>{
+                alert('Error occurred');
+            });
+        }
+        
+    }
+</script>

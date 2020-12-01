@@ -1,0 +1,314 @@
+<div class="col-2 py-3 pl-3 pr-0 left-col admin-navigation" style="">
+    <a href="/admin/overview">
+        <h4 class="text-white font-weight-bold d-flex align-items-center pr-3">
+            <img src="/assets/img/logo.png" style="width: 50px; margin-right: 10px" />
+            Digital Manipur
+        </h4>
+    </a>
+
+    <hr class="bg-white mr-3">
+    <div class="py-4"></div>
+    <div class="cus-card">
+
+        <a href="/admin/overview" class="btn <%= pageTitle == 'overview' ? "btn-active":'' %>">
+            Overview
+        </a>
+
+
+    </div>
+    <div class="cus-card">
+
+        <a href="/admin/logo" class="btn <%= pageTitle == 'logo image' ? "btn-active":'' %>">
+            Logo
+        </a>
+
+
+    </div>
+    <div class="cus-card">
+        <a href="/admin/keywords" class="btn <%= pageTitle == 'keywords' ? "btn-active":'' %>">
+            Keywords
+        </a>
+
+    </div>
+    <div class="cus-card">
+        <a href="/admin/productBrands" class="btn <%= pageTitle == 'brands' ? "btn-active":'' %>">
+            Brands
+        </a>
+
+    </div>
+
+    <div class="accordion" id="accordionExample">
+        <!-- Banner custom sidebar card -->
+        <div class="cus-card">
+
+            <button class="btn  collapsed include-icons posts-btn" type="button" data-toggle="collapse"
+                data-target="#Banner" aria-expanded="false" aria-controls="collapseThree">
+                <span>Banner</span><i class="fal fa-angle-down"></i>
+            </button>
+
+            <div id="Banner" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                <ul class="list-group">
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/banner/image" class="<%= pageTitle == 'banner image' ? "btn-active":'' %>">
+                            <span>Image</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/banner/text" class="<%= pageTitle == 'banner text' ? "btn-active":'' %>">
+                            <span>Text</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="cus-card">
+
+            <button class="btn  collapsed include-icons posts-btn" type="button" data-toggle="collapse"
+                data-target="#Posts" aria-expanded="false" aria-controls="collapseThree">
+                <span>Posts</span><i class="fal fa-angle-down"></i>
+            </button>
+
+            <div id="Posts" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                <ul class="list-group">
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/posts/recent" class="<%= pageTitle == 'recent posts' ? "btn-active":'' %>">
+                            <span>Recent</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/posts/pending" class="<%= pageTitle == 'pending posts' ? "btn-active":'' %>">
+                            <span>Pending</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/posts/add" class="<%= pageTitle == 'Add post' ? "btn-active":'' %>">
+                            <span>Add</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/posts/edit" class="<%= pageTitle == 'Edit post' ? "btn-active":'' %>">
+
+                            <span>Edit</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+        <!-- Product custom sidebar card -->
+        <div class="cus-card">
+
+            <button class="btn  collapsed include-icons posts-btn" type="button" data-toggle="collapse"
+                data-target="#Products" aria-expanded="false" aria-controls="collapseThree">
+                <span>Products</span><i class="fal fa-angle-down"></i>
+            </button>
+
+            <div id="Products" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                <ul class="list-group">
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/products/recent"
+                            class="<%= pageTitle == 'recent products' ? "btn-active":'' %>">
+                            <span>Recent</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+                    <li class="list-group-item include-icons">
+                        <a href="" class="<%= pageTitle == 'pending products' ? "btn-active":'' %>">
+                            <span>Pending</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+        <div class="cus-card">
+
+            <button class="btn  collapsed include-icons" type="button" data-toggle="collapse" data-target="#users"
+                aria-expanded="false" aria-controls="collapseThree">
+                <span>Users</span><i class="fal fa-angle-down"></i>
+            </button>
+
+            <div id="users" class="collapse " aria-labelledby="headingThree" data-parent="#accordionExample">
+                <ul class="list-group">
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/users/recent" class="<%= pageTitle == 'Recent users' ? "btn-active":'' %>">
+
+                            <span>Recent</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/users/add" class="<%= pageTitle == 'Add user' ? "btn-active":'' %>">
+
+                            <span>Add </span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/users/edit" class="<%= pageTitle == 'Edit user' ? "btn-active":'' %>">
+                            <span>Edit </span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="cus-card">
+
+            <button class="btn  collapsed include-icons" type="button" data-toggle="collapse" data-target="#location"
+                aria-expanded="false" aria-controls="collapseThree">
+                <span>Location</span><i class="fal fa-angle-down"></i>
+            </button>
+
+            <div id="location" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                <ul class="list-group">
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/address/country" class="<%= pageTitle == 'Country' ? "btn-active":'' %>">
+                            <span>Country</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/address/state" class="<%= pageTitle == 'State' ? "btn-active":'' %>">
+                            <span>State</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/address/district" class="<%= pageTitle == 'District' ? "btn-active":'' %>">
+                            <span>District</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/address/locality" class="<%= pageTitle == 'Locality' ? "btn-active":'' %>">
+                            <span>Locality</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="cus-card">
+
+            <button
+                class="btn <%= ["Category", "Sub-Category"].indexOf(pageTitle) != -1 ? '': 'collapsed' %>   include-icons"
+                type="button" data-toggle="collapse" data-target="#Category"
+                aria-expanded="<%= ["Category", "Sub-Category"].indexOf(pageTitle) != -1 ? 'true': 'false' %>"
+                aria-controls="collapseThree">
+                <span>Category</span><i class="fal fa-angle-down"></i>
+            </button>
+
+            <div id="Category" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                <ul class="list-group">
+
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/category" class="<%= pageTitle == 'Category' ? "btn-active":'' %>">
+                            <span>Recent</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item include-icons">
+                        <a href="/admin/category/subcategory"
+                            class="<%= pageTitle == 'Sub-Category' ? "btn-active":'' %>">
+                            <span>Sub-Category</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+
+
+        <div class="cus-card">
+
+            <!-- <button class="btn  collapsed shadow-none include-icons" type="button" data-toggle="collapse"
+                data-target="#Website" aria-expanded="false" aria-controls="collapseThree">
+                <span>Website</span><i class="fal fa-angle-down"></i>
+
+            </button> -->
+            <a role="button" href="/admin/site/collections" class="btn text-white collapsed shadow-none include-icons">
+                <span>Website</span><i class="fal fa-angle-down"></i>
+
+            </a>
+
+            <div id="Website" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                <ul class="list-group">
+
+                    <li class="list-group-item include-icons" data-toggle="tab" href="#websiteHome">
+                        <a>
+                            <span>Home</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item include-icons" data-toggle="tab" href="#websiteAdvertisement">
+                        <a>
+                            <span>Advertisement</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item include-icons" data-toggle="tab" href="#websiteReviews">
+                        <a>
+                            <span>Reviews</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+                    <li class="list-group-item include-icons" data-toggle="tab" href="#websiteReports">
+                        <a>
+                            <span>Reports</span>
+                            <i class="fal fa-angle-right "></i>
+                        </a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(e => {
+        let pageTitle = <% - JSON.stringify(pageTitle) %>;
+
+        if (["Category", "Sub-Category"].indexOf(pageTitle) != -1) {
+            $(".admin-navigation button[data-target='#Category']").trigger('click');
+
+        }
+        if (["recent posts", "pending posts", "Edit post", "Add post"].indexOf(pageTitle) != -1) {
+            $(".admin-navigation button[data-target='#Posts']").trigger('click');
+        }
+        if (["Recent users", "Add user", "Edit user"].indexOf(pageTitle) != -1) {
+            $(".admin-navigation button[data-target='#users']").trigger('click');
+        }
+        if (["Country", "State", "District", "Locality"].indexOf(pageTitle) != -1) {
+            $(".admin-navigation button[data-target='#location']").trigger('click');
+        }
+        // alert(["Category", "Sub-Category"].indexOf(pageTitle));
+    });
+</script>

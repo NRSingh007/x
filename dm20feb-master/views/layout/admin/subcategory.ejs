@@ -1,0 +1,541 @@
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    
+
+
+</head>
+
+<body class="admin-page">
+
+    <%- include('./../../includes/alert'); %>
+
+
+    <section class="main-body container-fluid row mx-0 px-0">
+
+        <!-- Left column navigation  -->
+        <%- include('./../../includes/adminNavigation.ejs') %>
+
+        <!-- Right column main body -->
+        <div class="col-10  main-col px-0" ">
+
+            <!-- Top navigation -->
+            <section class=" container nav-container mx-0">
+                    <div class="d-flex nav-header  bg-white  py-2 px-3  " style="width: 100%;">
+
+                        <div class="dropdown dropdown-menu-right ml-auto" style="color: black;">
+                            <button class="shadow-none btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
+                                type="button">
+                                <% if( typeof user.images.profile.common.url != "undefined" && user.images.profile.common.url) { %>
+                                <img class="rounded-circle" src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                    style="width: 25px;height: 25px;margin-right: 5px;">
+                                <% } else { %>
+                                <i class="fad fa-user-shield font-weight-bold"></i>
+                                <% } %>
+
+                                <span class="px-1">
+                                    <%= `${user.name.firstName}` %>
+                                </span>
+                            </button>
+                            <div class="dropdown-menu text-secondary" role="menu"
+                                style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                                <i class="fal fa-angle-up"  style="
+                                color: #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 10px;
+                                font-size: 22px;
+                                z-index: 999;
+                                "></i>
+                                <a class="dropdown-item" role="presentation" href="#" style="color: black;">Profile</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Notifications</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Settings</a>
+                                <hr style="margin: 0;">
+                                <form action="/auth/logout?via=admin" method="POST">
+                                    <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                        role="presentation">Logout</button>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+            </section>
+
+            <!-- main content -->
+            <section>
+
+                <div class="container p-5 " id="subcategoryContainer">
+
+                    <div class="row" style="position: absolute;
+                    right: 50px;
+                    top: 0;
+                    z-index: 1">
+                
+                        <div class="toast" data-delay="5000">
+                            <div class="toast-header">
+                                <strong class="mr-auto text-primary"></strong>
+                                <!-- <small class="text-muted">5 mins ago</small> -->
+                                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                            </div>
+                            <div class="toast-body">
+                
+                            </div>
+                        </div>
+                    </div>
+                
+                    <section class="row px-3 edit-section">
+                        <div class="col bg-white p-3 rounded border">
+                            <h5 class="title">Add subcategory </h5>
+                            <div class="form">
+                                <form action="" name="subcategory-form">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <input autocomplete="off" type="text" class="form-control" id="subcategory-input"
+                                                    placeholder="Enter new subcategory ...">
+                                            </div>
+                                            <!-- <div class="form-group">
+                                                <label for="exampleFormControlSelect2" style="display: block;">Select category <small
+                                                        class="float-right">Multi select: <b>( Ctrl + click ) </b></small></label>
+                                                <select name="selected_categories" multiple class="form-control"
+                                                    id="categoriesMultiSelect">
+                                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                                                </select>
+                                            </div> -->
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="t" id="multilist_holder">
+                
+                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <input type="hidden" id="updateIdsubcategory" name="updateId" value="null">
+                
+                                    <div class="row px-3 page-control">
+                                        <button type="button" id="addBtnSubCategory" onclick="addSubCategory(event)"
+                                            class="btn btn-success mr-3">Submit</button>
+                                        <button type="button" hidden id="updateBtnSubCategory" onclick="updateSubcategory()"
+                                            class="btn btn-success mr-3">Update</button>
+                                        <button type="reset" id="cancelBtnSubCategory" class="btn btn-info mr-3 "
+                                            onclick="cancelEditSubCategory()">Cancel</button>
+                                        <button hidden type="button" id="cdeleteBtnSubCategory" class="btn btn-danger mr-3 ">Delete</button>
+                                        <script>
+                                            $(document).ready(function () {
+                
+                                                var div = $('<div></div>');
+                                                div.append(`<div class="px-3 py-2" style="display: flex;"> 
+                                                                    <button onclick="deleteSubcategory()" class="btn btn-success small mr-3">Yes</button>
+                                                                    <button class="btn btn-secondary small">No</button>
+                                                                </div>`);
+                                                var options = {
+                                                    placement: 'right',
+                                                    html: true,
+                                                    title: "Are you sure?",
+                                                    trigger: 'click',
+                                                    template: `
+                                                    <div class="popover" role="tooltip" style="width: min-width:200px">
+                                                        <div class="arrow"></div>
+                                                            <h3 class="popover-header"> Are you sure? </h3>
+                                                            <div class="popover-body" style="">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        `,
+                                                    content: div,
+                                                    animation: true
+                
+                                                };
+                
+                                                $('#cdeleteBtnSubCategory').popover(options);
+                
+                
+                
+                
+                                            });
+                
+                                            $('html').on('click', function (e) {
+                                                if (typeof $(e.target).data('original-title') == 'undefined' &&
+                                                    !$(e.target).parents().is('.popover.in')) {
+                                                    $('#cdeleteBtnSubCategory').popover('hide');
+                                                }
+                                            });
+                
+                                        </script>
+                                    </div>
+                                </form>
+                
+                            </div>
+                        </div>
+                
+                    </section>
+                
+                    <section class="row px-3">
+                        <div class="col bg-white p-3 rounded border">
+                            <div class="row px-0 my-2 py-3">
+                                <div class="col">
+                                    <span>
+                                        <h5>Recent subcategory </h5>
+                                    </span>
+                                </div>
+                                <div class="col d-flex flex-row "
+                                    style="display: flex; align-items: center; justify-content: space-around;">
+                                    <input autocomplete="off" type="text" class="" style="width:90%;  padding: 4px 10px;display: none;"
+                                        name="searchsubcategory" id="searchsubcategory" class="form-control" onkeyup="searchSubCategory()"
+                                        placeholder=" Enter text to search..." id="">
+                                    <a class="ml-auto" onclick="(() => { $('#searchsubcategory').show().focus(); searchSubCategory();  })()"
+                                        style="color: initial; cursor: pointer;">
+                                        <i class="fa fa-search text-secondary"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="posts-list">
+                                <ul class="list-group " id="Recent_category_list">
+                
+                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                
+                
+                
+                </div>
+                
+                
+            <!-- Main content ends here -->
+            </section>
+
+        <!-- Right column main body ends here -->
+         </div>
+
+
+    </section>
+
+
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/fontawesome-pro-5.11.1-web/js/fontawesome.min.js"></script>
+    <script src="/assets/js/admin.js"></script>
+
+   
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+
+
+<script>
+
+    $(document).ready(e=>{
+        fetchSubCategory();
+    });
+
+    // AJAX category PAGE
+    let recentSubCategory;
+    function fetchSubCategory() {
+
+        console.log('calling fetchSubCategory');
+        $('#subcategoryContainer #Recent_category_list').html('');
+        $('#subcategoryContainer #Recent_category_list').append(`<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+        $.get(rootDomain + '/admin/category/subcategory/recent', (data, status) => {
+
+            if (status == 'success') {
+                console.log("Response fetchSubCategory : ", data, status);
+                // $('#totalUsers').html(data.usersCount);
+                // $('#monthlyUsers').html(data.usersCountCurrentMonth);
+                // $('#totalPosts').html(data.postsCount);
+                // $('#monthlyPosts').html(data.postsCountCurrentMonth);
+                recentSubCategory = data;
+                refreshsubcategoryList(data);
+
+                // append categories
+                //                                 $('#category #categoriesMultiSelect').html('');
+                //                                 var count = 0;
+                //                                 data.forEach(category => {
+
+                //                                     $('#category #categoriesMultiSelect').append(`
+                //         <option value="${category._id}" name="${category.name}">${++count}. ${category.name}</option>
+                // `);
+                //                                 });
+
+            }
+
+        });
+    }
+
+
+    // show selected categories on right side
+    $('#subcategoryContainer #categoriesMultiSelect').on('click', 'option', function (e) {
+
+        $("#subcategoryContainer #categoriesMultiSelect")
+            .change(function () {
+
+                $('#multilist_holder').html('');
+                $("#categoriesMultiSelect option:selected").each(function () {
+                    $('#multilist_holder').append(`
+                            <span class="badge badge-pill badge-success"> ${ $(this).text()}</span>
+                            `);
+                });
+
+            })
+            .trigger("change");
+
+        // console.log($('#categoriesMultiSelect').val());
+    });
+
+    function refreshsubcategoryList(data) {
+
+        // exception for subCat inside category
+        data.forEach((subCatArray)=>{
+            
+        });
+
+        console.log("refreshsubcategoryList data ", data);
+        $('#subcategoryContainer #Recent_category_list').html('');
+        // append list header
+        $('#subcategoryContainer #Recent_category_list').append(`<li class="cus-list-header list-group-item d-flex justify-content-between align-items-center">
+            <div class="col-4 d-inline-block text-truncate">
+                <b> Sub-category </b>
+            </div>
+            <div class="col-3 d-inline-block text-truncate">
+                <b> Created Date </b>
+            </div>
+            <div class="col-3 d-inline-block text-truncate"><b>Modified Date</b></div>
+            <div class="col-2" >   
+                <b>Manage</b>                    
+            </div>
+        </li>`);
+
+        data.forEach(post => {
+
+            // append list data
+            $('#subcategoryContainer #Recent_category_list').append(`
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="col-4 d-inline-block text-truncate">${post.name}</div>
+             
+                
+                <input type="hidden" name="keyId" value="${post._id}" />
+                <div class="col-3 d-inline-block text-truncate">
+                    ${ getCustomDate(new Date(post.createdOn))}
+            </div>
+                <div class="col-3 d-inline-block text-truncate">${ getCustomDate(new Date(post.modifiedOn)) }</div>
+                <div class="col-2" >                            
+                    <button data-id="${post._id}" class="btn btn-outline-primary btn-sm" onclick="editSubCategory(event)">Edit</button>                            
+                </div>
+        </li>
+        `);
+        });
+    }
+
+    function editSubCategory(e) {
+
+        $('.main-col').stop(true, false).animate({ scrollTop: 0 }, 'fast');
+        $('#updateBtnSubCategory').prop('hidden', false);
+        $('#addBtnSubCategory').prop('hidden', true);
+        $('#cdeleteBtnSubCategory').prop('hidden', false);
+
+        let category = recentSubCategory.find((category) => {
+            return $(e.target).data('id') == category._id;
+        })
+        if (category) {
+            $('#subcategoryContainer #subcategory-input').val(category.name);
+            $('#subcategoryContainer .edit-section .title').text('Edit category');
+            $('#updateIdsubcategory').val(category._id);
+        } else {
+            console.log('cannot find sub-category');
+        }
+
+
+    }
+
+
+    function cancelEditSubCategory() {
+        $('#multilist_holder').html('');            // clear selected options
+        $('#subcategoryContainer .edit-section .title').text('Add new sub category');
+        $('#subcategoryContainer #categoriesMultiSelect option:selected').prop("selected", false);
+        $('#subcategoryContainer #categoriesMultiSelect option:selected').prop("selected", false);
+        $('#updateBtnSubCategory').prop('hidden', true);
+        $('#addBtnSubCategory').prop('hidden', false);
+        $('#cdeleteBtnSubCategory').prop('hidden', true);
+        $("#subcategoryContainer form[name='category-form']").trigger("reset");
+        $('#subcategoryContainer #category').removeAttr('value');
+        // $('#cancelBtnSubCategory').prop('hidden', true);
+        $("#subcategory-input").val('');
+    }
+
+    function updateSubcategory() {
+        const updateId = $('#subcategoryContainer #updateIdsubcategory').val();
+        console.log('updateId : ', updateId);
+
+        const key = $('#subcategoryContainer #subcategory-input').val();
+        const token = $("#subcategoryContainer form[name='subcategory-form'] input[name='_csrf']").val();
+
+        if (updateId != null && updateId.length == 24) {
+
+            // ajax post update
+            $.post(rootDomain + '/admin/category/subcategory/update',
+                {
+                    "name": key,
+                    "_csrf": token,
+                    "id": updateId
+                }, (data, status) => {
+
+                    if (status == 'success') {
+                        fetchSubCategory();
+                        cancelEditSubCategory();
+                        console.log(data, status);
+                        showSuccessAlert('Updated successfully');
+                    }
+                }).fail(e=>{
+                    showDangerAlert("Unexpected error occurred. Please reload this page.");
+                });
+
+        }
+    }
+
+    function deleteSubcategory() {
+
+        const id = $('#subcategoryContainer #updateIdsubcategory').val();
+        const token = $("#subcategoryContainer form[name='subcategory-form'] input[name='_csrf']").val();
+        console.log('Deleting category - ', id ,token);
+        if (id != null && id.length == 24) {
+            $.post(`${rootDomain}/admin/category/subcategory/delete`, {
+                "_csrf": token,
+                "id": id
+            }, (data, status) => {
+                if (status == 'success') {
+                    console.log('Response : ', data);
+                    console.log('category Deleted ');
+                    fetchSubCategory();
+                    showSuccessAlert('Deleted successfully');
+                    cancelEditSubCategory();
+
+                }
+            }
+
+            )
+                .fail(function (error) {
+                    // alert(JSON.parse(error)) ;
+                    const response = JSON.parse(error.responseText);
+                    console.log(response);
+                    showDangerAlert(response.error)
+                });
+        }
+
+    }
+
+
+    function addSubCategory(event) {
+        event.preventDefault();
+        console.log('adding Category..');
+
+        const key = $('#subcategoryContainer #subcategory-input').val();
+        const token = $(event.target).parent('div').siblings("input[name='_csrf']").val();
+
+        if (key.length > 0) {
+            $.post(`${rootDomain}/admin/category/subcategory/add`, {
+                "name": key,
+                "_csrf": token
+            }, (data, status) => {
+                if (status == 'success') {
+                    console.log('Response : ', data);
+                    cancelEditSubCategory();
+                    showSuccessAlert('Added!')
+                    fetchSubCategory();
+                }
+            }
+
+            )
+                .fail(function (error) {
+                    // alert(JSON.parse(error)) ;
+                    const response = JSON.parse(error.responseText);
+                    console.log(response);
+                    showDangerAlert(response.error)
+                });
+
+        } else {
+            console.log("fields cannot be empty");
+            showDangerAlert('Please provide a sub-category name');
+        }
+
+    }
+
+
+
+
+
+    // function showSuccessAlert(title, error = false, message = null) {
+    //     $('#subcategoryContainer .toast-header strong').text(title);
+    //     // $('#category .toast-header small').text(title);
+    //     // $('#category .toast-body ').text(body);
+
+    //     if (error) {
+    //         $('#subcategoryContainer .toast-body ').text(message ? message : '');
+    //         $('#subcategoryContainer .toast-body ').show();
+    //     } else {
+    //         $('#subcategoryContainer .toast-body ').hide();
+    //     }
+    //     $('#subcategoryContainer .toast').toast('show');
+    //     // setTimeout(function(){ $('#category .toast').toast('hide') }, 200000);
+    // };
+
+    var timer;
+    function searchSubCategory() {
+
+        const value = $(" #subcategoryContainer #searchsubcategory").val();
+        console.log(value)
+        if (value.length > 0) {
+
+            $('#subcategoryContainer #Recent_category_list').html('');
+            $('#subcategoryContainer #Recent_category_list').append(`<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+
+            if (timer) { clearTimeout(timer); }
+            timer = setTimeout(function () {
+                $.get(`${rootDomain}/admin/category/subcategory/search?searchText=${value}`, (data, status) => {
+                    // console.log(data,status)
+
+                    if (status == 'success' && data != 'undefined' && data.length > 0) {
+                        console.log(data, status)
+                        recentSubCategory = data;
+                        refreshsubcategoryList(data);
+                    } else {
+                        refreshsubcategoryList(recentSubCategory );
+                    }
+                })
+                    .fail((error) => {
+                        console.log("error")
+
+                        refreshsubcategoryList(recentSubCategory );
+                    });
+            }, 1000)
+
+        } else {
+            clearTimeout(timer);
+            refreshsubcategoryList( recentSubCategory);
+        }
+    }
+
+</script>
+
+
+
+
+
+</body>
+
+</html>

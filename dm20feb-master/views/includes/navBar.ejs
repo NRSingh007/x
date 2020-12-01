@@ -1,0 +1,243 @@
+<style>
+    
+@media screen and ( max-width: 768px) {
+    #searchpage-combo-c{
+        width: 100%;
+        margin: 0;
+    }
+}
+</style>
+
+<section class="header" style="background-color: #cb202d;">
+
+    <!-- <div class="row" style="background-color: #cb202d;"> -->
+    <!-- <div class="col"> -->
+    <div class="" style="background-color: #cb202d;">
+        <div class="container d-flex flex-row align-items-center flex-wrap  nav-container" style=" padding: 10px 0;">
+
+            <div class="col-12 col-sm-12 col-md-0 col-lg-0 col-xl-2 px-0 d-flex flex-row justify-content-between mb-2 mb-sm-0">
+                <div class="search-nav-logo pl-3 pl-sm-0" style="cursor: pointer;">
+                    <a href="/">
+                        <!-- <img style="cursor: pointer;" src="/assets/img/logo.png"> -->
+                        <label style="cursor: pointer;" class="sm-show">Digital &nbsp;Manipur</label>
+                    </a>
+                </div>
+
+                <div class="pr-3 pr-sm-0 m-buttons web-hide d-flex flex-row w-20" style="color: rgb(255,255,255);">
+
+                    <%- include('./mobile-profile.ejs',{ user}) %>
+
+                    <!-- <div class=" btn m-search" href="#" style="
+                            padding: 5px;
+                            color: rgb(255,255,255);">
+                        <i class="fa fa-search" style="cursor: pointer;"
+                            onclick="(function(){$('#mobileProfile').toggle();})()"></i>
+                    </div> -->
+                    <div class="m-login ml-3" href="#" style="color: rgb(255,255,255);">
+
+                        <div class="dropdown dropdown-menu-right ml-auto " id="dd-custom" style="color: black; ">
+                            <% if (user) { %>
+
+                            <button class="shadow-none btn p-0" onclick="(function(){$('#mobileProfile').toggle();})()"
+                                type="button">
+
+                                <% if( user.images.profile.common.url ) { %>
+                                <div class="rounded-circle " id="avatar" style="
+                                        border: 5px solid #ba1e2b; 
+                                        background-image:  url('/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>');
+                                        width: 35px;
+                                        height: 35px;
+                                        margin-right: 5px;"></div>
+                                <% } else { %>
+                                <i class="p-1 rounded border-secondary far fa-user font-weight-bold"></i>
+                                <% } %>
+
+
+
+                            </button>
+
+
+                            <% } else {  %>
+                            <i class="fas fa-user text-white"
+                                onclick="(function(){$('#mobileProfile').toggle();})()"></i>
+
+                            <div class="d-inline-block d-xs-block login m-hide ml-auto" style="margin: 0px;">
+                                <a class="shadow-none btn rounded btn-sm-block btn-xs-block btn-md search-btn w-login m-hide"
+                                    role="button"
+                                    style="height: auto;background-color: #cb202d;color: rgb(255,255,255);"
+                                    href="/auth/login">Log in</a>
+                            </div>
+                            <div class="d-inline-block d-xs-block ml-auto create-account md-hide" type="button"
+                                style="height: auto;background-color: #b8111e;color: rgb(255,255,255);">
+                                <a class="shadow-none btn rounded btn-sm-block btn-xs-block btn-md search-btn"
+                                    role="button"
+                                    style="height: auto;background-color: #b8111e;color: rgb(255,255,255);"
+                                    href="/auth/signup">Create account</a>
+                            </div>
+                            <% }  %>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <form class="col-12 col-xs-12  col-sm-12 col-md-9 col-lg-9 col-xl-7 px-0 " method="GET" action="/search" name="search-form"
+                autocomplete="off">
+                <input type="text" hidden name="p" value="1">
+                <input type="text" hidden name="li" value="10">
+                <div class="text-center both-holder d-flex justify-content-center align-items-md-center row px-4 mx-lg-0 px-sm-0"
+                    id="searchpage-combo-c">
+
+                    <div class="location-holder">
+                        <div class="bg-white input-item d-flex flex-row justify-content-around align-items-center cus-panel rounded"
+                            id="cus-dd-input-holder" style="color: #A6AFB4;">
+                            <i class="fa fa-location-arrow"
+                                style="color: #A6AFB4;"></i>
+                            <input autocomplete="off" type="text" id="location-input" style="color: #373636;"
+                                name="slocation" placeholder="Location" value="<%= 
+                                typeof slocation != 'undefined' && slocation && slocation != 'null' ? slocation : ''
+                                 %>"><i class="fas fa-angle-down" style="color: #A6AFB4;"></i>
+                        </div>
+                        <ul class="cus-dd-list " style="display: none;">
+
+                            <div class="text-center loading " id="lsr-loading"
+                                style="display: none; width: 100%; height: 100px;">
+                                <div class="spinner-border text-danger"></div>
+                            </div>
+
+                            <div id="lsrError" style="background: rgb(255,248,235); text-align: center;"></div>
+
+                            <div class="default_dd_menu location-dd-list ">
+
+
+                            </div>
+                            <div class="sr_locations_menu">
+
+                            </div>
+                        </ul>
+                    </div>
+                    <div class="search-holder">
+                        <div class="input-item bg-white d-flex flex-row justify-content-around align-items-center cus-panel rounded"
+                            id="cus-dd-input-holder" style="color: #A6AFB4;">
+                            <i class="fas fa-search"
+                                style="color: #A6AFB4;"></i>
+                                <input type="text" id="search-input"
+                                value="<%= typeof stext != 'undefined' ? stext : '' %>"
+                                style="color: #373636;" name="stext" placeholder="Search for places..."></div>
+                        <div class="cus-dd-list" style="display: none;">
+
+                            <div class="text-center loading" id="sr-loading"
+                                style="display: none; width: 100%; height: 300px;">
+                                <div class="spinner-border text-danger"></div>
+                            </div>
+
+                            <div id="searchResultError"
+                                style="background: rgb(255,248,235); text-align: center;"></div>
+
+                            <div id="default_dd_menuID" class="default_dd_menu  p-2">
+                              
+                                
+                            </div>
+                            <div class="search_result_menu">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-inline-block d-xs-block">
+                        <button id="form-search-btn"
+                            class="shadow-none btn btn-danger rounded btn-sm-block btn-xs-block btn-md border-white"
+                            role="button" style="height: 40px;" type="submit">Search</button>
+                    </div>
+                </div>
+            </form>
+
+            <% if (user) { %>
+            <!-- hide-in-mobile  -->
+            <div class="col-12 col-xs-12 col-sm-12 col-md-3  col-lg-3 px-0  dropdown dropdown-menu-right ml-auto hide-in-mobile"
+                style="color: black; ">
+
+                <button style="background-color: #ba1e2b; min-width: 160px; color: #fff; height: 42px;"
+                    class="float-right border-none shadow-none btn btn-sm dropdown-toggle" data-toggle="dropdown"
+                    aria-expanded="false" type="button">
+
+                    <% if( user.images.profile.common.url ) { %>
+                    <img class="rounded-circle " id="avatar"
+                        src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                        style="width: 25px;height: 25px;margin-right: 5px;">
+                    <% } else { %>
+                    <i id"profilePreviewUpdateDe"
+                        class="text-white p-1 rounded border-secondary far fa-user font-weight-bold"></i>
+                    <% } %>
+
+                    <span class="px-2 ">
+                        <%= `${ user.name && user.name.firstName ? user.name.firstName.trim().split(' ')[0] : ''}` %>
+                    </span>
+
+                </button>
+
+                <div class="dropdown-menu text-secondary" role="menu"
+                    style="
+                    padding-top: 4px;
+                    padding-bottom: 4px;
+                    margin-right: 0; 
+                    margin-top: 5px; 
+                    max-width: 160px;
+                    left: 25px !important;
+                    right:0">
+                    <i class="fas fa-caret-up" style="
+                                color: #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 10px;
+                                font-size: 22px;
+                                z-index: 999;
+                                "></i><a class="dropdown-item" role="presentation"
+                                href="/users/home"
+                                style="color: black;">Profile</a>
+                            <a class="dropdown-item text-dark" role="presentation"
+                                href="/users/notifications">Notifications</a>
+                            <a class="dropdown-item text-dark" role="presentation"
+                                href="/users/home#Bookmarks">Bookmarks</a>
+                            <a class="dropdown-item text-dark" role="presentation"
+                                href="/users/home#Reviews">Reviews</a>
+                            <a class="dropdown-item text-dark" role="presentation"
+                                href="/users/setting">Settings</a><hr style="margin: 0;">
+                    <form action="/auth/logout" method="POST">
+                        <button 
+                        onclick="location.replace('/auth/logout');"
+                        type="submit" class="dropdown-item btn btn-light text-dark"
+                            role="presentation">Logout</button>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    </form>
+
+                </div>
+
+            </div>
+            <% } else {  %>
+            <div class="col-12 col-xs-12  col-sm-12 col-md-3  col-lg-3 px-0 d-flex flex-row justify-content-between">
+                <div class="d-inline-block d-xs-block login m-hide ml-auto hide-in-mobile" style="margin: 0px;">
+                    <a class="shadow-none btn rounded btn-sm-block btn-xs-block btn-md search-btn w-login m-hide"
+                        role="button" style="height: auto;background-color: #cb202d;color: rgb(255,255,255);"
+                        href="/auth/login">Log in</a>
+                </div>
+                <div class="d-inline-block d-xs-block ml-auto create-account md-hide hide-in-mobile" type="button"
+                    style="height: auto;background-color: #b8111e;color: rgb(255,255,255);">
+                    <a class="shadow-none btn rounded btn-sm-block btn-xs-block btn-md search-btn" role="button"
+                        style="height: auto;background-color: #b8111e;color: rgb(255,255,255);"
+                        href="/auth/signup">Create
+                        account</a>
+                </div>
+            </div>
+            <% }  %>
+
+        </div>
+    </div>
+    <!-- </div> -->
+    <!-- </div> -->
+
+    <%- include("./shortcutBar.ejs"); %>
+
+
+</section>

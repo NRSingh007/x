@@ -1,0 +1,23 @@
+.list-custom ul li {
+  border-bottom: 1px solid rgb(237,237,237);
+}
+
+.list-custom ul li a {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.list-custom ul li a:hover {
+  background-color: #FBEED5;
+}
+
+.nav-col {
+  margin: 0 !important;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.form-group {
+  width: 100%;
+}
+

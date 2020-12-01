@@ -1,0 +1,824 @@
+
+
+
+
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    
+
+
+</head>
+
+<body class="admin-page">
+
+    <%- include('./../../includes/alert'); %>
+
+    <input hidden type="text" name="userId" id="userId" value="<%= typeof userToEdit != 'undefined' ? userToEdit._id :'' %>">
+
+    <section class="main-body container-fluid row mx-0 px-0">
+
+        <!-- Left column navigation  -->
+        <%- include('./../../includes/adminNavigation.ejs') %>
+
+        <!-- Right column main body -->
+        <div class="col-10  main-col px-0" ">
+
+            <!-- Top navigation -->
+            <section class=" container nav-container mx-0">
+                    <div class="d-flex nav-header  bg-white  py-2 px-3  " style="width: 100%;">
+
+                        <div class="dropdown dropdown-menu-right ml-auto" style="color: black;">
+                            <button class="shadow-none btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
+                                type="button">
+                                <% if( typeof user.images.profile.common.url != "undefined" && user.images.profile.common.url) { %>
+                                <img class="rounded-circle" src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                    style="width: 25px;height: 25px;margin-right: 5px;">
+                                <% } else { %>
+                                <i class="fad fa-user-shield font-weight-bold"></i>
+                                <% } %>
+
+                                <span class="px-1">
+                                    <%= `${user.name.firstName}` %>
+                                </span>
+                            </button>
+                            <div class="dropdown-menu text-secondary" role="menu"
+                                style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                                <i class="fal fa-angle-up"  style="
+                                color: #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 10px;
+                                font-size: 22px;
+                                z-index: 999;
+                                "></i>
+                                <a class="dropdown-item" role="presentation" href="#" style="color: black;">Profile</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Notifications</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Settings</a>
+                                <hr style="margin: 0;">
+                                <form action="/auth/logout?via=admin" method="POST">
+                                    <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                        role="presentation">Logout</button>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+            </section>
+
+            <!-- main content -->
+            <section>
+
+                <div class="container p-5 " id="editUserContainerId">
+
+                    <div class="row" style="position: absolute;
+                    right: 50px;
+                    top: 0;
+                    z-index: 1">
+                
+                        <div class="toast" data-delay="5000">
+                            <div class="toast-header">
+                                <strong class="mr-auto text-primary"></strong>
+                                <!-- <small class="text-muted">5 mins ago</small> -->
+                                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                            </div>
+                            <div class="toast-body">
+                
+                            </div>
+                        </div>
+                    </div>
+                
+                
+                
+                
+                
+                
+                
+                    <section class="row px-3">
+                        <div class="col bg-white p-3 rounded border">
+                            <div class="row px-0 my-2 py-1">
+                                <div class="col text-center">
+                                    <span>
+                                        <h5 class="display-4">Edit User</h5>
+                                        <hr>
+                
+                                    </span>
+                                </div>
+                
+                            </div>
+                
+                            <div class="searchUserHolder">
+                
+                                <div id="searchBoxEditUser" class="">
+                                    <div class="row px-0 my-1 py-1">
+                                        <div class="col-8 text-center input-group mx-auto">
+                
+                                            <input autocomplete="off" type="text" class="form-control" name="usernameOrEmail"
+                                                class="form-control" placeholder=" Enter email/username to search..." id="">
+                
+                                            <button class="btn btn-outline-secondary ml-1" onclick="searchUsersEdit(event)"
+                                                style="color: initial; cursor: pointer;">
+                                                Search
+                                                <!-- <i class="fa fa-search text-secondary"></i> -->
+                                            </button>
+                                        </div>
+                
+                
+                
+                                    </div>
+                                    <ul class="list-group px-0 my-2 py-2" id="search_post_list">
+                
+                                    </ul>
+                                </div>
+                
+                                <section class="row px-3" id="searchUsersListSectionId" style="min-height: 300px; display: none; ">
+                                    <div class="col bg-white p-3 rounded border">
+                                        <div class="row px-0 my-2 py-1">
+                                            <div class="col">
+                                                <span>
+                                                    <h5>Search result</h5>
+                                                </span>
+                                            </div>
+                
+                                        </div>
+                                        <div class="users-list">
+                                            <ul class="list-group " id="recentUsersListId">
+                
+                                                <li
+                                                    class="cus-list-header list-group-item d-flex justify-content-between align-items-center">
+                                                    <div class="col-3 d-inline-block text-truncate">
+                                                        <b> Name </b>
+                                                    </div>
+                                                    <div class="col-3 d-inline-block text-truncate">
+                                                        <b> Email </b>
+                                                    </div>
+                
+                                                    <!-- <div class="col-2 d-inline-block text-truncate">
+                                                        <b> Mobile </b>
+                                                    </div> -->
+                                                    <div class="col-2 d-inline-block text-truncate">
+                                                        <b> status </b>
+                                                    </div>
+                                                    <!-- <div class="col-1 d-inline-block text-truncate">
+                                                        <b> Verified </b>
+                                                    </div> -->
+                
+                                                    <div class="col-3 d-inline-block text-truncate"><b>Created Date</b></div>
+                                                    <div class="col-1">
+                                                        <b>Manage</b>
+                                                    </div>
+                                                </li>
+                
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </section>
+                
+                            </div>
+                
+                            <form name="edit_user_form" id="editUserFormId" method="post" enctype="multipart/form-data"
+                                style="display: none;">
+                                <div class="row justify-content-center">
+                                    <div class="col-8">
+                                        <input type="text" hidden name="userId" />
+                                        <input type="text" hidden name="oldImageLink" />
+                                        <div class="form-group">
+                                            <label for="firstName">Name:</label>
+                                            <input required autocomplete="off" type="text" name="firstName" class="form-control"
+                                                placeholder="Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="email">Email:</label>
+                                            <input required autocomplete="off" type="email" name="email" class="form-control"
+                                                placeholder="Email" title="Email should be of the format - example@company.xyz">
+                                        </div>
+                                        <!-- <div class="form-group">
+                                            <label for="password">New Password:</label>
+                                            
+                                            <input autocomplete="off" onchange="showPassword(event)" type="password" name="password"
+                                                class="form-control" placeholder="New password" min="8" pattern=".{8,}"
+                                                title="Password should be eight or more characters">
+                                        </div> -->
+                
+                                        <div class="form-group">
+                                            <label for="mobileNumber">Mobile number:</label>
+                                            <input autocomplete="off" onkeyup="checkMobile(this)" type="tel" name="mobileNumber"
+                                                class="form-control" placeholder="Mobile number"
+                                                title="Mobile number should be 10 digits " pattern="[0-9]{10}" minlength="10"
+                                                maxlength="10">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="optionalMobileNumber">Optional mobile number:</label>
+                                            <input autocomplete="off" type="tel" onkeyup="checkMobile(this)" name="optionalMobileNumber"
+                                                class="form-control" placeholder="Optional mobile number"
+                                                title="Mobile number should be 10 digits " pattern="[0-9]{10}" minlength="10"
+                                                maxlength="10">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="about">Bio:</label>
+                                            <textarea autocomplete="off" name="about" class="form-control" rows="5"
+                                                placeholder="Tell something about yourself in brief"></textarea autocomplete="off">
+                                        </div>
+                                        <div class="form-group custom-file mb-3">
+                                            <input autocomplete="off" onchange="filePreview(this)" type="file" placeholder="Profile picture" class="custom-file-input"
+                                                name="image" accept=".jpg, .png, .jpeg">
+                                            <label class="custom-file-label" for="image">Profile picture</label>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <select required onchange="" class="custom-select" name="role">
+                                                <option value="user" selected >Role - User</option>
+                                                <option value="admin" >Role - Admin</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group mt-2 ">
+                                            <div class="d-flex  flex-fill justify-content-start align-items-center">
+                                                <h4 class="text-muted mr-3 col-4 pl-0 text-muted font-weight-normal	">Status</h4>
+                
+                                                <div class="custom-control col-6 custom-switch">
+                                                    <input name="status" onchange="checkStatus(event)"  type="checkbox"
+                                                        class="custom-control-input" id="userStatusEditId" >
+                                                    <label class="custom-control-label" for="userStatusEditId">Inactive</label>
+                                                </div>
+                                            </div>
+                
+                                        </div>
+
+                                        <div class="form-group mt-2 ">
+                                            <div class="d-flex  flex-fill justify-content-start align-items-center">
+                
+                                                    <button class="btn btn-sm btn-outline-success " id="sendVerificationEmail">Send Verfication Email</button>
+                                            </div>
+                
+                                        </div>
+
+                                    </div>
+                                </div>
+                                
+                                   
+                
+                                <hr>
+                                <div class="row px-3 mx-3">
+                                    <div class="col d-flex justify-content-between">
+                                        <button type="submit" id="submit_edit_user" onclick="validateEditUserForm(event)" 
+                                        class="btn btn-success px-3">Update</button>
+                                        <button type="button" id="delete_edit_user" onclick="deleteUserEdit(event)" 
+                                        class="btn btn-danger px-3">Delete user</button>
+                                        <button type="button" id="cancel_edit_user" onclick="cancelUserEdit(event)" 
+                                        class="btn btn-warning px-3">Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                
+                        </div>
+                    </section>
+                
+                
+                
+                </div>
+                
+                
+            <!-- Main content ends here -->
+            </section>
+
+        <!-- Right column main body ends here -->
+         </div>
+
+
+    </section>
+
+
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/fontawesome-pro-5.11.1-web/js/fontawesome.min.js"></script>
+    <script src="/assets/js/admin.js"></script>
+
+   
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+
+
+
+
+<!-- form validation -->
+<script>
+
+    const spinnerSmall = `<div class="spinner-border spinner-border-sm text-light mr-1"></div>`;
+
+    $(document).ready(e=>{
+        const userId = $("#userId").val();
+        if ( userId) {
+            getUserForEdit(userId);
+        }
+    });
+
+    function searchUsersEdit(e) {
+        e.preventDefault();
+
+        console.log("searching");
+        const searchterm = $("#searchBoxEditUser input[name='usernameOrEmail']").val();
+
+        if (searchterm && searchterm.length > 0) {
+            console.log(searchterm);
+
+            $(e.target).html(spinnerSmall);
+            // disable search button 
+            $(e.target).prop('disabled', true);
+
+            // fetch user
+            $.get(`${rootDomain}/admin/users/search-users/${searchterm}`, 
+            (data, status) => {
+                $(e.target).html('Search');
+                console.log({data});
+
+                if (status == 'success' && Array.isArray(data) && data.length > 0) {
+                    console.log({ users: data });
+                    refreshSearchedUsers(data);
+                }
+
+                $(e.target).removeAttr('disabled');
+
+            }).fail((error) => {
+                $(e.target).html('Search');
+                $(e.target).removeAttr('disabled');
+                console.log('User search failed');
+            });
+        }
+
+    }
+
+    function refreshSearchedUsers(users) {
+
+        $("#searchUsersListSectionId").show();
+
+        console.log("%cRefreshing users", "color: green; font-size: 20px");
+        $('#editUserContainerId #recentUsersListId li:not(:first-child)').remove();
+
+        users.forEach(user => {
+
+            var mobileArray = [...user.mobileNumber.map(no => no.number), ...user.telephoneNumber.map(no => no.number)];;
+            mobileArray = mobileArray.toString().replace(',', '');
+
+
+            // append list data
+            $('#editUserContainerId #recentUsersListId').append(`
+<li class="list-group-item d-flex justify-content-between align-items-center">
+        <div class="col-3 d-inline-block text-wrap">${user.name.firstName ? user.name.firstName : ''}</div>
+        <div class="col-3 d-inline-block text-wrap text-truncate">
+            ${ user.email ? user.email : ''}
+    </div>
+   
+        <input type="hidden" name="keyId" value="${user._id}" />
+        <div class="col-2 d-inline-block text-wrap ${user.status ? 'text-success' : 'text-danger'}">
+            <div>${user.status ? 'Active' : 'Inactive'} </div>
+        </div>
+        
+        <div class="col-3 d-inline-block text-wrap">${ getCustomDate(new Date(user.createdOn))}</div>
+        <div class="col-1" >                            
+            <button  class="btn btn-outline-primary btn-sm" onclick="getUserForEdit('${user._id}')">Edit</button>                            
+        </div>
+</li>
+`);
+        });
+
+    }
+
+
+    let userDataConstant;
+    function getUserForEdit(userId) {
+
+        console.log("getUserForEdit");
+        // set active user edit tab
+        $('#usersEditPageNav').trigger('click');
+
+
+
+
+        // get user
+        if (userId)
+            $.post(`${rootDomain}/admin/users/get/${userId}`, null, (data, status) => {
+                if (status == 'success' && data) {
+
+                    console.log({ "user": data });
+                    userDataConstant = data;
+                    // show edit form
+                    $("#editUserFormId").show();
+                    // hide search box
+                    $("#searchBoxEditUser").hide();
+                    // hide search result
+                    $("#searchUsersListSectionId").hide();
+
+                    initUserUpdateForm(data);
+
+                }
+            }).fail((error) => {
+                console.log({ error });
+                showAlert(true, " Error in fetching user");
+            });
+
+
+    }
+
+    function initUserUpdateForm(user) {
+        let firstName = user.name && user.name.firstName ? user.name.firstName : '';
+        let email = user.email ? user.email : '';
+        let password = user.password ? user.password : '';
+        let mobileNumber = user.mobileNumber && user.mobileNumber[0] && user.mobileNumber[0].number ? user.mobileNumber[0].number : '';
+        let optionalMobileNumber = user.mobileNumber && user.mobileNumber[1] && user.mobileNumber[1].number ? user.mobileNumber[1].number : '';
+        let about = user.about ? user.about : '';
+        let status = user.status && user.status == true ? true : false;
+        let role = user.role ? user.role : 'user';
+        // let verified = user.verified ? user.verified : false;
+        let image = user.images && user.images.profile && user.images.profile.common && user.images.profile.common.url ? user.images.profile.common.url : '';
+
+        let userId = user._id;
+
+        if (userId) {
+
+            // show form
+            const form = $("#editUserFormId")[0];
+            const formData = new FormData(form);
+            resetFormDataEditUser(formData);
+
+            $("#editUserFormId input[name='userId']").val(userId);
+            $("#editUserFormId input[name='firstName']").val(firstName);
+            $("#editUserFormId input[name='email']").val(email);
+            // $("#editUserFormId input[name='password']").val(password);
+            $("#editUserFormId input[name='mobileNumber']").val(mobileNumber);
+            $("#editUserFormId input[name='optionalMobileNumber']").val(optionalMobileNumber);
+            $("#editUserFormId textarea[name='about']").val(about);
+
+            $("#editUserFormId input[name='oldImageLink']").val(image);
+
+            // profile image
+            $("#editUserFormId .img-thumbnail, #editUserFormId .delete-btn").remove();
+
+            if (image)
+                $("#editUserFormId input[name='image']").parent().after(`
+    <img class="imgPreview img-thumbnail my-2" src="${rootDomain}/uploads/images/web_thumbnail/${image}" width="100%" />
+    
+    <button class="mb-2 btn btn-sm btn-outline-danger delete-btn" onclick="removeProfileImage(event)" >Delete image</button>
+    `);
+
+            $("#editUserFormId input[name='status']").prop('checked', status);
+            $("#editUserFormId input[name='status']").siblings('label').html(status ? 'Active' : 'Inactive');
+            const options = $("#editUserFormId select[name='role'] option");
+            let optionsArray = Object.values(options);
+            optionsArray = optionsArray.slice(0, options.length);
+
+            optionsArray.forEach(option => {
+                if ($(option).val() == role) {
+                    console.log($(option).val())
+                    $(option).prop('selected', true);
+                }
+            });
+
+        }
+    }
+
+
+
+
+
+    function showAlert(error = false, message) {
+        const template = `
+        <div style="position: fixed; z-index: 1; top: 10px;" class="alert ${error ? 'alert-danger' : 'alert-success'} fade show alert-dismissible">
+            <strong>${error ? 'Error' : 'Success'}!</strong> ${message}
+        </div>
+        `;
+        $('body').append(template);
+        setTimeout(() => {
+            $('body .alert').hide();
+        }, 5000);
+    }
+
+    async function validateEditUserForm(e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        $("#editUserFormId #submit_edit_user").html(`<div class="spinner-border spinner-border-sm text-light mr-1"></div> Submitting..`);
+        $("#editUserFormId #submit_edit_user").prop('disabled', true);
+        const form = $("#editUserFormId")[0];
+        const formData = new FormData(form);
+
+        // set status value based on isChecked
+        var isChecked = $("#editUserFormId input[name='status']").is(':checked');
+        formData.delete('status');
+        formData.append('status', isChecked);
+
+        for (let [key, value] of formData.entries()) {
+            console.log(key + " - " + JSON.stringify(value, null, 4));
+        }
+
+
+        if (form.checkValidity()) {
+            // check if file is present
+            if (formData.get('image').name != '' && formData.get('image').name != null) {
+                // submit file
+                try {
+                    const filename = await submitFileEditUser(formData);
+                    formData.set('image', null);
+                    formData.append('profile', filename);
+
+                    if (filename) {
+                        updateUser(formData);
+                    }
+                } catch (error) {
+                    console.log({ error });
+                    showAlert(true, 'Error in uploading file');
+                    $("#editUserFormId #submit_edit_user").prop('disabled', false);
+                    $("#editUserFormId #submit_edit_user").html('Submit');
+
+                }
+
+            } else {
+                formData.set('image', null);
+                updateUser(formData);
+            }
+        } else {
+            // add validation styles
+            styleValidationEditUser();
+
+            console.log("Is form Valid : ", form.checkValidity());
+            $("#editUserFormId #submit_edit_user").html('Submit');
+            $("#editUserFormId #submit_edit_user").prop('disabled', false);
+
+
+        }
+
+        return false;
+
+    }
+
+    function submitFileEditUser(formData) {
+        console.log('Submitting file');
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${rootDomain}/admin/users/upload-file`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (data) {
+                    console.log('File submitted');
+                    console.log("file info: ", data);
+
+                    if (data && data.filename && data.filename != null && data.filename.length > 0) {
+                        resolve(data.filename);
+                    } else {
+                        reject('Unexpected error: wrong filename!');
+                    }
+                },
+                error: function (data) {
+                    console.log('Error');
+                    reject(data);
+                }
+            });
+        })
+    }
+
+    function resetFormDataEditUser(optional = null) {
+        const form = $("#editUserFormId")[0];
+        const formData = new FormData(form);
+        for (var key of formData.keys()) {
+            // here you can add filtering conditions
+            formData.delete(key);
+        }
+        // *** remove validation styles 
+        form.classList.remove('was-validated');
+        $('#editUserFormId .input-feedback').remove();
+        $('#editUserFormId .img-thumbnail').remove();
+        $('#editUserFormId .delete-btn').remove();
+
+
+        // *** Reset form 
+        $('#editUserFormId').trigger('reset');
+
+        // input : not working
+        const filesInput = $("#editUserFormId .custom-file-input");
+        let filesInputArray = Object.values(filesInput);
+        for (let index = 0; index < filesInput.length; index++) {
+            $(filesInputArray[index]).val('');
+            $(filesInputArray[index]).siblings("label").html($(filesInputArray[index]).attr('placeholder'));
+
+        }
+    }
+
+    function updateUser(formData) {
+        console.log('%cupdating user form', "color: red;");
+
+        // formData wouldn't work with ajax post so convert to simple object
+        let data = {};
+        for (let [key, value] of formData.entries()) {
+
+            data[key] = value;
+
+        }
+
+        // check if new profile pic is uploaded
+        const keys = Object.keys(data);
+        if (keys.indexOf('profile') == -1 && $("#editUserFormId input[name='oldImageLink']").val() && userDataConstant.images.profile.common.url != null) {
+            data['profile'] = $("#editUserFormId input[name='oldImageLink']").val();
+        }
+
+        data.status = formData.get('status');
+
+        for (let entries of Object.entries(data)) {
+            console.log(entries[0] + " - " + entries[1]);
+        }
+
+        const userId = $("#editUserFormId input[name='userId']").val();
+        data['userId'] = userId;
+
+        if (userId)
+            $.post(`${rootDomain}/admin/users/update`,
+                data,
+                (data, status) => {
+                    if (status == 'success') {
+                        console.log(data);
+                        showAlert(false, 'User updated successfully');
+
+                        resetFormDataEditUser();
+                        hideUserEditForm();
+                        setTimeout(() => {
+                                    location.replace(`${rootDomain}/admin/users/recent`);
+                                }, 2000);
+                        console.log('form submitted ');
+                        $("#editUserFormId #submit_edit_user").html('Submit');
+                        $('#editUserFormId #submit_edit_user').removeAttr("disabled");
+                    }
+                })
+                .fail((error) => {
+                    $("#editUserFormId #submit_edit_user").html('Submit');
+                    console.log('Fail ', error);
+                    showAlert(true, 'Unexpected error occurred. Please try again.');
+                    $('#editUserFormId input[type="submit"]').removeAttr("disabled");
+                });
+    }
+
+    function showPassword(e) {
+        console.log("Password : ", $(e.target).val());
+        $(e.target).siblings('div.input-feedback').html('');
+        $(e.target).after(`<div class="input-feedback text-secondary">
+            <button type="button" class="btn btn-outline-info btn-sm text-dark" onclick="($(this).parent().siblings('input').attr('type','text'))()">Show password</button> 
+            </div>
+            `);
+        // <span class="text-primary show-pwd" style="display: none;"> ${$(e.target).val()} </span>
+    }
+
+    function filePreview(input) {
+        console.log("input files", input.files[0]);
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $(input).parent().siblings('.imgPreview').remove();
+                $(input).parent().after('<img class="imgPreview img-thumbnail my-2" src="' + e.target.result + '" width="100%" />');
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+
+    function checkMobile(input) {
+        // console.log(input);
+        // console.log('Corrected mobile number : ',$(input).val().slice(0, 10));
+        if ($(input).val().length > 10) {
+            $(input).val($(input).val().slice(0, 10));
+        }
+    }
+
+    function styleValidationEditUser() {
+        console.log('Validating input fields');
+        var invalidClassName = 'error'
+        var inputs = document.querySelectorAll('#editUserFormId input, #editUserFormId select, #editUserFormId textarea');
+        inputs.forEach(function (input) {
+            // Add a css class on submit when the input is invalid.
+            input.addEventListener('invalid', function () {
+                input.classList.add(invalidClassName)
+            })
+
+            // Remove the class when the input becomes valid.
+            // 'input' will fire each time the user types
+            input.addEventListener('input', function () {
+                if (input.validity.valid) {
+                    input.classList.remove(invalidClassName)
+                }
+            })
+
+            input.addEventListener("blur", function () {
+                input.checkValidity();
+            });
+
+        });
+    }
+
+    function removeProfileImage(e) {
+        e.preventDefault();
+        $(e.target).siblings('.img-thumbnail').remove();
+        $(e.target).remove();
+
+        userDataConstant.images.profile.common.url = null;
+        return false;
+    }
+
+    function deleteUserEdit(e) {
+        e.preventDefault();
+        const userId = $("#editUserFormId input[name='userId']").val();
+
+        if (userId && confirm('Are you sure?')) {
+            $(e.target).html(`<div class="spinner-border spinner-border-sm text-light mr-1"></div> Deleting.. `);
+            $.post(`${rootDomain}/admin/users/delete/${userId}`,
+                {},
+                (data, status) => {
+                    console.log({ status, data });
+                    if (status == 'success' && data.message) {
+                        $(e.target).html(`Delete`);
+
+                        showAlert(false, data.message);
+                        resetFormDataEditUser();
+                        hideUserEditForm();
+                    } else {
+                        $(e.target).html(`Delete`);
+                        showAlert(true, 'Unexpected error occurred while deleting user');
+                        console.log('Unexpected error occurred while deleting user');
+                    }
+                })
+                .fail((e) => {
+                    $(e.target).html(`Delete`);
+                    console.log({ e });
+                    showAlert(true, e.message);
+                });
+        }
+
+    }
+
+    function cancelUserEdit(e) {
+        e.preventDefault();
+
+        resetFormDataEditUser();
+
+        hideUserEditForm();
+
+    }
+
+    function hideUserEditForm() {
+
+        // hide form  
+        $("#editUserFormId").hide();
+
+        // show search box
+        $("#searchBoxEditUser").show();
+
+        //  // show search result
+        //  $("#searchUsersListSectionId").show();
+    }
+
+    function checkStatus(e) {
+        if (toggleValue(e)) {
+            $(e.target).siblings('label').html('Active');
+        } else {
+            $(e.target).siblings('label').html('Inactive');
+        }
+    }
+
+    function toggleValue(e) {
+        return $(e.target).is(':checked');
+    }
+
+    $("#sendVerificationEmail").click( e=> {
+        e.preventDefault();
+        const userId = $("#userId").val();
+        if ( userId ) {
+            $.post(`${rootDomain}/admin/users/sendVerificationEmail/${userId}`, {}, (data,status) => {
+                console.log({data});
+                if( status=='success' && data) {
+                    showSuccessAlert('Verification email Sent.');
+                }
+            }).fail(e=> {
+                showDangerAlert('Please try again later.');
+            });
+        }
+    })
+</script>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,1382 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+    
+
+
+</head>
+
+<body class="admin-page">
+
+    <%- include('./../../includes/alert'); %>
+
+
+    <section class="main-body container-fluid row mx-0 px-0">
+
+        <!-- Left column navigation  -->
+        <%- include('./../../includes/adminNavigation.ejs') %>
+
+        <!-- Right column main body -->
+        <div class="col-10  main-col px-0" ">
+
+            <!-- Top navigation -->
+            <section class=" container nav-container mx-0">
+                    <div class="d-flex nav-header  bg-white  py-2 px-3  " style="width: 100%;">
+
+                        <div class="dropdown dropdown-menu-right ml-auto" style="color: black;">
+                            <button class="shadow-none btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
+                                type="button">
+                                <% if( typeof user.images.profile.common.url != "undefined" && user.images.profile.common.url) { %>
+                                <img class="rounded-circle" src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                    style="width: 25px;height: 25px;margin-right: 5px;">
+                                <% } else { %>
+                                <i class="fad fa-user-shield font-weight-bold"></i>
+                                <% } %>
+
+                                <span class="px-1">
+                                    <%= `${user.name.firstName}` %>
+                                </span>
+                            </button>
+                            <div class="dropdown-menu text-secondary" role="menu"
+                                style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                                <i class="fal fa-angle-up"  style="
+                                color: #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 10px;
+                                font-size: 22px;
+                                z-index: 999;
+                                "></i>
+                                <a class="dropdown-item" role="presentation" href="#" style="color: black;">Profile</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Notifications</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Settings</a>
+                                <hr style="margin: 0;">
+                                <form action="/auth/logout?via=admin" method="POST">
+                                    <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                        role="presentation">Logout</button>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+            </section>
+
+            <!-- main content -->
+            <section>
+
+                <div class="container p-5 " id="postAddContainer">
+
+                    <div class="row" style="position: absolute;
+                    right: 50px;
+                    top: 0;
+                    z-index: 1">
+                
+                        <div class="toast" data-delay="5000">
+                            <div class="toast-header">
+                                <strong class="mr-auto text-primary"></strong>
+                                <!-- <small class="text-muted">5 mins ago</small> -->
+                                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                            </div>
+                            <div class="toast-body">
+                
+                            </div>
+                        </div>
+                    </div>
+                
+                
+                
+                    <section class="row px-3">
+                        <div class="col bg-white p-3 rounded border">
+                            <div class="row px-0 my-2 py-1">
+                                <div class="col text-center">
+                                    <span>
+                                        <h5 class="display-4">Add post</h5>
+                                        <hr>
+                
+                                    </span>
+                                </div>
+                
+                            </div>
+                
+                            <form name="add_post" id="add_post_form" method="post" enctype="multipart/form-data">
+                
+                                <div class="postAdds-list row">
+                                    <div class="col-md-5 col-sm-12 col-lg-5">
+                                        <h4 class="text-capitalize my-3 text-muted font-weight-normal">Select user <span
+                                                class="text-muted font-weight-normal small">[optional]</span></h4>
+                
+                                        <div class="form-group">
+                                            <select required onchange="" class="custom-select" id="post_user" name="post_user">
+                                                <option value="" selected hidden disabled>Default user</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group search-user-add">
+                                            <div class="col-9 px-0">
+                                                <input type="text" class="form-control" id="search-user-input"
+                                                    placeholder="Search user with email or name">
+                                            </div>
+                                            <div class="col-3 pr-0">
+                                                <button type="button" class="btn-outline-secondary form-control"
+                                                    id="search-user-btn-add" onclick="searchUserAdd(event)">Search</button>
+                                            </div>
+                                        </div>
+                
+                
+                
+                                        <h4 class="text-capitalize my-3 text-muted font-weight-normal">Basic information</h4>
+                                        <div class="form-group">
+                                            <!-- <label for="company_name">Name</label> -->
+                                            <input required autocomplete="off" type="text" class="form-control" id="company_name"
+                                                name="company_name" placeholder="Company name">
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="company_email">Email</label> -->
+                                            <input required autocomplete="off" type="email" class="form-control" id="company_email"
+                                                name="company_email" placeholder="Company email">
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="company_website">Email</label> -->
+                                            <input autocomplete="off" type="text" class="form-control" id="company_website"
+                                                name="company_website" placeholder="Company website">
+                                        </div>
+                
+                                        <div class="form-group">
+                                            <!-- <label for="company_website">Email</label> -->
+                                            <textarea required placeholder="Brief description" class="form-control" rows="5"
+                                                id="company_description" name="company_description"></textarea>
+                                        </div>
+                
+                
+                
+                
+                                        <h4 class="text-capitalize my-3 text-muted font-weight-normal">Contact information</h4>
+                                        <div class="form-group">
+                                            <!-- <label for="owner_contact_name">Mobile</label> -->
+                                            <input required autocomplete="off" type="text" class="form-control"
+                                                id="owner_contact_name" name="owner_contact_name" placeholder="Contact/owner name">
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="company_mobile1">Mobile</label> -->
+                                            <input required autocomplete="off" type="number" class="form-control" id="owner_mobile1"
+                                                name="company_mobile1" placeholder="Mobile number" min="0" max="9999999999"
+                                                onKeyPress="if(this.value.length==10) return false;">
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="company_mobile_optional">Mobile</label> -->
+                                            <input autocomplete="off" type="number" class="form-control" id="owner_mobile_optional"
+                                                name="company_mobile_optional" placeholder="Optional mobile number " min="0"
+                                                max="9999999999" onKeyPress="if(this.value.length==10) return false;">
+                                        </div>
+                                        <script>
+                                            // $('#owner_mobile1_add, #owner_mobile_optional').on
+                                        </script>
+                                        <div class="form-group">
+                                            <!-- <label for="owner_telephone1">Mobile</label> -->
+                                            <input autocomplete="off" type="number" class="form-control" id="owner_telephone1"
+                                                name="company_telephone1" placeholder="Telephone number" min="0" max="9999999"
+                                                onKeyPress="if(this.value.length==7) return false;">
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="owner_telephone_optional">Mobile</label> -->
+                                            <input autocomplete="off" type="number" class="form-control"
+                                                id="owner_telephone_optional" name="company_telephone_optional"
+                                                placeholder="Optional telephone number" min="0" max="9999999"
+                                                onKeyPress="if(this.value.length==7) return false;">
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="owner_email">Mobile</label> -->
+                                            <input required autocomplete="off" type="email" class="form-control" id="owner_email"
+                                                name="owner_email" placeholder="Email">
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="owner_email_optional">Mobile</label> -->
+                                            <input autocomplete="off" type="email" class="form-control" id="owner_email_optional"
+                                                name="owner_email_optional" placeholder="Optional email">
+                                        </div>
+                
+                                        <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Category</h4>
+                                        <div class="form-group">
+                                            <!-- <label for="company_locality_address">Email</label> -->
+                                            <select required onchange="fetchSubcategoryAndKeywordsAddPost()"
+                                                onchange="(function(){  $('#selected_category_name').val( $('#category option').attr('selected').html() ) })()"
+                                                class="custom-select" id="category" name="category">
+                                                <option value="" selected hidden disabled>Category</option>
+                                            </select>
+                                            <input type="hidden" name="selected_category_name" id="selected_category_name">
+                                            <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address" name="company_locality_address"
+                                                placeholder="Locality"> -->
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="company_locality_address">Email</label> -->
+                                            <select
+                                                onchange="(function(){  $('#selected_subcategory_name').val( $('#subcategory option').attr('selected').html() ) })()"
+                                                required class="custom-select" id="subcategory" name="subcategory">
+                                                <option value="" selected hidden disabled>Sub-category</option>
+                                            </select>
+                                            <input type="hidden" name="selected_subcategory_name" id="selected_subcategory_name">
+                
+                                            <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address" name="company_locality_address"
+                                                placeholder="Locality"> -->
+                                        </div>
+                                        <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Keywords</h4>
+                                        <div class="form-group">
+                                            <!-- <label for="company_locality_address">Email</label> -->
+                                            <select required multiple size="6" class="custom-select" id="company_keywords"
+                                                name="company_keywords">
+                                                <option value="" selected hidden disabled>Keywords</option>
+                                            </select>
+                                            <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address" name="company_locality_address"
+                                                placeholder="Locality"> -->
+                                        </div>
+                                        <script>
+                                            $("#postAddContainer #company_keywords").change(function () {
+                                                console.log($(this).find("option:selected").length, ' keywords selected ');
+                
+                                                if ($(this).find("option:selected").length > 5) {
+                                                    console.log('selected more than 5');
+                
+                                                    let selected = $(this).find("option:selected");
+                                                    let selectedArray = Object.values(selected);
+                                                    for (let i = 5; i < selected.length; i++) {
+                                                        console.log('Deselecting ', $(selectedArray[i]).html());
+                                                        $(selectedArray[i]).prop("selected", "selected");
+                                                        $(selectedArray[i]).prop('selected', false);
+                                                    }
+                
+                                                }
+                                            });
+                                        </script>
+                
+                                        <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Timings</h4>
+                                        <div class="row form-group">
+                                            <div class="col-8 pr-2">
+                                                <select class="custom-select" id="timing_day" name="timing_day">
+                                                    <option value="" selected hidden disabled>Day</option>
+                
+                                                </select>
+                                            </div>
+                                            <div class="col-4 pl-1">
+                                                <button onclick="timingsControlAdd.addClosedDay(event)"
+                                                    class="shadow-none  btn btn-outline-secondary btn-block">Close</button>
+                                            </div>
+                
+                
+                                        </div>
+                                        <div class="row mx-0 form-group d-flex justify-content-between">
+                                            <div class="" style="width: 31%;">
+                                                <select class="custom-select" id="timing_from" name="timing_from">
+                                                    <option value="" selected hidden disabled>From</option>
+                
+                                                </select>
+                                            </div>
+                                            <div class="" style="width: 31%;">
+                                                <select class="custom-select" id="timing_to" name="timing_to">
+                                                    <option value="" selected hidden disabled>To</option>
+                
+                                                </select>
+                                            </div>
+                                            <div class="" style="width: 31%;">
+                                                <button class="shadow-none btn btn-outline-secondary btn-block"
+                                                    onclick="timingsControlAdd.addTime(event)">Add</button>
+                                            </div>
+                                        </div>
+                                        <div class="form-group d-block" id="time-slot-display-addPost">
+                
+                                        </div>
+                
+                                        <div class="form-group mt-4 ">
+                                            <div class="d-flex  flex-fill justify-content-start align-items-center">
+                                                <h4 class="text-muted mr-3 col-4 pl-0 text-muted font-weight-normal	">Status</h4>
+                
+                                                <div class="custom-control col-6 custom-switch">
+                                                    <input name="status" onchange="checkStatus(event)" type="checkbox"
+                                                        class="custom-control-input" id="StatusAdd">
+                                                    <label class="custom-control-label" for="StatusAdd">Inactive</label>
+                                                </div>
+                                            </div>
+                
+                                        </div>
+                                        <div class="form-group 	mt-4">
+                                            <div class="d-flex  flex-fill  justify-content-start  align-items-center">
+                                                <h4 class="text-muted mr-3 col-4 pl-0 text-muted font-weight-normal">Verified</h4>
+                
+                                                <div class="custom-control col-6 custom-switch">
+                                                    <input name="verified" type="checkbox" onchange="checkVerified(event)"
+                                                        class="custom-control-input" id="VerifiedAdd">
+                                                    <label class="custom-control-label" for="VerifiedAdd">Not verified</label>
+                                                </div>
+                                            </div>
+                
+                                        </div>
+                
+                
+                
+                
+                                    </div>
+                                    <div class="col-lg-5 col-md-5 col-sm-12">
+                                        <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Address</h4>
+                                        <div class="form-group">
+                                            <select required onchange="updateDistrict()" class="custom-select"
+                                                id="company_state_address" name="company_state_address">
+                                                <option value="" selected hidden disabled>State</option>
+                
+                                            </select>
+                                            <input type="text" hidden name="state_name">
+                                            <!-- <label for="company_state_address">Email</label> -->
+                                            <!-- <input autocomplete="off"  type="text" class="form-control" id="company_state_address" name="company_state_address"
+                                                placeholder="State"> -->
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="company_district_address">Email</label> -->
+                                            <select onchange="fetchLocality()" required class="custom-select"
+                                                id="company_district_address" name="company_district_address">
+                                                <option value="" selected hidden disabled>District</option>
+                                            </select>
+                                            <input type="text" hidden name="district_name">
+                
+                                            <!-- <input autocomplete="off"  type="text" class="form-control" id="company_district_address" name="company_district_address"
+                                                placeholder="District"> -->
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="company_locality_address">Email</label> -->
+                                            <select 
+                                            onchange="setPincode(event)"
+                                            required class="custom-select" id="company_locality_address"
+                                                name="company_locality_address">
+                                                <option value="" selected hidden disabled>Locality</option>
+                                            </select>
+                                            <input type="text" hidden name="locality_name">
+                
+                                            <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address" name="company_locality_address"
+                                                placeholder="Locality"> -->
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="company_sublocality_address">Email</label> -->
+                                            <input required autocomplete="off" type="text" class="form-control"
+                                                id="company_street_address" name="company_street_address"
+                                                placeholder="Street address">
+                                            <!-- <select class="custom-select" id="company_sublocality_address"
+                                                name="company_sublocality_address">
+                                                <option value=""  selected hidden  disabled>Sub-locality</option>
+                                            </select> -->
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="company_building_apartment_address">Email</label> -->
+                                            <input autocomplete="off" type="text" class="form-control"
+                                                id="company_building_apartment_address" name="company_building_apartment_address"
+                                                placeholder="Building/Apartment">
+                                        </div>
+                
+                                        <div class="form-group">
+                                            <!-- <label for="company_landmarks_address">Email</label> -->
+                                            <input autocomplete="off" type="text" class="form-control"
+                                                id="company_landmarks_address" name="company_landmarks_address"
+                                                placeholder="Landmarks">
+                                        </div>
+                                        <div class="form-group">
+                                            <!-- <label for="company_pincode_address">Email</label> -->
+                                            <input required autocomplete="off" type="number" class="form-control"
+                                                id="company_pincode_address" name="company_pincode_address" placeholder="Pincode"
+                                                minlength="6" maxlength="6" onKeyPress="if(this.value.length==6) return false;">
+                                        </div>
+                                        <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Location</h4>
+                
+                                        <div class="form-group">
+                                            <!-- <label for="company_pincode_address">Email</label> -->
+                                            <div id="dynamic_map" style="height: 350px; width: 100%; " class="form-control"></div>
+                                            <input type="text" name="lat" hidden>
+                                            <input type="text" name="lng" hidden>
+                
+                                        </div>
+                
+                                        <script>
+                                            var map, marker, infowindow;
+                
+                                            function googleDynamicMap() {
+                
+                                                // KANGLA TRAFFIC ISLAND
+                                                const kanglaPosition = {
+                                                    lat: 24.807,
+                                                    lng: 93.938
+                                                };
+                                                var markedLocation;
+                
+                
+                                                function init() {
+                
+                                                    console.log('%cINIT: google map ', 'color: red');
+                
+                                                    map = new google.maps.Map(document.getElementById('dynamic_map'), {
+                                                        center: kanglaPosition,
+                                                        disableDefaultUI: true,
+                                                        zoom: 9,
+                                                        mapTypeId: 'roadmap',
+                                                        mapTypeControl: false,
+                                                        streetViewControl: false,
+                                                        zoomControl: true,
+                                                        fullscreenControl: true,
+                                                        // Preventing map pan and zoom on page scroll
+                                                        gestureHandling: 'cooperative'
+                                                    });
+                
+                                                    console.log({
+                                                        map
+                                                    });
+                
+                                                    marker = new google.maps.Marker({
+                                                        position: kanglaPosition,
+                                                        map: map
+                                                    });
+                                                    infowindow = new google.maps.InfoWindow({
+                                                        content: "Selected location.",
+                                                        position: kanglaPosition
+                                                    });
+                
+                                                    map.addListener('click', function (e) {
+                                                        markedLocation = {
+                                                            lat: e.latLng.lat(),
+                                                            lng: e.latLng.lng()
+                                                        };
+                                                        setSelectedLocation(e.latLng.lat(), e.latLng.lng())
+                                                        // console.log({ markedLocation });
+                                                        changeMarkerAndPanTo(e.latLng);
+                                                    });
+                
+                                                }
+                
+                                                function changeMarkerAndPanTo(latLng) {
+                                                    console.log('%cCHANGING: google map changeMarkerAndPanTo', 'color: red');
+                                                    console.log('%GETTER: google map marker position', 'color: red', {
+                                                        markedLocation
+                                                    });
+                
+                                                    marker.setPosition(latLng);
+                                                    map.panTo(latLng);
+                
+                                                }
+                
+                                                function setSelectedLocation(lat, lng) {
+                                                    console.log('%GETTER: google map setting position', 'color: red', {
+                                                        markedLocation
+                                                    });
+                                                    $("#add_post_form input[name='lat']").val(lat);
+                                                    $("#add_post_form input[name='lng']").val(lng);
+                                                }
+                
+                                                function resetMarker() {
+                                                    console.log('%RESETTING: google map ', 'color: red');
+                
+                                                    marker.setPosition(kanglaPosition);
+                                                    map.panTo(kanglaPosition);
+                
+                                                }
+                
+                                                function getMap() {
+                                                    console.log('%GETTER: google map ', 'color: red');
+                                                    console.log({
+                                                        map
+                                                    });
+                
+                                                    return map;
+                                                }
+                
+                                                return {
+                                                    getMap,
+                                                    init,
+                                                    resetMarker,
+                                                    changeMarkerAndPanTo
+                                                };
+                
+                                            }
+                                        </script>
+                
+                
+                
+                                        <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Photos</h4>
+                
+                                        <div class="custom-file my-1">
+                                            <input type="file" placeholder="Logo" class="custom-file-input" id="company_logo"
+                                                name="logo" accept=".jpg, .png, .jpeg">
+                                            <label class="custom-file-label" for="company_logo">Logo</label>
+                                        </div>
+                                        <div class="custom-file my-1">
+                                            <input type="file" placeholder="cover" class="custom-file-input" id="company_coverImage"
+                                                name="coverImage" accept=".jpg, .png, .jpeg">
+                                            <label class="custom-file-label" for="company_coverImage">cover</label>
+                                        </div>
+                                        <div class="custom-file my-1">
+                                            <input type="file" class="custom-file-input" id="customFile1" name="customFile1"
+                                                accept=".jpg, .png, .jpeg">
+                                            <label class="custom-file-label" for="customFile1">Image 1</label>
+                                        </div>
+                                        <div class="custom-file my-1">
+                                            <input type="file" class="custom-file-input" id="customFile2" name="customFile2"
+                                                accept=".jpg, .png, .jpeg">
+                                            <label class="custom-file-label" for="customFile2">Image 2</label>
+                                        </div>
+                                        <div class="custom-file my-1">
+                                            <input type="file" class="custom-file-input" id="customFile3" name="customFile3"
+                                                accept=".jpg, .png, .jpeg">
+                                            <label class="custom-file-label" for="customFile3">Image 3</label>
+                                        </div>
+                                        <div class="custom-file my-1">
+                                            <input type="file" class="custom-file-input" id="customFile4" name="customFile4"
+                                                accept=".jpg, .png, .jpeg">
+                                            <label class="custom-file-label" for="customFile4">Image 4</label>
+                                        </div>
+                                        <div class="custom-file my-1">
+                                            <input type="file" class="custom-file-input" id="customFile5" name="customFile5"
+                                                accept=".jpg, .png, .jpeg">
+                                            <label class="custom-file-label" for="customFile5">Image 5</label>
+                                        </div>
+                                        <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Documents</h4>
+                
+                                        <div class="row form-group " style="display: flex; align-items: center;">
+                                            <div class="col">
+                                                <div class="">
+                                                    <!-- <label for="owner_contact_name">Mobile</label> -->
+                                                    <input autocomplete="off" type="text" class="form-control" id="document1_name"
+                                                        name="document1_name" placeholder="Name">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="custom-file my-1">
+                                                    <input type="file" placeholder="Logo" class="custom-file-input" id="document1"
+                                                        name="document1" accept=".docx, .pdf">
+                                                    <label class="custom-file-label" for="document1">Document 1</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                
+                                        <div class="row form-group " style="display: flex; align-items: center;">
+                                            <div class="col">
+                                                <div class="">
+                                                    <!-- <label for="owner_contact_name">Mobile</label> -->
+                                                    <input autocomplete="off" type="text" class="form-control" id="document2_name"
+                                                        name="document2_name" placeholder="Name">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="custom-file my-1">
+                                                    <input type="file" placeholder="Logo" class="custom-file-input" id="document2"
+                                                        accept=".docx, .pdf" name="document2">
+                                                    <label class="custom-file-label" for="document2">Document 2</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row form-group " style="display: flex; align-items: center;">
+                                            <div class="col">
+                                                <div class="">
+                                                    <!-- <label for="owner_contact_name">Mobile</label> -->
+                                                    <input autocomplete="off" type="text" class="form-control" id="document3_name"
+                                                        name="document3_name" placeholder="Name">
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="custom-file my-1">
+                                                    <input type="file" placeholder="Logo" class="custom-file-input" id="document3"
+                                                        accept=".docx, .pdf" name="document3">
+                                                    <label class="custom-file-label" for="document3">Document 3</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <script>
+                                            // Add the following code if you want the name of the file appear on select
+                                            $(".custom-file-input").on("change", function () {
+                                                var fileName = $(this).val().split("\\").pop();
+                                                $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+                
+                                <hr>
+                                <div class="row px-3 mx-3">
+                                    <div class="col">
+                                        <button type="submit" id="submit-form-post" name="Save"
+                                            class="btn btn-success px-3">Submit</button>
+                
+                
+                                    </div>
+                                </div>
+                            </form>
+                
+                        </div>
+                    </section>
+                
+                
+                
+                </div>
+                
+
+            <!-- Main content ends here -->
+            </section>
+
+        <!-- Right column main body ends here -->
+         </div>
+
+
+    </section>
+
+
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/fontawesome-pro-5.11.1-web/js/fontawesome.min.js"></script>
+    <script src="/assets/js/admin.js"></script>
+
+
+
+        <script>
+
+            $(document).ready(e=>{
+                getAddPostInitData();
+            });
+
+            let timingsAdd = {
+                monday: {
+        
+                },
+                tuesday: {},
+                wednesday: {},
+                thursday: {},
+                friday: {},
+                saturday: {},
+                sunday: {},
+            };
+        
+            // handle timingsAdd 
+            const timingsControlAdd = {
+        
+        
+        
+                init: function () {
+                    console.log('%c Calling timingsAdd init() ', 'color: orange; font-weight: bold;');
+        
+                    // init days
+                    const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
+                    let body;
+                    days.forEach(day => {
+                        $('#timing_day').append(`<option value="${day}" >${day.toUpperCase()}</option>`);
+                    });
+        
+                    // init from
+                    // let hours = [...Array(25).keys()];
+                    const range = (start, stop, step = 1) =>
+                        Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step);
+                    let hours = range(0, 24.5, .5);
+                    hours.splice(0, 1);
+                    const hoursWithPeriods = hours.map(hour => {
+        
+                        if (hour == 12)
+                            return `${hour}:00 Noon`;
+                        else if (hour == 24)
+                            return `${hour}:00 Midnight`;
+                        else if (hour > 12 && hour < 24)
+                            return Number.isInteger(hour) ? `${hour}:00 PM` : `${hour - 0.5}:30 PM`;
+                        else
+                            return Number.isInteger(hour) ? `${hour}:00 AM` : `${hour - 0.5}:30 AM`;
+        
+                    });
+        
+                    hoursWithPeriods.forEach(time => {
+                        $('#timing_from').append(`<option value="${time}" >${time}</option>`);
+                        $('#timing_to').append(`<option value="${time}" >${time}</option>`);
+                    });
+        
+                    // $('#timing_day').html(body);
+                },
+        
+                addTime: function (e) {
+                    console.log('%c ADDTIME  ', 'color: blue; font-weight: bold;');
+        
+                    e.preventDefault();
+                    const day = $('#timing_day').val().trim().toLowerCase();
+                    const from = $('#timing_from').val().trim();
+                    const to = $('#timing_to').val().trim();
+        
+                    if (day && from && to) {
+                        if (timingsAdd[day].slots && timingsAdd[day].slots.length < 3) {
+                            timingsAdd[day].slots.push(`${from} - ${to}`);
+                        } else if (!timingsAdd[day].slots) {
+                            timingsAdd[day].slots = [`${from} - ${to}`];
+                        }
+        
+                        // override if closed 
+                        timingsAdd[day].closed = false;
+                        this.refreshTime();
+                    }
+                },
+        
+                addClosedDay: function (e) {
+        
+                    e.preventDefault();
+                    const day = $('#timing_day').val().trim().toLowerCase();
+        
+                    if (day) {
+                        timingsAdd[day].closed = true;
+                        timingsAdd[day].slots = [];
+                        console.log('%c Operation: ADDCLOSEDAY DONE!,', 'color: orange; font-weight: bold;');
+                        this.refreshTime();
+                    } else {
+                        console.log('%c Operation: ADDCLOSEDAY Failed!,', 'color: orange; font-weight: bold;');
+                    }
+                },
+        
+                removeClosedDay: function (e) {
+                    const day = $('#timing_day').val().trim().toLowerCase();
+        
+                    if (day && from && to) {
+                        timingsAdd[day].closed = false;
+                    }
+                },
+        
+                removeTime: function (day) {
+                    console.log('%c Operation: removeTime !,', 'color: orange; font-weight: bold;');
+        
+                    if (day) {
+                        timingsAdd[day.trim()] = {};
+                        this.refreshTime();
+                    }
+                },
+                refreshTime: function () {
+                    $('#time-slot-display-addPost').html('');
+                    const entries = Object.entries(timingsAdd);
+        
+        
+                    let body = '';
+                    entries.forEach(item => {
+        
+                        if (item[1].slots || item[1].closed)
+                            body = body + `
+                            <li class='list-group-item d-flex'>
+                                <div class='col-4 text-capitalize text-left'>${item[0]} </div>`;
+                        if (item[1].closed) {
+                            body = body + `<div class='col-7 px-0 text-left'>Closed</div>
+                                <div class="close-time">
+                                    <i class="fa fa-times" aria-hidden="true" onclick="timingsControlAdd.removeTime('${item[0]}')"></i>
+                                </div></li>`
+                        } else if (item[1].slots) {
+                            body = body + `<div class='col-7 px-0 text-left'>${item[1].slots.toString()}</div> 
+                                    <div class="close-time">
+                                        <i class="fa fa-times" aria-hidden="true" onclick="timingsControlAdd.removeTime('${item[0]}')"></i>
+                                    </div>      
+                                </li>`
+                        }
+        
+                    });
+        
+        
+                    $('#time-slot-display-addPost').html(`<ul class="list-group">${body}</ul>`);
+        
+        
+                }
+        
+            };
+        
+            // init timingsAdd
+            timingsControlAdd.init();
+        
+        
+            // utils
+            Array.prototype.unique = function () {
+                return this.filter(function (value, index, self) {
+                    console.log(self.indexOf(value) != index ? `${value, index}` : '');
+                    return self.indexOf(value) === index;
+                });
+            }
+        
+        
+        
+            Array.prototype.uniqueAndUndefined = function () {
+                return this.filter(function (value, index, self) {
+                    console.log(self.indexOf(value) != index && typeof value != 'undefined' ? `${value, index}` :
+                        '');
+                    return self.indexOf(value) === index && typeof value != 'undefined';
+                });
+            }
+        
+            function toggleValue(e) {
+                return $(e.target).is(':checked');
+            }
+        
+            function checkVerified(e) {
+                if (toggleValue(e)) {
+                    $(e.target).siblings('label').html('Verified');
+                } else {
+                    $(e.target).siblings('label').html('Not verified');
+                }
+            }
+        
+            function checkStatus(e) {
+                if (toggleValue(e)) {
+                    $(e.target).siblings('label').html('Active');
+                } else {
+                    $(e.target).siblings('label').html('Inactive');
+                }
+            }
+        
+            $(document).ready(() => {
+                // show required fields
+                const requiredFieldsObject = $(
+                    "form[name='add_post'] input:required, form[name='add_post'] textarea:required, form[name='add_post'] select:required"
+                );
+                const requiredFieldsArray = Object.values(requiredFieldsObject).slice(0, requiredFieldsObject.length);
+                // const requiredFieldsId = requiredFields.map(field => $(field).removeAttr('required'));
+                const requiredFieldsId = requiredFieldsArray.map(field => $(field).attr('id'));
+                const requiredFieldsIdUnique = requiredFieldsId.uniqueAndUndefined();
+        
+                console.log({
+                    requiredFieldsObject,
+                    requiredFieldsArray
+                });
+        
+                if (requiredFieldsObject.length > 0)
+                    requiredFieldsArray.forEach(element => {
+                        console.log($(element).attr('id'));
+        
+                        if (typeof element != 'undefined')
+                            $(element).after(`
+                        <span class="required">*</required>
+                    `);
+                    });
+                // console.log({ requiredFieldsIdUnique });
+        
+                // const notRequiredFieldsObject = $(
+                //     " input:not(form[name='add_post'] input:required) , textarea:not(form[name='add_post'] textarea:required) , select:not(form[name='add_post'] select:required) "
+                // );
+                // console.log({
+                //     notRequiredFieldsObject
+                // });
+        
+                // init timingsAdd
+        
+        
+        
+            });
+        
+        
+            function submitAddPostFormData(filesUploaded, upload, form) {
+        
+                // console.log('Entering submitAddPostFormData text fields');
+                // // modify formdata with uploaded file links
+                // if (filesUploaded) {
+                //     const keys = Object.keys(filesUploaded);
+                //     keys.forEach(key => {
+                //         upload[key] = filesUploaded[key];
+                //     });
+                // }
+        
+                // // convert form data to plain object
+                // let data = {};
+                // Object.keys(upload).forEach((key, index) => {
+                //     // if ( typeof upload[key] == 'array' && upload[key].length > 0 ) {
+                //     //     upload[key] = 
+                //     // }
+                //     data[key] = upload[key];
+                // });
+        
+                // // add timingsAdd
+                // data['timings'] = timingsAdd;
+        
+                // // status
+                // data['status'] = data['status'] == 'true' ? true : false;
+                // data['verified'] = data['verified'] == 'true' ? true : false;
+        
+                // // location
+                // data['coordinates'] = upload['lat'] && upload['lng'] ? { 'lat':  upload['lat'], 'lng':  upload['lng'] } :  undefined ;
+        
+                // upload formdata even if no files are submitted
+                // And post only if more than 3 inputs [ already entered = "status", "verified", "company_keywords" ] are enter 
+                const formFileds = Object.keys(upload);
+        
+                // new 
+                const state = $("#add_post_form select[name='company_state_address'] option:selected").data();
+                const district = $("#add_post_form select[name='company_district_address'] option:selected").data();
+                const locality = $("#add_post_form select[name='company_locality_address'] option:selected").data();
+                const areaAndStreetAddress = $("#add_post_form input[name='company_street_address']").val();
+                const building = $("#add_post_form input[name='company_building_apartment_address']").val();
+                const landmark = $("#add_post_form input[name='company_landmarks_address']").val();
+                const pincode = $("#add_post_form input[name='company_pincode_address']").val();
+        
+                const address = {
+                    state,
+                    district,
+                    locality,
+                    areaAndStreetAddress,
+                    building,
+                    landmark,
+                    pincode
+                };
+        
+                let category = $("#add_post_form select[name='category'] option:selected").data();
+                const subCategory = $("#add_post_form select[name='subcategory'] option:selected").data();
+                category['subCategory'] = subCategory;
+        
+                const keywordsObj = $("#add_post_form select[name='company_keywords'] option:selected");
+                let keywords = [];
+                for (let i = 0; i < keywordsObj.length; i++) {
+                    keywords.push($(keywordsObj[i]).data());
+                }
+        
+                let images = {
+                    collection: [],
+                    logo: {},
+                    coverImage: {}
+                },
+                    docs = [];
+        
+                if (filesUploaded) {
+                    const filesKey = Object.keys(filesUploaded);
+                    let imagesFileName = ['customFile1', 'customFile2', 'customFile3', 'customFile4', 'customFile5'];
+                    let docsFileName = ['document1', 'document2', 'document3'];
+        
+                    filesKey.forEach(key => {
+        
+                        let index = imagesFileName.indexOf(key);
+                        if (index != -1) {
+                            images['collection'].push({
+                                url: filesUploaded[imagesFileName[index]]
+                            });
+                        }
+        
+                        let index1 = docsFileName.indexOf(key);
+                        if (index1 != -1) {
+                            docs.push({
+                                url: filesUploaded[docsFileName[index1]],
+                                name: upload[`document${Number(index1)+1}_name`]
+                            });
+                        }
+        
+                        if (key == 'logo') {
+                            images['logo'] = {
+                                url: filesUploaded['logo']
+                            }
+                        }
+        
+                        if (key == 'coverImage') {
+                            images['coverImage'] = {
+                                url: filesUploaded['coverImage']
+                            }
+                        }
+                    });
+        
+                }
+        
+                console.log({
+                    address,
+                    category,
+                    keywords
+                });
+        
+                let data = {
+                    geoLocation: {
+                        coordinates: {
+                            lat: parseFloat(upload['lat']),
+                            lng: parseFloat(upload['lng'])
+                        }
+                    },
+                    ownerDetails: {
+                        email: [
+                            upload['owner_email'] ? upload['owner_email'] : null,
+                            upload['owner_email_optional'] ? upload['owner_email_optional'] : null
+                        ],
+                        name: upload['owner_contact_name'] ? upload['owner_contact_name'] : null
+                    },
+                    timings: timingsAdd,
+                    address: address,
+                    category: category,
+                    images: images,
+                    verified: upload['status'] == true ? true : false,
+                    status: upload['verified'] == true ? true : false,
+                    openingStatus: false,
+                    description: {
+                        short: upload['company_description'] ? upload['company_description'] : null
+                    },
+                    name: upload['company_name'] ? upload['company_name'] : null,
+                    email: upload['company_email'] ? upload['company_email'] : null,
+                    website: upload['company_website'] ? upload['company_website'] : null,
+                    mobileNumber: [{
+                            number: upload['company_mobile1'] ? upload['company_mobile1'] : null
+                        },
+                        {
+                            number: upload['company_mobile_optional'] ? upload['company_mobile_optional'] : null
+                        }
+                    ],
+                    telephoneNumber: [{
+                            number: upload['company_telephone1'] ? upload['company_telephone1'] : null
+                        },
+                        {
+                            number: upload['company_telephone_optional'] ? upload['company_telephone_optional'] : null
+                        }
+                    ],
+                    preference: null,
+                    userPackageId: null,
+                    userPackageDate: null,
+                    userId: upload['post_user'] ? upload['post_user'] : null,
+                    postAmount: null,
+                    price: null,
+                    negotiable: null,
+                    postCount: null,
+                    docs: docs,
+                    createdOn: Date.now(),
+                    modifiedOn: Date.now(),
+                    keywords: keywords
+        
+                }
+                console.log('Final form data: ', data);
+        
+                if (formFileds.length > 3) {
+                    console.log('Submitting....');
+                    $("#add_post_form input[type='submit']").prop("disabled", true);
+        
+                    $.post(`${rootDomain}/admin/posts/add-post`,
+                        data,
+                        (data, status) => {
+                            if (status == 'success') {
+                                // console.log(data);
+                                showSuccessAlert('Post added successfully');
+        
+                                // *** remove validation styles 
+                                form.classList.remove('was-validated');
+        
+                                // *** Reset form 
+                                $("#add_post_form").trigger('reset');
+        
+                                // input : not working
+                                const filesInput = $("#add_post_form .custom-file-input");
+                                let filesInputArray = Object.values(filesInput);
+                                for (let index = 0; index < filesInput.length; index++) {
+                                    $(filesInputArray[index]).val('');
+                                    $(filesInputArray[index]).siblings("label").html($(filesInputArray[index]).attr(
+                                        'placeholder'));
+        
+                                }
+        
+                                // timings
+                                $('#time-slot-display-addPost').html('');
+        
+                                // keywords
+                                $('#postAddContainer #company_keywords').html('');
+        
+                                console.log('form submitted ');
+                                $('#add_post_form input[type="submit"]').removeAttr("disabled");
+
+                                setTimeout(() => {
+                                    location.replace(`${rootDomain}/admin/posts/recent`);
+                                }, 2000);
+                            }
+                        }).fail((error) => {
+                        console.log('Fail ', error);
+                        showDangerAlert( 'Unexpected error occurred. Please try again.');
+                        $('#add_post_form input[type="submit"]').removeAttr("disabled");
+                    });
+                }
+        
+            }
+        
+        
+            // form submit handler
+            $("#add_post_form").submit(function (e) {
+                e.preventDefault();
+                console.log('%c Form submit handled', 'color: orange; font-weight: bold;');
+        
+        
+        
+                var upload = new FormData(document.getElementById('add_post_form'));
+                console.log("Formdata ", upload);
+        
+                const requiredFieldsObject = $(
+                    "form[name='add_post'] input, form[name='add_post'] textarea, form[name = 'add_post'] select");
+                const requiredFields = Object.values(requiredFieldsObject);
+                requiredFields.forEach(field => {
+                    // $(field).removeAttr('required');
+        
+                    // console.log(field);
+                    // console.log($(field).attr('name'));
+                    var key = $(field).attr('name');
+                    if (key && $(field).val()) {
+                        if ($(field).attr('type') == 'checkbox') {
+                            upload[key] = $(field).is(':checked ');
+                        } else {
+                            upload[key] = $(field).val();
+                        }
+                    }
+        
+                });
+                console.log(upload);
+        
+        
+                console.log($("form[name='add_post']")[0].checkValidity());
+                const form = $("form[name='add_post']")[0];
+                form.classList.add('was-validated');
+        
+                let filesUploaded = {};
+        
+                // upload files first
+                if (upload.logo || upload.customFile1 || upload.customFile2 || upload.customFile3 || upload
+                    .customFile4 || upload.customFile5 || upload.document1 || upload.document3 || upload.document3) {
+        
+                    $('#add_post_form input[type="submit"]').prop("disabled", true);
+        
+                    $.ajax({
+                        url: `${rootDomain}/admin/posts/add-post/upload-files`,
+                        type: 'POST',
+                        data: upload,
+                        cache: false,
+                        contentType: false,
+                        processData: false, // neccessary for file upload
+                        success: function (data) {
+                            console.log('Files submitted Success');
+                            console.log("files", data);
+                            submitAddPostFormData(data, upload, form);
+        
+                        },
+                        error: function (data) {
+                            console.log('Error');
+                        }
+                    });
+        
+        
+                } else {
+                    submitAddPostFormData(null, upload, form);
+                }
+        
+                return false;
+        
+        
+            });
+        
+        
+        
+            // AJAX CALLS
+            // let state, district, locality;
+        
+        
+            function getAddPostInitData() {
+        
+                $.get(`${rootDomain}/admin/posts/post-common-data/init`, (data, status) => {
+                        if (status == 'success') {
+                            console.log(data);
+                            ({
+                                state,
+                                district
+                            } = data);
+                            console.log({
+                                state,
+                                district
+                            });
+        
+                            updateAllSelectAddPost(data.state, data.district, data.category, data.users);
+                        }
+                    })
+                    .fail((error) => {
+                        console.log('Fail ', error)
+                    });
+        
+                // init google MAP
+                //
+                const dynamicMap = googleDynamicMap();
+                console.log("ADD POST MAP exist", typeof dynamicMap.getMap() != 'undefined');
+                if (dynamicMap.getMap()) {
+                    dynamicMap.resetMarker();
+                } else {
+                    dynamicMap.init();
+                }
+        
+            }
+        
+        
+            // form modifiers
+            // 
+            // 
+            function updateAllSelectAddPost(states, districts, categories, users) {
+                console.log("updateAllSelectAddPost");
+                console.log({ states,  districts, categories, users });
+                $('#postAddContainer #company_state_address option:not(:first-child)').remove();
+                states.forEach((state) => {
+                    $('#postAddContainer #company_state_address').append(
+                        `<option value="${state._id}" data-id="${state._id}" data-name="${state.name}" >${state.name}</option> `
+                    );
+                });
+        
+                $('#postAddContainer #company_district_address option:not(:first-child)').remove();
+                districts.forEach((district) => {
+                    $('#postAddContainer #company_district_address').append(
+                        `<option value="${district._id}" data-id="${district._id}" data-name="${district.name}" >${district.name}</option> `
+                    );
+                });
+        
+                $('#postAddContainer #category option:not(:first-child)').remove();
+                categories.forEach((category) => {
+                    $('#postAddContainer #category').append(
+                        `<option value="${category._id}" data-id="${category._id}" data-name="${category.name}" >${category.name}</option> `
+                    );
+                });
+        
+                $('#postAddContainer #post_user option:not(:first-child)').remove();
+                users.forEach((user) => {
+                    $('#postAddContainer #post_user').append(
+                        `<option value="${user._id}" data-id="${user._id}" data-name="${user.name}"  >${user.name.firstName} ( ${user.role ? user.role : 'user'})</option> `
+                    );
+                });
+        
+            }
+        
+            function updateDistrict() {
+                console.log({
+                    district
+                })
+                const stateId = $('#company_state_address').val();
+                const updatedDistricts = district.filter(e => e.state._id == stateId);
+                console.log({
+                    updatedDistricts,
+                    stateId
+                })
+        
+                $('#postAddContainer #company_district_address option:not(:first-child)').remove();
+                updatedDistricts.forEach((districtnew) => {
+                    $('#postAddContainer #company_district_address').append(
+                        `<option value="${districtnew._id}"  data-id="${districtnew._id}" data-name="${districtnew.name}"  >${districtnew.name}</option> `
+                    );
+                });
+            }
+            
+            let recentLocality;
+            function fetchLocality() {
+                const selectedDistrictId = $('#postAddContainer #company_district_address').val();
+                $.get(`${rootDomain}/admin/address/locality/${selectedDistrictId}`, (data, status) => {
+                        if (status == 'success') {
+                            console.log(data);
+                            recentLocality = data;
+                            // updateAllSelectAddPost(data.state, data.district, data.category);
+                            $('#postAddContainer #company_locality_address option:not(:first-child)').remove();
+                            data.forEach((locality) => {
+                                $('#postAddContainer #company_locality_address').append(
+                                    `<option value="${locality._id}" data-id="${locality._id}" data-name="${locality.name}"  >${locality.name}</option>`
+                                );
+                            });
+                        }
+                    })
+                    .fail((error) => {
+                        console.log('Fail ', error)
+                    });
+            }
+
+            function setPincode(e) {
+                const selectedLocalityId = $(e.target).val();
+                
+                if ( recentLocality ) {
+                    const selectedLocality = recentLocality.find( (locality)=>{
+                        return String( locality._id) == String(selectedLocalityId) ;
+                    });
+                    $("#company_pincode_address").val(selectedLocality && selectedLocality.pincode ? selectedLocality.pincode: '');
+                }
+                
+            }
+        
+            function fetchSubcategoryAndKeywordsAddPost() {
+                console.log("fetchSubcategoryAndKeywordsAddPost");
+        
+                const selectedCategoryId = $('#category').val();
+                $.get(`${rootDomain}/admin/posts/post-common-data/category/${selectedCategoryId}`, (data, status) => {
+                        if (status == 'success' && data) {
+                            console.log(data);
+                            // updateAllSelectAddPost(data.state, data.district, data.category);
+        
+                            // update keywords
+                            $('#postAddContainer #company_keywords option:not(:first-child)').remove();
+                            data.keywords.forEach((keyword) => {
+                                $('#postAddContainer #company_keywords').append(
+                                    `<option value="${keyword._id}"  data-id="${keyword._id}" data-name="${keyword.name}"  >${keyword.name}</option>`
+                                );
+                            });
+        
+                            // update subcategory
+                            $('#postAddContainer #subcategory option:not(:first-child)').remove();
+                            data.subCategory.forEach((subcategory) => {
+                                $('#postAddContainer #subcategory').append(
+                                    `<option value="${subcategory._id}" data-id="${subcategory._id}" data-name="${subcategory.name}"  >${subcategory.name}</option>`
+                                );
+                            });
+        
+                        }
+                    })
+                    .fail((error) => {
+                        console.log('Fail ', error)
+                    });
+            }
+        
+        
+            function searchUserAdd(e) {
+        
+                const searchterm = $('#postAddContainer #search-user-input').val();
+                if (searchterm.length > 0) {
+                    $(e.target).html(`<div class="spinner-border spinner-border-sm text-primary"></div>`);
+                    // disable search button 
+                    $('#postAddContainer #search-user-btn-add').prop('disabled', true);
+        
+                    // fetch user
+                    $.get(`${rootDomain}/admin/users/search-users/${searchterm}`, 
+                    (data, status) => {
+                        console.log({data});
+                        $(e.target).html('Search');
+        
+                        if (status == 'success' && data.length > 0) {
+        
+                            $('#postAddContainer #post_user option:not(:first-child)').remove()
+        
+                            for (let user of data) {
+                                $('#postAddContainer #post_user').append(
+                                    ` <option value="${user._id}"  data-id="${user._id}" data-name="${user.name && user.name.firstName ? user.name.firstName:''}" >${user.name && user.name.firstName ? user.name.firstName :''}/${user.email}  (${user.role ? user.role : 'user'})</option>
+                                    `
+                                );
+                            }
+                            $('#postAddContainer #post_user').prop('size', data.length > 6 ? 6 : data.length);
+        
+                        }
+                        $('#postAddContainer #search-user-btn-add').removeAttr('disabled');
+        
+                    }).fail((error) => {
+                        $(e.target).html('Search');
+                        console.log('User search failed');
+                        $('#postAddContainer #search-user-btn-add').removeAttr('disabled');
+                    });
+                }
+            }
+        
+        
+            function showAlert(error = false, message) {
+                const template = `
+                <div style="position: fixed;
+            z-index: 1;
+            top: 10px;" class="alert ${error ? 'alert-danger' : 'alert-success'} fade show alert-dismissible">
+                    <strong>${error ? 'Error' : 'Success'}!</strong> ${message}
+                </div>
+                `;
+                $('body').append(template);
+                setTimeout(() => {
+                    $('body .alert').hide();
+                }, 5000);
+            }
+        </script>
+    
+    
+
+
+</body>
+
+</html>

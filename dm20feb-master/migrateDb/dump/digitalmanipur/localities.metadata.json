@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"digitalmanipur.localities"},{"v":2,"key":{"name":1},"name":"name_1","ns":"digitalmanipur.localities","background":true}],"uuid":"89099381982a4967b42630d0fd89566d"}

@@ -1,0 +1,507 @@
+<%- include('../includes/header.ejs') %>
+<link rel="stylesheet" href="/assets/css/collectionPublic.css">
+
+</head>
+
+<body id="collectionPublic">
+    <%- include('../includes/navBar.ejs' ) %>
+    <input type="text" name="userId" id="userId" value="<%= user && user._id ? user._id : '' %>" hidden>
+
+    <div class="container main">
+        <section id="quick_navigation">
+            <div class="links">
+                <a href="/">Home</a>
+                <span class="seperator">/</span>
+                <a 
+                href="/collections/<%= typeof state != 'undefined' ? state: typeof defaultState != 'undefined'  ? defaultState : 'manipur' %>"
+                >Collections</a>
+                <span class="seperator">/</span>
+                <a href="<%= href %>" onclick="return false;"
+                    class="active"><%= pageTitle ? pageTitle: 'Collection' %></a>
+
+
+            </div>
+        </section>
+
+
+        <section id="cover_image">
+            <div class="bg-img lozad" style="background-image: url('/uploads/images/web/<%= collection.coverImage  %>');">
+                <div class="overlay p-4">
+                    <div class="controls">
+                        <button class="btn saved" data-saveid="<%= collection._id %>"
+                            onclick="saveStaticCollection(event)">
+                            <% if ( user && user.savedCollections.some( i => String(i.id) == String(collection._id) )) { %>
+                            <i class="far fa-check"></i>
+                            <span class="label">Saved Collection</span>
+
+                            <% } else { %>
+                            <i class="far fa-plus"></i>
+                            <span class="label">Save Collection</span>
+
+                                <% } %>
+
+
+                        </button>
+                        <button class="btn rounded-circle copy" onclick="copyLink()">
+                            <i class="far fa-link" onclick="copyLink()"></i>
+                        </button>
+                    </div>
+                    <div class="details">
+                        <div class="name"><%= collection.name %></div>
+                        <div class="description"><%= collection.description %></div>
+                        <div class="place_count" 
+                        id="placesCount" data-placescount="<%= collection.places ? collection.places.length : 0 %>"
+                        ><%= collection.places.length + ' Place(s)' %></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="places">
+            <% collection.places.forEach( place => { %>
+            <div class="place px-2  col-md-3">
+                <a href="<%= rootDomain %>/detail?name=<%= place.name %>&tk=<%= place._id %>">
+                    <% if (place.images.cover  && place.images.cover.url ) { %>
+                    <div class="cover-image lozad"
+                        data-background-image="/uploads/images/web/<%=  place.images.cover.url %>"
+                        data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  place.images.cover.url %>') 1x , url('/uploads/images/web_thumbnail/<%=  place.images.cover.url %>') 2x">
+
+                        <% } else if (place.images.collection  && place.images.collection[0] && place.images.collection[0].url ) { %>
+                        <div class="cover-image lozad"
+                            data-background-image="/uploads/images/web/<%= place.images.collection[0].url   %>"
+                            data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  place.images.collection[0].url %>') 1x , url('/uploads/images/web_thumbnail/<%= place.images.collection[0].url %>') 2x">
+
+                            <% } else { %>
+                            <div class="cover-image lozad" data-background-image="/assets/img/bg-abstract-lg.jpg">
+                                <% } %>
+
+                                <div class="overlay">
+                                    <div class="controls">
+
+                                        <div class=" rounded-circle bookmark " data-id="<%= place._id %>">
+                                            <% if ( user && user.bookmarks && user.bookmarks.some( e => String(e.id) == String(place._id)) ) {  %>
+                                            <i class="fas fa-bookmark save"></i>
+                                            <% } else { %>
+                                            <i class="fal fa-bookmark save"></i>
+                                            <% } %>
+
+                                        </div>
+
+                                        <% let item=place,  levelClass; %>
+                                        <% if ( item.calcRating >= 0 && item.calcRating <= 0.5 ) { levelClass = 'level-0'; } %>
+                                        <% if ( item.calcRating >= 0.6 && item.calcRating <= 1.0 ) { levelClass = 'level-1'; } %>
+                                        <% if ( item.calcRating >= 1.1 && item.calcRating <= 1.5 ) { levelClass = 'level-2'; } %>
+                                        <% if ( item.calcRating >= 1.6 && item.calcRating <= 2.0 ) { levelClass = 'level-3'; } %>
+                                        <% if ( item.calcRating >= 2.1 && item.calcRating <= 2.5 ) { levelClass = 'level-4'; } %>
+                                        <% if ( item.calcRating >= 2.6 && item.calcRating <= 3.0 ) { levelClass = 'level-5'; } %>
+                                        <% if ( item.calcRating >= 3.1 && item.calcRating <= 3.5 ) { levelClass = 'level-6'; } %>
+                                        <% if ( item.calcRating >= 3.6 && item.calcRating <= 4.0 ) { levelClass = 'level-7'; } %>
+                                        <% if ( item.calcRating >= 4.1 && item.calcRating <= 4.5 ) { levelClass = 'level-8'; } %>
+                                        <% if ( item.calcRating >= 4.6 && item.calcRating <= 5.0 ) { levelClass = 'level-9'; } %>
+
+                                        <span class="badge badge-success <%= levelClass %>"><%= place.calcRating %></span>
+
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                </a>
+                <div class="details">
+                    <div class="name">
+                        <a href="<%= rootDomain %>/detail?name=<%= place.name %>&tk=<%= place._id %>">
+                            <%= place.name %>
+                        </a>
+                    </div>
+                    <div class="location">
+                        <a
+                            href="<%= rootDomain %>/search?slocation=<%= place.address.locality && place.address.locality.name ? place.address.locality.name :  place.address.district && place.address.district.name ? place.address.district.name :  place.address.state && place.address.state.name ? place.address.state.name : '' %>&p=1&li=15&sk=0">
+                            <%= place.fullAddress %>
+                        </a>
+                    </div>
+                    <div class="keywords">
+                        <% place.keywords.forEach( key => { %>
+                        <a href="<%= rootDomain %>/search?stext=<%= key.name %>&p=1&li=15&sk=0&slocation=Imphal">
+                            <%= key.name %>
+                        </a>
+                        <% } ) %>
+                    </div>
+                </div>
+
+            </div>
+            <% }) %>
+        </section>
+
+        <section id="more_collections">
+            <% if (( staticCollections &&  staticCollections.length > 0  ) || ( moreCollections &&  moreCollections.length > 0  ) ) { %>
+
+            <div class="title">More Collections</div>
+            <div class="places">
+
+                <% if ( staticCollections &&  staticCollections.length > 0  ) { %>
+
+                <% staticCollections.forEach( place => {   if ( place.places  ) { %>
+                <div class="place px-2  col-sm-6 col-md-4 col-lg-3" data-id="<%= place._id %>">
+                    <a data-id="<%= place._id %>" 
+                        href="<%= rootDomain %>/collections/<%= state ? state: defaultState? defaultState : 'manipur' %>/<%= place.id %>">
+                         <% if (place.coverImage) { %>
+                        <div class="cover-image lozad"
+                            data-background-image="/uploads/images/mobile/<%=  place.coverImage %>"
+                            data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  place.coverImage %>') 1x , url('/uploads/images/web_thumbnail/<%=  place.coverImage %>') 2x">
+
+                            <% } else { %>
+                            <div class="cover-image lozad" data-background-image="/assets/img/bg-abstract-lg.jpg">
+                                <% } %>
+
+                                <div class="overlay p-3">
+                                    <div class="controls">
+                                      
+                                    </div>
+                                    <div class="details">
+                                        <div class="name"><%= place.name %></div>
+                                        <div class="place_count"><%= staticCollectionCounts[place.id] + ' Place(s)' %></div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                    </a>
+
+
+                </div>
+                <% } }) %>
+                <% } %>
+
+                <% if ( moreCollections &&  moreCollections.length > 0  ) { %>
+
+                <% moreCollections.forEach( place => {   if (place.places && place.places.length > 0 && String(place._id) != String(collection._id) ) { %>
+                <div class="place px-2  col-sm-6 col-md-4 col-lg-3" data-id="<%= place._id %>">
+                    <a data-id="<%= place._id %>" href="<%= rootDomain %>/collections/<%= state ? state: defaultState? defaultState : 'manipur' %>/<%= String(place.name).replace(/\s/g,'-') %>/<%= place._id %>">
+                        <% if (place.coverImage) { %>
+                        <div class="cover-image lozad"
+                            data-background-image="/uploads/images/mobile/<%=  place.coverImage %>"
+                            data-background-image-set="url('/uploads/images/mobile_thumbnail/<%=  place.coverImage %>') 1x , url('/uploads/images/web_thumbnail/<%=  place.coverImage %>') 2x">
+
+                            <% } else { %>
+                            <div class="cover-image lozad" data-background-image="/assets/img/bg-abstract-lg.jpg">
+                                <% } %>
+
+                                <div class="overlay p-3">
+                                    <div class="controls">
+                                       
+                                    </div>
+                                    <div class="details">
+                                        <div class="name"><%= place.name %></div>
+                                        <div class="place_count"><%= place.places.length + ' Place(s)' %></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                    </a>
+
+
+                </div>
+                <% } }) %>
+                <% } %>
+
+
+
+            </div>
+            <% } %>
+        </section>
+
+    </div>
+
+    <div class="d-flex flex-row justify-content-center alert-container"
+    style=" position: fixed; top: 30px; width: 100%; height: auto;">
+    <div class="col-sm-10 col-lg-8 " style="z-index: 1; font-size: 22px;">
+        <div class="alert alert-success alert-dismissible" style="display: none;">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="mr-3">Success!</strong> <span class="message"></span>
+        </div>
+
+        <div class="alert alert-danger alert-dismissible" style="display: none;;">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="mr-3">Error!</strong> <span class="message"></span>
+        </div>
+
+        <div class="alert alert-info alert-dismissible" style="display: none;;">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong class="mr-3">Info!</strong> <span class="message"></span>
+        </div>
+
+    </div>
+
+</div>
+
+    <script type="text/javascript" src="/assets/js/lozad.min.js">
+
+    </script>
+    <script>
+        
+        const userId = $("#userId").val();
+
+        // image lazy load
+        const observer = lozad('.lozad', {
+            // load: function (el) {
+            //     console.log('loading element');
+
+            //     // Custom implementation to load an element
+            //     // e.g. el.src = el.getAttribute('data-src');
+            // },
+            loaded: function (el) {
+                // Custom implementation on a loaded element
+                console.log('loaded element');
+                console.log($(el.target));
+
+                el.classList.add('zoom-bg');
+            }
+        }); // lazy loads elements with default selector as '.lozad'
+        observer.observe();
+
+        // online/offline
+        window.addEventListener('load', function () {
+
+            function updateOnlineStatus(event) {
+                document.body.setAttribute("data-online", navigator.onLine);
+            }
+            updateOnlineStatus();
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+        });
+
+
+        // bookmark icon
+        $(".bookmark > i").click(function (e) {
+            // Do something
+            console.log("Common");
+
+            console.log($(e.target));
+            $(e.target).parent().trigger('click');
+            e.stopImmediatePropagation();
+            return false;
+
+        });
+
+        $(document).on('click', ".bookmark i.save", (e) => {
+            // Do something
+            console.log("SAVE");
+            console.log($(e.target));
+            $(e.target).parent().trigger('click');
+            e.stopImmediatePropagation();
+            return false;
+
+            // alert(e.isPropagationStopped());
+
+        });
+
+        $(document).on('click', ".bookmark i.remove", (e) => {
+            // Do something
+            console.log("REMOVE");
+            console.log($(e.target));
+            $(e.target).parent().trigger('click');
+            e.stopImmediatePropagation();
+            return false;
+            // alert(e.isPropagationStopped());
+
+        });
+
+        // bookmark spinner
+        $(".bookmark > div").click(function (e) {
+            // Do something
+            e.stopPropagation();
+            // alert(e.isPropagationStopped());
+        });
+
+        // bookmark div 
+        $(".bookmark").click(e => {
+
+            // check isonline
+            // if (!navigator.onLine) {
+            //     showDangerAlert('Oops! Something went wrong. Please contact support.');
+            //     e.stopPropagation();
+            //     return false;
+            // }
+            if ( !userId ) {
+                showInfoAlert('Please login to continue.');
+                return false;
+            }
+            let id = $(e.target).data('id'); // clicked on button
+            if (!id)
+                return;
+
+            console.log({
+                id
+            });
+            console.log($(e.target));
+
+            // mode
+            const save = $(e.target).children('i').hasClass('fal');
+            const remove = $(e.target).children('i').hasClass('fas');
+            const mode = save ? 'save' : remove ? 'remove' : null;
+
+            // request
+            const rootDomain =
+                `${location.protocol}//${window.location.hostname}${location.port ? ':' + location.port : ''}`;
+
+            // loading
+            console.log("IsDIV ", $(e.target).hasClass('bookmark'));
+
+            $(e.target).empty();
+            $(e.target).html(`<div class="spinner-border spinner-border-sm"></div>`);
+
+            $.post(`${rootDomain}/users/bookmark/${mode}/${id}`, {
+                url: location.href
+            }, (data, status) => {
+                console.log({
+                    data,
+                    status
+                });
+                if (status == 'success' && data) {
+
+                    // change icon
+                    if (save) {
+                        $(e.target).html(`<i class="fas fa-bookmark remove"></i>`);
+                    }
+
+                    if (remove) {
+                        $(e.target).html(`<i class="fal fa-bookmark save"></i>`);
+                    }
+
+                } else {
+                    showDangerAlert('Oops! Something went wrong. Please contact support.');
+                }
+            }).fail(e => {
+                showDangerAlert('Oops! Something went wrong. Please contact support.');
+                if (save) {
+                    $(e.target).html(`<i class="fal fa-bookmark save"></i>`);
+                }
+
+                if (remove) {
+                    $(e.target).html(`<i class="fas fa-bookmark remove"></i>`);
+                }
+
+            });
+
+            e.stopPropagation();
+            return false;
+
+        });
+
+
+        function showSuccessAlert(message) {
+            $(".alert-container").show();
+            $(".alert-success .message").html(message);
+            $(".alert-success").show();
+
+            setTimeout(() => {
+                $(".alert-container").hide();
+                $(".alert-success").hide();
+            }, 1500);
+
+        }
+
+        function showDangerAlert(message) {
+            $(".alert-danger .message").html(message);
+            $(".alert-danger").show();
+            setTimeout(() => {
+                $(".alert-container").show();
+                $(".alert-danger").hide();
+            }, 1500);
+        }
+
+                
+        function showInfoAlert(message) {
+            $(".alert-info .message").html(message);
+            $(".alert-info").show();
+            setTimeout(() => {
+                $(".alert-container").show();
+                $(".alert-info").hide();
+            }, 1500);
+        }
+
+        // collection click
+        // $("#more_collections .places .place a , #moreCollections .places .place").click( e => {
+
+        //     e.preventDefault();
+
+        //     const id = $(e.target).data('id');
+        //     if ( !id ) return;
+        //     const form = `<form action="/collections/${id}" method="post" ></form>`;
+        //     console.log($(form).prop());
+
+        // });
+
+        function copyLink() {
+
+/* Alert the copied text */
+
+var input = document.createElement('textarea');
+input.innerHTML = window.location.href;
+document.body.appendChild(input);
+input.select();
+var result = document.execCommand('copy');
+document.body.removeChild(input);
+showSuccessAlert("Link Copied to Clipboard");
+
+return result;
+
+}
+
+        function saveStaticCollection(e) {
+            const saveid = $(e.target).data('saveid');
+            console.log('clicked', saveid);
+            if ( !userId ) {
+                showInfoAlert('Please login to continue.');
+                return false;
+            }
+            if (saveid) {
+                let toSave = $(e.target).children('i').hasClass('fa-plus');
+                $(e.target).children('i').prop('class','fa fa-spinner fa-spin');
+
+                $.post(`${rootDomain}/users/saveCollection/${saveid}`, {
+                    'url': location.href,
+                    'placesCount':   $('#placesCount').data('placescount') 
+                }, (data, status) => {
+                    console.log({
+                        data
+                    });
+                    if (status == 'success' && data.saved) {
+
+                        if ( toSave ) {
+                            setTimeout(function () {
+                                $(e.target).children('i').prop('class', 'far fa-check');
+                            $(e.target).children('.label').html('Saved Collection');
+                            showSuccessAlert('Collection added in Saved Collections.');
+                            }, 500);
+                            
+
+                        } else {
+                            setTimeout(function () {
+                                $(e.target).children('i').prop('class', 'far fa-plus');
+                            $(e.target).children('.label').html('Save Collection');
+                            showSuccessAlert('Collection removed from Saved Collections.');
+                            }, 500);
+                            
+
+                        }
+
+                    } else {
+                        showDangerAlert('Cannot save right now! Please try later.');
+                    }
+                }).fail(e => {
+                    showDangerAlert('Please try after sometime.');
+                });
+            }
+        }
+
+        $(document).on('click', '.controls .saved i, .controls .saved .label', (e) => {
+            console.log(e.target);
+            $(".controls .saved").trigger('click');
+            e.stopPropagation();
+        });
+
+    </script>
+
+    <%- include('../includes/footer.ejs') %>

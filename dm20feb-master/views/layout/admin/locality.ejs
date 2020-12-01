@@ -1,0 +1,779 @@
+
+
+
+
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    
+
+
+</head>
+
+<body class="admin-page">
+
+    <%- include('./../../includes/alert'); %>
+
+
+    <section class="main-body container-fluid row mx-0 px-0">
+
+        <!-- Left column navigation  -->
+        <%- include('./../../includes/adminNavigation.ejs') %>
+
+        <!-- Right column main body -->
+        <div class="col-10  main-col px-0" ">
+
+            <!-- Top navigation -->
+            <section class=" container nav-container mx-0">
+                    <div class="d-flex nav-header  bg-white  py-2 px-3  " style="width: 100%;">
+
+                        <div class="dropdown dropdown-menu-right ml-auto" style="color: black;">
+                            <button class="shadow-none btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
+                                type="button">
+                                <% if( typeof user.images.profile.common.url != "undefined" && user.images.profile.common.url) { %>
+                                <img class="rounded-circle" src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                    style="width: 25px;height: 25px;margin-right: 5px;">
+                                <% } else { %>
+                                <i class="fad fa-user-shield font-weight-bold"></i>
+                                <% } %>
+
+                                <span class="px-1">
+                                    <%= `${user.name.firstName}` %>
+                                </span>
+                            </button>
+                            <div class="dropdown-menu text-secondary" role="menu"
+                                style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                                <i class="fal fa-angle-up"  style="
+                                color: #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 10px;
+                                font-size: 22px;
+                                z-index: 999;
+                                "></i>
+                                <a class="dropdown-item" role="presentation" href="#" style="color: black;">Profile</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Notifications</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Settings</a>
+                                <hr style="margin: 0;">
+                                <form action="/auth/logout?via=admin" method="POST">
+                                    <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                        role="presentation">Logout</button>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+            </section>
+
+            <!-- main content -->
+            <section>
+
+                <div class="container px-5 " id="localityContainer">
+
+                    <div class="row" style="position: absolute;
+                    right: 50px;
+                    top: 0;
+                    z-index: 1">
+                
+                        <div class="toast" data-delay="5000">
+                            <div class="toast-header">
+                                <strong class="mr-auto text-primary"></strong>
+                                <!-- <small class="text-muted">5 mins ago</small> -->
+                                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                            </div>
+                            <div class="toast-body">
+                
+                            </div>
+                        </div>
+                    </div>
+                
+                    <section class="row px-3 edit-section">
+                        <div class="col bg-white p-3 rounded border">
+                            <h5 class="title">Add locality </h5>
+                            <div class="form px-3 mx-0">
+
+                                <!-- state and district -->
+                                    <div class="row py-3">
+
+                                        <div class="col-4">
+                                            <div class="form-inline">
+                                                <label class="font-weight-bold"  for="districtSelect">State</label>
+                                                <select style="margin-left: 20px; min-width: 150px;" onchange="getDistricts(event)" name="stateSelect"  class="form-control" id="stateSelect">
+                                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                                                </select>
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-inline">
+                                                <label class="font-weight-bold" for="districtSelect">District</label>
+                                                <select style="margin-left: 20px; min-width: 150px;" name="districtSelect"  class="form-control" id="localityDistrictSelect">
+                                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                                                    
+                                                </select>
+                                            </div>
+                                            
+                                            
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                    <!-- new locality fields -->
+                                    <div class="p-3 border-top row" >
+                                                <div class="col-9 " id="localityHolderId">
+                                                    <div class="row">
+                                                        <div class="col-7">
+                                                            <div class="form-group">
+                                                                <!-- <label for="districtSelect">Locality</label> -->
+                
+                                                                <input autocomplete="off" type="text" class="form-control" name="locality" id="locality"
+                                                                    placeholder="Enter new locality...">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-3">
+                                                            <div class="form-group">
+                                                                <!-- <label for="districtSelect">Pincode</label> -->
+                
+                                                                <input autocomplete="off" type="text" class="form-control" name="pincode" id="pincode"
+                                                                    placeholder="Enter pincode...">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-3">
+                                                    <button class="btn btn-sm btn-outline-secondary" id="addMoreId" onclick="addNewLocalityField()">Add more</button>
+                                                </div>
+                                                
+                                                <script>
+                                                    function addNewLocalityField(){
+                                                        $("#localityHolderId").append(`
+                                                            <div class="row">
+                                                                <div class="col-7">
+                                                                    <div class="form-group">
+                                                                        <!-- <label for="districtSelect">Locality</label> -->
+                        
+                                                                        <input autocomplete="off" type="text" class="form-control" name="locality" 
+                                                                            placeholder="Enter new locality...">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-3">
+                                                                    <div class="form-group">
+                                                                        <!-- <label for="districtSelect">Pincode</label> -->
+                        
+                                                                        <input autocomplete="off" type="text" class="form-control" name="pincode" 
+                                                                            placeholder="Enter pincode...">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col text-danger font-weight-bold " style="cursor:pointer;" 
+                                                                onclick="deleteField(event)">X</div>
+                                                            </div>
+                                                        `);
+                                                    }
+
+                                                    function deleteField(e){ 
+                                                        $(e.target).parent().remove(); 
+                                                    }
+                                                </script>
+                                            
+                                    </div>
+                                    
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <input type="hidden" id="updateIdlocality" name="updateId" value="null">
+                                    <hr class="my-3">
+                                    <div class=" px-3 d-flex flex-row justify-content-end page-control">
+                                        <button type="button" id="addBtnlocality" onclick="addlocality(event)"
+                                            class="btn btn-success mr-3">Submit</button>
+                                        <button type="button" hidden id="updateBtnlocality" onclick="updatelocality()"
+                                            class="btn btn-success mr-3">Update</button>
+                                        <button type="reset" id="cancelBtnlocality" class="btn btn-info mr-3 "
+                                            onclick="cancelEditDistrict()">Cancel</button>
+                                        <button hidden type="button" id="deleteBtnlocality" class="btn btn-danger mr-3 ">Delete</button>
+                                        <script>
+                                            $(document).ready(function () {
+                
+                                                var div = $('<div></div>');
+                                                div.append(`<div class="px-3 py-2" style="display: flex;"> 
+                                                                    <button onclick="deletelocality()" class="btn btn-success small mr-3">Yes</button>
+                                                                    <button class="btn btn-secondary small">No</button>
+                                                                </div>`);
+                                                var options = {
+                                                    placement: 'right',
+                                                    html: true,
+                                                    title: "Are you sure?",
+                                                    trigger: 'click',
+                                                    template: `
+                                                    <div class="popover" role="tooltip" style="width: min-width:200px">
+                                                        <div class="arrow"></div>
+                                                            <h3 class="popover-header"> Are you sure? </h3>
+                                                            <div class="popover-body" style="">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        `,
+                                                    content: div,
+                                                    animation: true
+                
+                                                };
+                
+                                                $('#deleteBtnlocality').popover(options);
+                
+                
+                
+                
+                                            });
+                
+                                            $('html').on('click', function (e) {
+                                                if (typeof $(e.target).data('original-title') == 'undefined' &&
+                                                    !$(e.target).parents().is('.popover.in')) {
+                                                    $('#deleteBtnlocality').popover('hide');
+                                                }
+                                            });
+                
+                                        </script>
+                                    </div>
+                                
+                
+                            </div>
+                        </div>
+                
+                    </section>
+                
+                    <section class="row px-3">
+                        <div class="col bg-white p-3 rounded border">
+                            <div class="row px-0 my-2 py-1">
+                                <div class="col">
+                                    <span>
+                                        <h5>Recent locality </h5>
+                                    </span>
+                                </div>
+                                <div class="col d-flex flex-row "
+                                    style="display: flex; align-items: center; justify-content: space-around;">
+                                    <input autocomplete="off" type="text" class="" style="width:90%;  padding: 4px 10px;display: none;"
+                                        name="searchlocality" id="searchlocality" class="form-control" onkeyup="searchlocality()"
+                                        placeholder=" Enter locality to search..." id="">
+                                    <a class="ml-auto" onclick="(() => { $('#searchlocality').show().focus(); searchlocality();  })()"
+                                        style="color: initial; cursor: pointer;">
+                                        <i class="fa fa-search text-secondary"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="posts-list">
+                                <ul class="list-group " id="Recent_locality_list">
+                
+                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                
+                
+                
+                </div>
+                
+            <!-- Main content ends here -->
+            </section>
+
+        <!-- Right column main body ends here -->
+         </div>
+
+
+    </section>
+
+
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/fontawesome-pro-5.11.1-web/js/fontawesome.min.js"></script>
+    <script src="/assets/js/admin.js"></script>
+
+   
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+
+
+<script >
+
+    $(document).ready(e=> {
+        getRecentlocality();
+        getStates();
+
+    });
+
+    // AJAX locality PAGE
+    let recentlocality, recentStates, recentDistricts, recentCountryLocality, recentStateLocality , recentDistrictLocality ;
+    
+    const getRecentlocality = () => {
+
+        console.log('calling getRecentlocality');
+        $('#localityContainer #Recent_locality_list').html('');
+        $('#localityContainer #Recent_locality_list').append(`<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+        $.get(rootDomain + '/admin/address/locality/recent', (data, status) => {
+
+            if (status == 'success') {
+                console.log("Response getRecentlocality : ", data, status);
+                recentlocality = data.localities;
+                // recentStateLocality = data.states;
+                // recentCountryLocality = data.countries;
+                recentDistrictLocality = data.districts;
+                refreshlocalityList(recentlocality);
+
+
+                $('#localityContainer #localityDistrictSelect').html('');
+                // var counta = 0;
+                // data.districts.forEach( district => {
+
+                //     $('#localityContainer #localityDistrictSelect').append(`
+                //         <option value="${district._id}" name="${district.name}">${++counta}. ${district.name}</option>
+                //     `);
+                // });
+                
+
+            }
+
+        });
+
+}
+
+const getDistricts = (e) => {
+
+        
+
+        console.log('calling getDistricts');
+        const id = $("#stateSelect").val();
+        // $('#localityContainer #Recent_locality_list').html('');
+        // $('#localityContainer #Recent_locality_list').append(`<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+        
+                if ( id ) {
+                    $.get(rootDomain + `/admin/address/state/districts/${id}`, (data, status) => {
+
+                        if (status == 'success' && data && Array.isArray(data) ) {
+                            console.log("Response getRecentlocality : ", data, status);
+                            recentDistricts = data;
+
+                            var counta = 0;
+                            $('#localityDistrictSelect').html('');
+
+                            if (data.length == 0) {
+                                showInfoAlert('No district available');
+                                return;
+
+                            }
+                           
+                            data.forEach( district => {
+
+                                $('#localityDistrictSelect').append(`
+                                    <option value="${district._id}" name="${district.name}">${++counta}. ${district.name}</option>
+                                `);
+                            });
+                            
+
+                        }
+
+                });
+        } else {
+            showInfoAlert('Please select a state');
+        }
+        
+
+    }
+
+    function getStates(){
+        $.get(rootDomain + '/admin/address/state/all', (data, status) => {
+
+            if (status == 'success' && data.length > 0 && Array.isArray(data)) {
+                console.log("Response getStates : ", { data, status } );
+                recentStates = data;
+                
+                var counta = 0;
+                $('#stateSelect').html('');
+                $('#stateSelect').append(`
+                        <option value="" selected="" hidden="" disabled="">Select</option>
+                    `);
+                
+                data.forEach( state => {
+
+                    $('#stateSelect').append(`
+                        <option value="${state._id}" name="${state.name}">${++counta}. ${state.name}</option>
+                    `);
+                });
+                
+
+            }
+
+            });
+    }
+
+    
+
+    function refreshlocalityList(data) {
+
+        console.log("refreshlocalityList data ", data);
+        $('#localityContainer #Recent_locality_list').html('');
+        // append list header
+        $('#localityContainer #Recent_locality_list').append(`<li class="cus-list-header list-group-item d-flex justify-content-between align-items-center">
+            <div class="col-3 d-inline-block text-truncate">
+                <b> Locality </b>
+            </div>
+            <div class="col-2 d-inline-block text-truncate">
+                <b> District </b>
+            </div>
+            <div class="col-2 d-inline-block text-truncate">
+                <b> Pincode </b>
+            </div>
+           
+            <div class="col-2 d-inline-block text-truncate">
+                <b> Created Date </b>
+            </div>
+            <div class="col-2 d-inline-block text-truncate"><b>Modified Date</b></div>
+            <div class="col-1" >   
+                <b>Manage</b>                    
+            </div>
+        </li>`);
+
+        data.forEach(locality => {
+
+            // append list data
+            $('#localityContainer #Recent_locality_list').append(`
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div class="col-3 d-inline-block text-truncate">${locality.name}</div>
+                <div class="col-2 d-inline-block text-truncate">
+                    ${locality.district && locality.district.name ? locality.district.name :''}
+            </div>
+            <div class="col-2 d-inline-block text-truncate">
+               ${locality.pincode ? locality.pincode :''}
+            </div>
+                <input type="hidden" name="keyId" value="${locality._id}" />
+                <div class="col-2 d-inline-block text-wrap">${getCustomDate(new Date(locality.createdOn)) }</div>
+                <div class="col-2 d-inline-block text-wrap">${getCustomDate(new Date(locality.modifiedOn)) }</div>
+                <div class="col-1" >                            
+                    <button  class="btn btn-outline-primary btn-sm" onclick="editlocality(event)">Edit</button>                            
+                </div>
+        </li>
+        `);
+        });
+    }
+
+    function editlocality(e) {
+
+        $("#addMoreId").hide();
+        $('.main-col').stop(true, false).animate({ scrollTop: 0 }, 'fast');
+        $('#updateBtnlocality').prop('hidden', false);
+        $('#addBtnlocality').prop('hidden', true);
+        $('#deleteBtnlocality').prop('hidden', false);
+
+        // find locality from previously fetch locality array
+        let locality = recentlocality.find((locality) => {
+            return $(e.target).parent('div').siblings("input").val() == locality._id;
+        });
+
+        if( locality && locality.pincode){
+            $("#pincode").val(locality.pincode);
+        }
+        if (locality) {
+            $('#localityContainer #locality').val(locality.name);
+            $('#localityContainer .edit-section .title').text('Edit locality');
+            $('#updateIdlocality').val(locality._id);
+            $('#localityContainer  #multilist_holder').html('');
+            
+            
+
+            if ( locality.district ) {
+                $('#localityContainer #localityDistrictSelect option:selected').prop('selected', false);
+                $('#localityContainer #stateSelect option:selected').prop('selected', false);
+
+                // $("#localityDistrictSelect").html('');
+                // $("#localityDistrictSelect").append(`
+                //     <option value="${locality.district && locality.district._id ? locality.district._id: ''}" name="" selected>${locality.district.name}</option>
+                // `);
+
+                    var statesIdObject = $('#stateSelect option').map((index, option) => option.value);
+                    var statesIdArray = Object.values(statesIdObject);
+                    const stateIndex = statesIdArray.indexOf(String(locality.district.state));
+                    $('#localityContainer #stateSelect option:nth-child(' + ( stateIndex + 1) + ')').prop('selected', true);
+
+                    if ( stateIndex != -1 ) {
+                        $("#localityContainer #stateSelect").trigger('change');
+                    }
+                    setTimeout(() => {
+                        var districtIdObject = $('#localityDistrictSelect option').map((index, option) => option.value);
+                        var districtIdArray = Object.values(districtIdObject);
+
+                            console.log('district ID : ', locality.district._id);
+                            if (districtIdArray.indexOf(locality.district._id) != -1) {
+                                console.log(districtIdArray.indexOf(locality.district._id));
+                                $('#localityContainer #localityDistrictSelect option:nth-child(' + (districtIdArray.indexOf(locality.district._id) + 1) + ')').prop('selected', true);
+                            } else {
+                                console.log('not found : ', locality.district.name);
+
+                            }
+                    }, 2000);
+                    
+
+            }
+
+        }
+
+
+
+
+    }
+
+
+    function cancelEditDistrict() {
+        
+        $("#addMoreId").show();
+        $('#localityContainer #multilist_holder').html('');            // clear selected options
+        $('#localityContainer .edit-section .title').text('Add new locality');
+        $('#localityContainer #localityCountrySelect option:selected').prop("selected", false);
+        $('#localityContainer #localityStateSelect option:selected').prop("selected", false);
+        $('#localityContainer #localityDistrictSelect option:selected').prop("selected", false);
+        $('#updateBtnlocality').prop('hidden', true);
+        $('#addBtnlocality').prop('hidden', false);
+        $('#deleteBtnlocality').prop('hidden', true);
+        $("#localityContainer form[name='locality-form']").trigger("reset");
+        $('#localityContainer #locality').removeAttr('value');
+
+        $("#localityHolderId .row:not(:first-child)").remove();
+        $("#localityHolderId .row input").val('');
+
+        // $('#cancelBtnlocality').prop('hidden', true);
+
+    }
+
+    function updatelocality() {
+        const updateId = $('#localityContainer #updateIdlocality').val();
+        console.log('updateId : ', updateId);
+
+
+        const key = $('#localityContainer #locality').val();
+        const pincode = $('#localityContainer #pincode').val();
+        const token = $("#localityContainer form[name='locality-form'] input[name='_csrf']").val();
+        // const country = $('#localityCountrySelect').val();
+        // const state = $('#localityStateSelect').val();
+        const district = $('#localityDistrictSelect').val();
+
+        if ( updateId != null && updateId.length == 24 && district) {
+
+            // ajax post update
+            $.post(rootDomain + '/admin/address/locality/update',
+                {
+                    "name": key,
+                    "pincode": pincode,
+                    "_csrf": token,
+                    "id": updateId,
+                    
+                    "district": district
+                }, (data, status) => {
+
+                    if (status == 'success') {
+                        getRecentlocality();
+                        cancelEditDistrict();
+                        console.log(data, status);
+                        showSuccessAlert('Updated successfully');
+                    }
+                });
+
+        }
+    }
+
+    function deletelocality() {
+
+        const id = $('#localityContainer #updateIdlocality').val();
+        const token = $("#localityContainer form[name='locality-form'] input[name='_csrf']").val();
+        console.log('Deleting locality - ', id);
+        if ( id != null && id.length == 24 ) {
+            $.post(`${rootDomain}/admin/address/locality/delete`, {
+                "_csrf": token,
+                "id": id
+            }, (data, status) => {
+                if (status == 'success') {
+                    console.log('Response : ', data);
+                    console.log('locality Deleted ');
+                    getRecentlocality();
+                    showSuccessAlert('locality deleted successfully');
+                    cancelEditDistrict();
+
+                }
+            }
+
+            )
+                .fail(function (error) {
+                    // alert(JSON.parse(error)) ;
+                    const response = JSON.parse(error.responseText);
+                    console.log(response);
+                    showDangerAlert(response.error)
+                });
+        }
+
+    }
+
+
+    function addlocality(event) {
+        event.preventDefault();
+        console.log('adding locality..');
+
+        // check 
+        // const key = $('#localityContainer #locality').val();
+        // const token = $(event.target).parent('div').siblings("input[name='_csrf']").val();
+        // const country = $('#localityCountrySelect').val();
+        const state = $('#stateSelect').val();
+        const district = $('#localityDistrictSelect').val();
+        
+        if ( !district ) {
+            showInfoAlert('Please select a district');
+            return;
+
+        } 
+
+        let localities = [];
+        const fields = $("#localityHolderId .row");
+        for (let i =0; i < fields.length; i++){
+            const locality = $(fields[i]).find('input[name="locality"]').val();
+            const pincode = $(fields[i]).find('input[name="pincode"]').val();
+            console.log( locality, pincode );
+            if ( locality && pincode ) {
+                localities.push({ 
+                    name: locality, pincode: pincode, 
+                    district: district ,
+                    modifiedOn: Date.now(),
+                    createdOn: Date.now(),
+                    status: true
+                 });
+            } else {
+                showInfoAlert("Please enter all input fields ");
+                return;
+                break;
+            }
+        }
+
+
+
+        console.log('continue');
+        
+
+
+        if ( localities.length > 0 && district ) {
+            $.post(`${rootDomain}/admin/address/locality/addMany`, {
+                localities
+            }, (data, status) => {
+                if (status == 'success') {
+                    console.log('Response : ', data);
+                    cancelEditDistrict();
+                    showSuccessAlert('Added!')
+                    getRecentlocality();
+                }
+            }
+
+            )
+                .fail(function (error) {
+                    // alert(JSON.parse(error)) ;
+                    const response = JSON.parse(error.responseText);
+                    console.log(response);
+                    showDangerAlert(response.error)
+                });
+
+        } else {
+            console.log("fields cannot be empty");
+            showInfoAlert('Please provide a locality name');
+        }
+
+    }
+
+
+
+
+
+    function showToastDistrict(title, error = false, message = null) {
+        $('#localityContainer .toast-header strong').text(title);
+        // $('#locality .toast-header small').text(title);
+        // $('#locality .toast-body ').text(body);
+
+        if (error) {
+            $('#localityContainer .toast-body ').text(message ? message : '');
+            $('#localityContainer .toast-body ').show();
+        } else {
+            $('#localityContainer .toast-body ').hide();
+        }
+        $('#localityContainer .toast').toast('show');
+        // setTimeout(function(){ $('#locality .toast').toast('hide') }, 200000);
+    };
+
+    var timer;
+    function searchlocality() {
+
+        const value = $(" #localityContainer #searchlocality").val();
+        console.log(value)
+        if (value.length > 0) {
+
+            $('#localityContainer #Recent_locality_list').html('');
+            $('#localityContainer #Recent_locality_list').append(`<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+
+            if (timer) { clearTimeout(timer); }
+            timer = setTimeout(function () {
+                $.get(`${rootDomain}/admin/address/locality/search?searchText=${value}`, (data, status) => {
+                    // console.log(data,status)
+
+                    if (status == 'success' && data != 'undefined' && data.length > 0) {
+                        console.log(data, status)
+
+                        refreshlocalityList(data);
+                    } else {
+                        refreshlocalityList(recentlocality);
+                    }
+                })
+                    .fail((error) => {
+                        console.log("error")
+
+                        refreshlocalityList(recentlocality);
+                    });
+            }, 1000)
+
+        } else {
+            clearTimeout(timer);
+            refreshlocalityList(recentlocality);
+        }
+    }
+
+
+   
+
+// show selected sub-categories on right side
+$('#localityContainer #localityMultiSelect').on('click', 'option', function (e) {
+
+$("#localityContainer #localityMultiSelect")
+    .change(function () {
+
+        $('#localityContainer  #multilist_holder').html('');
+        $("#localityContainer  #localityMultiSelect option:selected").each(function () {
+            $(' #localityContainer  #multilist_holder').append(`
+        <span class="badge badge-pill badge-success"> ${ $(this).text()}</span>
+        `);
+        });
+
+    })
+    .trigger("change");
+
+// console.log($('#localityMultiSelect').val());
+});
+
+</script>
+
+
+</body>
+
+</html>

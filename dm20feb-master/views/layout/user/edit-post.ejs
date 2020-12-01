@@ -1,0 +1,1011 @@
+<%- include('./../../includes/header.ejs',{ 
+    keywords: 'User setting' , 
+    author: 'Digtal Manipur',
+    description: ``
+ }) %>
+<link rel="stylesheet" href="/assets/css/post-listing.css">
+<script src="/assets/js/validate.min.js"></script>
+</head>
+
+<body class='edit-post'>
+    <%- include('./../../includes/navBar.ejs') %>
+
+    <section class="add-listing my-4" id="add-listing-container">
+        <div class="container py-4 px-0">
+            <h3>Edit listing</h3>
+            <div class="row">
+                <div class="col-md-9 col-xs-12 col-sm-12 ">
+                    <form name="add_post" id="add_post_form" method="post" enctype="multipart/form-data" novalidate>
+                        <input hidden type="text" name="postId" value="<%= post._id %>" id="postId">
+                        <input hidden type="text" name="postId" value="<%= user.name.firstName %>" id="username">
+                        
+                        <section class=" ">
+                            <h5 class="text-dark my-2">Basic info</h5>
+                            <div class=" bg-white lightGrey-border rounded p-3">
+
+                                <div class="form-group">
+                                    <label for="company_name">Company name</label>
+                                    <input required autocomplete="off" type="text" class="form-control"
+                                        id="company_name_add" name="company_name" placeholder="Enter company name"
+                                        value="<%= post.name ? post.name : '' %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="company_email">Company email</label>
+                                    <input required autocomplete="off" type="email" class="form-control"
+                                        id="company_email_add" name="company_email" placeholder="Enter company email"
+                                        value="<%= post.email ? post.email : '' %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="company_website">Company website</label>
+                                    <input autocomplete="off" type="text" class="form-control" id="company_website_add"
+                                        name="company_website" placeholder="Enter company website"
+                                        value="<%= post.website ? post.website : '' %>">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="company_website">company description</label>
+                                    <textarea required placeholder="Enter brief description about your company"
+                                        class="form-control" rows="5" id="company_description_add"
+                                        name="company_description"><%=  post.description && post.description.short ? post.description.short.trim() : '' %></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="company_mobile">Mobile Number</label>
+                                    <input required autocomplete="off" type="number" class="form-control"
+                                        id="owner_mobile1_add" name="company_mobile" placeholder="Enter mobile number"
+                                        value="<%= post.mobileNumber && post.mobileNumber[0] && post.mobileNumber[0].number ? post.mobileNumber[0].number : '' %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="company_optional_mobile"> Optional mobile number</label>
+                                    <input autocomplete="off" type="number" class="form-control"
+                                        id="owner_mobile_optional_add" name="company_optional_mobile"
+                                        placeholder="Enter optional mobile number " min="0" max="9999999999"
+                                        onKeyPress="if(this.value.length==10) return false;"
+                                        value="<%= post.mobileNumber && post.mobileNumber[1] && post.mobileNumber[1].number ? post.mobileNumber[1].number:'' %>">
+                                </div>
+                                <script>
+                                    // $('#owner_mobile1_add, #owner_mobile_optional_add').on
+                                </script>
+                                <div class="form-group">
+                                    <label for="owner_telephone1">telephone number</label>
+                                    <input autocomplete="off" type="number" class="form-control"
+                                        id="owner_telephone1_add" name="company_telephone"
+                                        placeholder="Enter telephone number" min="0" max="9999999"
+                                        onKeyPress="if(this.value.length==10) return false;"
+                                        value="<%= post.telephoneNumber[0] && post.telephoneNumber[0].number ? post.telephoneNumber[0].number : '' %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="owner_telephone_optional">Optional telephone number</label>
+                                    <input autocomplete="off" type="number" class="form-control"
+                                        id="owner_telephone_optional_add" name="company_optional_telephone"
+                                        placeholder="Enter optional telephone number" min="0" max="9999999"
+                                        onKeyPress="if(this.value.length==10) return false;"
+                                        value="<%= post.telephoneNumber[1] && post.telephoneNumber[1].number ? post.telephoneNumber[1].number : '' %>">
+                                </div>
+                            </div>
+
+                        </section>
+
+                        <section>
+                            <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Address</h4>
+
+                            <div class="bg-white lightGrey-border rounded p-3">
+                                <div class="form-group">
+                                    <label for="state">State</label>
+
+                                    <select required onchange="updateDistrict()" class="custom-select"
+                                        id="company_state_address_add" name="state">
+
+                                        <option value="" hidden disabled>Select</option>
+                                        <% for ( let state of initData.state ) { %>
+                                        <option value="<%= state._id %>" data-id="<%= state._id %>"
+                                            data-name="<%= state.name %>"
+                                            <%= String(state._id) == String(post.address.state.id) ? 'selected': '' %>>
+                                            <%= state.name %>
+                                        </option>
+                                        <% } %>
+
+                                    </select>
+                                    <!-- <label for="state">Email</label> -->
+                                    <!-- <input autocomplete="off"  type="text" class="form-control" id="company_state_address_add" name="state"
+                                                placeholder="State"> -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="district">District</label>
+                                    <select onchange="fetchLocality()" required class="custom-select"
+                                        id="company_district_address_add" name="district">
+                                        <option value="" hidden disabled>Select</option>
+                                        <% for ( let district of initData.district ) { %>
+                                        <option value="<%= district._id %>" data-id="<%= district._id %>"
+                                            data-name="<%= district.name %>"
+                                            <%= String(district._id) == String(post.address.district.id)  ? 'selected': '' %>>
+                                            <%= district.name %>
+                                        </option>
+                                        <% } %>
+                                    </select>
+                                    <!-- <input autocomplete="off"  type="text" class="form-control" id="company_district_address_add" name="district"
+                                                placeholder="District"> -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="locality">Locality</label>
+                                    <select required class="custom-select" id="company_locality_address_add"
+                                        name="locality">
+                                        <option value="" hidden disabled>Select</option>
+                                    </select>
+                                    <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address_add" name="locality"
+                                                placeholder="Locality"> -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="company_sublocality_address">Street address</label>
+                                    <input required autocomplete="off" type="text" class="form-control"
+                                        id="company_street_address_add" name="areaAndStreetAddress"
+                                        placeholder="Enter street address"
+                                        value="<%= post.address.areaAndStreetAddress ? post.address.areaAndStreetAddress : '' %>">
+                                    <!-- <select class="custom-select" id="company_sublocality_address_add"
+                                                name="company_sublocality_address">
+                                                <option value=""  selected hidden  disabled>Sub-locality</option>
+                                            </select> -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="building_apartment">building/apartment</label>
+                                    <input  autocomplete="off" type="text" class="form-control"
+                                        id="company_building_apartment_address_add" name="building"
+                                        placeholder=" Enter building/apartment name"
+                                        value="<%= post.address.building ? post.address.building : '' %>">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="landmarks">Landmarks</label>
+                                    <input  autocomplete="off" type="text" class="form-control"
+                                        id="company_landmarks_address_add" name="landmark" placeholder="Enter landmarks"
+                                        value="<%= post.address.landmark ? post.address.landmark : '' %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="pincode">Pincode</label>
+                                    <input required autocomplete="off" type="number" class="form-control"
+                                        id="company_pincode_address_add" name="pincode" placeholder="Enter pincode"
+                                        value="<%=  post.address && post.address.pincode ? post.address.pincode : '' %>" minlength="6" maxlength="6"
+                                        onKeyPress="if(this.value.length==6) return false;">
+                                </div>
+                                <!-- <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Location</h4> -->
+
+                                <div class="form-group">
+                                    <label for="pincode">MAP COORDINATES (CLICK ON THE MAP TO ADJUST
+                                        PIN)</label>
+                                    <div id="dynamic_map_add" style="height: 250px; width: 100%; " class="form-control">
+                                    </div>
+                                    <input id="geo_lat" required type="number" name="lat"
+                                        value="<%= post.geoLocation && post.geoLocation.coordinates && post.geoLocation.coordinates.lat ? post.geoLocation.coordinates.lat : '' %>" hidden>
+                                    <input id="geo_lng" required type="number" name="lng"
+                                        value="<%= post.geoLocation && post.geoLocation.coordinates && post.geoLocation.coordinates.lng ? post.geoLocation.coordinates.lng : '' %>" hidden>
+
+                                </div>
+
+                               
+
+                            </div>
+                        </section>
+
+
+                        <section class=" ">
+
+                            <h4 class="text-capitalize my-3 text-muted font-weight-normal">Contact information</h4>
+
+                            <div class="bg-white lightGrey-border rounded p-3">
+                                <div class="form-group">
+                                    <label for="owner_name">Owner name</label>
+                                    <input value="<%= post.ownerDetails && post.ownerDetails.name  ? post.ownerDetails.name : '' %>" required autocomplete="off" type="text"
+                                        class="form-control" id="owner_contact_name_add" name="owner_name"
+                                        placeholder="Enter owner name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="owner_email">Email</label>
+                                    <input value="<%= post.ownerDetails && post.ownerDetails.email[0] ? post.ownerDetails.email[0] : '' %>" required autocomplete="off"
+                                        type="email" class="form-control" id="owner_email_add" name="owner_email"
+                                        placeholder="Enter email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="owner_optional_email">Optional email</label>
+                                    <input 
+                                        autocomplete="off" 
+                                        type="email" 
+                                        class="form-control"
+                                        id="owner_optional_email" name="owner_optional_email"
+                                        placeholder="Enter optional email" 
+                                        value="<%= post.ownerDetails && post.ownerDetails.email[1] ? post.ownerDetails.email[1] : '' %>">
+                                </div>
+                            </div>
+                        </section>
+
+                        <section>
+                            <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Category</h4>
+                            <div class="bg-white lightGrey-border rounded p-3">
+
+                                <div class="form-group">
+                                    <label for="locality">Category</label>
+                                    <select required onchange="fetchSubcategoryAndKeywordsAddPost()"
+                                        onchange="(function(){  $('#selected_category_name').val( $('#category option').attr('selected').html() ) })()"
+                                        class="custom-select" id="category" name="category">
+                                        <option value="" selected hidden disabled>Select</option>
+                                        <% for ( let category of initData.category ) { %>
+                                        <option value="<%= category._id %>" data-id="<%= category._id %>"
+                                            data-name="<%= category.name %>"
+                                            <%= String(category._id) == String(post.category.id) ? 'selected': '' %>>
+                                            <%= category.name %>
+                                        </option>
+                                        <% } %>
+                                    </select>
+                                    <input type="hidden" name="selected_category_name" id="selected_category_name">
+                                    <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address_add" name="locality"
+                                            placeholder="Locality"> -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="locality">subCategory</label>
+                                    <select
+                                        onchange="(function(){  $('#selected_subcategory_name').val( $('#subCategory option').attr('selected').html() ) })()"
+                                        required class="custom-select" id="subCategory" name="subCategory">
+                                        <option value="" selected hidden disabled>Select</option>
+                                    </select>
+                                    <input type="hidden" name="selected_subcategory_name"
+                                        id="selected_subcategory_name">
+
+                                    <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address_add" name="locality"
+                                            placeholder="Locality"> -->
+                                </div>
+                                <!-- <h4 class="text-capitalize my-3 text-muted font-weight-normal	">Keywords</h4> -->
+                                <div class="form-group">
+                                    <label for="locality">Keywords </label> <span
+                                        class="text-muted font-weight-light float-right">( Multi select : Ctrl + left
+                                        click)</span>
+                                    <select required multiple size="6" class="custom-select" id="company_keywords_add"
+                                        name="keywords">
+                                        <option value="" selected hidden disabled>Select</option>
+                                    </select>
+                                    <!-- <input autocomplete="off"  type="text" class="form-control" id="company_locality_address_add" name="locality"
+                                            placeholder="Locality"> -->
+                                </div>
+                                <script>
+                                    $("#add-listing-container #company_keywords_add").change(function () {
+                                        console.log($(this).find("option:selected").length,
+                                            ' keywords selected ');
+
+                                        if ($(this).find("option:selected").length > 5) {
+                                            console.log('selected more than 5');
+
+                                            let selected = $(this).find("option:selected");
+                                            let selectedArray = Object.values(selected);
+                                            for (let i = 5; i < selected.length; i++) {
+                                                console.log('Deselecting ', $(selectedArray[i]).html());
+                                                $(selectedArray[i]).prop("selected", "selected");
+                                                $(selectedArray[i]).prop('selected', false);
+                                            }
+
+                                        }
+                                    });
+                                </script>
+                            </div>
+                        </section>
+
+                        <section>
+
+                            <h4 class="text-capitalize my-3 text-muted font-weight-normal	">
+                                Timings
+                                <i class="fal fa-asterisk text-danger small ml-1  required"
+                                    style="margin-top: 10px;"></i>
+                            </h4>
+                            <div class="bg-white lightGrey-border rounded p-3">
+                                <div class="row days justify-content-start px-3" id="daysId">
+
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Monday" name="Monday">
+                                        <label class="custom-control-label" for="Monday">Monday</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Tuesday" name="Tuesday">
+                                        <label class="custom-control-label" for="Tuesday">Tuesday</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Wednesday"
+                                            name="Wednesday">
+                                        <label class="custom-control-label" for="Wednesday">Wednesday</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Thursday"
+                                            name="Thursday">
+                                        <label class="custom-control-label" for="Thursday">Thursday</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Friday" name="Friday">
+                                        <label class="custom-control-label" for="Friday">Friday</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Saturday"
+                                            name="Saturday">
+                                        <label class="custom-control-label" for="Saturday">Saturday</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Sunday" name="Sunday">
+                                        <label class="custom-control-label" for="Sunday">Sunday</label>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <!-- <div class="col pr-2">
+                                        <select class="custom-select" id="timing_day_add" name="timing_day">
+                                            <option value="" selected hidden disabled>Day</option>
+
+                                        </select>
+                                    </div> -->
+
+
+
+
+                                </div>
+                                <div class="row  form-group d-flex ">
+                                    <div class="col-md-3 col-xs-12 col-sm-12">
+                                        <select class="custom-select" id="timing_from_add" name="timing_from">
+                                            <option value="" selected hidden disabled>From</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 col-xs-12 col-sm-12">
+                                        <select class="custom-select" id="timing_to_add" name="timing_to">
+                                            <option value="" selected hidden disabled>To</option>
+
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 col-xs-12 col-sm-12">
+
+                                        <button class="shadow-none btn btn-light mx-3"
+                                            onclick="timingsControlAdd.addTime(event)" style="min-width:100px;">
+                                            <i class="fal fa-plus px-2"></i>Add</button>
+
+
+                                        <button onclick="timingsControlAdd.addClosedDay(event)"
+                                            class="shadow-none  btn btn-light " style="min-width:100px;">
+                                            <i class="fal fa-times px-2"></i>Close</button>
+                                    </div>
+
+                                </div>
+                                <div class="form-group d-block" id="time-slot-display-addPost">
+
+                                </div>
+                            </div>
+                        </section>
+
+
+
+
+                        <!-- <div class="row my-3 p-3 justify-content-around">
+                            <button class="shadow-none btn btn-outline-success" data-toggle="modal" data-target="#imagesModal" onclick="preventFormSubmit(event)">
+                                PHOTOS
+                            </button>
+                            
+                        </div> -->
+
+
+                        <section id="photosId" style="display: none;">
+                            <h4 class="text-capitalize my-3 text-muted font-weight-normal	">
+                                Photos
+                                <button class="shadow-none btn btn-link" data-toggle="modal" data-target="#imagesModal"
+                                    onclick="preventFormSubmit(event)">
+                                    Manage
+                                </button>
+                            </h4>
+
+                           
+                        </section>
+
+
+
+                        <section id="documentsId" style="display: none;">
+                            <h4 class="text-capitalize my-3 text-muted font-weight-normal	">
+                                Documents
+                                <button class="shadow-none btn btn-link" data-toggle="modal"
+                                    data-target="#documentsModal" onclick="preventFormSubmit(event)">
+                                    Manage
+                                </button>
+                            </h4>
+
+                            
+                        </section>
+                        <script>
+                            // Add the following code if you want the name of the file appear on select
+                            $(".custom-file-input").on("change", function () {
+                                var fileName = $(this).val().split("\\").pop();
+                                $(this).siblings(".custom-file-label").addClass("selected").html(
+                                    fileName);
+                            });
+                        </script>
+                        <hr>
+                        <div class="row ">
+                            <div class="col">
+                                <button type="submit" id="submit-form-post" name="Save"
+                                    class="btn btn-success px-3 btn-block">Update Post</button>
+
+
+                            </div>
+                        </div>
+
+
+
+                    </form>
+                </div>
+
+                <div class="col-md-3 col-xs-12 col-sm-12 pl-1">
+                    <!-- <div class="p-3 bg-white lightGrey-border ">
+                        <h5>How it works</h5>
+                        <ul class="pl-2 ml-3 font-weight-normal " style="font-size: 14px;">
+                            <li class="">
+                                If you are the owner of an establishment, or if you are a user who's discovered a place
+                                not
+                                listed on Digital Manipur, let us know using this form.
+                            </li>
+                            <li>Once you send the information to us, our awesome content team will verify it. To help
+                                speed
+                                up the process, please provide a contact number or email address.</li>
+                            <li>That's it! Once verified the listing will start appearing on Digital Manipur</li>
+                        </ul>
+
+                    </div> -->
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <div class="modal fade" id="documentsModal">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom modal-dialog-scrollable"">
+        <div class=" modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Manage Documents</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body px-3 mx-3">
+                <div class="mb-2">
+                    <span class="small text-muted">* Maximum file size is 5mb and files should be .docx
+                        or .pdf format.</span>
+                <button class="shadow-none btn btn-sm btn-outline-secondary px-2 my-2 float-right" id="addDocForm">Add document</button>
+
+                </div>
+
+                <div class="p-3 my-4 default-document-box">
+                    <p>
+                        No documents added yet!
+                    </p>
+                </div>
+
+                
+
+                <div class="docs-list col">
+
+                </div>
+
+
+            </div>
+
+
+
+        </div>
+    </div>
+    </div>
+
+    <script>
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function () {
+            var fileName = $(this).val().split("\\").pop();
+            $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+
+        $(document).on('click', '.doc-file .choose-doc', (e) => {
+            $(e.target).siblings('input[name="document"]').trigger('click');
+        });
+
+        $(document).on('change', '.doc-file  input[name="document"]', (e) => {
+            let docname = $(e.target).val() ? $(e.target).val().replace(/C:\\fakepath\\/i, '').slice(0, 10)+'...' : 'CHOOSE FILE';
+
+            $(e.target).siblings('.choose-doc').html(`<i class="far fa-file-pdf mr-1"></i> ${docname}`);
+        });
+
+        $("#documentsModal").on('show.bs.modal', function () {
+            if (post && post.docs && post.docs.length > 0) {
+                $("#documentsModal .default-document-box").hide();
+                $("#documentsModal .docs-list").show();
+
+                refreshDocs();
+
+            } else {
+                $("#documentsModal .default-document-box").show();
+                $("#documentsModal .docs-list").hide();
+
+            }
+
+        });
+        
+        function refreshDocs() {
+            $("#documentsModal .docs-list").html('');
+            $("#documentsModal .docs-list").show();
+            console.log(post.docs);
+            if ( post.docs.length > 0) {
+                post.docs.forEach(doc => {
+                    if (doc && doc.url)
+                        $("#documentsModal .docs-list").append(`
+                        <div class=" doc-item form-group lightGrey-border rounded bg-white p-3 my-2 d-flex flex-column justify-content-around" >
+                            <div class="row px-3 form-data">
+                                <div class="px-0 col-sm-12 col-xs-12 col-md-3 doc-file">
+                                    <a type="button" role="button" aria-roledescription="" class="btn btn btn-link view-doc"
+                                    href="${rootDomain}/uploads/original/${doc.url}" target="_blank" >
+                                    <i class="far fa-file-pdf mr-1"></i> View</a>
+                                    <button type="button" role="button" aria-roledescription="" class="btn btn btn-link choose-doc"
+                                    style="display: none;">
+                                    <i class="far fa-file-pdf mr-1"></i> Choose File</button>
+                                    <input type="file" name="document"  accept=".docx, .pdf" hidden class="doc-file" />
+                                
+                                </div>
+                                <div class=" col-sm-12 col-xs-12 col-md-7  doc-name">
+                                    <div class="">
+                                        <input disabled autocomplete="off" type="text" class="form-control"
+                                        value="${doc.name ? doc.name : 'DOCUMENT'}" id="" name="name" placeholder="Name">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-2">
+                                    <button class="btn px-2 btn-link  btn-sm edit-doc" data-edit="true"  type="button">Edit</button>
+                                </div>
+                            </div>
+                            <div class="row px-3 pt-3 flex-start border-top mt-3 docs-ctrl" style="display: none;">
+                                <button class="btn px-3 mx-3 btn-success btn-sm update-doc" style="display: none;" data-id="${doc._id}" data-url="${doc.url}" type="button">Save</button>
+                                <button class="btn px-3 mx-3 btn-danger btn-sm remove-doc" style="display: none;" data-id="${doc._id}" data-url="${doc.url}" type="button">Remove</button>
+                            </div>
+                        </div>
+                        `);
+                });
+
+                $("#documentsModal .default-document-box").hide();
+
+
+            } else {
+                $("#documentsModal .default-document-box").show();
+            }
+        }
+
+        $(document).on('click', '.save-new-doc', (e) => {
+            console.log({
+                e
+            });
+            const name = $(e.target).parent().siblings('.doc-name').find('input').val();
+            const files = $(e.target).parent().siblings('.doc-file').find('input[name="document"]')[0].files[0];
+
+            console.log({
+                name,
+                files
+            });
+
+            if ( name && files  ){
+                let formData = new FormData();
+                formData.append('name', name);
+                formData.append('document', files);
+
+                $(e.target).html(`<div class="spinner-border spinner-border-sm"></div> saving..`).prop(
+                    'disabled', true);
+
+
+                $.ajax({
+                    url: `${rootDomain}/users/post/${postId}/add-doc`,
+                    type: 'POST',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false, // neccessary for file upload
+                    success: function (data) {
+                        console.log('doc added');
+                        console.log("Docs info: ", data);
+
+                        if (data) {
+                            $(e.target).siblings(`.cancel-add-doc`).trigger('click');
+                            post.docs = data.docs;
+                        }
+                        $(e.target).html(`save`).prop('disabled', false);
+                        refreshDocs();
+                        
+
+                    },
+                    error: function (data) {
+                        console.log('Error',data);
+                        alert('Error occurred while updating document.');
+                        $(e.target).html(`save`).prop('disabled', false);
+
+                    }
+                });
+
+            } else {
+                alert( ' Both file and filename are required!');
+            }
+            
+
+        });
+
+        $(document).on('click', '.cancel-add-doc', (e) => {
+            $(e.target).parent().parent().parent().remove();
+        });
+
+        
+
+        $(document).on('click', '.edit-doc', (e) => {
+            console.log({
+                e
+            });
+            // $(e.target).hide();
+            if ($(e.target).data('edit')) {
+                $(e.target).data('edit', false);
+                $(e.target).html('Cancel');
+                $(e.target).parent().parent().siblings('.docs-ctrl').show();
+                $(e.target).parent().siblings('.doc-file').children('.view-doc').hide();
+                $(e.target).parent().siblings('.doc-file').children('.choose-doc').show();
+                $(e.target).parent().siblings('.doc-name').find('input[name="name"]').prop('disabled', false);
+                $(e.target).parent().parent().siblings('.row').find('.update-doc').show();
+                $(e.target).parent().parent().siblings('.row').find('.remove-doc').show();
+                // $(e.target).siblings('.remove-doc').show();
+                // $(e.target).siblings('.update-doc').show();
+
+            } else {
+                $(e.target).data('edit', true);
+                $(e.target).html('Edit');
+                $(e.target).parent().parent().siblings('.docs-ctrl').hide();
+                $(e.target).parent().siblings('.doc-file').children('.view-doc').show();
+                $(e.target).parent().siblings('.doc-file').children('.choose-doc').hide();
+                $(e.target).parent().siblings('.doc-name').find('input[name="name"]').prop('disabled', true);
+                $(e.target).parent().parent().siblings('.row').find('.update-doc').hide();
+                $(e.target).parent().parent().siblings('.row').find('.remove-doc').hide();
+
+            }
+
+
+        });
+
+        $("#addDocForm").click((e)=>{
+            e.preventDefault();
+            $(e.target).parent().append(
+                `
+                <div class=" doc-item form-group lightGrey-border rounded bg-white p-3 my-2 d-flex flex-column justify-content-around" >
+                    <div class="row px-3 form-data">
+                        <div class="px-0 col-sm-12 col-xs-12 col-md-3 doc-file">
+                            <button type="button" role="button" aria-roledescription="" class="btn btn btn-link choose-doc"
+                           >
+                            <i class="far fa-file-pdf mr-1"></i> Choose File</button>
+                            <input type="file" name="document"  accept=".docx, .pdf" hidden class="doc-file" />
+                        </div>
+                        <div class=" col-sm-12 col-xs-12 col-md-6  doc-name">
+                            <div class="">
+                                <input  autocomplete="off" type="text" class="form-control"
+                                value="" id="" name="name" placeholder="Name">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-3">
+                            <button class="btn px-2 btn-link  btn-sm save-new-doc text-success" data-edit="true"  type="button">Save</button>
+                            <button class="btn px-2 mr-3 btn-link  btn-sm cancel-add-doc text-warning" data-edit="true"  type="button">Cancel</button>
+                        </div>
+                    </div>
+                    
+                </div>
+                `
+            );
+        });
+
+        $(document).on('click', '.update-doc', (e) => {
+            console.log({
+                e
+            });
+            const name = $(e.target).parent().siblings('.form-data').children('.doc-name').find('input').val();
+            const files = $(e.target).parent().siblings('.form-data').children('.doc-file').find('input[name="document"]')[0].files[0];
+            const docId = $(e.target).data('id');
+
+            console.log({
+                name,
+                docId,
+                files
+            });
+
+            if ( docId && ( name || files ) ){
+                let formData = new FormData();
+                formData.append('id', docId);
+                formData.append('name', name);
+                formData.append('document', files);
+
+
+                $(e.target).html(`<div class="spinner-border spinner-border-sm"></div> saving..`).prop(
+                    'disabled', true);
+
+
+                $.ajax({
+                    url: `${rootDomain}/users/post/${postId}/update-doc`,
+                    type: 'POST',
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false, // neccessary for file upload
+                    success: function (data) {
+                        console.log('doc updated');
+                        // console.log("file info: ", data);
+
+                        if (data) {
+                            $(e.target).siblings(`.edit-doc`).trigger('click');
+                            post.docs = post.docs.map( doc => {
+                                console.log(String(doc._id) ," ", String(docId), String(doc._id) == String(docId));
+                                if ( String(doc._id) == String(docId) ) {
+                                    console.log('DOC matched');
+                                    matchDoc = {
+                                        name: data.doc.name ? data.doc.name : doc.name ? doc.name : null,
+                                        url: data.doc.url ? data.doc.url : doc.url ? doc.url : null
+                                    };
+                                    return matchDoc;
+                                } else {
+                                    return doc;
+                                }
+                            });
+                        }
+                        $(e.target).html(`save`).prop('disabled', false);
+                        refreshDocs();
+
+                        
+
+                    },
+                    error: function (data) {
+                        console.log('Error',data);
+                        alert('Error occurred while updating document.');
+                        $(e.target).html(`save`).prop('disabled', false);
+
+                    }
+                });
+
+            }
+            
+
+        });
+
+        $(document).on('click', '.remove-doc', (e) => {
+            console.log({
+                e
+            });
+            const docId = $(e.target).data('id');
+            const docURL = $(e.target).data('url');
+            const name = $(e.target).parent().siblings('.form-data').children('.doc-name').find('input').val();
+
+            if ( docId || name ){
+
+                $(e.target).html(`<div class="spinner-border spinner-border-sm"></div> Removing..`).prop('disabled', true);
+
+
+                $.post( `${rootDomain}/users/post/${postId}/remove-doc`,
+                { docId: docId, docURL: docURL, name: name },
+                ( data, status ) => {
+                    console.log({data, status});
+                    if ( status == 'success' && data.message == 'Deleted' ) {
+                        post.docs = data.docs;
+                        refreshDocs();
+                    } else {
+                        alert('Error occurred while deleting document.');
+                    }
+                    $(e.target).html(`save`).prop('disabled', false);
+                    $(e.target).html(`Remove`).prop('disabled', true);
+
+                })
+                .fail( e => {
+                        console.log('Error',data);
+                        alert('Error occurred while deleting document.');
+                        $(e.target).html(`save`).prop('disabled', false);
+                        $(e.target).html(`Remove`).prop('disabled', true);
+                });
+                        
+            }
+            
+        });
+    </script>
+
+    <!-- photos Modal -->
+    <div class="modal fade" id="imagesModal">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom modal-dialog-scrollable"">
+        <div class=" modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Manage Photos</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body px-3 mx-3">
+
+                <div class="row lightGrey-border rounded bg-white p-3">
+                    <div class="col-xs-12 col-sm-12 col ">
+                        <div>
+                            <label for="">Logo</label>
+                            <div class="float-right">
+                                <button class="btn btn-link  btn-sm add-btn" id="changeLogo">
+                                    <!-- <i class="far fa-plus"></i> -->
+                                    Change</button>
+                                <button class="btn btn-link  btn-sm remove-btn" id="removeLogo">
+                                    <!-- <i class="far fa-minus"></i> -->
+                                    Remove</button>
+                                <input type="file" name="logo" id="logoFile" hidden accept=".jpg, .png, .jpeg">
+
+                            </div>
+                        </div>
+                        <div class="image-box" style="justify-content: center;
+                        display: flex;
+                        flex-direction: row;">
+
+                            <img src="/assets/img/bg-abstract.jpg" id="logoImg"
+                                style="max-width: 200px; max-height:200px" class="img-thumbnail" alt="">
+                            <!-- <div class="my-2">
+                                
+                            </div> -->
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row lightGrey-border rounded bg-white p-3 my-3">
+                    <div class="col-xs-12 col-sm-12 col ">
+                        <div class="image-box">
+                            <div>
+                                <label for="">Cover</label>
+                                <div class="float-right">
+                                    <button class="btn btn-link  btn-sm add-btn" id="changeCoverImage">Change</button>
+                                    <button class="btn btn-link btn-sm remove-btn" id="removeCoverImage">Remove</button>
+
+                                    <input type="file" name="coverImage" id="coverImageFile" hidden
+                                        accept=".jpg, .png, .jpeg">
+
+
+                                </div>
+
+                            </div>
+                            <div style="background-image: url('/assets/img/bg-abstract-lg.jpg');" id="coverImageImg"
+                                class="img-thumbnail" alt=""></div>
+                            <div class="my-2">
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row lightGrey-border rounded bg-white p-3 mt-3">
+                    <div class="col ">
+                        <div>
+                            <label for="">Collection</label>
+
+                            <button class="btn btn-link float-right btn-sm add-btn" id="addCollection">Add </button>
+                            <input accept=".jpg, .png, .jpeg" type="file" name="collectionImages" hidden multiple
+                                aria-multiselectable="true" id="collectionFile">
+                        </div>
+                        <div class="collectionImg" id="collectionImg">
+                            <p class="px-4 my-2">No images added yet!</p>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        </div>
+    </div>
+    </div>
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+    <script>
+        var map, marker, infowindow;
+
+        function googleDynamicMap() {
+
+            // KANGLA TRAFFIC ISLAND
+            const kanglaPosition = {
+                lat: 24.807,
+                lng: 93.938
+            };
+            var markedLocation;
+
+
+            function init() {
+
+                console.log('%cINIT: google map ', 'color: red');
+
+                map = new google.maps.Map(document.getElementById('dynamic_map_add'), {
+                    center: kanglaPosition,
+                    disableDefaultUI: true,
+                    zoom: 9,
+                    mapTypeId: 'roadmap',
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    zoomControl: true,
+                    fullscreenControl: true,
+                    // Preventing map pan and zoom on page scroll
+                    gestureHandling: 'cooperative'
+                });
+
+                console.log({
+                    map
+                });
+
+                marker = new google.maps.Marker({
+                    position: kanglaPosition,
+                    map: map
+                });
+                infowindow = new google.maps.InfoWindow({
+                    content: "Selected location.",
+                    position: kanglaPosition
+                });
+
+                map.addListener('click', function (e) {
+                    markedLocation = {
+                        lat: e.latLng.lat(),
+                        lng: e.latLng.lng()
+                    };
+                    setSelectedLocation(e.latLng.lat(), e.latLng.lng())
+                    // console.log({ markedLocation });
+                    changeMarkerAndPanTo(e.latLng);
+                });
+
+            }
+
+            function changeMarkerAndPanTo(latLng) {
+                console.log('%cCHANGING: google map changeMarkerAndPanTo', 'color: red');
+                console.log('%GETTER: google map marker position', 'color: red', {
+                    markedLocation
+                });
+
+                marker.setPosition(latLng);
+                map.panTo(latLng);
+
+            }
+
+            function setSelectedLocation(lat, lng) {
+                console.log('%GETTER: google map setting position', 'color: red', {
+                    markedLocation
+                });
+    
+                // trigger change for hidden fields
+                $("#add_post_form input[name='lat']").val(lat).trigger('change');
+                $("#add_post_form input[name='lng']").val(lng).trigger('change');
+            }
+
+            function resetMarker() {
+                console.log('%RESETTING: google map ', 'color: red');
+
+                marker.setPosition(kanglaPosition);
+                map.panTo(kanglaPosition);
+
+            }
+
+            function getMap() {
+                console.log('%GETTER: google map ', 'color: red');
+                console.log({
+                    map
+                });
+
+                return map;
+            }
+
+            return {
+                getMap,
+                init,
+                resetMarker,
+                changeMarkerAndPanTo
+            };
+
+        }
+    </script>
+<script src="/assets/js/edit-post.js"></script>
+    <%- include('./../../includes/footer.ejs') %>

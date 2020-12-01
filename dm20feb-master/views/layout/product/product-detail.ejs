@@ -1,0 +1,724 @@
+<%- include('./../../includes/product/header.ejs') %>
+
+</head>
+
+<body>
+    <%- include('./../../includes/product/searchNavBar.ejs') %>
+	
+	   <!-- Modal -->
+    <script>
+        function showEnquiry() {
+            $('#chat_with_seller').modal('show')
+        }
+
+        function buyNow() {
+            $('#buyNowModal').modal('show')
+        }
+        function sendreport()
+        {
+            $('#sendreportModal').modal('show')
+        }
+    </script>
+     <div class="modal fade" id="chat_with_seller" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #CB202D; color: white;">
+                    <h5 class="modal-title" id="exampleModalLongTitle">CHAT WITH SELLER</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white;">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/product/send/text/<%=product._id%>" method="POST">
+                        <div>
+                            <span>Quote your price to initiate chat & negotiation</span>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <input type="text" name="buyer_name" class="form-control" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="buyer_email" class="form-control" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="offer_amount" class="form-control" placeholder="Enter your Offer amount">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="address" class="form-control" placeholder="Enter your Address">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">+91</span>
+                            </div>
+                            <input type="number" class="form-control" placeholder="Enter your mobile no."
+                                name="buyer_phone" aria-label="mobile" aria-describedby="basic-addon1">
+                            <input type="hidden" name="product_ad_title" value="<%=product.product_ad_title%>">
+                            <input type="hidden" name="seller_email" value="<%=product.email%>">
+                        </div>
+                        <div>
+                            <span>By clicking Make Offer & Chat you will agree to our <a href="https://digitalmanipur.com/site/terms">Terms of Use and <a href="https://digitalmanipur.com/site/privacy">Privacy Policy</a>
+                            </span>
+                        </div>
+                        <br>
+                        <div>
+                            <button class="btn btn-block custom_post_prod_btn">
+                                Make Offer and Chat
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+     <div class="modal fade" id="buyNowModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #CB202D; color: white;">
+                    <h5 class="modal-title" id="exampleModalLongTitle">BUY NOW</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white;">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/product/send/text/<%=product._id%>" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="buyer_name" class="form-control" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="buyer_email" class="form-control" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <input type="text" name="buyer_address" class="form-control" placeholder="Enter your Address">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">+91</span>
+                            </div>
+                            <input type="number" class="form-control" placeholder="Enter your mobile no."
+                                name="buyer_phone" aria-label="mobile" aria-describedby="basic-addon1">
+                            <input type="hidden" name="product_ad_title" value="<%=product.product_ad_title%>">
+                            <input type="hidden" name="seller_email" value="<%=product.email%>">
+                        </div>
+                        <div>
+                            <span>By clicking Buy Now you will agree to our <a href="https://digitalmanipur.com/site/terms">Terms of Use</a> and <a href="https://digitalmanipur.com/site/privacy">Privacy Policy</a>
+                            </span>
+                        </div>
+                        <br>
+                        <div>
+                            <button class="btn btn-block custom_post_prod_btn">
+                                BUY NOW
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="sendreportModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #CB202D; color: white;">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Report</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: white;">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/product/send/report/<%=product._id%>" method="POST">
+                        <div class="form-group">
+                            <input type="text" name="report_name" class="form-control" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="report_email" class="form-control" placeholder="Enter your email">
+                        </div>
+                        <!-- <div class="form-group">
+                            <input type="text" name="comment" class="form-control" placeholder="Enter your Comment">
+                        </div> -->
+                        <textarea class="form-control" placeholder="Enter your comment here..." type="text"
+                            name="comment" id="comment" rows="3"></textarea>
+                        <div class="input-group mb-3">
+                            <!-- <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">+91</span>
+                            </div> -->
+                            <input type="hidden" class="form-control" placeholder="Enter your mobile no."
+                                name="buyer_phone" aria-label="mobile" aria-describedby="basic-addon1">
+                            <input type="hidden" name="product_ad_title" value="<%=product.product_ad_title%>">
+                            <input type="hidden" name="seller_email" value="<%=product.email%>">
+                        </div>
+                        <div>
+                            <button class="btn btn-block custom_post_prod_btn">
+                                SUBMIT
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <section class="container">
+        <div style="margin-top: 20px;" class="nav_tab">
+            <small><a href="/product/search?searchlocation=<%=product.state.name%>"><%=product.state.name%></a>
+                ></small>
+            <small><a href="/product/search?searchlocation=<%=product.district.name%>"><%=product.district.name%></a>
+                ></small>
+            <small><a
+                    href="/product/search?searchlocation=<%=product.district.name%>&searchlocationproduct=<%=product.product_category%>"><%=product.product_category%></a>
+                ></small>
+            <small><a
+                    href="/product/search?searchlocation=<%=product.district.name%>&searchlocationproduct=<%=product.product_sub_category%>"><%=product.product_sub_category%></a></small>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-md-8" style="margin-bottom: 10px;">
+                <%product.product_photos.forEach(function(photolg, ind){%>
+                <div id="product_photo_lg_<%=ind%>" class="lightGrey-border bg-white product_detail_img" style="background-image: url('/product/image/<%=photolg.photo.image_filename%>'); <%if(ind>0){%>display: none;<%}%>">
+                        <!-- Add photo dynamically in the background -->
+                        <div class="watermark1">
+                            <img src="https://i.imgur.com/FJDEL9O_d.webp?maxwidth=640&shape=thumb&fidelity=medium" alt="dm_icon" style="height: 40px; bottom: 10px; opacity: 0.5;">
+                        </div>
+                    </div>
+                    <%})%>
+
+                <div class=" image_slide_holder d-flex bd-highlight">
+                    <%product.product_photos.forEach(function(photo, idx){%>
+                    <%if(photo != ''){%>
+                    <div id="product_photo_<%=idx%>"
+                        onclick="toggleImage('product_photo_<%=idx%>','product_photo_lg_<%=idx%>','<%=product_photo_length%>')"
+                        class="image_slide_ele <%if(idx==0){%>active<%}%> <%if(photo != ''){%>img_sl_pointer<%}%>" 
+                                style="background-image: url('/product/image/<%=photo.photo.image_filename%>');">
+                    </div>
+                    <%}%>
+                    
+                    <%})%>
+
+                </div>
+            </div>
+            <div class="col-md-4" style="margin-bottom: 10px;">
+                <div style="height: 100%;">
+                    <div class="d-flex bd-highlight align-items-baseline">
+                        <div class="productAdTitle flex-fill">
+                            <span><%=product.product_ad_title%></span>
+                        </div>
+                        <div class="flex-fill productAdCreatedAt">
+                            <%=moment(product.createdAt).format('ll')%>
+                        </div>
+
+                    </div>
+
+                    <div class="productAdDescription">
+                        <span><%=product.product_description%></span>
+                    </div>
+				
+                    <div class="productAdPrice">
+                        <div>
+                            <%if(product.product_price_updated>0){%>
+                                ₹ <span id="<%=product._id%>"></span>
+                                <script>
+                                    var format = new Number('<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                    document.getElementById("<%=product._id%>").innerHTML = format;
+                                    console.log(format);
+                                </script>       
+
+                                <span class="productAdPrice" style="font-size:70%; color: #99a3a4;"><del>₹ <%=product.product_price%></del></span>
+                                
+                                <style>
+                                    .offColor{
+                                        color:red;
+                                    }
+
+                                </style>
+                                
+                                <span class="offColor">
+                                    <h6>
+                                        You save ₹<span id="demo"></span>
+                                        <script>
+                                            var sv= ('<%=product.product_price%>' - '<%=product.product_price_updated%>').toLocaleString('en-IN');
+                                            console.log(sv);
+                                            document.getElementById("demo").innerHTML = sv;
+                                        </script>
+                                        &nbsp;
+                                        (<span id="offer"></span>
+                                        <script>
+                                            var off= (( ('<%=product.product_price%>' - '<%=product.product_price_updated%>') / '<%=product.product_price%>')*100).toFixed(0);
+                                            console.log(off);
+                                            document.getElementById("offer").innerHTML = off;
+                                        </script>%OFF)
+                                    </h6>
+                                </span>
+                                
+                                <%}
+                                else{%>
+                                    ₹ <span id="<%=product._id%>"></span>
+                                    <script>
+                                        var format = new Number('<%=product.product_price%>').toLocaleString('en-IN');
+                                        document.getElementById("<%=product._id%>").innerHTML = format;
+                                        console.log(format);
+                                    </script>
+
+                                <%}%>
+                            
+                        </div>
+                    </div>
+                    <div class="productLocation">
+                        <div>
+                            <span><%=product.locality.name%></span>
+                            <span>, </span>
+                            <span><%=product.district.name%></span>
+                        </div>
+                    </div>
+                    <div class="d-flex bd-highlight flex-wrap" style="margin-top: 20px;">
+                        
+                        <div class="share-btn flex-fill lightGrey-border custom_gr_div" data-url="https://digitalmanipur.com/product/post/<%=product._id%>" style="width: 50%;">
+                                <!-- <span style="margin-right: 5px;"><i class="fas fa-share-alt" aria-hidden="true"></i></span> -->
+                                <span style="margin-right: 5px;"><a class="btn-facebook fas fa-share-alt" data-id="fb"> Share</a></span>
+
+                            <!-- Share -->
+                                <!-- <a class="btn-facebook" data-id="fb">Facebook</a> -->
+                                
+                        </div>
+
+                        <input type="text" hidden value="<%=user ?  user._id : ''%>" id="userId">
+                        <input type="text" hidden value="<%=product._id%>" id="productId">
+
+                        <div onclick="addToWishlist()"
+
+                            class="flex-fill lightGrey-border custom_gr_div" style="width: 50%;">
+                            
+                            <span style="margin-right: 5px;">
+                                <% if( user && user.wishlistProduct && user.wishlistProduct.some(e => String(e.id) == String(product._id)) ) { %>
+                                    <i class="fas fa-heart"  style="color: red;"></i>
+                                <% } else { %>
+                                    <i class="far fa-heart" ></i>
+                                <% } %>
+                            </span>Add to wishlist
+                        </div>
+						<div style="display: none;">
+                            <input type="text" id="copied_url">
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px; margin-bottom: 10px; font-weight: 700;">
+                        <span>Seller Information</span>
+                    </div>
+                    <div class="d-flex bd-highlight">
+                        <%if(product.userId.images.profile.common.url){%>
+                        <div style="margin-right: 10px;">
+                            <img class="seller_profile_img"
+                                src="/uploads/images/mobile_thumbnail/<%=product.userId.images.profile.common.url%>"
+                                alt="profile image">
+
+                        </div>
+
+                        <%} else{%>
+                        <div class="seller_profile_icon_wrapper">
+                            <span><i class="fas fa-user seller_profile_icon" aria-hidden="true"></i></span>
+                        </div>
+                        <%}%>
+                        
+                        <div class="d-flex flex-column bd-highlight">
+                            <div class="seller_fullname">
+                                <span><%=product.userId.name.fullName%></span>
+                    </div>
+                    <%if(product.view_seller_info == true){%>
+                    <div class="seller_about">
+                        <span><%=product.userId.about%></span>
+                    </div>
+                    <div class="seller_ph">
+                        <span><i class="fas fa-phone-alt seller_detail_icon" aria-hidden="true"></i></span>
+                        <span>+91-<%=product.userId.mobileNumber[0].number%></span>
+                    </div>
+                    <div class="seller_ph">
+                        <span><i class="fas fa-paper-plane seller_detail_icon" aria-hidden="true"></i></span>
+                        <span><%=product.userId.email%></span>
+                    </div>
+                    <%}%>
+                            <!-- <div class="seller_ph">
+                                    <span><i class="fas fa-map-marker-alt seller_detail_icon" aria-hidden="true"></i></span>
+                                    <span></span>
+                                </div> -->
+
+                        </div>
+                        
+                        
+            </div>
+			 <div class="row px-0 mx-0">
+                <div onclick="showEnquiry()" class="flex-fill lightGrey-border custom_gr_div" style="margin-top: 20px;">
+                    <span style="margin-right: 5px;"><i class="fas fa-comment-alt" aria-hidden="true"></i></span>Chat With
+                    Seller
+                </div>
+                <div onclick="buyNow()" class="flex-fill lightGrey-border custom_gr_div" style="margin-top: 20px;">
+                    <span style="margin-right: 5px;"><i class="fas fa-comment-alt" aria-hidden="true"></i></span>Buy now
+                </div>
+            </div>
+            <div class="row px-0 mx-0">
+               
+                <div onclick="sendreport()" class="flex-fill lightGrey-border custom_gr_div" style="margin-top: 20px;">
+                    <span style="margin-right: 5px;"><i class="fas fa-comment-alt" aria-hidden="true"></i></span>Report
+                </div>
+            
+            </div>
+           
+         
+        </div>
+        </div>
+        </div>
+
+
+        </div>
+        </div>
+
+
+        <!-- product description and specification section -->
+
+        <div class="row">
+            <div class="col-md-8">
+                <div id="product_spec" class="product_specification">
+                    <div class="product_desc_tab" id="spec_tab">
+                        <span>Product Specification</span>
+                    </div>
+                    <table class="table table-borderless custom_detail_table">
+                        <tbody>
+
+                            <tr>
+                                <th>Category</th>
+                                <td><%=product.product_sub_category%></td>
+                            </tr>
+                            <% if(product.product_brand.brand_name != 'none') { %>
+                            <tr>
+                                <th>Brand</th>
+                                <td><%=product.product_brand.brand_name%></td>
+                            </tr>
+                            <% } %>
+                            <% if(product.product_condition != 'none') { %>
+                            <tr>
+                                <th>Condition</th>
+                                <td><%=product.product_condition%></td>
+                            </tr>
+                            <% } %>
+                            <% if(product.product_type != 'none') { %>
+                            <tr>
+                                <th>Product Type</th>
+                                <td><%=product.product_type%></td>
+                            </tr>
+                            <% } %>
+                            <% if(product.product_year != null) { %>
+                            <tr>
+                                <th>Year</th>
+                                <td><%=product.product_year%></td>
+                            </tr>
+                            <% } %>
+                            <% if(product.product_fuel_type != 'none') { %>
+                            <tr>
+                                <th>Fuel type</th>
+                                <td><%=product.product_fuel_type%></td>
+                            </tr>
+                            <% } %>
+                            <% if(product.product_transmission_type != 'none') { %>
+                            <tr>
+                                <th>Transmission Type</th>
+                                <td><%=product.product_transmission_type%></td>
+                            </tr>
+                            <% } %>
+                            <% if(product.product_no_of_owner != 'none') { %>
+                            <tr>
+                                <th>No. of Owner</th>
+                                <td><%=product.product_no_of_owner%></td>
+                            </tr>
+                            <% } %>
+                            <% if(product.product_km_driven != null) { %>
+                            <tr>
+                                <th>Kms driven</th>
+                                <td><%=product.product_km_driven%></td>
+                            </tr>
+                            <br>
+                            <% } %>
+                            <% if(product.product_for != 'none') { %>
+                            <tr>
+                                <th>Product for</th>
+                                <td><%=product.product_for%></td>
+                            </tr>
+                            <% } %>
+                            <% if(product.product_door_style != 'none') { %>
+                            <tr>
+                                <th>Door style</th>
+                                <td><%=product.product_door_style%></td>
+                            </tr>
+                            <span>Door Style: </span><span></span>
+                            <br>
+                            <% } %>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <!-- Product Description -->
+                    <div class="product_desc_tab" id="summary_tab">
+                        <span>Product Summary</span>
+                    </div>
+                    <div>
+                        <span>
+                            <%=product.product_description%>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+		<div class="row">
+            <div class="col-md-8">
+                <div id="buyer_guidelines" class="product_specification">
+                    <div class="product_desc_tab" id="spec_tab">
+                        <span>Response to questions</span>
+                    </div>
+                    <table class="table table-borderless custom_detail_table">
+                        <tbody>
+                            <ul>
+                                <tr>
+                                    <th>Do you have Questions?</th>
+                                    <!-- <td><%=product.product_sub_category%></td> -->
+                                </tr>
+                                <tr>
+                                    <td><li>You must have login to ask a question</li> </td>
+                                </tr>
+                                <tr>
+                                    <td><li>Be specific, ask questions only about the product</li></td>
+                                </tr>
+                                <tr>
+                                    <td><li>Ensure you have gone throught the product specifications before posting your question.</li></td>
+                                </tr>
+                            </ul>
+                            <!-- TODO: fix product specification from list to 2 column grid -->
+                          
+                    
+                        </tbody>
+                    </table>
+                    <hr>
+                    <!-- Product Description -->
+                    <div class="product_desc_tab" id="summary_tab">
+                        <span>Buyer Guidelines</span>
+                    </div>
+                    <div>
+                        <span>
+                            <table class="table table-borderless custom_detail_table">
+                                <tbody>
+                                    <ul>
+
+                                        <tr>
+                                            <td><li>Be careful when paying offline</li></td>
+                                        </tr>
+                                        <tr>
+                                            <td><li>Beware of ads with unrealistic prices, look alikes or clone products</li></td>
+                                        </tr>
+                                        <tr>
+                                            <td><li>Use Make Offer or Buy Now and make secure payment</li></td>
+                                        </tr>
+                                        <tr>
+                                            <td><li>Chat or ask a question to be clear on product details</li></td>
+                                        </tr>
+                                        <tr>
+                                            <td><li>Do not deposit/transfer money to bank or any third party without verifying credentials</li></td>
+                                        </tr>
+                                        <tr>
+                                            <td><br></td>
+                                        </tr>
+                                    </ul>
+                                 
+                                    
+                                </tbody>
+                            </table>
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Product Specification -->
+
+        <div class="similar_ad_holder">
+            <div class="similar_prod_title">
+                <span>Similar Ads</span>
+            </div>
+            <%if(similar_products.length > 0){%>
+            <div class="d-flex bd-highlight flex-wrap">
+                <%similar_products.forEach(function(prod, ind){%>
+                <%if(ind < 4){%>
+                <div class="product_collection_wrapper flex_md_25">
+                    <a class="product_link" href="/product/post/<%=prod._id%>">
+                        <div class="product_collection_component_ele">
+                            <!-- product image container -->
+                            <div class="collection_card_image_container"
+                                style="background-image: url('/product/image/<%=prod.product_photos[0].photo.image_filename%>');">
+                                <div class="ad_badge_overlay_container d-flex bd-highlight">
+                                    <div>
+                                        <span class="ad_badge">FEATURED</span>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <span class="ad_badge2"><i class="fas fa-heart like_badge"
+                                                aria-hidden="true"></i></span>
+                                    </div>
+
+                                </div>
+                                <br><br><br><br><br><br>
+                                <div class="ad_badge_overlay_container d-flex flex-row-reverse">
+                                    <img src="https://i.imgur.com/FJDEL9O_d.webp?maxwidth=640&shape=thumb&fidelity=medium" alt="dm_icon" style="height: 20px; opacity: 0.5;">
+                                </div>
+                            </div>
+                            <!-- product detail -->
+                            <div class="col_card_detail">
+                                <div class="col_title_holder">
+                                    <div class="col_card_ad_title flex-fill">
+                                        <span><%=prod.product_ad_title%></span>
+                                    </div>
+                                    <div class="col_card_date_container">
+                                        <span
+                                            class="col_card_date text-muted"><%=moment(prod.createdAt).format('ll')%></span>
+                                    </div>
+                                </div>
+                                <div class="col_card_price">
+                                    <%if(prod.product_price_updated > 0){%>
+                                        <%if(prod.product_price_updated < prod.product_price) {%>
+                                                ₹ <span id="<%=prod._id%>"></span>
+                                                <script>
+                                                    var format = new Number('<%=prod.product_price_updated%>').toLocaleString('en-IN');
+                                                    document.getElementById("<%=prod._id%>").innerHTML = format;
+                                                    console.log(format);
+                                                </script>
+                                                <span class="productAdPrice" style="font-size:70%; color: #99a3a4;"><del>₹ <%=prod.product_price%></del></span>
+                                            <%}
+                                            else{%>
+                                                ₹ <span id="<%=prod._id%>"></span>
+                                                <script>
+                                                    var format = new Number('<%=prod.product_price_updated%>').toLocaleString('en-IN');
+                                                    document.getElementById("<%=prod._id%>").innerHTML = format;
+                                                    console.log(format);
+                                                </script>
+                                            <%}%>
+                                            %>
+                                        <%}
+                                        else{%>
+                                            ₹ <span id="<%=prod._id%>"></span>
+                                            <script>
+                                                var format = new Number('<%=prod.product_price%>').toLocaleString('en-IN');
+                                                document.getElementById("<%=prod._id%>").innerHTML = format;
+                                                console.log(format);
+                                            </script>
+            
+                                        <%}%>
+                                </div>
+                                <div><span style="font-size: small;"><%=product.locality.name%></span></div>
+                                <div class="col_card_desc text-muted">
+                                    <span id="card_desc"><%=prod.product_description%></span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </a>
+                </div>
+                <%}%>
+                <%})%>
+            </div>
+            <%} else {%>
+            <div style="text-align: center;">No Similar Products added yet...</div>
+            <%}%>
+        </div>
+
+        
+    </section>
+    <style>
+        .quicklink a {
+            color: #CB202D;
+        }
+
+        table tbody tr {
+            line-height: 0.7;
+        }
+    </style>
+    <script>
+        function showContent(show_tab, hide_tab, show_comp, hide_comp) {
+            show_tab = document.getElementById(show_tab);
+            hide_tab = document.getElementById(hide_tab);
+
+            show_comp = document.getElementById(show_comp);
+            hide_comp = document.getElementById(hide_comp);
+
+            show_tab.classList.add("active");
+            hide_tab.classList.remove("active");
+
+            show_comp.style.display = "block";
+            hide_comp.style.display = "none";
+
+        }
+
+        function toggleImage(small_id, large_id, prod_img_count) {
+            let small_img = document.getElementById(small_id);
+            let large_img = document.getElementById(large_id);
+            let img_count = parseInt(prod_img_count);
+
+            let smalls = 'product_photo_';
+            let large = 'product_photo_lg_';
+
+            for (let i = 0; i < img_count; i++) {
+                let cur_small = `${smalls}${i}`
+                let cur_large = `${large}${i}`
+
+                if (cur_small == small_id) {
+                    document.getElementById(cur_small).classList.add("active");
+                } else {
+                    document.getElementById(cur_small).classList.remove("active");
+                }
+
+                if (cur_large == large_id) {
+                    document.getElementById(cur_large).style.display = "block";
+                } else {
+                    document.getElementById(cur_large).style.display = "none";
+                }
+            }
+
+        }
+
+
+        function addToWishlist() {
+            const userId = $("#userId").val();
+            const productId = $("#productId").val(); 
+            return fetch(`/product/wishlist/add/${userId}/${productId}`)
+                .then(response => { return response.json() })
+                .then(data => {
+                    console.log({data});
+                    console.log(data.wishlist);
+                    if (data.error) {
+                        alert('Wishlist already added!');
+                    }
+
+                    if (data.wishlist) {
+                        alert('Wishlist successfully added!');
+                    }
+                })
+                .catch(err => { console.log(err) });
+        }
+
+
+        function copyLink() {
+            document.getElementById('copied_url').value = window.location.href;
+            let copyText = document.getElementById("copied_url");
+            copyText.focus();
+            copyText.select();
+            document.execCommand("copy");
+            alert("Copied the text: " + copyText.value);
+        }
+    </script>
+
+    <script src="/assets/js/share-buttons.js"></script> 
+
+
+    <script type=" text/javascript" src="/assets/js/lozad.min.js"></script>
+    <script src="/assets/js/detail-functions.js"></script>
+    <script type="text/javascript" src="/assets/js/product-search-nav-functions.js"></script>
+
+
+    <%- include('./../../includes/footer.ejs') %>

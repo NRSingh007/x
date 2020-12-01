@@ -1,0 +1,139 @@
+body{
+    background: #f9f9f9;
+}
+.manage-website{
+    .right-content{
+        background-color: #fff;
+        min-height: 100vh;
+    }
+    .nav-controls{
+        .nav-tabs{
+        }
+    }
+    .modal-title{
+        text-transform: uppercase;
+        font-size: 20px;
+        font-weight: 700;
+    }
+    .main-body{
+        .tab-content{
+            .tab-pane{
+                .tab-body{
+                    padding: 15px;
+                    margin: 30px 20px;
+                    form{
+                        .cover-image{
+                            // min-width: 360px;
+                            width: 100%;
+                            min-height: 200px;
+                            height: auto;
+                            background-position: center;
+                            background-size: cover;
+                            background-repeat: no-repeat;
+                            background-image: url('/assets/img/bg-abstract-lg.jpg');
+                            display: none;
+                        }
+                        .form-group {
+                            label{
+                                font-weight: 700;
+                                font-size: 15px;
+                            }
+
+                        }
+                        .input-group{
+                            .input-group-append{
+                                position: absolute;
+                                right: 1;
+                                top: 2px;
+                                z-index: 9999;
+                                overflow: hidden;
+                                background: #fff;
+                                border: none;
+                                i {
+                                color: #b3acac;
+
+                                }
+                            }
+                        }
+                        .list-group {
+                            .list-group-item{
+                                padding: 5px 15px;
+                                font-weight: 500;
+                            }
+                        }
+                    }
+                    .nav-tabs {
+                        .nav-link {
+                            border: none;
+                            border-bottom: 2px solid #e9ecef #e9ecef #dee2e6;
+                        }
+                    }
+                    .nav-tabs.nav-justified {
+                        .nav-link {
+                            border: none;
+                            border-bottom: 2px solid #e9ecef #e9ecef #dee2e6;
+                        }
+                        .nav-link.active {
+                            font-weight: 700;
+                            border-bottom: 2px solid rgb(31, 30, 30);
+
+                        }
+                    }
+
+                    #placeNameResultList, #placeNameResultListEC {
+                        max-height: 42vh;
+                        overflow-y: scroll;
+                    }
+                    #InCollection, #InCollectionEC {
+                        max-height: 60vh;
+                        overflow-y: scroll;
+                    }
+                    
+                }
+            }
+        }
+    }
+    // modal 
+    .modal.fade .modal-dialog.modal-dialog-zoom {
+        -webkit-transform: translate(0, 0)scale(.5);
+        transform: translate(0, 0)scale(.5);
+    }
+    .modal.show .modal-dialog.modal-dialog-zoom {
+        -webkit-transform: translate(0, 0)scale(1);
+        transform: translate(0, 0)scale(1);
+    }
+    
+    #manageSC{
+        .cover-image{
+            max-height: 150px;
+            height: 150px;
+            display: none;
+            border: 1px solid #fcfcfcb4;
+            margin: 10px 0;
+            background-position: center;
+            background-size: cover;
+        }
+        .form-group{
+            label{
+                font-weight: 600;
+                margin-top: 5px;
+                color: grey;
+            }
+        }
+    }
+}
+.cover-image{
+    max-height: 150px;
+    height: 150px;
+    display: none;
+    border: 1px solid #fcfcfcb4;
+    margin: 10px 0;
+    background-position: center;
+    background-size: cover;
+}
+.site-nav{
+    margin-top: 50px;
+    a{
+        padding: 5px 15px;
+    }
+}

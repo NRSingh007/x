@@ -1,0 +1,38 @@
+<div class="modal fade" id="filterByKeywords">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h6 class="modal-title">Filter search by Features</h6>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body pt-0 ">
+
+                <div class="p-3 d-flex flex-row flex-wrap">
+                    <% for ( let keyword of filterCategories.keywords ) { %>
+                        
+                    <div class="district filter-item">
+    
+                        <a href="/search?stext=<%= typeof stext != 'undefined' ? stext : '' %>&slocation=<%=  slocation ? slocation : '' %>&slocality=<%= typeof slocality != 'undefined' ? slocality : '' %>&sdistrict=<%= typeof sdistrict != 'undefined' ? sdistrict : '' %>&sstate=<%= typeof sstate != 'undefined'? sstate : '' %>&scat=<%= scat ? scat: '' %>&skeyword=<%= keyword.name %>&p=1&li=15&sk=0" class="a-cus">
+
+                            <%= keyword.name  %>
+                        </a>
+
+                    </div>
+                    <% } %>
+                    
+
+                </div>
+
+                
+
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

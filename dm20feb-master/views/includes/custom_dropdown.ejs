@@ -1,0 +1,30 @@
+<div class="form-group">
+
+    <label for="<%= label.trim().replace(' ', '_') %>"><%= label %>
+        <!-- <span class="asRed">*</span> -->
+    </label>
+    <div class="row choice justify-content-start">
+
+
+        <div class="input-group custom-dropdown-list <%= label.trim().replace(' ', '_')  %>">
+            <div class=" d-flex justify-content-between selected-items" id="selected-items">
+                <span id="selected-items-container" class="selected-items-container">Select <%= type %></span>
+                <input type="text" hidden name="<%= label.trim().replace(' ', '_')  %>" value="" placeholder="Select <%= type %>">
+                <i class="fas fa-caret-down ml-0"></i>
+            </div>
+            <div class="menus-container hidden">
+                <ul class="menu  " id="dd_list_company_types" tabindex="-1">
+                    <% for (let item of items ) { %>
+                    <li class="item" value="<%= item.name %>" > <%= item.name %> </li>
+                    <% } %>
+                    
+
+
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

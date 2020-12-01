@@ -1,0 +1,199 @@
+<%- include('../includes/header.ejs') %>
+
+    <body class="districts">
+        <%- include('../includes/navBar.ejs' ) %>
+
+            <section>
+                <div class="row state-row-cover-img bg-img" style="background-image: url(&quot;/assets/img/Manipur_Rustik-Travel_1349x550.jpg&quot;);background-position: center;background-size: cover;"></div>
+                <div class="container">
+                    <h1 class="mt-4">Districts in <%= typeof state != 'undefined' ? state : '' %></h1>
+                    <p>Find any Product or Service provider in all these Districts &nbsp;
+                        <span class="badge badge-secondary p-2">&nbsp;400 places&nbsp;</span>
+                        <br>
+                    </p>
+                    <div class="row side-row districts-holder mx-0 px-0 mt-5">
+
+                        <% districts.forEach( (district, index ) => {  %>
+                            <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                                <a href="<%= '/'+state.toLowerCase()+'/'+district.name %>">
+                                    <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                        <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/bishnupur.jpg&quot;);"></div>
+                                        <div class="d-flex flex-column p-3">
+                                            <h4><%= district.name %></h4>
+                                            <p>Paragraph</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        <% }) %>
+                        <!-- <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/ukhrul.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Ukhrul</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Imphal-West-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Imphal West</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Imphal-East-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Imphal East</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Thoubal-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Thoubal</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Senapati-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Senapati</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/chandel.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Chandel</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Churachandpur-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Churachandpur</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Tamenglong-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Tamenglong</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/jiri.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Jiribam</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Kangpokpi-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Kangpokpi</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Kakching-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Kakching</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Kamjong-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Kamjong</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Noney-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Noney</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Pherzawl-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Pherzawl</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-sm-10 col-md-4 col-lg-4 col-xl-4">
+                            <a href="/district_detail.html">
+                                <div class="border rounded d-flex flex-column side-row-item rounded" style="background-color: #fff;">
+                                    <div class="districts-row-item-img bg-img" style="background-image: url(&quot;/assets/img/Tengnoupal-District.jpg&quot;);"></div>
+                                    <div class="d-flex flex-column p-3">
+                                        <h4>Tengnoupal</h4>
+                                        <p>Paragraph</p>
+                                    </div>
+                                </div>
+                            </a>
+                        </div> -->
+                    </div>
+                </div>
+            </section>
+
+    <%- include('../includes/footer.ejs') %>
+            

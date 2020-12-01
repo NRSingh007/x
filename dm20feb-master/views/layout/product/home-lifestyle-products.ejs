@@ -1,0 +1,174 @@
+<% if(
+    subcategory === 'Clothing - Garments' ||
+    subcategory === 'Footware' ||
+    subcategory === 'Watches'
+) { %>
+<div class="form-group">
+    <label for="product_for">Product For*</label>
+    <select class="form-control custom-select" id="product_for" name="product_for">
+        <%if(edit){%>
+        <option value="none">Select Product For</option>
+        <option value="Kids" <%if(product.product_for.trim() == 'Kids'){%>selected<%}%> >Kids</option>
+        <option value="Men" <%if(product.product_for.trim() == 'Men'){%>selected<%}%> >Men</option>
+        <option value="Women" <%if(product.product_for.trim() == 'Women'){%>selected<%}%> >Women</option>
+            <%} else{%> <option value="none">Select Product For</option>
+        <option value="Kids">Kids</option>
+        <option value="Men">Men</option>
+        <option value="Women">Women</option>
+        <%}%>
+        
+    </select>
+</div>
+<% } %>
+
+        <% if(subcategory === 'Watches') { %>
+        <div class="form-group">
+            <label for="brand">Brand*</label>
+            <select class="form-control custom-select" id="product_brand" name="product_brand">
+                <option value="none">Select Brand</option>
+                <%if(edit == true){%>
+
+                <%brands.forEach(function(brand, index){%>
+
+                <%if(brand.product_subcategory == subcategory){%>
+
+                <option value="<%=brand._id%>"
+                    <%if(product.product_brand.toString().trim() == brand._id.toString().trim()){%>selected<%}%> ><%=brand.brand_name%></option>
+                    <%}%>
+                
+                <%})%>
+
+                    <%}%>
+
+            <!-- if edit is false -->
+            <%if(edit == false){%>
+
+                    <%brands.forEach(function(brand, index){%>
+
+                    <%if(brand.product_subcategory == subcategory){%>
+
+                <option value="<%=brand._id%>"><%=brand.brand_name%></option>
+                <%}%>
+                        
+                        <%})%>
+
+                <%}%>
+    </select>
+</div>
+<div class="form-group">
+    <label for="product_type">Watch Type*</label>
+    <select class="form-control custom-select" id="product_type" name="product_type">
+        <%if(edit){%>
+                <option value="none">Select Watch Type</option>
+                <option value="Analog Watch" <%if(product.product_type.trim() == 'Analog Watch'){%>selected<%}%> >Analog Watch</option>
+        <option value="Digital Watch" <%if(product.product_type.trim() == 'Digital Watch'){%>selected<%}%> >Digital Watch</option>
+        <option value="Smart Watch" <%if(product.product_type.trim() == 'Smart Watch'){%>selected<%}%> >Smart Watch</option>
+        <option value="Other" <%if(product.product_type.trim() == 'Other'){%>selected<%}%> >Other</option>
+            <%} else{%> <option value="none">Select Watch Type</option>
+                <option value="Analog Watch">Analog Watch</option>
+                <option value="Digital Watch">Digital Watch</option>
+                <option value="Smart Watch">Smart Watch</option>
+                <option value="Other">Other</option>
+                <%}%>
+        
+    </select>
+</div>
+<% } %>
+
+                <% if(subcategory === 'Bags - Luggage') { %>
+                <div class="form-group">
+                    <label for="product_type">Product Type*</label>
+                    <select class="form-control custom-select" id="product_type" name="product_type">
+                        <%if(edit){%>
+                        <option value="none">Select Product Type</option>
+                        <option value="Backpacks" <%if(product.product_type.trim() == 'Backpacks'){%>selected<%}%> >Backpacks</option>
+        <option value="Briefcases" <%if(product.product_type.trim() == 'Briefcases'){%>selected<%}%> >Briefcases</option>
+        <option value="Laptop Bags" <%if(product.product_type.trim() == 'Laptop Bags'){%>selected<%}%> >Laptop Bags</option>
+        <option value="Pouches" <%if(product.product_type.trim() == 'Pouches'){%>selected<%}%> >Pouches</option>
+        <option value="School Bags" <%if(product.product_type.trim() == 'School Bags'){%>selected<%}%> >School Bags</option>
+        <option value="Travelling and Trolley Bags" <%if(product.product_type.trim() == 'Travelling and Trolley Bags'){%>selected<%}%> >Travelling and Trolley Bags</option>
+        <option value="College Bags" <%if(product.product_type.trim() == 'College Bags'){%>selected<%}%> >College Bags</option>
+        <option value="Handbags" <%if(product.product_type.trim() == 'Handbags'){%>selected<%}%> >Handbags</option>
+        <option value="Office Bags" <%if(product.product_type.trim() == 'Office Bags'){%>selected<%}%> >Office Bags</option>
+        <option value="Sling Bags" <%if(product.product_type.trim() == 'Sling Bags'){%>selected<%}%> >Sling Bags</option>
+        <option value="Vanity Bags" <%if(product.product_type.trim() == 'Vanity Bags'){%>selected<%}%> >Vanity Bags</option>
+        <option value="Other" <%if(product.product_type.trim() == 'Other'){%>selected<%}%> >Other</option>
+            <%} else{%> <option value="none">Select Product Type</option>
+                        <option value="Backpacks">Backpacks</option>
+                        <option value="Briefcases">Briefcases</option>
+                        <option value="Laptop Bags">Laptop Bags</option>
+                        <option value="Pouches">Pouches</option>
+                        <option value="School Bags">School Bags</option>
+                        <option value="Travelling and Trolley Bags">Travelling and Trolley Bags</option>
+                        <option value="College Bags">College Bags</option>
+                        <option value="Handbags">Handbags</option>
+                        <option value="Office Bags">Office Bags</option>
+                        <option value="Sling Bags">Sling Bags</option>
+                        <option value="Vanity Bags">Vanity Bags</option>
+                        <option value="Other">Other</option>
+                        <%}%>
+        
+    </select>
+</div>
+<% } %>
+
+                        <% if(subcategory === 'Fashion Accessories') { %>
+                        <div class="form-group">
+                            <label for="product_type">Accessory Type*</label>
+                            <select class="form-control custom-select" id="product_type" name="product_type">
+                                <%if(edit){%>
+                                <option value="none">Select Accessory Type</option>
+                                <option value="Belt" <%if(product.product_type.trim() == 'Belt'){%>selected<%}%> >Belt</option>
+        <option value="Cap" <%if(product.product_type.trim() == 'Cap'){%>selected<%}%> >Cap</option>
+        <option value="Purse" <%if(product.product_type.trim() == 'Purse'){%>selected<%}%> >Purse</option>
+        <option value="Sunglasses" <%if(product.product_type.trim() == 'Sunglasses'){%>selected<%}%> >Sunglasses</option>
+        <option value="Wristband" <%if(product.product_type.trim() == 'Wristband'){%>selected<%}%> >Wristband</option>
+        <option value="Other" <%if(product.product_type.trim() == 'Other'){%>selected<%}%> >Other</option>
+            <%} else {%> <option value="none">Select Accessory Type</option>
+                                <option value="Belt">Belt</option>
+                                <option value="Cap">Cap</option>
+                                <option value="Purse">Purse</option>
+                                <option value="Sunglasses">Sunglasses</option>
+                                <option value="Wristband">Wristband</option>
+                                <option value="Other">Other</option>
+                                <%}%>
+        
+    </select>
+</div>
+<% } %>
+
+                                <% if(subcategory === 'Jwellery') { %>
+                                <div class="form-group">
+                                    <label for="product_type">Type*</label>
+                                    <select class="form-control custom-select" id="product_type" name="product_type">
+
+                                        <%if(edit){%>
+                                        <option value="none">Select Jwellery Type</option>
+                                        <option value="Bangles" <%if(product.product_type.trim() == 'Bangles'){%>selected<%}%> >Bangles</option>
+        <option value="Bracelet" <%if(product.product_type.trim() == 'Bracelet'){%>selected<%}%> >Bracelet</option>
+        <option value="Chain" <%if(product.product_type.trim() == 'Chain'){%>selected<%}%> >Chain</option>
+        <option value="Earings" <%if(product.product_type.trim() == 'Earings'){%>selected<%}%> >Earings</option>
+        <option value="Necklace" <%if(product.product_type.trim() == 'Necklace'){%>selected<%}%> >Necklace</option>
+        <option value="Ring" <%if(product.product_type.trim() == 'Ring'){%>selected<%}%> >Ring</option>
+        <option value="Anklet/Toe Ring" <%if(product.product_type.trim() == 'Anklet/Toe Ring'){%>selected<%}%> >Anklet/Toe Ring</option>
+        <option value="Broach" <%if(product.product_type.trim() == 'Broach'){%>selected<%}%> >Broach</option>
+        <option value="Gems & Stones" <%if(product.product_type.trim() == 'Gems & Stones'){%>selected<%}%> >Gems & Stones</option>
+        <option value="Pendant" <%if(product.product_type.trim() == 'Pendant'){%>selected<%}%> >Pendant</option>
+        <option value="Other" <%if(product.product_type.trim() == 'Other'){%>selected<%}%> >Other</option>
+            <%} else{%> <option value="none">Select Jwellery Type</option>
+                                        <option value="Bangles">Bangles</option>
+                                        <option value="Bracelet">Bracelet</option>
+                                        <option value="Chain">Chain</option>
+                                        <option value="Earings">Earings</option>
+                                        <option value="Necklace">Necklace</option>
+                                        <option value="Ring">Ring</option>
+                                        <option value="Anklet/Toe Ring">Anklet/Toe Ring</option>
+                                        <option value="Broach">Broach</option>
+                                        <option value="Gems & Stones">Gems & Stones</option>
+                                        <option value="Pendant">Pendant</option>
+                                        <option value="Other">Other</option>
+                                        <%}%>
+
+    </select>
+</div>
+<% } %>

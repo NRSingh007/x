@@ -1,0 +1,639 @@
+<%- include('../includes/header.ejs',{pageTitle:pageTitle}) %>
+
+    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/addBusiness.css">
+    </head>
+
+    <body>
+
+        <%- include("../includes/navBar.ejs") %>
+
+            <div class="container form-container my-5 ">
+                <h3>Add a listing</h3>
+
+                <div class="row ">
+                    <div class="col-9 pl-0">
+
+                    <form name="businessform" action="<%= domain %>/addBusiness" method="post"  >
+                                    
+                        <div class="form-section">
+                            <h5>Basic info</h5>
+                                <div class="panel">
+
+                                    <div class="form-group">
+                                        <label for="company_name">Company name
+                                            <span class="asRed">*</span>
+                                        </label>
+                                        <input type="text" name="company_name" class="form-control" id="company_name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="locality">Locality
+                                            <span class="asRed">*</span>
+                                        </label>
+                                        <input type="text" name="locality" class="form-control" id="locality">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+
+                                                <label for="state">state
+                                                    <!-- <span class="asRed">*</span> -->
+                                                </label>
+                                                <div class="row choice justify-content-start">
+
+
+                                                    <div class="input-group custom-dropdown-list state">
+                                                        <div class=" d-flex justify-content-between selected-items" id="selected-items">
+                                                            <span id="selected-items-container" class="selected-items-container">Select state</span>
+                                                            <input type="text" hidden name="state" value="" placeholder="Select state">
+                                                            <i class="fas fa-caret-down ml-0"></i>
+                                                        </div>
+                                                        <div class="menus-container hidden">
+                                                            <ul class="menu  " id="dd_list_company_types" tabindex="-1">
+                                                                <% for (let item of states  ) { %>
+                                                                    <li class="item" value="<%= item.name %>">
+                                                                        <%= item.name %>
+                                                                    </li>
+                                                                    <% } %>
+                                                            </ul>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+
+                                                <label for="district">district
+                                                    <!-- <span class="asRed">*</span> -->
+                                                </label>
+                                                <div class="row choice justify-content-start">
+
+
+                                                    <div class="input-group custom-dropdown-list district">
+                                                        <div class=" d-flex justify-content-between selected-items" id="selected-items">
+                                                            <span id="selected-items-container" class="selected-items-container">Select district</span>
+                                                            <input type="text" hidden name="district" value="" placeholder="Select district" >
+                                                            <i class="fas fa-caret-down ml-0"></i>
+                                                        </div>
+                                                        <div class="menus-container hidden">
+                                                            <ul class="menu  " id="dd_list_districts" tabindex="-1">
+                                                                <!-- <% for (let item of categories  ) { %>
+                                                                    <li class="item" value="<%= item.name %>">
+                                                                        <%= item.name %>
+                                                                    </li>
+                                                                    <% } %> -->
+                                                            </ul>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="owner_name">Owner name
+                                            <span class="asRed">*</span>
+                                        </label>
+                                        <input type="text" name="owner_name" class="form-control" id="owner_name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone_number">Phone number
+                                            <span class="asRed">*</span>
+                                        </label>
+                                        <input type="number" maxlength="10" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" name="phone_number" class="form-control" id="phone_number">
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="opening_status">Opening status</label>
+                                        <div class="row choice mt-2">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="already_opened" name="opening_status" value="already opened">
+                                                <label class="custom-control-label" for="already_opened">This place is already open</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="opening_soon" name="opening_status" value="opening soon">
+                                                <label class="custom-control-label" for="opening_soon">This place is opening soon</label>
+                                            </div>
+
+
+                                        </div>
+
+
+                                    </div>
+
+
+                                </div>
+                            
+                        </div>
+
+                        <div class="form-section">
+                            <h5>Location</h5>
+                                <div class="panel">
+                                    <div class="form-group">
+                                        <label for="landmark">Landmark
+                                            <span class="asRed">*</span>
+                                        </label>
+                                        <input type="text" name="landmark" class="form-control" id="landmark">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="locality">MAP COORDINATES (DRAG THE MAP TO ADJUST PIN)
+                                            <span class="asRed">*</span>
+                                        </label>
+
+                                    </div>
+                                    <div class="geo-selector">
+
+
+                                    </div>
+                                </div>
+                            
+                        </div>
+
+                        <div class="form-section">
+                            <h5>Timings</h5>
+                            <div class="panel timings py-4  ">
+                                <div class="row choice justify-content-start" id="days">
+
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Monday" name="Monday">
+                                        <label class="custom-control-label" for="Monday">Monday</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Tuesday" name="Tuesday">
+                                        <label class="custom-control-label" for="Tuesday">Tuesday</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Wednesday" name="Wednesday">
+                                        <label class="custom-control-label" for="Wednesday">Wednesday</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Thursday" name="Thursday">
+                                        <label class="custom-control-label" for="Thursday">Thursday</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Friday" name="Friday">
+                                        <label class="custom-control-label" for="Friday">Friday</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="Saturday" name="Saturday">
+                                        <label class="custom-control-label" for="Saturday">Saturday</label>
+                                    </div>
+
+                                </div>
+
+                                <div class="row mt-3 justify-content-Start align-item-center form-inline">
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder="From" id="from_timings">
+
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="far fa-angle-down"></i>
+                                            </span>
+                                        </div>
+
+                                        <ul class="menu dd_list transition hidden" id="dd_list_from" tabindex="-1">
+                                            <li class="item selected">00:00</li>
+                                            <li class="item">00:15</li>
+                                            <li class="item">00:30</li>
+                                            <li class="item">00:45</li>
+                                            <li class="item">01:00</li>
+                                            <li class="item">01:15</li>
+                                            <li class="item">01:30</li>
+                                            <li class="item">01:45</li>
+                                            <li class="item">02:00</li>
+                                            <li class="item">02:15</li>
+                                            <li class="item">02:30</li>
+                                            <li class="item">02:45</li>
+                                            <li class="item">03:00</li>
+                                            <li class="item">03:15</li>
+                                            <li class="item">03:30</li>
+                                            <li class="item">03:45</li>
+                                            <li class="item">04:00</li>
+                                            <li class="item">04:15</li>
+                                            <li class="item">04:30</li>
+                                            <li class="item">04:45</li>
+                                            <li class="item">05:00</li>
+                                            <li class="item">05:15</li>
+                                            <li class="item">05:30</li>
+                                            <li class="item">05:45</li>
+                                            <li class="item">06:00</li>
+                                            <li class="item">06:15</li>
+                                            <li class="item">06:30</li>
+                                            <li class="item">06:45</li>
+                                            <li class="item">07:00</li>
+                                            <li class="item">07:15</li>
+                                            <li class="item">07:30</li>
+                                            <li class="item">07:45</li>
+                                            <li class="item">08:00</li>
+                                            <li class="item">08:15</li>
+                                            <li class="item">08:30</li>
+                                            <li class="item">08:45</li>
+                                            <li class="item">09:00</li>
+                                            <li class="item">09:15</li>
+                                            <li class="item">09:30</li>
+                                            <li class="item">09:45</li>
+                                            <li class="item">10:00</li>
+                                            <li class="item">10:15</li>
+                                            <li class="item">10:30</li>
+                                            <li class="item">10:45</li>
+                                            <li class="item">11:00</li>
+                                            <li class="item">11:15</li>
+                                            <li class="item">11:30</li>
+                                            <li class="item">11:45</li>
+                                            <li class="item">12:00</li>
+                                            <li class="item">12:15</li>
+                                            <li class="item">12:30</li>
+                                            <li class="item">12:45</li>
+                                            <li class="item">13:00</li>
+                                            <li class="item">13:15</li>
+                                            <li class="item">13:30</li>
+                                            <li class="item">13:45</li>
+                                            <li class="item">14:00</li>
+                                            <li class="item">14:15</li>
+                                            <li class="item">14:30</li>
+                                            <li class="item">14:45</li>
+                                            <li class="item">15:00</li>
+                                            <li class="item">15:15</li>
+                                            <li class="item">15:30</li>
+                                            <li class="item">15:45</li>
+                                            <li class="item">16:00</li>
+                                            <li class="item">16:15</li>
+                                            <li class="item">16:30</li>
+                                            <li class="item">16:45</li>
+                                            <li class="item">17:00</li>
+                                            <li class="item">17:15</li>
+                                            <li class="item">17:30</li>
+                                            <li class="item">17:45</li>
+                                            <li class="item">18:00</li>
+                                            <li class="item">18:15</li>
+                                            <li class="item">18:30</li>
+                                            <li class="item">18:45</li>
+                                            <li class="item">19:00</li>
+                                            <li class="item">19:15</li>
+                                            <li class="item">19:30</li>
+                                            <li class="item">19:45</li>
+                                            <li class="item">20:00</li>
+                                            <li class="item">20:15</li>
+                                            <li class="item">20:30</li>
+                                            <li class="item">20:45</li>
+                                            <li class="item">21:00</li>
+                                            <li class="item">21:15</li>
+                                            <li class="item">21:30</li>
+                                            <li class="item">21:45</li>
+                                            <li class="item">22:00</li>
+                                            <li class="item">22:15</li>
+                                            <li class="item">22:30</li>
+                                            <li class="item">22:45</li>
+                                            <li class="item">23:00</li>
+                                            <li class="item">23:15</li>
+                                            <li class="item">23:30</li>
+                                            <li class="item">23:45</li>
+                                            <li class="item">24:00</li>
+                                        </ul>
+
+                                    </div>
+                                    <label class="mx-3 " style="margin-top: -.9rem;">
+                                        <i class="far fa-minus"></i>
+                                    </label>
+                                    <div class="input-group mb-3">
+                                        <input type="text" class="form-control" placeholder="To" id="to_timings">
+
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">
+                                                <i class="far fa-angle-down"></i>
+                                            </span>
+                                        </div>
+                                        <ul class="menu dd_list transition hidden " id="dd_list_to" tabindex="-1">
+                                            <li class="item selected">00:00</li>
+                                            <li class="item">00:15</li>
+                                            <li class="item">00:30</li>
+                                            <li class="item">00:45</li>
+                                            <li class="item">01:00</li>
+                                            <li class="item">01:15</li>
+                                            <li class="item">01:30</li>
+                                            <li class="item">01:45</li>
+                                            <li class="item">02:00</li>
+                                            <li class="item">02:15</li>
+                                            <li class="item">02:30</li>
+                                            <li class="item">02:45</li>
+                                            <li class="item">03:00</li>
+                                            <li class="item">03:15</li>
+                                            <li class="item">03:30</li>
+                                            <li class="item">03:45</li>
+                                            <li class="item">04:00</li>
+                                            <li class="item">04:15</li>
+                                            <li class="item">04:30</li>
+                                            <li class="item">04:45</li>
+                                            <li class="item">05:00</li>
+                                            <li class="item">05:15</li>
+                                            <li class="item">05:30</li>
+                                            <li class="item">05:45</li>
+                                            <li class="item">06:00</li>
+                                            <li class="item">06:15</li>
+                                            <li class="item">06:30</li>
+                                            <li class="item">06:45</li>
+                                            <li class="item">07:00</li>
+                                            <li class="item">07:15</li>
+                                            <li class="item">07:30</li>
+                                            <li class="item">07:45</li>
+                                            <li class="item">08:00</li>
+                                            <li class="item">08:15</li>
+                                            <li class="item">08:30</li>
+                                            <li class="item">08:45</li>
+                                            <li class="item">09:00</li>
+                                            <li class="item">09:15</li>
+                                            <li class="item">09:30</li>
+                                            <li class="item">09:45</li>
+                                            <li class="item">10:00</li>
+                                            <li class="item">10:15</li>
+                                            <li class="item">10:30</li>
+                                            <li class="item">10:45</li>
+                                            <li class="item">11:00</li>
+                                            <li class="item">11:15</li>
+                                            <li class="item">11:30</li>
+                                            <li class="item">11:45</li>
+                                            <li class="item">12:00</li>
+                                            <li class="item">12:15</li>
+                                            <li class="item">12:30</li>
+                                            <li class="item">12:45</li>
+                                            <li class="item">13:00</li>
+                                            <li class="item">13:15</li>
+                                            <li class="item">13:30</li>
+                                            <li class="item">13:45</li>
+                                            <li class="item">14:00</li>
+                                            <li class="item">14:15</li>
+                                            <li class="item">14:30</li>
+                                            <li class="item">14:45</li>
+                                            <li class="item">15:00</li>
+                                            <li class="item">15:15</li>
+                                            <li class="item">15:30</li>
+                                            <li class="item">15:45</li>
+                                            <li class="item">16:00</li>
+                                            <li class="item">16:15</li>
+                                            <li class="item">16:30</li>
+                                            <li class="item">16:45</li>
+                                            <li class="item">17:00</li>
+                                            <li class="item">17:15</li>
+                                            <li class="item">17:30</li>
+                                            <li class="item">17:45</li>
+                                            <li class="item">18:00</li>
+                                            <li class="item">18:15</li>
+                                            <li class="item">18:30</li>
+                                            <li class="item">18:45</li>
+                                            <li class="item">19:00</li>
+                                            <li class="item">19:15</li>
+                                            <li class="item">19:30</li>
+                                            <li class="item">19:45</li>
+                                            <li class="item">20:00</li>
+                                            <li class="item">20:15</li>
+                                            <li class="item">20:30</li>
+                                            <li class="item">20:45</li>
+                                            <li class="item">21:00</li>
+                                            <li class="item">21:15</li>
+                                            <li class="item">21:30</li>
+                                            <li class="item">21:45</li>
+                                            <li class="item">22:00</li>
+                                            <li class="item">22:15</li>
+                                            <li class="item">22:30</li>
+                                            <li class="item">22:45</li>
+                                            <li class="item">23:00</li>
+                                            <li class="item">23:15</li>
+                                            <li class="item">23:30</li>
+                                            <li class="item">23:45</li>
+                                            <li class="item">24:00</li>
+                                        </ul>
+                                    </div>
+                                    <button type="button" id="add-time" class="btn btn-outline-info mb-3 ml-3">
+                                        <i class="far fa-plus"></i> Add time</button>
+                                </div>
+                                <div class="time-slots">
+                                    <p id="time-slots-error" class="text-dark"></p>
+                                    <hr>
+
+
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-section ">
+                            <h5>Characteristic</h5>
+                            <div class="panel">
+
+                                <div class="form-group">
+
+                                    <label for="company_type">Company type
+                                        <!-- <span class="asRed">*</span> -->
+                                    </label>
+                                    <div class="row choice justify-content-start">
+
+
+                                        <div class="input-group custom-dropdown-list company_type">
+                                            <div class=" d-flex justify-content-between selected-items" id="selected-items">
+                                                <span id="selected-items-container" class="selected-items-container">Select type</span>
+                                                <input type="text" hidden name="company_type" value="" placeholder="Select type">
+                                                <i class="fas fa-caret-down ml-0"></i>
+                                            </div>
+                                            <div class="menus-container hidden">
+                                                <ul class="menu  " id="dd_list_company_types" tabindex="-1">
+                                                    <% for (let item of categories  ) { %>
+                                                                    <li class="item" value="<%= item.name %>">
+                                                                        <%= item.name %>
+                                                                    </li>
+                                                                    <% } %>
+
+
+                                                </ul>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+
+                                <div id="Restaurant-section" class="hidden">
+                                    <div class="form-group">
+                                        <label for="Service">Service
+                                            <!-- <span class="asRed">*</span> -->
+                                        </label>
+                                        <div class="row choice justify-content-start">
+
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Breakfast" name="Breakfast">
+                                                <label class="custom-control-label" for="Breakfast">Breakfast</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Lunch" name="Lunch">
+                                                <label class="custom-control-label" for="Lunch">Lunch</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Dinner" name="Dinner">
+                                                <label class="custom-control-label" for="Dinner">Dinner</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Cafe" name="Cafe">
+                                                <label class="custom-control-label" for="Cafe">Cafe</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Nightlife" name="Nightlife">
+                                                <label class="custom-control-label" for="Nightlife">Nightlife</label>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="locality">Seating
+                                            <!-- <span class="asRed">*</span> -->
+                                        </label>
+                                        <div class="row choice justify-content-start">
+
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Indoor" name="Indoor">
+                                                <label class="custom-control-label" for="Indoor">Indoor</label>
+                                            </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="Outdoor" name="Outdoor">
+                                                <label class="custom-control-label" for="Outdoor">Outdoor</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="locality">Payment
+                                            <!-- <span class="asRed">*</span> -->
+                                        </label>
+                                        <div class="row choice justify-content-start">
+
+
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Cards_and_cash" name="payment" value="Cards and cash">
+                                                <label class="custom-control-label" for="Cards_and_cash">Cards and cash</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="Cash" name="payment" value="Cash">
+                                                <label class="custom-control-label" for="Cash">Cash</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group pb-2">
+                                        <div class="row">
+                                            <div class="col">
+                                                <label for="locality">Cuisines
+                                                    <!-- <span class="asRed">*</span> -->
+                                                </label>
+                                                <div class="row choice justify-content-start">
+
+
+                                                    <div class="input-group custom-dropdown-list Cusines">
+                                                        <input hidden type="text" class="form-control" placeholder="To" id="to_timings">
+                                                        <div class=" d-flex justify-content-between selected-items" id="selected-items">
+                                                            <span id="selected-items-container" class="selected-items-container">Select cuisines...</span>
+                                                            <i class="fas fa-caret-down ml-0"></i>
+                                                        </div>
+                                                        <div class="menus-container hidden">
+                                                            <ul class="menu  " id="dd_list_cuisines" tabindex="-1">
+                                                                <li class="item ">BBQ</li>
+                                                                <li class="item">Biryani</li>
+                                                                <li class="item">Burger</li>
+                                                                <li class="item">Charcoal chicken</li>
+                                                                <li class="item">kebab</li>
+
+                                                            </ul>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <label for="locality">Tags
+                                                    <!-- <span class="asRed">*</span> -->
+                                                </label>
+                                                <div class="row choice justify-content-start">
+
+
+                                                    <div class="input-group custom-dropdown-list Tags">
+                                                        <div class=" d-flex justify-content-between selected-items" id="selected-items">
+                                                            <span id="selected-items-container" class="selected-items-container">Select tags...</span>
+                                                            <i class="fas fa-caret-down ml-0"></i>
+                                                        </div>
+                                                        <div class="menus-container hidden">
+                                                            <ul class="menu  " id="dd_list_tags" tabindex="-1">
+                                                                <li class="item ">school</li>
+                                                                <li class="item">hotels</li>
+                                                                <li class="item">Burger</li>
+                                                                <li class="item">Charcoal chicken</li>
+                                                                <li class="item">kebab</li>
+
+                                                            </ul>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="form-section">
+                            <button class="btn btn-block btn-success" type="submit">Submit</button>
+                        </div>
+                    </form>
+
+                    </div>
+                    <div class="col-3 pr-0">
+                        <div class="panel ">
+                            <h5>How it works</h5>
+                            <ul class="">
+                                <li>
+                                    If you are the owner of a restaurant, or if you are a user who's discovered a place not listed on Digital Manipur, let us know using
+                                    this form.
+
+                                </li>
+                                <li>
+                                    Once you send the information to us, our awesome content team will verify it. To help speed up the process, please provide
+                                    a contact number or email address.
+
+                                </li>
+                                <li>
+                                    That's it! Once verified the listing will start appearing on Digital Manipur
+
+                                </li>
+                            </ul>
+                        </div>
+
+
+
+
+                    </div>
+                </div>
+
+            </div>
+            <%- include('../includes/footer.ejs') %>
+                <script src="/js/business_form_ui.js"></script>
+                <script>
+                    
+
+                </script>
+
+    </body>
+
+    </html>

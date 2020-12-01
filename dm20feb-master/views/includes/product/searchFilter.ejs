@@ -1,0 +1,438 @@
+<div class="show_filter_section" onclick="toggleFilter()">
+    <div>Show Filters</div>
+    <div class="ml-auto"><i class="fa fa-chevron-down" id="down_icon" aria-hidden="true"></i></div>
+</div>
+<script>
+    function toggleFilter() {
+        filter_content = document.getElementById('filter_content');
+        if (filter_content.style.display == "none") {
+            filter_content.style.display = "block";
+        } else {
+            filter_content.style.display = "none"
+        }
+    }
+</script>
+<div class="search_filter_content_holder" id="filter_content" style="display: none;">
+    <div class="filter_main_title">
+        <span>Filters</span>
+    </div>
+    <section class="category_filters">
+        <div class="category_filter_title">
+            <span>Categories</span>
+        </div>
+        <div class="filter_categories">
+            <a href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Mobiles">
+                <div>Mobiles</div>
+            </a>
+            <a href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Cars">
+                <div>Cars</div>
+            </a>
+            <a href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Bikes">
+                <div>Bikes</div>
+            </a>
+            <a
+                href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Electronics & Appliances">
+                <div>Electronics & Appliances</div>
+            </a>
+            <a href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Home & Lifestyle">
+                <div>Home & Lifestyle</div>
+            </a>
+            <div onclick="showSubCategories()" id="show_sub_categories">
+                See more
+            </div>
+            <script>
+                function showSubCategories() {
+                    $('#sub_cat_modal').modal('show')
+                }
+            </script>
+        </div>
+
+    </section>
+
+
+    <!-- Category Modal -->
+    <div class="modal fade" id="sub_cat_modal" tabindex="-1" role="dialog" aria-labelledby="sub_cat_modal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span class="modal_title">
+                        Filer Search by Category
+                    </span>
+                </div>
+                <div class="modal_body_holder">
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-md-6">
+                            <div class="modal_category_title">
+                                <span>Mobiles</span>
+                            </div>
+                            <div class="modal_category_body">
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Mobile Phones">
+                                    <div>Mobile Phones</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Mobile Accessories">
+                                    <div>Accessories</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Tablets">
+                                    <div>Tablets</div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="modal_category_title">
+                                <span>Cars</span>
+                            </div>
+                            <div class="modal_category_body">
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Cars">
+                                    <div>Cars</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Commercial & Other Vehicles">
+                                    <div>Commercial & Other Vehicles</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Car Sapre Parts - Accessories">
+                                    <div>Car Spare Parts-Accessories</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-md-6">
+                            <div class="modal_category_title">
+                                <span>Bikes</span>
+                            </div>
+                            <div class="modal_category_body">
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Motorcycles">
+                                    <div>Motorcycles</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Scooters">
+                                    <div>Scooters</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Bicycles">
+                                    <div>Bicycles</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Bike Spare Parts - Accessories">
+                                    <div>Bike Spare Parts-Accessories</div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="modal_category_title">
+                                <span>Electronics & Appliances</span>
+                            </div>
+                            <div class="modal_category_body">
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Computers & Laptops">
+                                    <div>Computers & Laptops</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Camera & Lenses">
+                                    <div>Camera & Lenses</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Hard Disks, Printers & Monitors">
+                                    <div>Hard Disks, Printers & Monitors</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Computer Accessories">
+                                    <div>Computer Accessories</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=TVs, Video - Audio">
+                                    <div>TVs, Video-Audio</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Games & Entertainment">
+                                    <div>Games & Entertainment</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Kitchen & Other Appliances">
+                                    <div>Kitchen & Other Appliances</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Fridges">
+                                    <div>Fridges</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=ACs">
+                                    <div>ACs</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Washing Machines">
+                                    <div>Washing Machines</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Home and lifestyle section -->
+                    <div class="modal_category_title" style="margin-bottom: 5px;">
+                        <span>Home & Lifestyle</span>
+                    </div>
+
+
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-md-6">
+                            <div class="modal_category_title">
+                                <span>Furniture & Decor</span>
+                            </div>
+                            <div class="modal_category_body">
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Furniture for Home & Office">
+                                    <div>Furniture for Home & Office</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Home Decor - Furnishings">
+                                    <div>Home Decor-Furnishings</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Kitchenware">
+                                    <div>Kitchenware</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Paintings">
+                                    <div>Paintings</div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="modal_category_title">
+                                <span>Sports, Books & Hobbies</span>
+                            </div>
+                            <div class="modal_category_body">
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Sports - Fitness Equipment">
+                                    <div>Sports-Fitness Equipment</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Books - Megazines">
+                                    <div>Books-Megazines</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Musical Instruments">
+                                    <div>Musical Instruments</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Collectibles">
+                                    <div>Collectibles</div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-md-6">
+                            <div class="modal_category_title">
+                                <span>Kids & Toys</span>
+                            </div>
+                            <div class="modal_category_body">
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Toys - Games">
+                                    <div>Toys-Games</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Baby - Infant Products">
+                                    <div>Baby-Infant Products</div>
+                                </a>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="modal_category_title">
+                                <span>Fashion</span>
+                            </div>
+                            <div class="modal_category_body">
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Clothing - Garments">
+                                    <div>Clothing-Garments</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Footware">
+                                    <div>Footware</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Watches">
+                                    <div>Watches</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Bags - Luggage">
+                                    <div>Bags-Luggage</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Jwellery">
+                                    <div>Jwellery</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Fashion Accessories">
+                                    <div>Fashion Accessories</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Health - Beauty Products">
+                                    <div>Health-Beauty Products</div>
+                                </a>
+                                <a
+                                    href="/product/search?searchlocation=<%=search_location_query%>&searchlocationproduct=Gifts - Stationary">
+                                    <div>Gifts-Stationary</div>
+                                </a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- category modal ends here -->
+
+
+    <%if(districtFilters.length > 0){%>
+    <section class="category_filters">
+        <div class="category_filter_title">
+            <span>Districts</span>
+        </div>
+        <%districtFilters.forEach(function(district, index){%>
+        <div class="filter_categories">
+            <%if(index < 10){%>
+            <a href="">
+                <div><%=district%></div>
+            </a>
+            <%}%>  
+<%})%>
+
+            <%if(districtFilters.length > 10){%>
+            <div onclick="showDistricts()" id="show_sub_categories">
+                See more
+            </div>
+            <script>
+                function showDistricts() {
+                    $('#district_modal').modal('show')
+                }
+            </script>
+            <%}%>
+
+</div>
+
+</section>
+
+<!-- District Modal -->
+<div class="modal fade" id="district_modal" tabindex="-1" role="dialog" aria-labelledby="district_modal" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-body">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <span class="modal_title">
+        Filer Search by District
+    </span>
+</div>
+<div class="modal_body_holder">
+    <%if(districtFilters.length>0){%>
+            <div class="modal_category_title">
+                <span>Districts</span>
+            </div>
+            <div class="row">
+                <%districtFilters.forEach(function(district,index){%>
+
+                <div class="col-md-4">
+                    <div class="modal_category_body">
+                        <a href="/product/search?searchlocation=<%=district%>&searchlocationproduct=">
+                            <div><%=district%></div>
+                        </a>
+                    </div>
+                </div>
+                <%})%>
+            </div>
+            <%}%>
+                        
+</div>
+</div>
+</div>
+</div>
+<!-- district modal ends here -->
+
+<%}%>
+
+            <%if(localityFilters.length > 0){%>
+            <section class="category_filters">
+                <div class="category_filter_title">
+                    <span>Localities</span>
+                </div>
+                <%localityFilters.forEach(function(locality, index){%>
+                <div class="filter_categories">
+                    <%if(index < 10){%>
+                    <a href="">
+                        <div><%=locality%></div>
+                    </a>
+                    <%}%>  
+    <%})%>
+
+                    <%if(localityFilters.length > 10){%>
+                    <div onclick="showLocalities()" id="show_sub_categories">
+                        See more
+                    </div>
+                    <script>
+                        function showLocalities() {
+                            $('#locality_modal').modal('show')
+                        }
+                    </script>
+                    <%}%>
+    
+</div>
+
+</section>
+
+<!-- Locality Modal -->
+<div class="modal fade" id="locality_modal" tabindex="-1" role="dialog" aria-labelledby="locality_modal" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+    <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <span class="modal_title">
+            Filer Search by Locality
+        </span>
+    </div>
+    <div class="modal_body_holder">
+        <%if(localityFilters.length>0){%>
+                    <div class="modal_category_title">
+                        <span>Localities</span>
+                    </div>
+                    <div class="row">
+                        <%localityFilters.forEach(function(locality,index){%>
+
+                        <div class="col-md-4">
+                            <div class="modal_category_body">
+                                <a href="/product/search?searchlocation=<%=locality%>&searchlocationproduct=">
+                                    <div><%=locality%></div>
+                                </a>
+                            </div>
+                        </div>
+                        <%})%>
+                    </div>
+                    <%}%>
+                            
+    </div>
+</div>
+</div>
+</div>
+<!-- locality modal ends here -->
+
+<%}%>
+
+
+                </div>

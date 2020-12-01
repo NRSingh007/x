@@ -1,0 +1,295 @@
+<section class="footer-section mt-5">
+    <div class="container container-fluid">
+        <div class="row">
+            <div class="col">
+                <a href="#"><img src="/assets/img/logo.png" style="width: 66px;"></a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4">
+                <h3 style="font-size: 18px;font-weight: 700;">About Digital Manipur</h3>
+                <ul>
+                    <li><a href="/site/about">About Us</a></li>
+                    <!-- <li><a href="#">Culture</a></li> -->
+                    <!-- <li><a href="">Blog</a></li> -->
+                    <li><a href="/site/career">Careers</a></li>
+                    <li><a href="/site/contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="col">
+                <div>
+                    <h3 style="font-size: 18px;font-weight: 700;">Business</h3>
+                </div>
+                <div class="d-flex">
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 sm-col-fix">
+                        <ul>
+                            <li><a href="/site/add-listing">Add a Listing</a></li>
+                            <li><a href="/site/claim-listing">Claim your Listing</a></li>
+                            <li><a href="/site/mobile-app">Mobile App</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 sm-col-fix">
+                        <ul>
+                            <li><a href="/site/promote">Advertisement</a></li>
+                            <li><a href="/site/owner-guidelines">Business Owner Guidelines</a></li>
+
+                            <!-- <li><a href="#">Order</a></li>
+                            <li><a href="#">Book</a></li>
+                            <li></li> -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div>
+                    <h3 style="font-size: 18px;font-weight: 700;">States</h3>
+                </div>
+                <div class="d-flex">
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 sm-col-fix">
+                        <ul>
+                            <li><a href="/search?sstate=Assam&page=1">Assam</a></li>
+                            <li><a href="/search?sstate=Manipur&page=1">Manipur</a></li>
+                            <li><a href="/search?sstate=Arunachal Pradesh&page=1">Arunachal Pradesh</a></li>
+
+
+                        </ul>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 sm-col-fix">
+                        <ul>
+                            <li><a href="/search?sstate=Mizoram&page=1">Mizoram</a></li>
+                            <li><a href="/search?sstate=Sikkim&page=1">Sikkim</a></li>
+                            <li><a href="/search?sstate=Nagaland&page=1">Nagaland</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 sm-col-fix">
+                        <ul>
+                            <li><a href="/search?sstate=Meghalaya&page=1">Meghalaya</a></li>
+                            <li><a href="/search?sstate=Tripura&page=1">Tripura</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex flex-row justify-content-start privacy-links"><a
+                    href="/site/privacy">Privacy Policy</a>
+                <a href="/site/terms">Terms of Use</a>
+                <!-- <a href="/site/api">API Policy</a> -->
+                <!-- <a href="#">Security</a> -->
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 d-flex flex-row justify-content-end social-links">
+                <a href="https://www.facebook.com/DigitalManipurinfo"><i
+                        class="fab fa-facebook-square rounded-circle"></i></a>
+                <a href="https://www.instagram.com/digital_manipur/"><i class="fab fa-instagram rounded-circle"></i></a>
+                <a href="https://www.youtube.com/channel/UCOukPgGptq8meyHyXzRpYIg"><i
+                        class="fab fa-youtube rounded-circle"></i></a>
+                <!-- <a href="#"><i  class="fab fa-twitter rounded-circle"></i></a> -->
+            </div>
+        </div>
+        <div class="row">
+            <p class="small terms-msg">
+                By continuing past this page, you agree to our Terms of Service, Cookie Policy, Privacy Policy and
+                Content Policies. All trademarks are properties of their respective owners. ©
+                2017-<%=    new Date().getFullYear() %> - Leibak Information Technology Pvt Ltd. All rights reserved.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- <script>
+    $(document).mouseup(function(e){
+    
+    // const sliderOverlayContent = $(".slider-overlay-content");
+    // var testDiv = document.getElementById("sliderOverlayContent");
+    // console.log(testDiv.scrollTop);
+    // Location search
+    var locations_container = $("#location-dropdown");
+    
+    $("#location-input").click(function(){
+      // alert($(document).height());
+        locations_container.show();
+    });
+    $(" .slider-container #location-input").click(function(){
+      // alert($(document).height());
+      $('html, body').stop(true, false).animate({scrollTop:100}, 'fast');
+        locations_container.show();
+    });
+    // If the target of the click isn't the container
+    if(!locations_container.is(e.target) && locations_container.has(e.target).length === 0){
+        locations_container.hide();
+    }
+
+    // Product search
+    var searches_container = $("#search-dropdown");
+
+    $("#search-input").click(function(){
+        searches_container.show();
+      });
+    $(".slider-container #search-input").click(function(){
+      $('html, body').stop(true, false).animate({scrollTop:100}, 'fast');
+        searches_container.show();
+      });
+      
+      // If the target of the click isn't the container
+      if(!searches_container.is(e.target) && searches_container.has(e.target).length === 0){
+        searches_container.hide();
+      }
+});
+</script> -->
+
+<script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="/assets/js/add-listing.js"></script>
+<script src="/https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
+<script src="/assets/js/search.js"></script>
+<script src="/assets/js/Simple-Slider.js"></script>
+<script src="/assets/js/tools.js"></script>
+<script src="/assets/js/untitled.js"></script>
+<script src="/assets/js/placedetail.js"></script>
+<script src="/assets/js/popper.min.js"></script>
+<script src="/assets/js/purify.min.js"></script>
+<script src="/assets/js/sanitize-html.min.js"></script>
+
+<script>
+
+    var SH_options = {
+        allowedTags: [],
+        disallowedTagsMode: 'discard',
+
+    };
+    DOMPurify.setConfig({
+        SAFE_FOR_JQUERY: true,
+        USE_PROFILES: {
+            html: false
+        },
+        ALLOWED_TAGS: []
+    });
+
+    var tagBody = '(?:[^"\'>]|"[^"]*"|\'[^\']*\')*';
+
+    var tagOrComment = new RegExp(
+        '<(?:'
+        // Comment body.
+        +
+        '!--(?:(?:-*[^->])*--+|-?)'
+        // Special "raw text" elements whose content should be elided.
+        +
+        '|script\\b' + tagBody + '>[\\s\\S]*?</script\\s*' +
+        '|style\\b' + tagBody + '>[\\s\\S]*?</style\\s*'
+        // Regular name
+        +
+        '|/?[a-z]' +
+        tagBody +
+        ')>',
+        'gi');
+
+    function removeTags(html) {
+        var oldHtml;
+        do {
+            oldHtml = html;
+            html = html.replace(tagOrComment, '');
+        } while (html !== oldHtml);
+        return html.replace(/</g, '&lt;');
+    }
+
+    
+</script>
+
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-116710448-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-116710448-1');
+</script>
+
+
+
+<!-- Facebook Pixel Code -->
+<script>
+    !function (f, b, e, v, n, t, s) {
+        if (f.fbq) return; n = f.fbq = function () {
+            n.callMethod ?
+            n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+        };
+        if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+        n.queue = []; t = b.createElement(e); t.async = !0;
+        t.src = v; s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s)
+    }(window, document, 'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '356608794934531');
+    fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=356608794934531&ev=PageView&noscript=1" /></noscript>
+<!-- End Facebook Pixel Code -->
+
+
+
+<!-- Google Tag Manager -->
+<script>(function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+            'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+        });
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src =
+            'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-WG3QQMJ');</script>
+<!-- End Google Tag Manager -->
+
+
+
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WG3QQMJ" height="0" width="0"
+        style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-8555623819168947",
+        enable_page_level_ads: true
+    });
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119144863-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-119144863-1');
+</script>
+
+<script async custom-element="amp-auto-ads" src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+</script>
+
+<amp-auto-ads type="adsense" data-ad-client="ca-pub-8555623819168947">
+</amp-auto-ads>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+        google_ad_client: "ca-pub-9270875062032912",
+        enable_page_level_ads: true
+    });
+</script>
+
+</body>
+
+</html>

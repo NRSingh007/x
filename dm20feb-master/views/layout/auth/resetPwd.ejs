@@ -1,0 +1,69 @@
+<%- include('../../includes/header.ejs',{pageTitle:pageTitle}) %>
+<link rel="stylesheet" href="../css/main.css">
+
+</head>
+
+<body>
+
+        <%- include("../../includes/navBar.ejs") %>
+        <%- include("../../includes/shortcutBar.ejs") %>
+    
+        <div class="container">
+            <div class="row p-3 my-3 d-flex flex-column justify-content-center align-items-center ">
+                    <% if (errorMessage ) { %>
+                        <div class="alert alert-danger alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <%= errorMessage %>
+                        </div>
+                        <% } %>
+                        <% if (noticeMessage ) { %>
+                            <div class="alert alert-info alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                <%= noticeMessage %>
+                            </div>
+                            <% } %>
+                    <div class="col-5 panel py-5">
+                        
+                        <div class="col " id="auth-reset-pwd">
+                                
+                                <form action="/auth/reset-password" method="POST">
+                                    <div class="form-group ">
+                                        <label for="email">Email:</label>
+                                        <input type="email" name="email" class="form-control" id="email">
+                                    </div>
+                                    <!-- <h6 class=" text-center">OR</h6>
+                                    
+                                    <div class="form-group ">
+                                            <label for="mobile">Mobile:</label>
+                                            <input type="text" maxlength="10" name="mobile" class="form-control" id="mobile">
+                                        </div> -->
+                                    
+                                    <!-- <div class="form-check mb-3">
+                                        <label class="form-check-label">
+                                            <input type="checkbox" class="form-check-input" value="">I agree to Digital Manipur's Terms of Service, Privacy Policy and Content Policies
+                                        </label>
+                                    </div> -->
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>" >
+                                    
+                                    <button type="submit" class="btn btn-danger btn-block p-3 my-3">Submit</button>
+                                </form>
+            
+            
+                                <p class="small pt-3 lightgrey">
+                                    By creating an account, you agree to Digital Manipur's
+                                    <a>Terms of Service</a>,
+                                    <a href="">Cookie Policy</a> ,
+                                    <a href="">Privacy Policy</a> and
+                                    <a href="">Content Policies</a> .
+                                </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../../includes/footer.ejs') %>
+
+</body>
+
+</html>
+

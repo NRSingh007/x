@@ -1,0 +1,482 @@
+
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    
+
+
+</head>
+
+<body class="admin-page">
+
+    <%- include('./../../includes/alert'); %>
+
+
+    <section class="main-body container-fluid row mx-0 px-0">
+
+        <!-- Left column navigation  -->
+        <%- include('./../../includes/adminNavigation.ejs') %>
+
+        <!-- Right column main body -->
+        <div class="col-10  main-col px-0" ">
+
+            <!-- Top navigation -->
+            <section class=" container nav-container mx-0">
+                    <div class="d-flex nav-header  bg-white  py-2 px-3  " style="width: 100%;">
+
+                        <div class="dropdown dropdown-menu-right ml-auto" style="color: black;">
+                            <button class="shadow-none btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
+                                type="button">
+                                <% if( typeof user.images.profile.common.url != "undefined" && user.images.profile.common.url) { %>
+                                <img class="rounded-circle" src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                    style="width: 25px;height: 25px;margin-right: 5px;">
+                                <% } else { %>
+                                <i class="fad fa-user-shield font-weight-bold"></i>
+                                <% } %>
+
+                                <span class="px-1">
+                                    <%= `${user.name.firstName}` %>
+                                </span>
+                            </button>
+                            <div class="dropdown-menu text-secondary" role="menu"
+                                style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                                <i class="fal fa-angle-up"  style="
+                                color: #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 10px;
+                                font-size: 22px;
+                                z-index: 999;
+                                "></i>
+                                <a class="dropdown-item" role="presentation" href="#" style="color: black;">Profile</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Notifications</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Settings</a>
+                                <hr style="margin: 0;">
+                                <form action="/auth/logout?via=admin" method="POST">
+                                    <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                        role="presentation">Logout</button>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+            </section>
+
+            <!-- main content -->
+            <section>
+
+                <div class="container p-5 " id="addUserContainerId">
+
+                    <div class="row" style="position: absolute;
+                    right: 50px;
+                    top: 0;
+                    z-index: 1">
+                
+                        <div class="toast" data-delay="5000">
+                            <div class="toast-header">
+                                <strong class="mr-auto text-primary"></strong>
+                                <!-- <small class="text-muted">5 mins ago</small> -->
+                                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                            </div>
+                            <div class="toast-body">
+                
+                            </div>
+                        </div>
+                    </div>
+                
+                
+                
+                    <section class="row px-3">
+                        <div class="col bg-white p-3 rounded border">
+                            <div class="row px-0 my-2 py-1">
+                                <div class="col text-center">
+                                    <span>
+                                        <h5 class="display-4">Add User</h5>
+                                        <hr>
+                
+                                    </span>
+                                </div>
+                
+                            </div>
+                
+                            <form name="add_user_form" id="addUserFormId" method="post" enctype="multipart/form-data">
+                                <div class="row justify-content-center">
+                                    <div class="col-8">
+                                        <div class="form-group">
+                                            <input required autocomplete="off" type="text" name="firstName" class="form-control"
+                                                placeholder="Name">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required autocomplete="off" type="email" name="email" class="form-control"
+                                                placeholder="Email" title="Email should be of the format - example@company.xyz">
+                                        </div>
+                                        <div class="form-group">
+                                            <input required autocomplete="off" type="password"
+                                                name="password" class="form-control" placeholder="Password" min="8" pattern=".{8,}"
+                                                title="Password should be eight or more characters">
+                                                <!-- <input required autocomplete="off" onchange="showPassword(event)" type="password"
+                                                name="password" class="form-control" placeholder="Password" min="8" pattern=".{8,}"
+                                                title="Password should be eight or more characters"> -->
+                                        </div>
+                
+                                        <div class="form-group">
+                                            <input required autocomplete="off" onkeyup="checkMobile(this)" type="tel"
+                                                name="mobileNumber" class="form-control" placeholder="Mobile number"
+                                                title="Mobile number should be 10 digits " pattern="[0-9]{10}" minlength="10"
+                                                maxlength="10">
+                                        </div>
+                                        <div class="form-group">
+                                            <input autocomplete="off" type="tel" onkeyup="checkMobile(this)" name="optionalMobileNumber"
+                                                class="form-control" placeholder="Optional mobile number"
+                                                title="Mobile number should be 10 digits " pattern="[0-9]{10}" minlength="10"
+                                                maxlength="10">
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea autocomplete="off" name="about" class="form-control" rows="5"
+                                                placeholder="Tell something about yourself in brief"></textarea autocomplete="off">
+                                        </div>
+                                        <div class="form-group custom-file mb-3">
+                                            <input autocomplete="off" onchange="filePreview(this)" type="file" placeholder="Profile picture" class="custom-file-input"
+                                                name="image" accept=".jpg, .png, .jpeg">
+                                            <label class="custom-file-label" for="image">Profile picture</label>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <select required onchange="" class="custom-select" name="role">
+                                                <option value="user" selected >Role - normal user/customer</option>
+                                                <option value="admin" >Role - admin</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group mt-2 ">
+                                            <div class="d-flex  flex-fill justify-content-start align-items-center">
+                                                <h4 class="text-muted mr-3 col-4 pl-0 text-muted font-weight-normal	">Status</h4>
+                
+                                                <div class="custom-control col-6 custom-switch">
+                                                    <input name="status" onchange="checkStatus(event)"  type="checkbox"
+                                                        class="custom-control-input" id="userStatusId" >
+                                                    <label class="custom-control-label" for="userStatusId">Inactive</label>
+                                                </div>
+                                            </div>
+                
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                   
+                
+                                <hr>
+                                <div class="row px-3 mx-3">
+                                    <div class="col d-flex justify-content-between">
+                                        <button type="submit" id="submit_add_user" onclick="validateAddUserForm(event)" 
+                                        class="btn btn-success px-3">Submit</button>
+                                        <button type="button" onclick="cancelAddUserForm(event)" 
+                                        class="btn btn-warning px-3">Cancel</button>
+                                        
+                                    </div>
+                                </div>
+                            </form>
+                
+                        </div>
+                    </section>
+                
+                
+                
+                </div>
+                
+            <!-- Main content ends here -->
+            </section>
+
+        <!-- Right column main body ends here -->
+         </div>
+
+
+    </section>
+
+
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/fontawesome-pro-5.11.1-web/js/fontawesome.min.js"></script>
+    <script src="/assets/js/admin.js"></script>
+
+   
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+
+
+<!-- form validation -->
+<script>
+
+    function cancelAddUserForm(e) {
+        e.preventDefault();
+
+        resetFormData();
+    }
+
+
+
+    function showAlert(error = false, message) {
+        const template = `
+        <div style="position: fixed; z-index: 1; top: 10px;" class="alert ${error ? 'alert-danger' : 'alert-success'} fade show alert-dismissible">
+            <strong>${error ? 'Error' : 'Success'}!</strong> ${message}
+        </div>
+        `;
+        $('body').append(template);
+        setTimeout(() => {
+            $('body .alert').hide();
+        }, 5000);
+    }
+
+    async function validateAddUserForm(e) {
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        $("#addUserFormId #submit_add_user").html(`<div class="spinner-border spinner-border-sm text-light mr-1"></div> Submitting..`);
+        $("#addUserFormId #submit_add_user").prop('disabled', true);
+        const form = $("#addUserFormId")[0];
+        const formData = new FormData(form);
+
+        // set status value based on isChecked
+        var isChecked = $("#addUserFormId input[name='status']").is(':checked');
+        formData.delete('status');
+        formData.append('status', isChecked);
+
+        for (let [key, value] of formData.entries()) {
+            console.log(key + " - " + value);
+        }
+
+
+        if (form.checkValidity()) {
+            // check if file is present
+            if (formData.get('image').name != '' && formData.get('image').name != null) {
+                // submit file
+                try {
+                    const filename = await submitFile(formData);
+                    formData.set('image', null);
+                    formData.append('profile', filename);
+
+                    if (filename) {
+                        submitUser(formData);
+                    }
+                } catch (error) {
+                    console.log({ error });
+                    showAlert(true, 'Error in uploading file');
+                    $("#addUserFormId #submit_add_user").prop('disabled', false);
+                    $("#addUserFormId #submit_add_user").html('Submit');
+
+                }
+
+            } else {
+                formData.set('image', null);
+                submitUser(formData);
+            }
+        } else {
+            // add validation styles
+            styleValidation();
+
+            console.log("Is form Valid : ", form.checkValidity());
+            $("#addUserFormId #submit_add_user").html('Submit');
+            $("#addUserFormId #submit_add_user").prop('disabled', false);
+
+
+        }
+
+        return false;
+
+    }
+
+    function submitFile(formData) {
+        console.log('Submitting file');
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${rootDomain}/admin/users/upload-file`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (data) {
+                    console.log('File submitted');
+                    console.log("file info: ", data);
+
+                    if (data && data.filename && data.filename != null && data.filename.length > 0) {
+                        resolve(data.filename);
+                    } else {
+                        reject('Unexpected error: wrong filename!');
+                    }
+                },
+                error: function (data) {
+                    console.log('Error');
+                    reject(data);
+                }
+            });
+        })
+    }
+
+    function resetFormData() {
+        const form = $("#addUserFormId")[0];
+        const formData = new FormData(form);
+        for (var key of formData.keys()) {
+            // here you can add filtering conditions
+            formData.delete(key);
+        }
+        // *** remove validation styles 
+        form.classList.remove('was-validated');
+        $('#addUserFormId .input-feedback').remove();
+        $('#addUserFormId .img-thumbnail').remove();
+
+        // *** Reset form 
+        $('#addUserFormId').trigger('reset');
+
+        // input : not working
+        const filesInput = $("#add_user_form .custom-file-input");
+        let filesInputArray = Object.values(filesInput);
+        for (let index = 0; index < filesInput.length; index++) {
+            $(filesInputArray[index]).val('');
+            $(filesInputArray[index]).siblings("label").html($(filesInputArray[index]).attr('placeholder'));
+
+        }
+    }
+
+    function submitUser(formData) {
+        console.log('submitting user form');
+
+        // formData wouldn't work with ajax post so convert to simple object
+        let data = {};
+        for (let [key, value] of formData.entries()) {
+
+            data[key] = value;
+
+        }
+        // // modify custom status value
+        // if (formData.get('status') == 'on') {
+        //     formData.set('status', true);
+        // } else {
+        //     formData.set('status', false);
+        // }
+
+        for (let entries of Object.entries(data)) {
+            console.log(entries[0] + " - " + entries[1]);
+        }
+
+        $.post(`${rootDomain}/admin/users/add`,
+            data,
+            (data, status) => {
+                if (status == 'success' && data && data.message) {
+                    console.log(data);
+                    showAlert(false, data.message);
+
+                    resetFormData();
+                    setTimeout( function(){
+                        location.replace(`${rootDomain}/admin/users/recent`);
+                    }, 2000);
+
+                    console.log('form submitted ');
+                    $("#addUserFormId #submit_add_user").html('Submit');
+                    $('#addUserFormId #submit_add_user').removeAttr("disabled");
+                }
+            })
+            .fail((error) => {
+                $("#addUserFormId #submit_add_user").html('Submit');
+                console.log('Fail ', error.responseJSON);
+                showAlert(true, error.responseJSON.message);
+                $('#addUserFormId #submit_add_user').removeAttr("disabled");
+            });
+    }
+
+    function showPassword(e) {
+        console.log("Password : ", $(e.target).val());
+        $(e.target).siblings('div.input-feedback').html('');
+        $(e.target).after(`<div class="input-feedback text-secondary">
+            <button type="button" class="btn btn-outline-info btn-sm text-dark" onclick="($(this).parent().siblings('input').attr('type','text'))()">Show password</button> 
+            </div>
+            `);
+        // <span class="text-primary show-pwd" style="display: none;"> ${$(e.target).val()} </span>
+    }
+
+    function filePreview(input) {
+        console.log("input files", input.files[0]);
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $(input).parent().siblings('.imgPreview').remove();
+                $(input).parent().after('<img class="imgPreview img-thumbnail my-2" src="' + e.target.result + '" width="100%" />');
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+
+    function checkMobile(input) {
+        // console.log(input);
+        // console.log('Corrected mobile number : ',$(input).val().slice(0, 10));
+        if ($(input).val().length > 10) {
+            $(input).val($(input).val().slice(0, 10));
+        }
+    }
+
+    function styleValidation() {
+        var invalidClassName = 'error'
+        var inputs = document.querySelectorAll('#addUserFormId input, #addUserFormId select, #addUserFormId textarea');
+        inputs.forEach(function (input) {
+            // Add a css class on submit when the input is invalid.
+            input.addEventListener('invalid', function () {
+                input.classList.add(invalidClassName)
+            })
+
+            // Remove the class when the input becomes valid.
+            // 'input' will fire each time the user types
+            input.addEventListener('input', function () {
+                if (input.validity.valid) {
+                    input.classList.remove(invalidClassName)
+                }
+            })
+
+            input.addEventListener("blur", function () {
+                input.checkValidity();
+            });
+
+        });
+    }
+
+
+    // function toggleValue(e) {
+    //     return $(e.target).is(':checked');
+    // }
+
+    // function checkVerified(e) {
+    //     if (toggleValue(e)) {
+    //         $(e.target).siblings('label').html('Verified');
+    //     } else {
+    //         $(e.target).siblings('label').html('Not verified');
+    //     }
+    // }
+
+    // function checkStatus(e) {
+    //     if (toggleValue(e)) {
+    //         $(e.target).siblings('label').html('Active');
+    //     } else {
+    //         $(e.target).siblings('label').html('Inactive');
+    //     }
+    // }
+
+
+
+</script>
+</body>
+
+</html>

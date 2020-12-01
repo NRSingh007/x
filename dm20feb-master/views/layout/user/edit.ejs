@@ -1,0 +1,696 @@
+<%- include('./../../includes/header.ejs',{ 
+    keywords: 'User setting' , 
+    author: 'Digtal Manipur',
+    description: ``
+ }) %>
+ <link rel="stylesheet" href="/assets/css/profile-setting.css">
+
+</head>
+
+<body>
+    <%- include('./../../includes/navBar.ejs') %>
+
+    <section class="profile-setting">
+        <div class="container ">
+
+            <div class="row my-4 rounded lightGrey-border bg-white p-4">
+                <div class="d-flex justify-content-center profile-header">
+
+                    <div class="profile-preview-box">
+                        <div id="profile-preview" class="profilePreviewUpdate rounded-circle profile-preview" style="
+                            background-image: url('<%= user.images.profile.common.url ? `/uploads/images/mobile/${user.images.profile.common.url}` : `/assets/img/bg-abstract.jpg` %>');
+                            ">
+                        </div>
+                    </div>
+
+                    
+
+                    <div class="profile-desc ">
+                        <div class="name ">
+                            <%= user.name && user.name.firstName ? user.name.firstName: '' %>
+                        </div>
+                        <% let de = districts.find( district => String(district._id) == String(user.address.district.id) ); %>
+
+                        <% if( userDistrict ) { %>
+                        <div class="address">
+                            <i class="fal fa-map-marker-alt"></i>
+                                        
+                                        <% if ( de ) { %>
+                                            <%= de.name ? de.name: userDistrict ? userDistrict: '' %>
+                                        <% }  %>
+                        </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3 px-2 px-md-0">
+
+
+                <a class="back-profile" href="/users/home">
+                    <i class="fal fa-angle-left mr-2"></i>Back to profile
+                </a>
+
+            </div>
+            <div class="row mb-5">
+                <div class="col-md-9 col-sm-12 col-xs-12 px-md-0">
+                    <div class="d-flex row mx-0">
+                        <div class="col-md-4 col-sm-12 col-xs-12  px-0 ">
+                            <div class="lightGrey-border bg-white rounded">
+                                <div class="profile-change-box">
+
+                                    <div>
+
+                                        <div id="profile-change" class="profilePreviewUpdate  profile-change" style="
+                                        background-image: url('<%= user.images.profile.common.url ? `/uploads/images/mobile/${user.images.profile.common.url}` : `/assets/img/bg-abstract.jpg` %>');
+                                        ">
+
+                                        </div>
+                                        <div class="center-items select-profile">
+                                            <button data-toggle="modal" data-target="#myModal" type="button"
+                                                class="shadow-none btn  btn-danger">Change picture</button>
+                                        </div>
+
+                                    </div>
+
+
+
+                                </div>
+
+
+                                <div class="profile-desc  ml-3 my-3">
+                                    <div class="name ">
+                                        <%= user.name && user.name.firstName ? user.name.firstName: '' %>
+                                    </div>
+                                    <% if(  user.address && user.address.district && user.address.district.id ) { %>
+                                    <div class="address">
+                                        <i class="fal fa-map-marker-alt"></i>
+                                       
+                                        <% if ( de ) { %>
+                                            <%= de.name ? de.name: userDistrict ? userDistrict: '' %>
+                                        <% }  %>
+                                    </div>
+
+                                    <% } %>
+
+                                </div>
+                            </div>
+
+                            <div class="nav-tabs-holder bg-white lightGrey-border my-3 px-2 px-sm-0" style="background-color: #f3f3f3 !important;">
+                                <div class="list-group ">
+                                    <!-- <li class="list-group-item active"> -->
+                                    <a class="list-group-item list-group-item-action active" data-toggle="tab"
+                                        href="#profileInformation">Edit
+                                        Profile
+                                        <i class="far fa-angle-right float-right"></i>
+                                    </a>
+                                    <!-- </li> -->
+                                    <!-- <li class="list-group-item"> -->
+                                    <a class="list-group-item list-group-item-action" data-toggle="tab"
+                                        href="#security">
+                                        Security
+                                        <i class="far fa-angle-right float-right"></i>
+                                    </a>
+                                    <!-- </li> -->
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-8 col-sm-12 col-xs-12">
+                            <div class="tab-content ">
+                                <div class="tab-pane container active px-0 px-sm-3" id="profileInformation">
+                                    <h5 class="mb-2">Profile Information</h5>
+                                    <div class="lightGrey-border  bg-white rounded p-3">
+                                        <form id="editProfile" action="" method="post">
+                                            <input type="text" hidden name="userId" value="<%= user._id %>" />
+                                            <div class="form-group">
+                                                <label for="firstName">Your full name*</label>
+                                                <input required autocomplete="off" type="text"
+                                                    value="<%= user.name && user.name.fullName ? user.name.fullName : '' %>" name="fullName"
+                                                    class="form-control" placeholder="Name">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="password">Where do you live?*</label>
+                                                <select required class="custom-select" name="district">
+                                                    <% for ( let district of districts ) { %>
+                                                    <% if (String(district._id) == String(user.address.district.id) ) { %>
+                                                    <option selected value="<%= district._id %>"
+                                                        name="<%= district.name ? district.name : '' %>"> <%= district.name ? district.name : '' %> </option>
+                                                    <% } else { %>
+                                                    <option value="<%= district._id %>" name="<%= district.name ? district.name : '' %>">
+                                                        <%= district.name ? district.name : '' %> </option>
+                                                    <% } %>
+                                                    <% } %>
+                                                </select>
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label for="about">A little bit about yourself</label>
+                                                <textarea onKeyPress="if(this.value.length==250) return false;"
+                                                    autocomplete="off" name="about" maxlength="250" class="form-control"
+                                                    rows="5" placeholder="Tell something about yourself in brief"><%= user.about ? user.about :'' %></textarea>
+                                                <button class="btn btn-sm btn-light my-2">Bio can be a maximum of 250
+                                                    characters</button>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="mobileNumber">Your mobile number</label>
+                                                <input value="<%= user.mobileNumber[0] && user.mobileNumber[0].number ? user.mobileNumber[0].number :'' %>" autocomplete="off"
+                                                    min="0" max="9999999999"
+                                                    onKeyPress="if(this.value.length==10) return false;" minlength="10"
+                                                    maxlength="10" type="number" name="mobileNumber"
+                                                    class="form-control" placeholder="Mobile number">
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="firstName">Your email address*</label>
+                                                <div class="input-group">
+                                                    <input disabled autocomplete="off" type="email"
+                                                        value="<%= user.email ? user.email : '' %>" name="email" class="form-control"
+                                                        placeholder="Email">
+
+                                                    <div class="input-group-append">
+                                                        <button data-toggle="modal" data-target="#changeEmail"
+                                                            class="shadow-none btn btn-success">
+                                                            Change</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button id="submitProfile" type="submit" value="Save"
+                                                class="mt-2 btn btn-success">Save</button>
+
+
+
+
+
+                                        </form>
+                                    </div>
+
+                                </div>
+                                <div class="tab-pane container fade px-0 px-sm-3" id="security">
+                                    <h5 class="mb-2">Security</h5>
+                                    <div class="lightGrey-border  bg-white rounded p-3">
+                                        <form id="editProfile" action="" method="post">
+                                            <hr class="">
+                                            <button class="my-2 lightGrey-border shadow-none btn btn-light"
+                                                data-toggle="modal" data-target="#deleteAccountModal">Delete my
+                                                account</button>
+                                            <p class="small">
+                                                Please note that this action is irreversible and all the data associated
+                                                with your account will be permanently deleted.
+                                            </p>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12 col-xs-12 px-3 px-sm-0 mt-5 mt-sm-0">
+
+                    <h5 class="mb-2">Connected accounts</h5>
+                    <div class="bg-white p-3 my-2 lightGrey-border">
+                        <div class="mt-2 mb-3  social-connected">
+                            <div><label for="">Facebook</label>
+                                <button class="btn btn-block d-flex align-items-center justify-content-start" <%=  !user.social.facebook.id ? "disabled" :'' %>  style="background-color: #3B5998;">
+                                    <i class="fab fa-facebook-f ml-1 mr-3 rounded-circle"></i>
+                                    CONNECT WITH FACEBOOK
+                                    <% if( user.social.facebook.id ) { %>
+                                        <i class=" ml-3  far fa-check" > </i>
+                                    <% } %>
+                                </button></div>
+                        </div>
+                        <div class=" mt-2 mb-3 social-connected">
+                            <div><label for="">Google</label>
+                                <button class="btn btn-block align-items-center justify-content-start" <%=  !user.social.google.id ? "disabled" :'' %>   style="background-color: #0F9D58;">
+                                    <i class="fab fa-google mr-3 rounded-circle"></i>
+                                    CONNECT WITH GOOGLE
+                                    <% if( user.social.google.id ) { %>
+                                        <i class="ml-3 far fa-check" > </i>
+                                            <% } %>
+
+                                </button></div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- The Modal -->
+        <div class="modal fade" id="deleteAccountModal">
+            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-zoom">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Account deletion request</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <div class="p-4">
+                            <div class="feedback-warning alert alert-warning " style="display:none;">
+
+                            </div>
+                            <div class="feedback-success alert alert-warning " style="display:none;">
+
+                            </div>
+                            <p class="small">
+                                Before you leave, please tell us why you'd like to delete your account. This information
+                                will help us improve.
+                                <span class="text-muted"> (optional)</span></p>
+                            <form name="deleteAccountForm" action="" method="post">
+                                <div class="form-group">
+                                    <textarea rows="4" autocomplete="off" name="reason" class="form-control"
+                                        maxlength="500"></textarea>
+                                </div>
+                                <input type="text" hidden name="email" value="<%= user.email %>" />
+
+                                <input type="text" hidden name="userId" value="<%= user._id %>" />
+                                <button onclick="deleteAccount(event)" class="btn-sm shadow-none btn btn-danger"
+                                    type="submit">Delete my account</button>
+                            </form>
+
+
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- The Modal -->
+        <div class="modal fade" id="myModal">
+            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-zoom">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Edit profile picture</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+
+                        <div class="d-flex flex-row">
+
+                            <div class="col-md-4 col-sm-12 col-xs-12">
+                                <div>Upload Picture</div>
+                                <form name="upload-profile-image" action="" method="post" enctype="multipart/form-data">
+                                    <div class="custom-file my-2">
+                                        <input onchange="filePreview(this)" type="file" class="custom-file-input"
+                                            id="customFile" name="image" accept=".jpg, .png, .jpeg" id="">
+                                        <label class="custom-file-label" for="customFile">Choose file</label>
+                                    </div>
+                                    <input type="text" hidden name="userId" value="<%= user._id %>" />
+
+                                </form>
+                                <p class="text-secondary small">JPG/PNG formats only Maximum size 5 MB Greater than
+                                    400px in height and width
+                                </p>
+                                <hr>
+                                <button type="button" class="btn btn-link" onclick="deleteProfilePicture(event)">Delete
+                                    my profile picture</button>
+                            </div>
+                            <div
+                                class="d-none col-md-8 col-sm-12 col-xs-12 file-preview justify-content-center align-items-center flex-column">
+                                <img style="width: 70%; max-height: 400px ;max-width: 800px;"
+                                    class="imgPreview img-thumbnail my-2" src="" width="100%" />
+                                <div>
+                                    <button type="button" onclick="changeProfile()" class="shadow-none btn btn-success">
+                                        Upload
+                                        image</button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div> -->
+
+                </div>
+            </div>
+        </div>
+
+
+        <!-- The Modal -->
+        <div class="modal fade" id="changeEmail">
+            <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-zoom">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title">Change email</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="email-update-feedback-warning alert alert-warning " style="display:none;">
+
+                        </div>
+                        <div class="email-update-feedback-success alert alert-warning " style="display:none;">
+
+                        </div>
+                        <div class="px-3">
+
+
+                            <form name="changeEmailForm" action="" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="">New Email</label>
+                                    <input autocomplete="off" type="email" name="email" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Confirm new email</label>
+                                    <input autocomplete="off" type="email" name="confirm-email" class="form-control">
+                                </div>
+                                <input type="text" hidden name="userId" value="<%= user._id %>" />
+                                <button class="shadow-none btn btn-success" type="submit"
+                                    onclick="changeEmail(event)">Change</button>
+                            </form>
+
+
+                        </div>
+
+                    </div>
+
+                    <!-- Modal footer -->
+                    <!-- <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div> -->
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- profile sections ends -->
+    </section>
+
+
+    <% var user = user; %>
+
+    <script>
+        function changeProfile() {
+
+            console.log('changeProfile');
+
+            const form = $("form[name='upload-profile-image']")[0];
+            const formData = new FormData(form);
+
+            // return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${rootDomain}/users/update/upload-profile-image`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (data) {
+                    console.log('File submitted');
+                    console.log("file info: ", data);
+
+                    if (data && data.filename && data.filename != null && data.filename.length > 0) {
+                        // resolve(data.filename);
+                        // update profile
+                        updateProfilePictures(data.filename);
+                        $('#myModal').modal('hide');
+                        showAlert(false, data.message);
+                        location.reload();
+
+                    } else {
+                        showAlert(true, data.message);
+
+                        // reject('Unexpected error: wrong filename!');
+                    }
+                },
+                error: function (error) {
+                    console.log('Error', error);
+                    if (error.message) {
+                        showAlert(true, error.message);
+                    }
+                }
+            });
+            // })
+        }
+
+        function filePreview(input) {
+            console.log("input files", input.files[0]);
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // $('.file-preview').children().remove();
+                    $('.file-preview').removeClass('d-none');
+                    $('.file-preview').addClass('d-flex');
+                    $('.file-preview .imgPreview').prop('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function updateProfilePictures(filename) {
+            console.log(filename);
+
+            const objects = $(".profilePreviewUpdate");
+            const arrays = Object.values(objects);
+            const imageUrl = filename ? `url('/uploads/images/mobile/${filename}')` :
+                `url('/assets/img/bg-abstract.jpg')`;
+            for (let i in arrays) {
+                if (i <= objects.length) {
+                    $(arrays[i]).css({
+                        "background-image": imageUrl
+                    });
+                } else {
+                    break;
+                }
+            }
+
+            if (filename) {
+                $("#avatar").prop(
+                    "src", `/uploads/images/mobile/${filename}`);
+            } else {
+                $("#avatar").prop(
+                    "src", `/assets/img/bg-abstract.jpg`);
+            }
+
+            // $("#profile-change").css({
+            //     "background-image": `url('/uploads/images/mobile/${filename}')`
+            // });
+        }
+
+        $('#myModal').on('show.bs.modal', function () {
+            console.log('dadas');
+        });
+
+        $('#myModal').on('hide.bs.modal', function () {
+            $('.file-preview').removeClass('d-flex');
+            $('.file-preview').addClass('d-none');
+
+        });
+
+        function showAlert(error, message) {
+            $('body').append(`
+                <div style="position: fixed; top: 20px; left: 35%;" class="alert alert-${error ? 'danger' : 'success'} alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">${error ? 'Error occurred!' : 'Success!'}</h4>
+                    <p>${message}</p>
+                </div>
+            `);
+            setTimeout(() => {
+                $(".alert").remove();
+            }, 2000);
+        }
+
+        $(document).ready(() => {
+            // remove placeholder
+            $('.profile-setting form input, .profile-setting form select, .profile-setting form textarea').prop(
+                'placeholder', '');
+            $('#editProfile button[type="submit"]').prop('disabled', true);
+
+            // disable form submit
+            $("#editProfile button").click((e) => {
+                e.preventDefault();
+                console.log('Button clicked');
+            });
+
+        });
+
+        $('#submitProfile').click((e) => {
+            e.preventDefault();
+            // alert('asa');
+
+            let data = {};
+            const formData = new FormData($('#editProfile')[0]);
+            for (let entry of formData.entries()) {
+                data[entry[0]] = entry[1];
+            }
+            console.log({
+                data
+            });
+
+            if (data) {
+                $('#submitProfile').html(`
+                <div class="spinner-border  text-light spinner-border-sm"></div> Saving
+                `);
+                $.post(`${rootDomain}/users/update/profile`,
+                        data,
+                        (data, status) => {
+                            if (status == 'success') {
+                                // showAlert(false, data.message);
+                            } else {
+                                // showAlert(true, data.message);
+                            }
+                            $('#submitProfile').html(`Saved`);
+                            setTimeout(() => {
+                                location.reload();
+                            }, 500);
+                        })
+                    .fail((error) => {
+                        showAlert(true, error.message);
+                        $('#submitProfile').html(`Save`);
+
+                    });
+            }
+
+        });
+
+
+        $('#editProfile').on('change', (e) => {
+            // alert('adads');
+            $('#editProfile button[type="submit"]').prop('disabled', false);
+            $('#submitProfile').html(`Save`);
+        });
+
+        function changeEmail(event) {
+            event.preventDefault();
+
+            $(".email-update-feedback-warning").hide();
+            $(".email-update-feedback-success").hide();
+
+            const email = $("form[name='changeEmailForm'] input[name='email']").val();
+            const confirmEmail = $("form[name='changeEmailForm'] input[name='confirm-email']").val();
+
+            if (email == confirmEmail) {
+
+                $("form[name='changeEmailForm'] button[type='submit']").html(
+                    ` <div class="spinner-border  text-light spinner-border-sm"></div> `);
+                let data = {};
+                const formData = new FormData($("form[name='changeEmailForm']")[0]);
+                for (let entry of formData.entries()) {
+                    data[entry[0]] = entry[1];
+                }
+                $.post(`${rootDomain}/users/update/email`,
+                        data,
+                        (data, status) => {
+                            if (status == 'success') {
+                                $("form[name='changeEmailForm'] button[type='submit']").html(`Change`);
+                                $(".email-update-feedback-success").show().html(
+                                    `Verification link has been sent to your new email address.`);
+                            }
+                        })
+                    .fail((error) => {
+
+                        $(".email-update-feedback-warning").show().html(`Invalid request.`);
+                        $("form[name='changeEmailForm'] button[type='submit']").html(`Change`);
+                    });
+
+            } else {
+                $(".email-update-feedback-warning").show().html(`Email not matched.`);
+            }
+        }
+
+        $(document).ready(() => {
+
+            // email update form event listener 
+            $("form[name='changeEmailForm'] button[type='submit']").prop('disabled', true);
+            $("form[name='changeEmailForm']").on('change', () => {
+                const email = $("form[name='changeEmailForm'] input[name='email']").val();
+                const confirmEmail = $("form[name='changeEmailForm'] input[name='confirm-email']")
+            .val();
+
+                if (email == confirmEmail) {
+                    $("form[name='changeEmailForm'] button[type='submit']").prop('disabled', false);
+                } else {
+                    $("form[name='changeEmailForm'] button[type='submit']").prop('disabled', true);
+                }
+            });
+
+        });
+
+        function deleteAccount(e) {
+            e.preventDefault();
+
+            if (confirm('Do you want to continue?')) {
+                $("form[name='deleteAccountForm'] button[type='submit']").html(
+                    ` <div class="spinner-border  text-light spinner-border-sm"></div> `);
+                let data = {};
+                const formData = new FormData($("form[name='deleteAccountForm']")[0]);
+                for (let entry of formData.entries()) {
+                    data[entry[0]] = entry[1];
+                }
+
+                $.post(`${rootDomain}/users/delete/account`,
+                        data,
+                        (data, status) => {
+                            if (status == 'success') {
+                                $("#deleteAccountModal .feedback-success").show().html(data.message +
+                                    `<br> You will now be redirected to log In page.`);
+
+                                $("form[name='deleteAccountForm'] button[type='submit']").html(`Delete my account`);
+
+                                setTimeout(() => {
+                                    location.replace(`${rootDomain}/auth/login`);
+                                }, 5000);
+                            }
+                        })
+                    .fail((error) => {
+
+                        $("#deleteAccountModal .feedback-warning").show().html(`Invalid request.`);
+                        $("form[name='changeEmailForm'] button[type='submit']").html(`Delete my account`);
+                    });
+            }
+        }
+
+        function deleteProfilePicture(e) {
+            $("#myModal .alert").remove();
+            $(e.target).html(`<div class="spinner-border  text-light spinner-border-sm"></div> Deleting `);
+            $.post(`${rootDomain}/users/delete/profile-picture`, {
+                        userId: $('form[name="upload-profile-image"] input[name="userId"]').val()
+                    },
+                    (data, status) => {
+                        if (status == 'success') {
+                            $('#myModal').modal('hide');
+                            $(e.target).html(`Delete`);
+
+                            // upload default img
+                            updateProfilePictures(null);
+
+                        } else {
+                            $(e.target).before(
+                                `<div class="alert alert-warning">Error occurred. Please try again</div>`)
+                            $(e.target).html(`Delete`);
+                        }
+                    })
+                .fail(e => {
+                    $(e.target).before(`<div class="alert alert-danger">${e.message}</div>`)
+                });
+        }
+    </script>
+
+
+    <%- include('./../../includes/footer.ejs') %>

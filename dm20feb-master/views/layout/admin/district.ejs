@@ -1,0 +1,607 @@
+
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="/assets/img/logo.png">
+
+    <title><%= pageTitle %></title>
+    <link rel="stylesheet" href="/assets/fontawesome-pro-5.11.1-web/css/all.min.css">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/admin.css">
+    <script src="/assets/js/jquery.min.js"></script>
+    <script src="/assets/js/popper.min.js"></script>
+    <script src="/assets/js/bootstrap.min.js"></script>
+    
+
+
+</head>
+
+<body class="admin-page">
+
+    <%- include('./../../includes/alert'); %>
+
+
+    <section class="main-body container-fluid row mx-0 px-0">
+
+        <!-- Left column navigation  -->
+        <%- include('./../../includes/adminNavigation.ejs') %>
+
+        <!-- Right column main body -->
+        <div class="col-10  main-col px-0" ">
+
+            <!-- Top navigation -->
+            <section class=" container nav-container mx-0">
+                    <div class="d-flex nav-header  bg-white  py-2 px-3  " style="width: 100%;">
+
+                        <div class="dropdown dropdown-menu-right ml-auto" style="color: black;">
+                            <button class="shadow-none btn btn-light btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false"
+                                type="button">
+                                <% if( typeof user.images.profile.common.url != "undefined" && user.images.profile.common.url) { %>
+                                <img class="rounded-circle" src="/uploads/images/mobile_thumbnail/<%= user.images.profile.common.url %>"
+                                    style="width: 25px;height: 25px;margin-right: 5px;">
+                                <% } else { %>
+                                <i class="fad fa-user-shield font-weight-bold"></i>
+                                <% } %>
+
+                                <span class="px-1">
+                                    <%= `${user.name.firstName}` %>
+                                </span>
+                            </button>
+                            <div class="dropdown-menu text-secondary" role="menu"
+                                style="padding-top: 4px;padding-bottom: 4px;margin-right: 0; margin-top: 5px; right:0">
+                                <i class="fal fa-angle-up"  style="
+                                color: #fff;
+                                position: absolute;
+                                top: -13px;
+                                right: 10px;
+                                font-size: 22px;
+                                z-index: 999;
+                                "></i>
+                                <a class="dropdown-item" role="presentation" href="#" style="color: black;">Profile</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Notifications</a>
+                                <a class="dropdown-item text-dark" role="presentation" href="#">Settings</a>
+                                <hr style="margin: 0;">
+                                <form action="/auth/logout?via=admin" method="POST">
+                                    <button type="submit" class="dropdown-item btn btn-light text-dark"
+                                        role="presentation">Logout</button>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+            </section>
+
+            <!-- main content -->
+            <section>
+
+                <div class="container p-5 " id="districtContainer">
+
+                    <div class="row" style="position: absolute;
+                    right: 50px;
+                    top: 0;
+                    z-index: 1">
+                
+                        <div class="toast" data-delay="5000">
+                            <div class="toast-header">
+                                <strong class="mr-auto text-primary"></strong>
+                                <!-- <small class="text-muted">5 mins ago</small> -->
+                                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+                            </div>
+                            <div class="toast-body">
+                
+                            </div>
+                        </div>
+                    </div>
+                
+                    <section class="row px-3 edit-section">
+                        <div class="col bg-white p-3 rounded border">
+                            <h5 class="title">Add district </h5>
+                            <div class="form">
+                                <form action="" name="district-form">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <input autocomplete="off" type="text" class="form-control" id="district"
+                                                    placeholder="Enter new district ...">
+                                            </div>
+                                            <!-- <div class="form-group">
+                                                <label for="countrySelect">Country</label>
+                                                <select name="countrySelect"  class="form-control" id="districtCountrySelect">
+                                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                                                </select>
+                                            </div> -->
+                                            <div class="form-group">
+                                                <label for="stateSelect">State</label>
+                                                <select name="stateSelect"  class="form-control" id="districtStateSelect">
+                                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                                                </select>
+                                            </div>
+                                            
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="t" id="multilist_holder">
+                
+                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                    <input type="hidden" id="updateIddistrict" name="updateId" value="null">
+                                    <hr class="my-3">
+                                    <div class="row px-3 page-control">
+                                        <button type="button" id="addBtndistrict" onclick="adddistrict(event)"
+                                            class="btn btn-success mr-3">Submit</button>
+                                        <button type="button" hidden id="updateBtndistrict" onclick="updatedistrict()"
+                                            class="btn btn-success mr-3">Update</button>
+                                        <button type="reset" id="cancelBtndistrict" class="btn btn-info mr-3 "
+                                            onclick="cancelEditDistrict()">Cancel</button>
+                                        <button hidden type="button" id="deleteBtndistrict" class="btn btn-danger mr-3 ">Delete</button>
+                                        <script>
+                                            $(document).ready(function () {
+                
+                                                var div = $('<div></div>');
+                                                div.append(`<div class="px-3 py-2" style="display: flex;"> 
+                                                                    <button onclick="deletedistrict()" class="btn btn-success small mr-3">Yes</button>
+                                                                    <button class="btn btn-secondary small">No</button>
+                                                                </div>`);
+                                                var options = {
+                                                    placement: 'right',
+                                                    html: true,
+                                                    title: "Are you sure?",
+                                                    trigger: 'click',
+                                                    template: `
+                                                    <div class="popover" role="tooltip" style="width: min-width:200px">
+                                                        <div class="arrow"></div>
+                                                            <h3 class="popover-header"> Are you sure? </h3>
+                                                            <div class="popover-body" style="">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        `,
+                                                    content: div,
+                                                    animation: true
+                
+                                                };
+                
+                                                $('#deleteBtndistrict').popover(options);
+                
+                
+                
+                
+                                            });
+                
+                                            $('html').on('click', function (e) {
+                                                if (typeof $(e.target).data('original-title') == 'undefined' &&
+                                                    !$(e.target).parents().is('.popover.in')) {
+                                                    $('#deleteBtndistrict').popover('hide');
+                                                }
+                                            });
+                
+                                        </script>
+                                    </div>
+                                </form>
+                
+                            </div>
+                        </div>
+                
+                    </section>
+                
+                    <section class="row px-3">
+                        <div class="col bg-white p-3 rounded border">
+                            <div class="row px-0 my-2 py-1">
+                                <div class="col">
+                                    <span>
+                                        <h5>Recent district </h5>
+                                    </span>
+                                </div>
+                                <div class="col d-flex flex-row "
+                                    style="display: flex; align-items: center; justify-content: space-around;">
+                                    <input autocomplete="off" type="text" class="" style="width:90%;  padding: 4px 10px;display: none;"
+                                        name="searchdistrict" id="searchdistrict" class="form-control" onkeyup="searchdistrict()"
+                                        placeholder=" Enter district to search..." id="">
+                                    <a class="ml-auto" onclick="(() => { $('#searchdistrict').show().focus(); searchdistrict();  })()"
+                                        style="color: initial; cursor: pointer;">
+                                        <i class="fa fa-search text-secondary"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="posts-list">
+                                <ul class="list-group " id="Recent_district_list">
+                
+                                    <div class="spinner-border text-primary p-2 m-5 mx-auto"></div>
+                
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+                
+                
+                
+                </div>
+                
+                
+            <!-- Main content ends here -->
+            </section>
+
+        <!-- Right column main body ends here -->
+         </div>
+
+
+    </section>
+
+
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/fontawesome-pro-5.11.1-web/js/fontawesome.min.js"></script>
+    <script src="/assets/js/admin.js"></script>
+
+   
+
+<script src="https://maps.googleapis.com/maps/api/js?key=<%= MAP_API %>" async defer></script>
+
+
+
+
+    <script >
+
+        $(document).ready(e=>{
+                getdistrict();
+            });
+
+        // AJAX district PAGE
+        let recentdistrict, recentCountryDistrict, recentStateDistrict;
+        const getdistrict = () => {
+    
+            
+    
+            console.log('calling getdistrict');
+            $('#districtContainer #Recent_district_list').html('');
+            $('#districtContainer #Recent_district_list').append(`<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+            $.get(rootDomain + '/admin/address/district/recent', (data, status) => {
+    
+                if (status == 'success') {
+                    console.log("Response getdistrict : ", data, status);
+                    // $('#totalUsers').html(data.usersCount);
+                    // $('#monthlyUsers').html(data.usersCountCurrentMonth);
+                    // $('#totalPosts').html(data.postsCount);
+                    // $('#monthlyPosts').html(data.postsCountCurrentMonth);
+                    recentdistrict = data.districts;
+                    recentStateDistrict = data.states;
+                    recentCountryDistrict = data.countries;
+                    refreshdistrictList(recentdistrict);
+    
+    
+                    // append Country & state list
+                    $('#districtContainer #districtCountrySelect').html('');
+                    var count = 0;
+                    data.countries.forEach( country => {
+    
+                        $('#districtContainer #districtCountrySelect').append(`
+                            <option value="${country._id}" name="${country.name}">${++count}. ${country.name}</option>
+                        `);
+                    });
+    
+                    $('#districtContainer #districtStateSelect').html('');
+                    var counta = 0;
+                    data.states.forEach( state => {
+    
+                        $('#districtContainer #districtStateSelect').append(`
+                            <option value="${state._id}" name="${state.name}">${++counta}. ${state.name}</option>
+                        `);
+                    });
+    
+                }
+    
+            });
+    
+        }
+    
+    
+        
+    
+        function refreshdistrictList(data) {
+    
+            console.log("refreshdistrictList data ", data);
+            $('#districtContainer #Recent_district_list').html('');
+            // append list header
+            $('#districtContainer #Recent_district_list').append(`<li class="cus-list-header list-group-item d-flex justify-content-between align-items-center">
+                <div class="col-3 d-inline-block text-truncate">
+                    <b> District </b>
+                </div>
+                <div class="col-2 d-inline-block text-truncate">
+                    <b> State </b>
+                </div>
+               
+                <div class="col-3 d-inline-block text-truncate">
+                    <b> Created Date </b>
+                </div>
+                <div class="col-3 d-inline-block text-truncate"><b>Modified Date</b></div>
+                <div class="col-1" >   
+                    <b>Manage</b>                    
+                </div>
+            </li>`);
+    
+            data.forEach(district => {
+    
+                // append list data
+                $('#districtContainer #Recent_district_list').append(`
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div class="col-3 d-inline-block text-truncate">${district.name}</div>
+                    <div class="col-2 d-inline-block text-truncate">
+                        ${district.state && district.state.name ? district.state.name :''}
+                </div>
+                    <input type="hidden" name="keyId" value="${district._id}" />
+                    <div class="col-3 d-inline-block text-truncate">${getCustomDate(new Date(district.createdOn))}</div>
+                    <div class="col-3 d-inline-block text-truncate">${getCustomDate(new Date(district.modifiedOn))}</div>
+                    <div class="col-1" >                            
+                        <button  class="btn btn-outline-primary btn-sm" onclick="editdistrict(event)">Edit</button>                            
+                    </div>
+            </li>
+            `);
+            });
+        }
+    
+        function editdistrict(e) {
+    
+            $('.main-col').stop(true, false).animate({ scrollTop: 0 }, 'fast');
+            $('#updateBtndistrict').prop('hidden', false);
+            $('#addBtndistrict').prop('hidden', true);
+            $('#deleteBtndistrict').prop('hidden', false);
+    
+            // find district from previously fetch district array
+            let district = recentdistrict.find((district) => {
+                return $(e.target).parent('div').siblings("input").val() == district._id;
+            })
+            if (district) {
+                $('#districtContainer #district').val(district.name);
+                $('#districtContainer .edit-section .title').text('Edit district');
+                $('#updateIddistrict').val(district._id);
+                $('#districtContainer  #multilist_holder').html('');
+    
+                if ( district.country ) {
+                    $('#districtContainer #districtCountrySelect option:selected').prop('selected', false);
+    
+                        var countryIdObject = $('#districtCountrySelect option').map((index, option) => option.value);
+                        var countryIdArray = Object.values(countryIdObject);
+    
+                            console.log('ID : ', district.country._id);
+                            if (countryIdArray.indexOf(district.country._id) != -1) {
+                                console.log(countryIdArray.indexOf(district.country._id));
+                                $('#districtContainer #districtCountrySelect option:nth-child(' + (countryIdArray.indexOf(district.country._id) + 1) + ')').prop('selected', true);
+                            } else {
+                                console.log('not found : ', district.country.name);
+    
+                            }
+    
+                }
+                if ( district.state ) {
+                    $('#districtContainer #districtStateSelect option:selected').prop('selected', false);
+    
+                        var stateIdObject = $('#districtStateSelect option').map((index, option) => option.value);
+                        var stateIdArray = Object.values(stateIdObject);
+    
+                            console.log('ID : ', district.state._id);
+                            if (stateIdArray.indexOf(district.state._id) != -1) {
+                                console.log(stateIdArray.indexOf(district.state._id));
+                                $('#districtContainer #districtStateSelect option:nth-child(' + (stateIdArray.indexOf(district.state._id) + 1) + ')').prop('selected', true);
+                            } else {
+                                console.log('not found : ', district.state.name);
+    
+                            }
+    
+                }
+    
+            }
+    
+    
+        }
+    
+    
+        function cancelEditDistrict() {
+            $('#districtContainer #multilist_holder').html('');            // clear selected options
+            $('#districtContainer .edit-section .title').text('Add new district');
+            $('#districtContainer #districtCountrySelect option:selected').prop("selected", false);
+            $('#districtContainer #districtStateSelect option:selected').prop("selected", false);
+            $('#updateBtndistrict').prop('hidden', true);
+            $('#addBtndistrict').prop('hidden', false);
+            $('#deleteBtndistrict').prop('hidden', true);
+            $("#districtContainer form[name='district-form']").trigger("reset");
+            $('#districtContainer #district').removeAttr('value');
+    
+            // $('#cancelBtndistrict').prop('hidden', true);
+    
+        }
+    
+        function updatedistrict() {
+            const updateId = $('#districtContainer #updateIddistrict').val();
+            console.log('updateId : ', updateId);
+    
+    
+            const key = $('#districtContainer #district').val();
+            const token = $("#districtContainer form[name='district-form'] input[name='_csrf']").val();
+            const country = $('#districtCountrySelect').val();
+            const state = $('#districtStateSelect').val();
+    
+            if ( updateId != null && updateId.length == 24 ) {
+    
+                // ajax post update
+                $.post(rootDomain + '/admin/address/district/update',
+                    {
+                        "name": key,
+                        "_csrf": token,
+                        "id": updateId,
+                        "country": country,
+                        "state": state
+                    }, (data, status) => {
+    
+                        if (status == 'success') {
+                            getdistrict();
+                            cancelEditDistrict();
+                            console.log(data, status);
+                            showSuccessAlert('Updated successfully');
+                        }
+                    }).fail(e=>{
+                        showDangerAlert('Please try again.');
+                    });
+    
+            }
+        }
+    
+        function deletedistrict() {
+    
+            const id = $('#districtContainer #updateIddistrict').val();
+            const token = $("#districtContainer form[name='district-form'] input[name='_csrf']").val();
+            console.log('Deleting district - ', id);
+            if ( id != null && id.length == 24 ) {
+                $.post(`${rootDomain}/admin/address/district/delete`, {
+                    "_csrf": token,
+                    "id": id
+                }, (data, status) => {
+                    if (status == 'success') {
+                        console.log('Response : ', data);
+                        console.log('district Deleted ');
+                        getdistrict();
+                        showSuccessAlert('district deleted successfully');
+                        cancelEditDistrict();
+    
+                    }
+                }
+    
+                )
+                    .fail(function (error) {
+                        // alert(JSON.parse(error)) ;
+                        const response = JSON.parse(error.responseText);
+                        console.log(response);
+                        showDangerAlert(response.error)
+                    });
+            }
+    
+        }
+    
+    
+        function adddistrict(event) {
+            event.preventDefault();
+            console.log('adding district..');
+    
+            const key = $('#districtContainer #district').val();
+            const token = $(event.target).parent('div').siblings("input[name='_csrf']").val();
+            // const country = $('#districtCountrySelect').val();
+            const state = $('#districtStateSelect').val();
+    
+            if ( key.length > 0 && state ) {
+                $.post(`${rootDomain}/admin/address/district/add`, {
+                    "name": key,
+                    "_csrf": token,
+                   
+                    "state": state
+                }, (data, status) => {
+                    if (status == 'success') {
+                        console.log('Response : ', data);
+                        cancelEditDistrict();
+                        showSuccessAlert('Added!')
+                        getdistrict();
+                    }
+                }
+    
+                )
+                    .fail(function (error) {
+                        // alert(JSON.parse(error)) ;
+                        const response = JSON.parse(error.responseText);
+                        console.log(response);
+                        showDangerAlert(response.error)
+                    });
+    
+            } else {
+                console.log("fields cannot be empty");
+                showInfoAlert('Please provide a district name');
+            }
+    
+        }
+    
+    
+    
+    
+    
+        // function showSuccessAlert(title, error = false, message = null) {
+        //     $('#districtContainer .toast-header strong').text(title);
+        //     // $('#district .toast-header small').text(title);
+        //     // $('#district .toast-body ').text(body);
+    
+        //     if (error) {
+        //         $('#districtContainer .toast-body ').text(message ? message : '');
+        //         $('#districtContainer .toast-body ').show();
+        //     } else {
+        //         $('#districtContainer .toast-body ').hide();
+        //     }
+        //     $('#districtContainer .toast').toast('show');
+        //     // setTimeout(function(){ $('#district .toast').toast('hide') }, 200000);
+        // };
+    
+        var timer;
+        function searchdistrict() {
+    
+            const value = $(" #districtContainer #searchdistrict").val();
+            console.log(value)
+            if (value.length > 0) {
+    
+                $('#districtContainer #Recent_district_list').html('');
+                $('#districtContainer #Recent_district_list').append(`<div class="spinner-border text-primary p-2 m-5 mx-auto"></div>`);
+    
+                if (timer) { clearTimeout(timer); }
+                timer = setTimeout(function () {
+                    $.get(`${rootDomain}/admin/address/district/search?searchText=${value}`, (data, status) => {
+                        // console.log(data,status)
+    
+                        if (status == 'success' && data != 'undefined' && data.length > 0) {
+                            console.log(data, status)
+    
+                            refreshdistrictList(data);
+                        } else {
+                            refreshdistrictList(recentdistrict);
+                        }
+                    })
+                        .fail((error) => {
+                            console.log("error")
+    
+                            refreshdistrictList(recentdistrict);
+                        });
+                }, 1000)
+    
+            } else {
+                clearTimeout(timer);
+                refreshdistrictList(recentdistrict);
+            }
+        }
+    
+    
+       
+    
+    // show selected sub-categories on right side
+    $('#districtContainer #districtMultiSelect').on('click', 'option', function (e) {
+    
+    $("#districtContainer #districtMultiSelect")
+        .change(function () {
+    
+            $('#districtContainer  #multilist_holder').html('');
+            $("#districtContainer  #districtMultiSelect option:selected").each(function () {
+                $(' #districtContainer  #multilist_holder').append(`
+            <span class="badge badge-pill badge-success"> ${ $(this).text()}</span>
+            `);
+            });
+    
+        })
+        .trigger("change");
+    
+    // console.log($('#districtMultiSelect').val());
+    });
+    
+    </script>
+
+</body>
+
+</html>

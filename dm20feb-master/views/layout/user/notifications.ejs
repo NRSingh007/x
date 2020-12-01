@@ -1,0 +1,323 @@
+<%- include('./../../includes/header.ejs',{ 
+    keywords: 'User setting' , 
+    author: 'Digtal Manipur',
+    description: ``
+ }) %>
+</head>
+
+<body>
+    <%- include('./../../includes/navBar.ejs') %>
+
+    <section class="profile-notifications">
+        <div class="container py-3 px-xs-3 px-lg-0 ">
+
+            <div class="nav-links ">
+                <a href="/" class="text-secondary small"  >Home</a>
+                <i class="fal fa-angle-right px-2 text-secondary"></i>
+                <a href="/users/home" class="text-secondary small"  ><%= user.name.firstName %></a>
+                <i class="fal fa-angle-right px-2 text-secondary"></i>
+                <span  class="text-secondary small"  >Notifications</span>
+
+            </div>
+            <div class="  my-3">
+                <h4>Notifications</h4>
+                <div style="min-height: 400px; display: flex; justify-content: center; align-items: center;">
+                    <span class="text-muted default " >No notifications</span>
+                </div>
+            </div>
+
+
+            
+
+            <!-- container ends here -->
+        </div>
+
+        </div>
+
+        </div>
+
+        
+
+
+
+        <!-- profile sections ends -->
+    </section>
+
+
+
+
+    <script>
+        function changeProfile() {
+
+            console.log('changeProfile');
+
+            const form = $("form[name='upload-profile-image']")[0];
+            const formData = new FormData(form);
+
+            // return new Promise((resolve, reject) => {
+            $.ajax({
+                url: `${rootDomain}/users/update/upload-profile-image`,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false, // neccessary for file upload
+                success: function (data) {
+                    console.log('File submitted');
+                    console.log("file info: ", data);
+
+                    if (data && data.filename && data.filename != null && data.filename.length > 0) {
+                        // resolve(data.filename);
+                        // update profile
+                        updateProfilePictures(data.filename);
+                        $('#myModal').modal('hide');
+                        showAlert(false, data.message);
+                    } else {
+                        showAlert(true, data.message);
+
+                        // reject('Unexpected error: wrong filename!');
+                    }
+                },
+                error: function (error) {
+                    console.log('Error', error);
+                    if (error.message) {
+                        showAlert(true, error.message);
+                    }
+                }
+            });
+            // })
+        }
+
+        function filePreview(input) {
+            console.log("input files", input.files[0]);
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    // $('.file-preview').children().remove();
+                    $('.file-preview').removeClass('d-none');
+                    $('.file-preview').addClass('d-flex');
+                    $('.file-preview .imgPreview').prop('src', e.target.result);
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function updateProfilePictures(filename) {
+            console.log(filename);
+
+            const objects = $(".profilePreviewUpdate");
+            const arrays = Object.values(objects);
+            const imageUrl = filename ? `url('/uploads/images/mobile/${filename}')` :
+                `url('/assets/img/bg-abstract.jpg')`;
+            for (let i in arrays) {
+                if (i <= objects.length) {
+                    $(arrays[i]).css({
+                        "background-image": imageUrl
+                    });
+                } else {
+                    break;
+                }
+            }
+
+            if (filename) {
+                $("#avatar").prop(
+                    "src", `/uploads/images/mobile/${filename}`);
+            } else {
+                $("#avatar").prop(
+                    "src", `/assets/img/bg-abstract.jpg`);
+            }
+
+            // $("#profile-change").css({
+            //     "background-image": `url('/uploads/images/mobile/${filename}')`
+            // });
+        }
+
+        $('#myModal').on('show.bs.modal', function () {
+            console.log('dadas');
+        });
+
+        $('#myModal').on('hide.bs.modal', function () {
+            $('.file-preview').removeClass('d-flex');
+            $('.file-preview').addClass('d-none');
+
+        });
+
+        function showAlert(error, message) {
+            $('body').append(`
+                <div style="position: fixed; top: 20px; left: 35%;" class="alert alert-${error ? 'danger' : 'success'} alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">${error ? 'Error occurred!' : 'Success!'}</h4>
+                    <p>${message}</p>
+                </div>
+            `);
+            setTimeout(() => {
+                $(".alert").remove();
+            }, 2000);
+        }
+
+        $(document).ready(() => {
+            // remove placeholder
+            $('.profile-setting form input, .profile-setting form select, .profile-setting form textarea').prop(
+                'placeholder', '');
+            $('#editProfile button[type="submit"]').prop('disabled', true);
+
+            // disable form submit
+            // $("button").click((e) => {
+            //     e.preventDefault();
+            //     console.log('Button clicked');
+            // });
+
+        });
+
+        $('#editProfile').submit((e) => {
+            e.preventDefault();
+            // alert('asa');
+
+            let data = {};
+            const formData = new FormData($('#editProfile')[0]);
+            for (let entry of formData.entries()) {
+                data[entry[0]] = entry[1];
+            }
+            console.log({
+                data
+            });
+
+            if (data) {
+                $('#submitProfile').html(`
+                <div class="spinner-border  text-light spinner-border-sm"></div> Saving
+                `);
+                $.post(`${rootDomain}/users/update/profile`,
+                        data,
+                        (data, status) => {
+                            if (status == 'success') {
+                                // showAlert(false, data.message);
+                            } else {
+                                // showAlert(true, data.message);
+                            }
+                            $('#submitProfile').html(`Saved`);
+                        })
+                    .fail((error) => {
+                        showAlert(true, error.message);
+                        $('#submitProfile').html(`Save`);
+
+                    });
+            }
+
+        });
+
+
+        $('#editProfile').on('change', (e) => {
+            // alert('adads');
+            $('#editProfile button[type="submit"]').prop('disabled', false);
+            $('#submitProfile').html(`Save`);
+        });
+
+        function changeEmail(event) {
+            event.preventDefault();
+
+            $(".email-update-feedback-warning").hide();
+            $(".email-update-feedback-success").hide();
+
+            const email = $("form[name='changeEmailForm'] input[name='email']").val();
+            const confirmEmail = $("form[name='changeEmailForm'] input[name='confirm-email']").val();
+
+            if (email == confirmEmail) {
+
+                $("form[name='changeEmailForm'] button[type='submit']").html(
+                    ` <div class="spinner-border  text-light spinner-border-sm"></div> `);
+                let data = {};
+                const formData = new FormData($("form[name='changeEmailForm']")[0]);
+                for (let entry of formData.entries()) {
+                    data[entry[0]] = entry[1];
+                }
+                $.post(`${rootDomain}/users/update/email`,
+                        data,
+                        (data, status) => {
+                            if (status == 'success') {
+                                $("form[name='changeEmailForm'] button[type='submit']").html(`Change`);
+                                $(".email-update-feedback-success").show().html(
+                                    `Verification link has been sent to your new email address.`);
+                            }
+                        })
+                    .fail((error) => {
+
+                        $(".email-update-feedback-warning").show().html(`Invalid request.`);
+                        $("form[name='changeEmailForm'] button[type='submit']").html(`Change`);
+                    });
+
+            } else {
+                $(".email-update-feedback-warning").show().html(`Email not matched.`);
+            }
+        }
+
+        $(document).ready(() => {
+
+            // email update form event listener 
+            $("form[name='changeEmailForm'] button[type='submit']").prop('disabled', true);
+            $("form[name='changeEmailForm']").on('change', () => {
+                const email = $("form[name='changeEmailForm'] input[name='email']").val();
+                const confirmEmail = $("form[name='changeEmailForm'] input[name='confirm-email']")
+                    .val();
+
+                if (email == confirmEmail) {
+                    $("form[name='changeEmailForm'] button[type='submit']").prop('disabled', false);
+                } else {
+                    $("form[name='changeEmailForm'] button[type='submit']").prop('disabled', true);
+                }
+            });
+
+
+
+
+
+        });
+
+        const loadingBox = `<div 
+        class="d-flex justify-content-center align-items-center " 
+        style="width: 100%; min-height: 400px;">
+        <div style="text-align: center">
+            <div class="spinner-border text-danger"></div>
+            <div class="text-muted small mt-2">Loading...</div>
+        </div>
+        </div>`;
+
+        $(".nav-tabs-holder .list-group .list-group-item").click(async (e) => {
+            const tabId = "#"+ $(e.target).prop('href').split("#")[1];
+            const store = $(tabId).html();
+            $(tabId).html(loadingBox);
+            console.log(e.target);
+            console.log(tabId);
+
+            // fetch data
+            switch (tabId) {
+                case "#Timeline":
+                    setTimeout(() => {
+                        $(tabId).html(store);
+                    }, 1000);
+                    break;
+                // case "#Reviews":
+                //     const Reviews = await getReviews();
+                //     break;
+                // case "#Bookmarks":
+                //     const Bookmarks = await getBookmarks();
+
+                //     break;
+                // case "#BeenThere":
+                //     const BeenThere = await getBeenThere();
+
+                //     break;
+                // case "#Recentlyviewedposts":
+                //     const Recentlyviewedposts = await getRecentlyviewedposts();
+
+                //     break;
+
+                default:
+                    $(tabId).html(store);
+                    break;
+            }
+
+        });
+
+    </script>
+
+
+    <%- include('./../../includes/footer.ejs') %>

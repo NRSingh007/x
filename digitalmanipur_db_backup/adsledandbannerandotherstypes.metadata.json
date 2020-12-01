@@ -1,0 +1,1 @@
+{"options":{},"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_","ns":"digitalmanipur.adsledandbannerandotherstypes"},{"v":{"$numberInt":"2"},"unique":true,"key":{"name":{"$numberInt":"1"}},"name":"name_1","ns":"digitalmanipur.adsledandbannerandotherstypes","background":true}],"uuid":"1c439a65355747f692a5a948ea16f4fc"}
